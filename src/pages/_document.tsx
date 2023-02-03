@@ -10,4 +10,4 @@ const Document = () => (
   </Html>
 );
 
-export default App;
+export default Document;
