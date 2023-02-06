@@ -2,6 +2,9 @@ import { useEffect } from "react";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useSession, signIn } from "next-auth/react";
+import Button from "@mui/material/Button";
+
+import st from "./styles.module.css";
 
 const Index = () => {
   const { data: session } = useSession();
@@ -21,13 +24,12 @@ const Index = () => {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main>
-        <h1>Morphis Trans</h1>
+      <main className={st.container}>
+        <h1 className={st.title}>Morphis Trans</h1>
         <div>
-          <>
-            Not signed in <br />
-            <button onClick={() => signIn()}>Sign in</button>
-          </>
+          <Button onClick={() => signIn()} variant="contained">
+            Login to connect wallet
+          </Button>
         </div>
       </main>
     </>
