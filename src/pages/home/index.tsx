@@ -1,15 +1,15 @@
 import { useEffect } from "react";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { useSession, signIn } from "next-auth/react";
+import { useSession, signOut } from "next-auth/react";
 
-const Index = () => {
+const Home = () => {
   const { data: session } = useSession();
   const router = useRouter();
 
   useEffect(() => {
-    if (session) {
-      router.push("/home");
+    if (!session) {
+      router.push("/");
     }
   }, [session, router]);
 
@@ -25,13 +25,14 @@ const Index = () => {
         <h1>Morphis Trans</h1>
         <div>
           <>
-            Not signed in <br />
-            <button onClick={() => signIn()}>Sign in</button>
+            Signed in as {session?.user?.email} <br />
+            <button onClick={() => signOut()}>Sign out</button>
           </>
+          <h1>Welcome</h1>
         </div>
       </main>
     </>
   );
 };
 
-export default Index;
+export default Home;
