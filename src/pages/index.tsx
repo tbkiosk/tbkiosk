@@ -26,11 +26,9 @@ const Index = () => {
       </Head>
       <main className={st.container}>
         <h1 className={st.title}>Morphis Trans</h1>
-        <div>
-          <Button onClick={() => signIn()} variant="contained">
-            Login to connect wallet
-          </Button>
-        </div>
+        <Button onClick={() => signIn()} variant="contained">
+          Login to connect wallet
+        </Button>
       </main>
     </>
   );

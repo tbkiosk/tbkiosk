@@ -12,6 +12,7 @@ import Tooltip from "@mui/material/Tooltip";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import IconButton from "@mui/material/IconButton";
+import { ConnectButton } from "@suiet/wallet-kit";
 
 import st from "./styles.module.css";
 
@@ -66,6 +67,9 @@ const Home = () => {
                 Morphis Trans
               </Typography>
               <Box sx={{ flexGrow: 1 }} />
+              <Box sx={{ flexGrow: 0, marginRight: "16px" }}>
+                <ConnectButton />
+              </Box>
               <Box sx={{ flexGrow: 0 }}>
                 <Tooltip title="Open settings">
                   <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
