@@ -11,6 +11,7 @@ import Avatar from "@mui/material/Avatar";
 import Tooltip from "@mui/material/Tooltip";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
+import IconButton from "@mui/material/IconButton";
 
 import st from "./styles.module.css";
 
@@ -25,8 +26,8 @@ const Home = () => {
   };
 
   const handleCloseUserMenu = () => {
-    signOut();
     setAnchorElUser(null);
+    signOut();
   };
 
   useEffect(() => {
@@ -46,7 +47,7 @@ const Home = () => {
       <div className={st.container}>
         <AppBar position="static">
           <Container>
-            <Toolbar disableGutters sx={{}}>
+            <Toolbar disableGutters>
               <Typography
                 variant="h6"
                 noWrap
@@ -67,10 +68,12 @@ const Home = () => {
               <Box sx={{ flexGrow: 1 }} />
               <Box sx={{ flexGrow: 0 }}>
                 <Tooltip title="Open settings">
-                  <Avatar
-                    alt={session?.user?.name ?? "?"}
-                    src={session?.user?.image ?? undefined}
-                  />
+                  <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                    <Avatar
+                      alt={session?.user?.name ?? "?"}
+                      src={session?.user?.image ?? undefined}
+                    />
+                  </IconButton>
                 </Tooltip>
                 <Menu
                   sx={{ mt: "45px" }}
@@ -86,7 +89,7 @@ const Home = () => {
                     horizontal: "right",
                   }}
                   open={Boolean(anchorElUser)}
-                  onClose={handleCloseUserMenu}
+                  onClose={() => setAnchorElUser(null)}
                 >
                   <MenuItem onClick={handleCloseUserMenu}>
                     <Typography textAlign="center">Log out</Typography>
