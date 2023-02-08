@@ -13,10 +13,10 @@ const SessionGuard = ({ children }: SesstionGuardProps) => {
   const router = useRouter();
 
   useEffect(() => {
-    if (!session) {
+    if (!session && status !== "loading") {
       router.push("/");
     }
-  }, [session, router]);
+  }, [session, router, status]);
 
   return <Loading isLoading={status === "loading"}>{children}</Loading>;
 };

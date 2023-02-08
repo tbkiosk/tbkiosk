@@ -3,6 +3,7 @@ lockfileVersion: 5.4
 specifiers:
   '@emotion/react': ^11.10.5
   '@emotion/styled': ^11.10.5
+  '@mui/lab': 5.0.0-alpha.119
   '@mui/material': ^5.11.8
   '@mysten/sui.js': ^0.26.1
   '@next-auth/mongodb-adapter': ^1.1.1
@@ -25,6 +26,7 @@ specifiers:
 dependencies:
   '@emotion/react': 11.10.5_yxdp3dl3eazy3vwpbmv4fq727a
   '@emotion/styled': 11.10.5_4erqsq3n444jecyuvaxwc5b3vi
+  '@mui/lab': 5.0.0-alpha.119_gw3vqkv23l2so2m7odom2kigy4
   '@mui/material': 5.11.8_rqh7qj4464ntrqrt6banhaqg4q
   '@mysten/sui.js': 0.26.1
   '@next-auth/mongodb-adapter': 1.1.1_mnvn34sskpyqnfji7bz47remva
@@ -2368,6 +2370,40 @@ packages:
 
   /@mui/core-downloads-tracker/5.11.8:
     resolution: {integrity: sha512-n/uJRIwZAaJaROaOA4VzycxDo27cusnrRzfycnAkAP5gBndwOJQ1CXjd1Y7hJe5eorj/ukixC7IZD+qCClMCMg==}
+    dev: false
+
+  /@mui/lab/5.0.0-alpha.119_gw3vqkv23l2so2m7odom2kigy4:
+    resolution: {integrity: sha512-74l+gA7fybcB2zyOLjWsPbOxt2F4ydu4t0a5rEC/Y4v6q0wDKaW1El1S/+zuE5Xw/fQmiwNrQ+Do5fDbRZDAsw==}
+    engines: {node: '>=12.0.0'}
+    peerDependencies:
+      '@emotion/react': ^11.5.0
+      '@emotion/styled': ^11.3.0
+      '@mui/material': ^5.0.0
+      '@types/react': ^17.0.0 || ^18.0.0
+      react: ^17.0.0 || ^18.0.0
+      react-dom: ^17.0.0 || ^18.0.0
+    peerDependenciesMeta:
+      '@emotion/react':
+        optional: true
+      '@emotion/styled':
+        optional: true
+      '@types/react':
+        optional: true
+    dependencies:
+      '@babel/runtime': 7.20.13
+      '@emotion/react': 11.10.5_yxdp3dl3eazy3vwpbmv4fq727a
+      '@emotion/styled': 11.10.5_4erqsq3n444jecyuvaxwc5b3vi
+      '@mui/base': 5.0.0-alpha.117_5ndqzdd6t4rivxsukjv3i3ak2q
+      '@mui/material': 5.11.8_rqh7qj4464ntrqrt6banhaqg4q
+      '@mui/system': 5.11.8_gzalmy7izvhol7vh4xfy3dq6ua
+      '@mui/types': 7.2.3_@types+react@18.0.27
+      '@mui/utils': 5.11.7_react@18.2.0
+      '@types/react': 18.0.27
+      clsx: 1.2.1
+      prop-types: 15.8.1
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+      react-is: 18.2.0
     dev: false
 
   /@mui/material/5.11.8_rqh7qj4464ntrqrt6banhaqg4q:

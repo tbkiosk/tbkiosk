@@ -2,12 +2,12 @@ import { useEffect } from "react";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useSession, signIn } from "next-auth/react";
-import Button from "@mui/material/Button";
+import Button from "@mui/lab/LoadingButton";
 
 import st from "./styles.module.css";
 
 const Index = () => {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const router = useRouter();
 
   useEffect(() => {
@@ -26,7 +26,11 @@ const Index = () => {
       </Head>
       <main className={st.container}>
         <h1 className={st.title}>Morphis Trans</h1>
-        <Button onClick={() => signIn()} variant="contained">
+        <Button
+          loading={status === "loading"}
+          onClick={() => signIn()}
+          variant="contained"
+        >
           Login to connect wallet
         </Button>
       </main>
