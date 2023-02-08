@@ -8,18 +8,18 @@ import "@suiet/wallet-kit/style.css";
 import "../styles/globals.css";
 
 const App = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => (
-  <WalletProvider>
-    <SessionProvider session={session}>
-      <SWRConfig
-        value={{
-          fetcher: async (...args: Parameters<typeof fetch>): Promise<JSON> =>
-            fetch(...args).then((res) => res.json()),
-        }}
-      >
+  <SWRConfig
+    value={{
+      fetcher: async (...args: Parameters<typeof fetch>): Promise<JSON> =>
+        fetch(...args).then((res) => res.json()),
+    }}
+  >
+    <WalletProvider>
+      <SessionProvider session={session}>
         <Component {...pageProps} />
-      </SWRConfig>
-    </SessionProvider>
-  </WalletProvider>
+      </SessionProvider>
+    </WalletProvider>
+  </SWRConfig>
 );
 
 export default App;

@@ -1,14 +1,20 @@
 import Head from "next/head";
+import { useWallet, ConnectModal } from "@suiet/wallet-kit";
+import { useState } from "react";
+import { isValidSuiAddress } from "@mysten/sui.js";
 
 import Layout from "@/layouts";
-import { SessionGuard } from "@/components";
+import { SessionGuard, Loading } from "@/components";
+import TextField from "@mui/material/TextField";
+import Box from "@mui/material/Box";
+import Button from "@mui/lab/LoadingButton";
 
 import useUserWallet from "@/hooks/swr/useUserWallet";
 
 import st from "./styles.module.css";
 
 const Home = () => {
-  const wallet = useUserWallet();
+  const { data, isLoading } = useUserWallet();
 
   return (
     <>
@@ -20,7 +26,9 @@ const Home = () => {
       </Head>
       <SessionGuard>
         <Layout>
-          <h1>You have not linked your wallet to Morphis</h1>
+          <Loading isLoading={isLoading}>
+            <NoWallet />
+          </Loading>
         </Layout>
       </SessionGuard>
     </>
@@ -28,3 +36,69 @@ const Home = () => {
 };
 
 export default Home;
+
+const NoWallet = () => {
+  const { connected, address } = useWallet();
+
+  const [newAddress, setNewAddress] = useState("");
+  const [addressError, setAddressError] = useState<null | string>(null);
+  const [showModal, setShowModal] = useState(false);
+
+  const onMigrateAddress = () => {
+    if (connected && address) {
+      setNewAddress(address);
+      return;
+    }
+
+    setShowModal(true);
+  };
+
+  const onLink = async () => {
+    const res = isValidSuiAddress(newAddress);
+    if (!res) {
+      setAddressError("Not a valid SUI address");
+      return;
+    }
+  };
+
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setAddressError(null);
+    setNewAddress(e.target.value);
+  };
+
+  return (
+    <div>
+      <ConnectModal
+        open={showModal}
+        onOpenChange={(open: boolean) => setShowModal(open)}
+      />
+      <h1>You have not linked your wallet to Morphis</h1>
+      <Box sx={{ marginBottom: "16px", marginTop: "16px" }}>
+        <TextField
+          error={!!addressError}
+          fullWidth
+          helperText={addressError}
+          id="address-field"
+          label="Address"
+          onChange={onChange}
+          placeholder="Your wallet address"
+          value={newAddress}
+          variant="standard"
+        />
+      </Box>
+      <Box>
+        <Button
+          disabled={!newAddress}
+          onClick={onLink}
+          sx={{ marginRight: "16px" }}
+          variant="contained"
+        >
+          Link to Morphis
+        </Button>
+        <Button onClick={onMigrateAddress} variant="contained">
+          Use connected wallet address
+        </Button>
+      </Box>
+    </div>
+  );
+};

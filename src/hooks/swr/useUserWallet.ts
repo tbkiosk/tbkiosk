@@ -1,18 +1,13 @@
-import useSWR from "swr";
+import useSWRImmutable from "swr/immutable";
 
 const useUserWallet = () => {
-  const { data, error, isLoading } = useSWR(`/api/wallet`, null, {
-    revalidateOnFocus: false,
-    revalidateOnReconnect: false,
-    refreshWhenOffline: false,
-    refreshWhenHidden: false,
-    refreshInterval: 0,
-  });
+  const { data, error, isLoading, mutate } = useSWRImmutable(`/api/wallet`);
 
   return {
     data,
     isLoading,
     error,
+    mutate,
   };
 };
 
