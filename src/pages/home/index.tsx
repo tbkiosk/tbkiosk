@@ -1,6 +1,7 @@
-import Head from "next/head";
-import { useWallet, ConnectModal } from "@suiet/wallet-kit";
 import { useState } from "react";
+import Head from "next/head";
+import { useSession } from "next-auth/react";
+import { useWallet, ConnectModal } from "@suiet/wallet-kit";
 import { isValidSuiAddress } from "@mysten/sui.js";
 
 import Layout from "@/layouts";
@@ -9,12 +10,15 @@ import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import Button from "@mui/lab/LoadingButton";
 
+import request from "@/utils/request";
+
 import useUserWallet from "@/hooks/swr/useUserWallet";
 
 import st from "./styles.module.css";
 
 const Home = () => {
   const { data, isLoading } = useUserWallet();
+  console.log(data);
 
   return (
     <>
@@ -38,6 +42,7 @@ const Home = () => {
 export default Home;
 
 const NoWallet = () => {
+  const { data: session } = useSession();
   const { connected, address } = useWallet();
 
   const [newAddress, setNewAddress] = useState("");
@@ -59,6 +64,15 @@ const NoWallet = () => {
       setAddressError("Not a valid SUI address");
       return;
     }
+
+    if (!session?.user?.email) {
+      return;
+    }
+
+    const data = await request("/api/wallet", {
+      method: "POST",
+      body: JSON.stringify({ email: session.user.email, address: newAddress }),
+    });
   };
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -88,7 +102,7 @@ const NoWallet = () => {
       </Box>
       <Box>
         <Button
-          disabled={!newAddress}
+          disabled={!newAddress || !session?.user?.email}
           onClick={onLink}
           sx={{ marginRight: "16px" }}
           variant="contained"
