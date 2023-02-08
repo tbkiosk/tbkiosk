@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
+import { useState } from "react";
 import { useSession, signOut } from "next-auth/react";
+
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -21,7 +21,6 @@ type LayoutProps = {
 
 const Layout = ({ children }: LayoutProps) => {
   const { data: session } = useSession();
-  const router = useRouter();
 
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 
@@ -33,12 +32,6 @@ const Layout = ({ children }: LayoutProps) => {
     setAnchorElUser(null);
     signOut();
   };
-
-  useEffect(() => {
-    if (!session) {
-      router.push("/");
-    }
-  }, [session, router]);
 
   return (
     <div className={st.container}>
