@@ -1,9 +1,7 @@
 import useSWR from "swr";
 
-import fetcher from "./fetcher";
-
 const useUserWallet = () => {
-  const { data, error, isLoading } = useSWR(`/api/wallet`, fetcher);
+  const { data, error, isLoading } = useSWR(`/api/wallet`);
 
   return {
     data,
