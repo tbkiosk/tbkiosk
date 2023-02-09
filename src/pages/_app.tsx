@@ -2,6 +2,8 @@ import { SessionProvider } from "next-auth/react";
 import { WalletProvider } from "@suiet/wallet-kit";
 import { SWRConfig } from "swr";
 
+import { SuiJsonRpcProvider } from "@/context/sui";
+
 import type { AppProps } from "next/app";
 
 import "@suiet/wallet-kit/style.css";
@@ -16,7 +18,9 @@ const App = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => (
   >
     <WalletProvider>
       <SessionProvider session={session}>
-        <Component {...pageProps} />
+        <SuiJsonRpcProvider>
+          <Component {...pageProps} />
+        </SuiJsonRpcProvider>
       </SessionProvider>
     </WalletProvider>
   </SWRConfig>
