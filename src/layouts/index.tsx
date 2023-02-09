@@ -36,7 +36,7 @@ const Layout = ({ children }: LayoutProps) => {
   return (
     <div className={st.container}>
       <AppBar position="static">
-        <Container>
+        <Container maxWidth={false}>
           <Toolbar disableGutters>
             <Typography
               variant="h6"
@@ -46,9 +46,7 @@ const Layout = ({ children }: LayoutProps) => {
               sx={{
                 mr: 2,
                 display: { xs: "none", md: "flex" },
-                fontFamily: "monospace",
                 fontWeight: 700,
-                letterSpacing: ".3rem",
                 color: "inherit",
                 textDecoration: "none",
               }}

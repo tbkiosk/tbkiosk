@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import Loading from "../loading";
 
 type SesstionGuardProps = {
-  children: React.ReactNode | React.ReactNode[];
+  children: JSX.Element;
 };
 
 const SessionGuard = ({ children }: SesstionGuardProps) => {

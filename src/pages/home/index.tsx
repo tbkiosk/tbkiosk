@@ -90,7 +90,7 @@ const WalletStatus = ({ wallet }: WalletStatusProps) => {
   };
 
   return (
-    <div>
+    <div className={st.container}>
       <ConnectModal
         open={showModal}
         onOpenChange={(open: boolean) => setShowModal(open)}
