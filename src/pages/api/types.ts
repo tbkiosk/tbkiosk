@@ -2,4 +2,8 @@ export type ResponseError = {
   message?: string;
 };
 
-export type ResponseBase<T = never> = T | ResponseError;
+export type ResponseSuccess<T> = {
+  data?: T;
+};
+
+export type ResponseBase<T> = ResponseSuccess<T> & ResponseError;

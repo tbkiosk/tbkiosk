@@ -14,11 +14,12 @@ import request from "@/utils/request";
 
 import useUserWallet from "@/hooks/swr/useUserWallet";
 
+import type { Wallet } from "@/schemas/wallet";
+
 import st from "./styles.module.css";
 
 const Home = () => {
-  const { data, isLoading } = useUserWallet();
-  console.log(data);
+  const { data, isLoading, error } = useUserWallet();
 
   return (
     <>
@@ -31,7 +32,11 @@ const Home = () => {
       <SessionGuard>
         <Layout>
           <Loading isLoading={isLoading}>
-            <NoWallet />
+            {error ? (
+              <h1>Failed to load linked wallet information</h1>
+            ) : (
+              <WalletStatus wallet={data} />
+            )}
           </Loading>
         </Layout>
       </SessionGuard>
@@ -41,11 +46,15 @@ const Home = () => {
 
 export default Home;
 
-const NoWallet = () => {
+type WalletStatusProps = {
+  wallet: Wallet | undefined;
+};
+
+const WalletStatus = ({ wallet }: WalletStatusProps) => {
   const { data: session } = useSession();
   const { connected, address } = useWallet();
 
-  const [newAddress, setNewAddress] = useState("");
+  const [newAddress, setNewAddress] = useState(wallet?.address || "");
   const [addressError, setAddressError] = useState<null | string>(null);
   const [showModal, setShowModal] = useState(false);
 
@@ -86,7 +95,7 @@ const NoWallet = () => {
         open={showModal}
         onOpenChange={(open: boolean) => setShowModal(open)}
       />
-      <h1>You have not linked your wallet to Morphis</h1>
+      {!wallet && <h1>You have not linked your wallet to Morphis</h1>}
       <Box sx={{ marginBottom: "16px", marginTop: "16px" }}>
         <TextField
           error={!!addressError}
@@ -102,7 +111,11 @@ const NoWallet = () => {
       </Box>
       <Box>
         <Button
-          disabled={!newAddress || !session?.user?.email}
+          disabled={
+            !newAddress ||
+            !session?.user?.email ||
+            newAddress === wallet?.address
+          }
           onClick={onLink}
           sx={{ marginRight: "16px" }}
           variant="contained"

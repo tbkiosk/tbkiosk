@@ -42,7 +42,7 @@ const handler = async (
       return;
     }
 
-    res.status(200).json(wallet[0]);
+    res.status(200).json({ data: wallet[0] });
     return;
   }
 
@@ -93,7 +93,7 @@ const handler = async (
       });
     }
 
-    res.status(200).json(model);
+    res.status(200).json({ data: model });
     return;
   }
 };
