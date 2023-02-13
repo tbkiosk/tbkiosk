@@ -32,7 +32,7 @@ export const generateMnemonicAndKeypair = (strength?: number) => {
  * @param index derivation index
  * @returns Ed25519Keypair
  */
-const getKeypairFromMnemonics = (
+export const getKeypairFromMnemonics = (
   mnemonics: string,
   index = 0
 ): Ed25519Keypair => {

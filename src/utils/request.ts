@@ -14,12 +14,14 @@ const request = async <T>(
     });
     if (!res.ok) {
       return {
+        status: res.status,
         message: res.statusText,
       };
     }
 
     const data: T = await res.json();
-    return data;
+
+    return { data };
   } catch (e) {
     return {
       message: (e as Error).message,
