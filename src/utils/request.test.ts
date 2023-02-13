@@ -17,7 +17,6 @@ describe("request", () => {
   it("should fail if server responses 500", async () => {
     const res = await request<MockResponse>("https://mock.codes/500");
 
-    console.log(999, res);
     expect(res.status).equals(500);
   });
 
