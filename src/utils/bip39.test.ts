@@ -3,7 +3,12 @@
 
 import { describe, it, expect } from "vitest";
 
-import { normalizeMnemonics, validateMnemonics } from "./bip39";
+import {
+  normalizeMnemonics,
+  validateMnemonics,
+  generateMnemonic,
+  getKeypairFromMnemonics,
+} from "./bip39";
 
 describe("mnemonics", () => {
   it("normalize mnemonics", () => {
@@ -72,5 +77,28 @@ describe("mnemonics", () => {
         "abandon void come effort suffer camp survey warrior heavy shoot primary clutch crush open amazing screen patrol group space point ten exist slush involve unfold"
       )
     ).toBe(false);
+  });
+
+  it("should generate random mnemonic", () => {
+    expect(validateMnemonics(generateMnemonic())).toBe(true);
+  });
+
+  it("should generate public key and derivation", () => {
+    const keypair = getKeypairFromMnemonics(
+      "result crisp session latin must fruit genuine question prevent start coconut brave speak student dismiss"
+    );
+    const pubkeyStr = keypair.getPublicKey().toString();
+
+    expect(pubkeyStr).toBe("aFstb5h4TddjJJryHJL1iMob6AxAqYxVv3yRt05aweI=");
+
+    const derivedKeypair = getKeypairFromMnemonics(
+      "result crisp session latin must fruit genuine question prevent start coconut brave speak student dismiss",
+      1
+    );
+    const derivedPubkeyStr = derivedKeypair.getPublicKey().toString();
+
+    expect(derivedPubkeyStr).toBe(
+      "UwffSbKhFzfGEZQeQ07qxtlYBIzK/zzxjC6A/3Dwq+w="
+    );
   });
 });

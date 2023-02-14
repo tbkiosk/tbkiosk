@@ -1,10 +1,9 @@
 import clientPromise from "@/lib/mongodb";
 import { getServerSession } from "next-auth/next";
-import { generateMnemonicAndKeypair } from "@/utils/bip39";
 
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
 import { generateMnemonic, getKeypairFromMnemonics } from "@/utils/bip39";
-import { generateRandomString, plainTextToHash } from "@/utils/password";
+import { generateRandomString } from "@/utils/password";
 
 import transferSchema from "@/schemas/transfer";
 

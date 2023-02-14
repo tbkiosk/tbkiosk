@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 
-import { plainTextToHash } from "./password";
+import { plainTextToHash, generateRandomString } from "./password";
 
 describe("password", () => {
   it("should create correct random string", () => {
@@ -15,5 +15,11 @@ describe("password", () => {
     const hash = plainTextToHash();
 
     expect(hash).toBeTruthy();
+  });
+
+  it("should generate random string", () => {
+    const random = generateRandomString();
+
+    expect(random).toBeTruthy();
   });
 });
