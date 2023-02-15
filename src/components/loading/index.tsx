@@ -1,5 +1,3 @@
-import CircularProgress from "@mui/material/CircularProgress";
-
 import st from "./styles.module.css";
 
 type LoadingProps = {
@@ -11,7 +9,7 @@ const Loading = ({ isLoading, children }: LoadingProps) => {
   if (isLoading) {
     return (
       <div className={st.loading}>
-        <CircularProgress />
+        <i className="fa-solid fa-spin fa-circle-notch" />
       </div>
     );
   }

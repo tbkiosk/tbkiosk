@@ -28,10 +28,10 @@ const Index = () => {
         <h1 className={st.title}>Morphis Trans</h1>
         <Button
           loading={status === "loading"}
-          onClick={() => signIn()}
+          onClick={() => signIn("discord", { test123: "tes123t" })}
           variant="contained"
         >
-          Login to connect wallet
+          Discord
         </Button>
       </main>
     </>

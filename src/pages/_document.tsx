@@ -2,7 +2,13 @@ import { Html, Head, Main, NextScript } from "next/document";
 
 const Document = () => (
   <Html lang="en">
-    <Head />
+    <Head>
+      <script
+        async
+        crossOrigin="anonymous"
+        src="https://kit.fontawesome.com/0ed81646db.js"
+      />
+    </Head>
     <body>
       <Main />
       <NextScript />
