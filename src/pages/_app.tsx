@@ -1,12 +1,12 @@
 import { SessionProvider } from "next-auth/react";
 import { WalletProvider } from "@suiet/wallet-kit";
 import { SWRConfig } from "swr";
-
-import { SuiJsonRpcProvider } from "@/context/sui";
+import { Tooltip } from "react-tooltip";
 
 import type { AppProps } from "next/app";
 
 import "@suiet/wallet-kit/style.css";
+import "react-tooltip/dist/react-tooltip.css";
 import "../styles/globals.css";
 
 const App = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => (
@@ -16,11 +16,10 @@ const App = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => (
         fetch(...args).then((res) => res.json()),
     }}
   >
-    <WalletProvider>
+    <WalletProvider autoConnect={false}>
       <SessionProvider session={session}>
-        <SuiJsonRpcProvider>
-          <Component {...pageProps} />
-        </SuiJsonRpcProvider>
+        <Component {...pageProps} />
+        <Tooltip anchorId="tooltip" />
       </SessionProvider>
     </WalletProvider>
   </SWRConfig>

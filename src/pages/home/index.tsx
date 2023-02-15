@@ -2,7 +2,6 @@ import Head from "next/head";
 
 import Layout from "@/layouts";
 import { SessionGuard, Loading } from "@/components";
-import WalletStatus from "@/components/_pages/home/wallet_status";
 
 import useUserWallet from "@/hooks/swr/useUserWallet";
 
@@ -23,7 +22,7 @@ const Home = () => {
             {error ? (
               <h1>Failed to load linked wallet information</h1>
             ) : (
-              <WalletStatus wallet={data} />
+              <h1>logged in</h1>
             )}
           </Loading>
         </Layout>
