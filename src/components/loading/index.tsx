@@ -1,5 +1,3 @@
-import st from "./styles.module.css";
-
 type LoadingProps = {
   isLoading: boolean;
   children: JSX.Element;
@@ -8,7 +6,7 @@ type LoadingProps = {
 const Loading = ({ isLoading, children }: LoadingProps) => {
   if (isLoading) {
     return (
-      <div className={st.loading}>
+      <div className="flex flex-grow items-center justify-center h-full w-full">
         <i className="fa-solid fa-spin fa-circle-notch" />
       </div>
     );
