@@ -1,10 +1,8 @@
-import clientPromise from "@/lib/mongodb";
 import { getServerSession } from "next-auth/next";
 
+import clientPromise from "@/lib/mongodb";
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
 import { generateMnemonic, getKeypairFromMnemonics } from "@/utils/bip39";
-import { generateRandomString } from "@/utils/password";
-
 import transferSchema from "@/schemas/transfer";
 
 import type { NextApiRequest, NextApiResponse } from "next";
@@ -68,7 +66,6 @@ const handler = async (
     const address = getKeypairFromMnemonics(mnemonics)
       .getPublicKey()
       .toSuiAddress();
-    const plainTextPassword = generateRandomString();
 
     const walletModel: Wallet = {
       email,

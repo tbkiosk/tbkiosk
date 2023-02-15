@@ -1,6 +1,6 @@
-import clientPromise from "@/lib/mongodb";
 import { getServerSession } from "next-auth/next";
 
+import clientPromise from "@/lib/mongodb";
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
 
 import walletSchema from "@/schemas/wallet";

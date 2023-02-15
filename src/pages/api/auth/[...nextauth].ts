@@ -1,41 +1,23 @@
 import NextAuth, { type NextAuthOptions, User, Session } from "next-auth";
-import GoogleProvider from "next-auth/providers/google";
+import DiscordProvider from "next-auth/providers/discord";
 import { MongoDBAdapter } from "@next-auth/mongodb-adapter";
 
 import clientPromise from "@/lib/mongodb";
 
-import type { JWT } from "next-auth/jwt";
+import refreshDiscordAccessToken from "@/helpers/nextauth/refreshDiscordToken";
 
-type AuthToken = JWT & {
-  accessToken: string;
-  accessTokenExpires: string;
-  refreshToken: string;
-  user: User;
-  error?: string;
-};
-
-type SessionType = {
-  session: ExtendedSession;
-  token: AuthToken;
-};
-
-type ExtendedSession = Session & {
-  accessToken?: string;
-  error?: string;
-};
+import type { AuthToken, SessionType } from "@/helpers/nextauth/types";
 
 export const authOptions: NextAuthOptions = {
   providers: [
-    GoogleProvider({
-      clientId: process.env.GOOGLE_ID as string,
-      clientSecret: process.env.GOOGLE_SECRET as string,
+    DiscordProvider({
+      clientId: process.env.DISCORD_CLIENT_ID as string,
+      clientSecret: process.env.DISCORD_CLIENT_SECRET as string,
       authorization: {
         params: {
-          prompt: "select_account",
-          response_type: "code",
-          access_type: "offline",
-          scope:
-            "openid email profile https://www.googleapis.com/auth/calendar.readonly",
+          prompt: "consent",
+          grant_type: "authorization_code",
+          scope: "connections",
         },
       },
     }),
@@ -62,7 +44,7 @@ export const authOptions: NextAuthOptions = {
         return token;
       }
 
-      return await refreshAccessToken(token as AuthToken);
+      return await refreshDiscordAccessToken(token as AuthToken);
     },
     // @ts-ignore
     session: async ({ session, token }: SessionType) => {
@@ -76,43 +58,3 @@ export const authOptions: NextAuthOptions = {
 };
 
 export default NextAuth(authOptions);
-
-const refreshAccessToken = async (token: AuthToken) => {
-  try {
-    const url =
-      "https://oauth2.googleapis.com/token?" +
-      new URLSearchParams({
-        client_id: process.env.GOOGLE_ID as string,
-        client_secret: process.env.GOOGLE_SECRET as string,
-        grant_type: "refresh_token",
-        refresh_token: token.refreshToken,
-      });
-
-    const response = await fetch(url, {
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-      method: "POST",
-    });
-
-    const refreshedTokens = await response.json();
-
-    if (!response.ok) {
-      throw refreshedTokens;
-    }
-
-    return {
-      ...token,
-      accessToken: refreshedTokens.access_token,
-      accessTokenExpires: Date.now() + refreshedTokens.expires_in * 1000,
-      refreshToken: refreshedTokens.refresh_token ?? token.refreshToken, // Fall back to old refresh token
-    };
-  } catch (error) {
-    console.log(error);
-
-    return {
-      ...token,
-      error: "RefreshAccessTokenError",
-    };
-  }
-};
