@@ -25,6 +25,7 @@ specifiers:
   react: 18.2.0
   react-dom: 18.2.0
   react-pro-sidebar: ^1.0.0
+  react-toastify: ^9.1.1
   react-tooltip: ^5.7.5
   swr: ^2.0.3
   tailwindcss: ^3.2.6
@@ -48,6 +49,7 @@ dependencies:
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
   react-pro-sidebar: 1.0.0_rhrpnuwl23ewqfh7btz44ilpmq
+  react-toastify: 9.1.1_biqbaboplfbrettd7655fr4n2y
   react-tooltip: 5.7.5_biqbaboplfbrettd7655fr4n2y
   swr: 2.0.3_react@18.2.0
 
@@ -3980,6 +3982,11 @@ packages:
       wrap-ansi: 7.0.0
     dev: true
 
+  /clsx/1.2.1:
+    resolution: {integrity: sha512-EcR6r5a8bj6pu3ycsa/E/cKVGuTgZJZdsyUYHOksG/UHIiKfjxzRxYJpyVBwYaQeOvghal9fcc4PidlgzugAQg==}
+    engines: {node: '>=6'}
+    dev: false
+
   /color-convert/1.9.3:
     resolution: {integrity: sha512-QfAUtd+vFdAtFQcC8CCyYt1fYWxSqAiK2cSD6zDB8N3cpsEBAvRxp9zOGg6G/SHHJYAT88/az/IuDGALsNVbGg==}
     dependencies:
@@ -6139,6 +6146,17 @@ packages:
       invariant: 2.2.4
       react: 18.2.0
       tslib: 2.5.0
+    dev: false
+
+  /react-toastify/9.1.1_biqbaboplfbrettd7655fr4n2y:
+    resolution: {integrity: sha512-pkFCla1z3ve045qvjEmn2xOJOy4ZciwRXm1oMPULVkELi5aJdHCN/FHnuqXq8IwGDLB7PPk2/J6uP9D8ejuiRw==}
+    peerDependencies:
+      react: '>=16'
+      react-dom: '>=16'
+    dependencies:
+      clsx: 1.2.1
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
     dev: false
 
   /react-tooltip/5.7.5_biqbaboplfbrettd7655fr4n2y:
