@@ -1,3 +1,4 @@
+import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import Image from "next/image";
@@ -10,37 +11,41 @@ import {
   useProSidebar,
   sidebarClasses,
 } from "react-pro-sidebar";
-import { Button } from "@/components";
+import { Button, Dropdown } from "@/components";
 
 type LayoutProps = {
-  children?: React.ReactNode;
+  showHeader?: boolean;
+  children?: React.ReactNode | React.ReactNode[];
 };
 
 const MENUS = [
   {
-    key: "Dashboard",
-    link: "/dashboard",
+    key: "dashboard",
     iconClass: "fa-house",
   },
   {
-    key: "Discover",
-    link: "/discover",
+    key: "discover",
     iconClass: "fa-compass",
   },
   {
-    key: "Communities",
-    link: "/communities",
+    key: "communities",
     iconClass: "fa-arrow-right-arrow-left",
   },
   {
-    key: "Activities",
-    link: "/activities",
+    key: "activities",
     iconClass: "fa-clock",
   },
 ];
 
-const Layout = ({ children }: LayoutProps) => {
+const DROPDOWN_MENUS = [
+  {
+    key: "sign out",
+  },
+];
+
+const Layout = ({ showHeader = true, children }: LayoutProps) => {
   const { route } = useRouter();
+  const { data: session } = useSession();
   const { collapsed, collapseSidebar } = useProSidebar();
   const [isMenuDefaultCollapsed, setIsMenuDefaultCollapsed] = useLocalStorage(
     "morphis-menu-default-collapsed",
@@ -78,14 +83,14 @@ const Layout = ({ children }: LayoutProps) => {
         </div>
         <Menu className="px-[30px]">
           <div className="flex flex-col grow gap-4">
-            {MENUS.map(({ key, link, iconClass }) => (
-              <Link href={link} key={key}>
+            {MENUS.map(({ key, iconClass }) => (
+              <Link href={`/${key}`} key={key}>
                 <Button
                   className={cl([
                     "flex grow items-center",
                     collapsed && "justify-center",
                   ])}
-                  variant={route.startsWith(link) ? "outlined" : "contained"}
+                  variant={route.includes(key) ? "outlined" : "contained"}
                 >
                   <i
                     className={cl([
@@ -94,7 +99,9 @@ const Layout = ({ children }: LayoutProps) => {
                       !collapsed && "ml-4 mr-4",
                     ])}
                   />
-                  {!collapsed && <span className="text-2xl">{key}</span>}
+                  {!collapsed && (
+                    <span className="text-2xl capitalize">{key}</span>
+                  )}
                 </Button>
               </Link>
             ))}
@@ -109,7 +116,47 @@ const Layout = ({ children }: LayoutProps) => {
           />
         </Menu>
       </Sidebar>
-      <main className="flex grow">{children}</main>
+      <main className="flex flex-col grow">
+        <div className="flex items-center justify-between px-[54px] py-[38px]">
+          <span className="font-bold text-xl capitalize">
+            {route.replace("/", "")}
+          </span>
+          <Dropdown
+            renderButton={() =>
+              session && (
+                <>
+                  <Image
+                    alt="avatar"
+                    className="rounded-full"
+                    height={32}
+                    src={session?.user?.image || ""}
+                    width={32}
+                  />
+                  <span className="mx-4 truncate">{session?.user?.name}</span>
+                  <i className="fa-solid fa-chevron-down" />
+                </>
+              )
+            }
+          >
+            <Dropdown.Items className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+              <Dropdown.Item>
+                {({ active }) => (
+                  <button
+                    className={cl(
+                      active ? "bg-gray-100 text-gray-900" : "text-gray-700",
+                      "block w-full px-4 py-4 text-left text-sm "
+                    )}
+                    onClick={() => signOut()}
+                  >
+                    Sign out
+                  </button>
+                )}
+              </Dropdown.Item>
+            </Dropdown.Items>
+          </Dropdown>
+        </div>
+        <div className="flex">{children}</div>
+      </main>
     </div>
   );
 };
