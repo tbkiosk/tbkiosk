@@ -34,7 +34,7 @@ const Index = () => {
 
   useEffect(() => {
     if (session) {
-      router.push("/home");
+      router.push("/dashboard");
     }
   }, [session, router]);
 
@@ -82,7 +82,7 @@ const Index = () => {
           </div>
           <Button
             className="border-[#d8dadc]"
-            onClick={() => signIn("discord", { callbackUrl: "/home" })}
+            onClick={() => signIn("discord", { callbackUrl: "/dashboard" })}
             startIcon={<i className="fa-brands fa-discord fa-xl ml-2" />}
             variant="outlined"
           >
