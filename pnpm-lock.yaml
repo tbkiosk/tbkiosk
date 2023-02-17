@@ -1,15 +1,13 @@
 lockfileVersion: 5.4
 
 specifiers:
-  '@emotion/react': ^11.10.5
-  '@emotion/styled': ^11.10.5
   '@headlessui/react': ^1.7.11
   '@mysten/sui.js': ^0.27.0
   '@next-auth/mongodb-adapter': ^1.1.1
   '@next/font': 13.1.6
   '@noble/hashes': ^1.2.0
   '@scure/bip39': ^1.1.1
-  '@suiet/wallet-kit': ^0.1.23
+  '@suiet/wallet-kit': ^0.1.24
   '@types/node': 18.13.0
   '@types/react': 18.0.28
   '@types/react-dom': 18.0.11
@@ -27,23 +25,21 @@ specifiers:
   react-dom: 18.2.0
   react-pro-sidebar: ^1.0.0
   react-toastify: ^9.1.1
-  react-tooltip: ^5.7.5
+  react-tooltip: ^5.8.1
   swr: ^2.0.3
-  tailwindcss: ^3.2.6
+  tailwindcss: ^3.2.7
   typescript: 4.9.5
   usehooks-ts: ^2.9.1
   vitest: ^0.28.5
 
 dependencies:
-  '@emotion/react': 11.10.5_wkiylh6bncbdhwh6tncqb3s2nm
-  '@emotion/styled': 11.10.5_cjinou6kcnbro54hfk33pnlsly
   '@headlessui/react': 1.7.11_biqbaboplfbrettd7655fr4n2y
   '@mysten/sui.js': 0.27.0
   '@next-auth/mongodb-adapter': 1.1.1_mnvn34sskpyqnfji7bz47remva
   '@next/font': 13.1.6
   '@noble/hashes': 1.2.0
   '@scure/bip39': 1.1.1
-  '@suiet/wallet-kit': 0.1.23_mm4iolharpqnpzrpm75acjue5m
+  '@suiet/wallet-kit': 0.1.24_mm4iolharpqnpzrpm75acjue5m
   classnames: 2.3.2
   joi: 17.7.1
   mongodb: 4.13.0
@@ -53,7 +49,7 @@ dependencies:
   react-dom: 18.2.0_react@18.2.0
   react-pro-sidebar: 1.0.0_rhrpnuwl23ewqfh7btz44ilpmq
   react-toastify: 9.1.1_biqbaboplfbrettd7655fr4n2y
-  react-tooltip: 5.7.5_biqbaboplfbrettd7655fr4n2y
+  react-tooltip: 5.8.1_biqbaboplfbrettd7655fr4n2y
   swr: 2.0.3_react@18.2.0
   usehooks-ts: 2.9.1_biqbaboplfbrettd7655fr4n2y
 
@@ -66,7 +62,7 @@ devDependencies:
   eslint: 8.34.0
   eslint-config-next: 13.1.6_7kw3g6rralp5ps6mg3uyzz6azm
   postcss: 8.4.21
-  tailwindcss: 3.2.6_postcss@8.4.21
+  tailwindcss: 3.2.7_postcss@8.4.21
   typescript: 4.9.5
   vitest: 0.28.5
 
@@ -3077,8 +3073,8 @@ packages:
     resolution: {integrity: sha512-bprE8+K5V+DPX7q2e2K57ImqNBdfGHDIWaGI5xHxZoxbKOuQZn4wzPiUxOAHnsUr3w3xHrWXwN7gnG/iIuEMIg==}
     dev: false
 
-  /@suiet/wallet-kit/0.1.23_mm4iolharpqnpzrpm75acjue5m:
-    resolution: {integrity: sha512-yaV4vhAFShHg4G75xicxn22MyO7IlNsSV+duRWdXUH8ce1gNLeLxzzGtHIRDCz2Wfa5mbNz0JUHz9Seb5flHxA==}
+  /@suiet/wallet-kit/0.1.24_mm4iolharpqnpzrpm75acjue5m:
+    resolution: {integrity: sha512-ddwyZ/fvuARPDVM0O3uhnej6Q5WMR92JSUwrpNGDnDQwBBQw7fX7j/M8FXWFzTpv2iAPqeLwGInMgIUVPKRxCA==}
     peerDependencies:
       cross-fetch: 3.x
     dependencies:
@@ -4218,7 +4214,7 @@ packages:
     dependencies:
       acorn-node: 1.8.2
       defined: 1.0.1
-      minimist: 1.2.7
+      minimist: 1.2.8
     dev: true
 
   /didyoumean/1.2.2:
@@ -5557,6 +5553,10 @@ packages:
     resolution: {integrity: sha512-bzfL1YUZsP41gmu/qjrEk0Q6i2ix/cVeAhbCbqH9u3zYutS1cLg00qhrD0M2MVdCcx4Sc0UpP2eBWo9rotpq6g==}
     dev: true
 
+  /minimist/1.2.8:
+    resolution: {integrity: sha512-2yyAR8qBkN3YuheJanUpWC5U3bb5osDywNB8RzDVlDwDHbocAJveqqj1u8+SVD7jkWT4yvsHCpWqqWqAxb0zCA==}
+    dev: true
+
   /mitt/3.0.0:
     resolution: {integrity: sha512-7dX2/10ITVyqh4aOSVI9gdape+t9l2/8QxHrFmUXu4EEUpdlxl6RudZUPZoc+zuY2hk1j7XxVroIVIan/pD/SQ==}
     dev: false
@@ -6175,8 +6175,8 @@ packages:
       react-dom: 18.2.0_react@18.2.0
     dev: false
 
-  /react-tooltip/5.7.5_biqbaboplfbrettd7655fr4n2y:
-    resolution: {integrity: sha512-hAr3AMSF47AuycEnI+ShwloYHTtVrftocXCfEjWAFvvAVpNGE9wredZs6NlUE1JtpOXIOe/oJUpoYj925v5hLQ==}
+  /react-tooltip/5.8.1_biqbaboplfbrettd7655fr4n2y:
+    resolution: {integrity: sha512-q30ARh/WwtcwNiZpzfYWFUmgZl6acRas/n7uhK6pXDiIWG6Xcklic0WFzHQLlvIGNeYbCY//h/RFdyBemfhZyQ==}
     peerDependencies:
       react: '>=16.14.0'
       react-dom: '>=16.14.0'
@@ -6643,8 +6643,8 @@ packages:
       tslib: 2.5.0
     dev: true
 
-  /tailwindcss/3.2.6_postcss@8.4.21:
-    resolution: {integrity: sha512-BfgQWZrtqowOQMC2bwaSNe7xcIjdDEgixWGYOd6AL0CbKHJlvhfdbINeAW76l1sO+1ov/MJ93ODJ9yluRituIw==}
+  /tailwindcss/3.2.7_postcss@8.4.21:
+    resolution: {integrity: sha512-B6DLqJzc21x7wntlH/GsZwEXTBttVSl1FtCzC8WP4oBc/NKef7kaax5jeihkkCEWc831/5NDJ9gRNDK6NEioQQ==}
     engines: {node: '>=12.13.0'}
     hasBin: true
     peerDependencies:
