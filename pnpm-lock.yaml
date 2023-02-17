@@ -25,7 +25,6 @@ specifiers:
   react-dom: 18.2.0
   react-pro-sidebar: ^1.0.0
   react-toastify: ^9.1.1
-  react-tooltip: ^5.8.1
   swr: ^2.0.3
   tailwindcss: ^3.2.7
   typescript: 4.9.5
@@ -49,7 +48,6 @@ dependencies:
   react-dom: 18.2.0_react@18.2.0
   react-pro-sidebar: 1.0.0_rhrpnuwl23ewqfh7btz44ilpmq
   react-toastify: 9.1.1_biqbaboplfbrettd7655fr4n2y
-  react-tooltip: 5.8.1_biqbaboplfbrettd7655fr4n2y
   swr: 2.0.3_react@18.2.0
   usehooks-ts: 2.9.1_biqbaboplfbrettd7655fr4n2y
 
@@ -2495,16 +2493,6 @@ packages:
     transitivePeerDependencies:
       - supports-color
     dev: true
-
-  /@floating-ui/core/1.2.1:
-    resolution: {integrity: sha512-LSqwPZkK3rYfD7GKoIeExXOyYx6Q1O4iqZWwIehDNuv3Dv425FIAE8PRwtAx1imEolFTHgBEcoFHm9MDnYgPCg==}
-    dev: false
-
-  /@floating-ui/dom/1.1.1:
-    resolution: {integrity: sha512-TpIO93+DIujg3g7SykEAGZMDtbJRrmnYRCNYSjJlvIbGhBjRSNTLVbNeDQBrzy9qDgUbiWdc7KA0uZHZ2tJmiw==}
-    dependencies:
-      '@floating-ui/core': 1.2.1
-    dev: false
 
   /@hapi/hoek/9.3.0:
     resolution: {integrity: sha512-/c6rf4UJlmHlC9b5BaNvzAcFv7HZ2QHaV0D4/HNlBdvFnvQq8RI4kYdhyPCl7Xj+oWvTWQ8ujhqS53LIgAe6KQ==}
@@ -6171,18 +6159,6 @@ packages:
       react-dom: '>=16'
     dependencies:
       clsx: 1.2.1
-      react: 18.2.0
-      react-dom: 18.2.0_react@18.2.0
-    dev: false
-
-  /react-tooltip/5.8.1_biqbaboplfbrettd7655fr4n2y:
-    resolution: {integrity: sha512-q30ARh/WwtcwNiZpzfYWFUmgZl6acRas/n7uhK6pXDiIWG6Xcklic0WFzHQLlvIGNeYbCY//h/RFdyBemfhZyQ==}
-    peerDependencies:
-      react: '>=16.14.0'
-      react-dom: '>=16.14.0'
-    dependencies:
-      '@floating-ui/dom': 1.1.1
-      classnames: 2.3.2
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
     dev: false

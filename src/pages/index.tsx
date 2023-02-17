@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import Image from "next/image";
 import { useSession, signIn } from "next-auth/react";
 import { useWallet, ConnectModal } from "@suiet/wallet-kit";
+import cl from "classnames";
 
 import { ellipsisMiddle } from "@/utils/address";
 
@@ -70,7 +71,15 @@ const Index = () => {
           >
             {connected ? ellipsisMiddle(address) : "Connect wallet"}
           </Button>
-          <div data-tooltip-content="Coming soon" id="tooltip">
+          <div className="group relative">
+            <span
+              className={cl([
+                "px-4 py-2 text-sm text-gray-100 rounded-md absolute left-1/2 bg-gray-800 z-[1050] opacity-0 transition-opacity",
+                "group-hover:opacity-90 -translate-x-1/2 -translate-y-[120%]",
+              ])}
+            >
+              Coming soon
+            </span>
             <Button
               className="border-[#d8dadc] mb-5"
               disabled
