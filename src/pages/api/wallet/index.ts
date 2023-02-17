@@ -8,12 +8,17 @@ import walletSchema from "@/schemas/wallet";
 import type { NextApiRequest, NextApiResponse } from "next";
 import type { ResponseBase } from "@/pages/api/types";
 import type { Wallet } from "@/schemas/wallet";
+import type { ExtendedSession } from "@/helpers/nextauth/types";
 
 const handler = async (
   req: NextApiRequest,
   res: NextApiResponse<ResponseBase<Wallet>>
 ) => {
-  const session = await getServerSession(req, res, authOptions);
+  const session = (await getServerSession(
+    req,
+    res,
+    authOptions
+  )) as ExtendedSession;
   if (!session) {
     return res.status(401);
   }

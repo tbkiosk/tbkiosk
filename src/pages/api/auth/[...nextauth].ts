@@ -17,7 +17,8 @@ export const authOptions: NextAuthOptions = {
         params: {
           prompt: "consent",
           grant_type: "authorization_code",
-          scope: "connections",
+          response_type: "code",
+          scope: "identify email guilds",
         },
       },
     }),

@@ -14,7 +14,7 @@ export type SessionType = {
   token: AuthToken;
 };
 
-type ExtendedSession = Session & {
+export type ExtendedSession = Session & {
   accessToken?: string;
   error?: string;
 };
