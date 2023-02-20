@@ -7,9 +7,9 @@ import { useSession, signIn } from 'next-auth/react'
 import { useWallet, ConnectModal } from '@suiet/wallet-kit'
 import cl from 'classnames'
 
-import { ellipsisMiddle } from '@/utils/address'
+import { Button, Tooltip } from '@/components'
 
-import { Button } from '@/components'
+import { ellipsisMiddle } from '@/utils/address'
 
 const Index = () => {
   const { data: session } = useSession()
@@ -79,6 +79,16 @@ const Index = () => {
               'Connect wallet'
             )}
           </Button>
+          <Tooltip tip="Coming soon">
+            <Button
+              className="border-[#d8dadc] mb-5"
+              disabled
+              startIcon={<i className="fa-brands fa-twitter fa-xl ml-2" />}
+              variant="outlined"
+            >
+              Connect Twitter
+            </Button>
+          </Tooltip>
           <div className="group relative">
             <span
               className={cl([
@@ -88,14 +98,6 @@ const Index = () => {
             >
               Coming soon
             </span>
-            <Button
-              className="border-[#d8dadc] mb-5"
-              disabled
-              startIcon={<i className="fa-brands fa-twitter fa-xl ml-2" />}
-              variant="outlined"
-            >
-              Connect Twitter
-            </Button>
           </div>
           <Button
             className="border-[#d8dadc] mb-5"
