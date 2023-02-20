@@ -1,70 +1,70 @@
-@import "tailwindcss/base";
-@import "tailwindcss/components";
-@import "tailwindcss/utilities";
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
 
 @font-face {
   font-family: satoshi;
   font-weight: 300;
-  src: url("/fonts/Satoshi-Light.otf");
+  src: url('/fonts/Satoshi-Light.otf');
 }
 
 @font-face {
   font-family: satoshi;
   font-style: italic;
   font-weight: 300;
-  src: url("/fonts/Satoshi-LightItalic.otf");
+  src: url('/fonts/Satoshi-LightItalic.otf');
 }
 
 @font-face {
   font-family: satoshi;
   font-weight: 400;
-  src: url("/fonts/Satoshi-Regular.otf");
+  src: url('/fonts/Satoshi-Regular.otf');
 }
 
 @font-face {
   font-family: satoshi;
   font-style: italic;
   font-weight: 400;
-  src: url("/fonts/Satoshi-Italic.otf");
+  src: url('/fonts/Satoshi-Italic.otf');
 }
 
 @font-face {
   font-family: satoshi;
   font-weight: 500;
-  src: url("/fonts/Satoshi-Medium.otf");
+  src: url('/fonts/Satoshi-Medium.otf');
 }
 
 @font-face {
   font-family: satoshi;
   font-style: italic;
   font-weight: 500;
-  src: url("/fonts/Satoshi-MediumItalic.otf");
+  src: url('/fonts/Satoshi-MediumItalic.otf');
 }
 
 @font-face {
   font-family: satoshi;
   font-weight: 700;
-  src: url("/fonts/Satoshi-Bold.otf");
+  src: url('/fonts/Satoshi-Bold.otf');
 }
 
 @font-face {
   font-family: satoshi;
   font-style: italic;
   font-weight: 700;
-  src: url("/fonts/Satoshi-BoldItalic.otf");
+  src: url('/fonts/Satoshi-BoldItalic.otf');
 }
 
 @font-face {
   font-family: satoshi;
   font-weight: 900;
-  src: url("/fonts/Satoshi-Black.otf");
+  src: url('/fonts/Satoshi-Black.otf');
 }
 
 @font-face {
   font-family: satoshi;
   font-style: italic;
   font-weight: 900;
-  src: url("/fonts/Satoshi-BlackItalic.otf");
+  src: url('/fonts/Satoshi-BlackItalic.otf');
 }
 
 * {

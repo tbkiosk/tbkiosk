@@ -1,7 +1,7 @@
 type LoadingProps = {
-  isLoading: boolean;
-  children: JSX.Element;
-};
+  isLoading: boolean
+  children: JSX.Element
+}
 
 const Loading = ({ isLoading, children }: LoadingProps) => {
   if (isLoading) {
@@ -9,10 +9,10 @@ const Loading = ({ isLoading, children }: LoadingProps) => {
       <div className="flex flex-grow items-center justify-center h-full w-full">
         <i className="fa-solid fa-spin fa-circle-notch" />
       </div>
-    );
+    )
   }
 
-  return children;
-};
+  return children
+}
 
-export default Loading;
+export default Loading

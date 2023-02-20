@@ -1,44 +1,44 @@
-import { useEffect, useState } from "react";
-import Head from "next/head";
-import { useRouter } from "next/router";
-import Image from "next/image";
-import Link from "next/link";
-import { useSession, signIn } from "next-auth/react";
-import { useWallet, ConnectModal } from "@suiet/wallet-kit";
-import cl from "classnames";
+import { useEffect, useState } from 'react'
+import Head from 'next/head'
+import { useRouter } from 'next/router'
+import Image from 'next/image'
+import Link from 'next/link'
+import { useSession, signIn } from 'next-auth/react'
+import { useWallet, ConnectModal } from '@suiet/wallet-kit'
+import cl from 'classnames'
 
-import { ellipsisMiddle } from "@/utils/address";
+import { ellipsisMiddle } from '@/utils/address'
 
-import { Button } from "@/components";
+import { Button } from '@/components'
 
 const Index = () => {
-  const { data: session } = useSession();
-  const { connecting, connected, address = "", disconnect } = useWallet();
-  const router = useRouter();
+  const { data: session } = useSession()
+  const { connecting, connected, address = '', disconnect } = useWallet()
+  const router = useRouter()
 
-  const [isModalVisible, setModalVisible] = useState(false);
+  const [isModalVisible, setModalVisible] = useState(false)
 
   const onWalletClick = () => {
     if (connected) {
-      disconnect();
-      setModalVisible(false);
-      return;
+      disconnect()
+      setModalVisible(false)
+      return
     }
 
-    setModalVisible(true);
-  };
+    setModalVisible(true)
+  }
 
   useEffect(() => {
     if (connected) {
-      setModalVisible(false);
+      setModalVisible(false)
     }
-  }, [connected, setModalVisible]);
+  }, [connected, setModalVisible])
 
   useEffect(() => {
     if (session) {
-      router.push("/profile");
+      router.push('/profile')
     }
-  }, [session, router]);
+  }, [session, router])
 
   return (
     <>
@@ -68,7 +68,7 @@ const Index = () => {
             loading={connecting}
             onClick={() => onWalletClick()}
             startIcon={<i className="fa-solid fa-wallet fa-xl ml-2"></i>}
-            variant={connected ? "contained" : "outlined"}
+            variant={connected ? 'contained' : 'outlined'}
           >
             {connected ? (
               <div className="flex justify-center items-center">
@@ -76,14 +76,14 @@ const Index = () => {
                 {ellipsisMiddle(address)}
               </div>
             ) : (
-              "Connect wallet"
+              'Connect wallet'
             )}
           </Button>
           <div className="group relative">
             <span
               className={cl([
-                "px-4 py-2 text-sm text-gray-100 rounded-md absolute left-1/2 bg-gray-800 invisible z-[1050] opacity-0 transition-opacity",
-                "group-hover:visible group-hover:opacity-90 -translate-x-1/2 -translate-y-[120%]",
+                'px-4 py-2 text-sm text-gray-100 rounded-md absolute left-1/2 bg-gray-800 invisible z-[1050] opacity-0 transition-opacity',
+                'group-hover:visible group-hover:opacity-90 -translate-x-1/2 -translate-y-[120%]',
               ])}
             >
               Coming soon
@@ -99,7 +99,7 @@ const Index = () => {
           </div>
           <Button
             className="border-[#d8dadc] mb-5"
-            onClick={() => signIn("discord", { callbackUrl: "/profile" })}
+            onClick={() => signIn('discord', { callbackUrl: '/profile' })}
             startIcon={<i className="fa-brands fa-discord fa-xl ml-2" />}
             variant="outlined"
           >
@@ -107,8 +107,8 @@ const Index = () => {
           </Button>
           <div
             className={cl([
-              "text-center font-bold",
-              connected ? "visible" : "invisible",
+              'text-center font-bold',
+              connected ? 'visible' : 'invisible',
             ])}
           >
             <Link
@@ -121,7 +121,7 @@ const Index = () => {
         </div>
       </main>
     </>
-  );
-};
+  )
+}
 
-export default Index;
+export default Index

@@ -1,104 +1,104 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { describe, it, expect } from "vitest";
+import { describe, it, expect } from 'vitest'
 
 import {
   normalizeMnemonics,
   validateMnemonics,
   generateMnemonic,
   getKeypairFromMnemonics,
-} from "./bip39";
+} from './bip39'
 
-describe("mnemonics", () => {
-  it("normalize mnemonics", () => {
-    expect(normalizeMnemonics(" Almost a Seed    Phrase")).toEqual(
-      "almost a seed phrase"
-    );
-  });
+describe('mnemonics', () => {
+  it('normalize mnemonics', () => {
+    expect(normalizeMnemonics(' Almost a Seed    Phrase')).toEqual(
+      'almost a seed phrase'
+    )
+  })
 
-  it("validate mnemonics", () => {
+  it('validate mnemonics', () => {
     // Mnemonics length too short
-    expect(validateMnemonics("result")).toBe(false);
+    expect(validateMnemonics('result')).toBe(false)
 
     // Invalid word not from the wordlist
     expect(
       validateMnemonics(
-        "aaa crisp session latin must fruit genuine question prevent start coconut brave speak student dismiss"
+        'aaa crisp session latin must fruit genuine question prevent start coconut brave speak student dismiss'
       )
-    ).toBe(false);
+    ).toBe(false)
 
     // Invalid checksum
     expect(
       validateMnemonics(
-        "sleep kitten sleep kitten sleep kitten sleep kitten sleep kitten sleep kitten"
+        'sleep kitten sleep kitten sleep kitten sleep kitten sleep kitten sleep kitten'
       )
-    ).toBe(false);
+    ).toBe(false)
 
     // Test cases generated from https://iancoleman.io/bip39/ and https://github.com/trezor/python-mnemonic/blob/master/vectors.json
     // Valid mnemonics 12 words
     expect(
       validateMnemonics(
-        "result crisp session latin must fruit genuine question prevent start coconut brave speak student dismiss"
+        'result crisp session latin must fruit genuine question prevent start coconut brave speak student dismiss'
       )
-    ).toBeTruthy();
+    ).toBeTruthy()
 
     // Valid mnemonics 15 words
     expect(
       validateMnemonics(
-        "slender myth trap industry peanut arrange depart guess chef common steel rookie brick enroll napkin"
+        'slender myth trap industry peanut arrange depart guess chef common steel rookie brick enroll napkin'
       )
-    ).toBeTruthy();
+    ).toBeTruthy()
 
     // Valid mnemonics 18 words
     expect(
       validateMnemonics(
-        "scissors invite lock maple supreme raw rapid void congress muscle digital elegant little brisk hair mango congress clump"
+        'scissors invite lock maple supreme raw rapid void congress muscle digital elegant little brisk hair mango congress clump'
       )
-    ).toBeTruthy();
+    ).toBeTruthy()
 
     // Valid mnemonics 21 words
     expect(
       validateMnemonics(
-        "entry spoon private ridge clean salon loan surround apology fluid damage orbit embark digital polar find lazy bean plate burger august"
+        'entry spoon private ridge clean salon loan surround apology fluid damage orbit embark digital polar find lazy bean plate burger august'
       )
-    ).toBeTruthy();
+    ).toBeTruthy()
 
     // Valid mnemonics 24 words
     expect(
       validateMnemonics(
-        "void come effort suffer camp survey warrior heavy shoot primary clutch crush open amazing screen patrol group space point ten exist slush involve unfold"
+        'void come effort suffer camp survey warrior heavy shoot primary clutch crush open amazing screen patrol group space point ten exist slush involve unfold'
       )
-    ).toBeTruthy();
+    ).toBeTruthy()
 
     // Mnemonics length too long
     expect(
       validateMnemonics(
-        "abandon void come effort suffer camp survey warrior heavy shoot primary clutch crush open amazing screen patrol group space point ten exist slush involve unfold"
+        'abandon void come effort suffer camp survey warrior heavy shoot primary clutch crush open amazing screen patrol group space point ten exist slush involve unfold'
       )
-    ).toBe(false);
-  });
+    ).toBe(false)
+  })
 
-  it("should generate random mnemonic", () => {
-    expect(validateMnemonics(generateMnemonic())).toBe(true);
-  });
+  it('should generate random mnemonic', () => {
+    expect(validateMnemonics(generateMnemonic())).toBe(true)
+  })
 
-  it("should generate public key and derivation", () => {
+  it('should generate public key and derivation', () => {
     const keypair = getKeypairFromMnemonics(
-      "result crisp session latin must fruit genuine question prevent start coconut brave speak student dismiss"
-    );
-    const pubkeyStr = keypair.getPublicKey().toString();
+      'result crisp session latin must fruit genuine question prevent start coconut brave speak student dismiss'
+    )
+    const pubkeyStr = keypair.getPublicKey().toString()
 
-    expect(pubkeyStr).toBe("aFstb5h4TddjJJryHJL1iMob6AxAqYxVv3yRt05aweI=");
+    expect(pubkeyStr).toBe('aFstb5h4TddjJJryHJL1iMob6AxAqYxVv3yRt05aweI=')
 
     const derivedKeypair = getKeypairFromMnemonics(
-      "result crisp session latin must fruit genuine question prevent start coconut brave speak student dismiss",
+      'result crisp session latin must fruit genuine question prevent start coconut brave speak student dismiss',
       1
-    );
-    const derivedPubkeyStr = derivedKeypair.getPublicKey().toString();
+    )
+    const derivedPubkeyStr = derivedKeypair.getPublicKey().toString()
 
     expect(derivedPubkeyStr).toBe(
-      "UwffSbKhFzfGEZQeQ07qxtlYBIzK/zzxjC6A/3Dwq+w="
-    );
-  });
-});
+      'UwffSbKhFzfGEZQeQ07qxtlYBIzK/zzxjC6A/3Dwq+w='
+    )
+  })
+})

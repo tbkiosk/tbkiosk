@@ -1,14 +1,14 @@
-import { SessionProvider } from "next-auth/react";
-import { WalletProvider } from "@suiet/wallet-kit";
-import { SWRConfig } from "swr";
-import { ProSidebarProvider } from "react-pro-sidebar";
-import { ToastContainer } from "react-toastify";
+import { SessionProvider } from 'next-auth/react'
+import { WalletProvider } from '@suiet/wallet-kit'
+import { SWRConfig } from 'swr'
+import { ProSidebarProvider } from 'react-pro-sidebar'
+import { ToastContainer } from 'react-toastify'
 
-import type { AppProps } from "next/app";
+import type { AppProps } from 'next/app'
 
-import "@suiet/wallet-kit/style.css";
-import "react-toastify/dist/ReactToastify.css";
-import "../styles/globals.css";
+import '@suiet/wallet-kit/style.css'
+import 'react-toastify/dist/ReactToastify.css'
+import '../styles/globals.css'
 
 const App = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => (
   <SWRConfig
@@ -26,6 +26,6 @@ const App = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => (
       </SessionProvider>
     </WalletProvider>
   </SWRConfig>
-);
+)
 
-export default App;
+export default App

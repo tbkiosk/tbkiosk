@@ -1,10 +1,10 @@
-import Head from "next/head";
-import { useSession } from "next-auth/react";
+import Head from 'next/head'
+// import { useSession } from 'next-auth/react'
 
-import Layout from "@/layouts";
+import Layout from '@/layouts'
 
 const Profile = () => {
-  const { status } = useSession();
+  // const { status } = useSession()
 
   return (
     <>
@@ -16,7 +16,7 @@ const Profile = () => {
       </Head>
       <Layout>profile</Layout>
     </>
-  );
-};
+  )
+}
 
-export default Profile;
+export default Profile

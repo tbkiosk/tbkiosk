@@ -1,11 +1,11 @@
-import { Fragment } from "react";
-import { Menu, Transition } from "@headlessui/react";
-import cl from "classnames";
+import { Fragment } from 'react'
+import { Menu, Transition } from '@headlessui/react'
+import cl from 'classnames'
 
 type DropdownProps = {
-  renderButton?: () => React.ReactNode | React.ReactNode[];
-  children?: React.ReactNode | React.ReactNode[];
-};
+  renderButton?: () => React.ReactNode | React.ReactNode[]
+  children?: React.ReactNode | React.ReactNode[]
+}
 
 const Dropdown = ({ renderButton, children }: DropdownProps) => (
   <Menu as="div" className="relative inline-block text-left">
@@ -14,17 +14,17 @@ const Dropdown = ({ renderButton, children }: DropdownProps) => (
         <div>
           <Menu.Button
             className={cl([
-              "w-full inline-flex justify-center items-center h-[54px] min-w-[160px] max-w-[240px]",
-              "rounded-[28px] bg-black text-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm transition",
-              "hover:bg-[#2a2a2d]",
-              "focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100",
+              'w-full inline-flex justify-center items-center h-[54px] min-w-[160px] max-w-[240px]',
+              'rounded-[28px] bg-black text-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm transition',
+              'hover:bg-[#2a2a2d]',
+              'focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100',
             ])}
           >
             {renderButton?.() || null}
             <i
               className={cl([
-                "fa-solid fa-chevron-down transition-transform",
-                open && "rotate-180",
+                'fa-solid fa-chevron-down transition-transform',
+                open && 'rotate-180',
               ])}
             />
           </Menu.Button>
@@ -43,9 +43,9 @@ const Dropdown = ({ renderButton, children }: DropdownProps) => (
       </>
     )}
   </Menu>
-);
+)
 
-Dropdown.Items = Menu.Items;
-Dropdown.Item = Menu.Item;
+Dropdown.Items = Menu.Items
+Dropdown.Item = Menu.Item
 
-export default Dropdown;
+export default Dropdown
