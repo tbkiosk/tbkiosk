@@ -5,6 +5,7 @@ import { MongoDBAdapter } from '@next-auth/mongodb-adapter'
 import clientPromise from '@/lib/mongodb'
 
 import refreshDiscordAccessToken from '@/helpers/nextauth/refreshDiscordToken'
+import updateUserByProvider from '@/helpers/nextauth/updateUserByProvider'
 
 import type { AuthToken, SessionType } from '@/helpers/nextauth/types'
 
@@ -32,6 +33,9 @@ export const authOptions: NextAuthOptions = {
     jwt: async ({ token, account, user }) => {
       // Initial sign in
       if (account && user) {
+        // update user discord or twitter email in users collection
+        await updateUserByProvider({ account, user })
+
         return {
           accessToken: account.access_token,
           accessTokenExpires: (account.expires_at || 0) * 1000,
