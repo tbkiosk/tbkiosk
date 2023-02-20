@@ -17,7 +17,7 @@ const App = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => (
         fetch(...args).then((res) => res.json()),
     }}
   >
-    <WalletProvider autoConnect={false}>
+    <WalletProvider autoConnect>
       <SessionProvider session={session}>
         <ProSidebarProvider>
           <Component {...pageProps} />

@@ -1,4 +1,3 @@
-import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import Image from "next/image";
@@ -11,7 +10,8 @@ import {
   useProSidebar,
   sidebarClasses,
 } from "react-pro-sidebar";
-import { Button, Dropdown } from "@/components";
+import { Button } from "@/components";
+import UserDropdown from "./components/UserDropdown";
 
 type LayoutProps = {
   showHeader?: boolean;
@@ -19,10 +19,6 @@ type LayoutProps = {
 };
 
 const MENUS = [
-  {
-    key: "dashboard",
-    iconClass: "fa-house",
-  },
   {
     key: "discover",
     iconClass: "fa-compass",
@@ -35,17 +31,14 @@ const MENUS = [
     key: "activities",
     iconClass: "fa-clock",
   },
-];
-
-const DROPDOWN_MENUS = [
   {
-    key: "sign out",
+    key: "profile",
+    iconClass: "fa-house",
   },
 ];
 
 const Layout = ({ showHeader = true, children }: LayoutProps) => {
   const { route } = useRouter();
-  const { data: session } = useSession();
   const { collapsed, collapseSidebar } = useProSidebar();
   const [isMenuDefaultCollapsed, setIsMenuDefaultCollapsed] = useLocalStorage(
     "morphis-menu-default-collapsed",
@@ -121,39 +114,7 @@ const Layout = ({ showHeader = true, children }: LayoutProps) => {
           <span className="font-bold text-xl capitalize">
             {route.replace("/", "")}
           </span>
-          <Dropdown
-            renderButton={() =>
-              session && (
-                <>
-                  <Image
-                    alt="avatar"
-                    className="rounded-full"
-                    height={32}
-                    src={session?.user?.image || ""}
-                    width={32}
-                  />
-                  <span className="mx-4 truncate">{session?.user?.name}</span>
-                  <i className="fa-solid fa-chevron-down" />
-                </>
-              )
-            }
-          >
-            <Dropdown.Items className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-              <Dropdown.Item>
-                {({ active }) => (
-                  <button
-                    className={cl(
-                      active ? "bg-gray-100 text-gray-900" : "text-gray-700",
-                      "block w-full px-4 py-4 text-left text-sm "
-                    )}
-                    onClick={() => signOut()}
-                  >
-                    Sign out
-                  </button>
-                )}
-              </Dropdown.Item>
-            </Dropdown.Items>
-          </Dropdown>
+          <UserDropdown />
         </div>
         <div className="flex">{children}</div>
       </main>

@@ -39,7 +39,7 @@ const Button = ({
     {...rest}
   >
     {startIcon && (
-      <div className="absolute inset-y-0  flex flex-col justify-center">
+      <div className="absolute inset-y-0 flex flex-col justify-center">
         {startIcon}
       </div>
     )}

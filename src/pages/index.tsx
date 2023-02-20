@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import Image from "next/image";
+import Link from "next/link";
 import { useSession, signIn } from "next-auth/react";
 import { useWallet, ConnectModal } from "@suiet/wallet-kit";
 import cl from "classnames";
@@ -35,14 +36,14 @@ const Index = () => {
 
   useEffect(() => {
     if (session) {
-      router.push("/dashboard");
+      router.push("/profile");
     }
   }, [session, router]);
 
   return (
     <>
       <Head>
-        <title>Morphis Social</title>
+        <title>Morphis Network</title>
       </Head>
       <main className="h-full flex flex-col justify-center items-center bg-[#f0f3fb] overflow-hidden">
         <ConnectModal
@@ -67,15 +68,22 @@ const Index = () => {
             loading={connecting}
             onClick={() => onWalletClick()}
             startIcon={<i className="fa-solid fa-wallet fa-xl ml-2"></i>}
-            variant="outlined"
+            variant={connected ? "contained" : "outlined"}
           >
-            {connected ? ellipsisMiddle(address) : "Connect wallet"}
+            {connected ? (
+              <div className="flex justify-center items-center">
+                <div className="bg-[#82ffac] h-[14px] w-[14px] rounded-full mr-4" />
+                {ellipsisMiddle(address)}
+              </div>
+            ) : (
+              "Connect wallet"
+            )}
           </Button>
           <div className="group relative">
             <span
               className={cl([
-                "px-4 py-2 text-sm text-gray-100 rounded-md absolute left-1/2 bg-gray-800 z-[1050] opacity-0 transition-opacity",
-                "group-hover:opacity-90 -translate-x-1/2 -translate-y-[120%]",
+                "px-4 py-2 text-sm text-gray-100 rounded-md absolute left-1/2 bg-gray-800 invisible z-[1050] opacity-0 transition-opacity",
+                "group-hover:visible group-hover:opacity-90 -translate-x-1/2 -translate-y-[120%]",
               ])}
             >
               Coming soon
@@ -90,13 +98,26 @@ const Index = () => {
             </Button>
           </div>
           <Button
-            className="border-[#d8dadc]"
-            onClick={() => signIn("discord", { callbackUrl: "/dashboard" })}
+            className="border-[#d8dadc] mb-5"
+            onClick={() => signIn("discord", { callbackUrl: "/profile" })}
             startIcon={<i className="fa-brands fa-discord fa-xl ml-2" />}
             variant="outlined"
           >
             Connect Discord
           </Button>
+          <div
+            className={cl([
+              "text-center font-bold",
+              connected ? "visible" : "invisible",
+            ])}
+          >
+            <Link
+              className="opacity-100 transition-opacity hover:opacity-50"
+              href="/profile"
+            >
+              Skip for now
+            </Link>
+          </div>
         </div>
       </main>
     </>
