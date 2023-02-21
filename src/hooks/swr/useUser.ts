@@ -1,17 +1,17 @@
 import { useEffect } from 'react'
-import useSWRImmutable from 'swr/immutable'
 import { toast } from 'react-toastify'
+import useSWRImmutable from 'swr/immutable'
 
 import type { ResponseBase } from '@/pages/api/types'
-import type { Wallet } from '@/schemas/wallet'
+import type { ExtendedUser } from '@/schemas/user'
 
-const useUserWallet = () => {
+const useUser = () => {
   const { data, error, isLoading, mutate } =
-    useSWRImmutable<ResponseBase<Wallet>>('/api/wallet')
+    useSWRImmutable<ResponseBase<ExtendedUser>>('/api/user')
 
   useEffect(() => {
     if (error) {
-      toast((error as Error)?.message || 'Failed to load /api/wallet')
+      toast((error as Error)?.message || 'Failed to load user')
     }
   }, [error])
 
@@ -23,4 +23,4 @@ const useUserWallet = () => {
   }
 }
 
-export default useUserWallet
+export default useUser
