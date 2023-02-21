@@ -6,7 +6,8 @@ import cl from 'classnames'
 
 import { Sidebar, Menu, useProSidebar, sidebarClasses } from 'react-pro-sidebar'
 import { Button } from '@/components'
-import UserDropdown from './components/UserDropdown'
+import UserDropdown from './components/user_dropdown'
+import ConnectStatus from './components/connect_status'
 
 type LayoutProps = {
   showHeader?: boolean
@@ -109,7 +110,13 @@ const Layout = ({ children }: LayoutProps) => {
           <span className="font-bold text-xl capitalize">
             {route.replace('/', '')}
           </span>
-          <UserDropdown />
+          <div className="flex flex-row items-center">
+            <span className="h-[48px] w-[48px] flex items-center justify-center bg-[#fdede5] rounded-full mr-4">
+              <i className="fa-regular fa-bell fa-xl" />
+            </span>
+            <ConnectStatus />
+            <UserDropdown />
+          </div>
         </div>
         <div className="flex">{children}</div>
       </main>
