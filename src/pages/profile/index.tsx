@@ -1,10 +1,12 @@
 import Head from 'next/head'
-// import { useSession } from 'next-auth/react'
+
+import useSessionGuard from '@/hooks/useSessionGuard'
 
 import Layout from '@/layouts'
+import ProfileCard from './components/profile_card'
 
 const Profile = () => {
-  // const { status } = useSession()
+  const { status } = useSessionGuard({ ignoreSession: true })
 
   return (
     <>
@@ -14,7 +16,16 @@ const Profile = () => {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Layout>profile</Layout>
+      <Layout>
+        <div className="flex grow">
+          {status === 'unauthenticated' && <span>Not logged in</span>}
+          {status === 'authenticated' && (
+            <>
+              <ProfileCard />
+            </>
+          )}
+        </div>
+      </Layout>
     </>
   )
 }

@@ -105,9 +105,9 @@ const Layout = ({ children }: LayoutProps) => {
           />
         </Menu>
       </Sidebar>
-      <main className="flex flex-col grow">
+      <main className="flex flex-col grow overflow-hidden">
         <div className="flex items-center justify-between px-[54px] py-[38px]">
-          <span className="font-bold text-xl capitalize">
+          <span className="font-bold text-5xl capitalize">
             {route.replace('/', '')}
           </span>
           <div className="flex flex-row items-center">
@@ -118,7 +118,7 @@ const Layout = ({ children }: LayoutProps) => {
             <UserDropdown />
           </div>
         </div>
-        <div className="flex">{children}</div>
+        <div className="flex flex-col px-[54px]">{children}</div>
       </main>
     </div>
   )

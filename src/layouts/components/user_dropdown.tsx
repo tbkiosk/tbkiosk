@@ -1,11 +1,13 @@
-import { signOut, useSession } from 'next-auth/react'
+import { signOut } from 'next-auth/react'
 import Image from 'next/image'
 import cl from 'classnames'
 
 import { Dropdown, Button } from '@/components'
 
+import useSessionGuard from '@/hooks/useSessionGuard'
+
 const UserDropdown = () => {
-  const { data: session, status } = useSession()
+  const { session, status } = useSessionGuard({ ignoreSession: true })
 
   const renderButton = () => {
     if (session && status === 'authenticated') {
