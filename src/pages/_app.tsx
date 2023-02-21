@@ -4,6 +4,8 @@ import { SWRConfig } from 'swr'
 import { ProSidebarProvider } from 'react-pro-sidebar'
 import { ToastContainer } from 'react-toastify'
 
+import fetcher from '@/helpers/swr/fetcher'
+
 import type { AppProps } from 'next/app'
 
 import '@suiet/wallet-kit/style.css'
@@ -13,8 +15,7 @@ import '../styles/globals.css'
 const App = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => (
   <SWRConfig
     value={{
-      fetcher: async (...args: Parameters<typeof fetch>): Promise<JSON> =>
-        fetch(...args).then((res) => res.json()),
+      fetcher,
     }}
   >
     <WalletProvider autoConnect>
