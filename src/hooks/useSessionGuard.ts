@@ -2,6 +2,8 @@ import { useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { useSession } from 'next-auth/react'
 
+import type { ExtendedSession } from '@/helpers/nextauth/types'
+
 type SessionGuardOptions = {
   ignoreSession?: boolean
 }
@@ -16,7 +18,7 @@ const useSessionGuard = (options?: SessionGuardOptions) => {
     }
   }, [session, router, status, options?.ignoreSession])
 
-  return { session, status }
+  return { session: session as ExtendedSession | null, status }
 }
 
 export default useSessionGuard

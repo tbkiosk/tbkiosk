@@ -1,11 +1,12 @@
-import type { User, Session } from 'next-auth'
+import type { Session } from 'next-auth'
 import type { JWT } from 'next-auth/jwt'
+import type { ExtendedUser } from '@/schemas/user'
 
 export type AuthToken = JWT & {
   accessToken: string
   accessTokenExpires: string
   refreshToken: string
-  user: User
+  user: ExtendedUser
   error?: string
 }
 
@@ -15,6 +16,7 @@ export type SessionType = {
 }
 
 export type ExtendedSession = Session & {
+  provider?: string
   accessToken?: string
   error?: string
 }

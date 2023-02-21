@@ -40,6 +40,7 @@ export const authOptions: NextAuthOptions = {
           accessToken: account.access_token,
           accessTokenExpires: (account.expires_at || 0) * 1000,
           refreshToken: account.refresh_token,
+          provider: account.provider,
           user,
         }
       }

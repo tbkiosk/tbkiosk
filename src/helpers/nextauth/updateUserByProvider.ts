@@ -26,8 +26,8 @@ const updateUserByProvider = async ({
   const targetUser = await collection.findOne({ email })
   if (
     !targetUser ||
-    targetUser.discordEmail === email ||
-    targetUser.twitterEmail === email
+    targetUser[provider === 'discord' ? 'discordEmail' : 'twitterEmail'] ===
+      email
   ) {
     return
   }
