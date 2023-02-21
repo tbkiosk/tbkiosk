@@ -5,7 +5,6 @@ import useSWRImmutable from 'swr/immutable'
 
 import fetcher from '@/helpers/swr/fetcher'
 
-import type { ResponseBase } from '@/pages/api/types'
 import type { ExtendedSession } from '@/helpers/nextauth/types'
 
 type DiscordGuilds = {
@@ -16,9 +15,7 @@ type DiscordGuilds = {
 
 const useDiscordGuilds = () => {
   const { data: session } = useSession()
-  const { data, error, isLoading, mutate } = useSWRImmutable<
-    ResponseBase<DiscordGuilds[]>
-  >(
+  const { data, error, isLoading, mutate } = useSWRImmutable<DiscordGuilds[]>(
     [
       'https://discord.com/api/v10/users/@me/guilds',
       {
@@ -28,7 +25,7 @@ const useDiscordGuilds = () => {
       },
     ],
     ([resource, options]: [RequestInfo, RequestInit]) =>
-      fetcher<ResponseBase<DiscordGuilds[]>>(resource, options)
+      fetcher<DiscordGuilds[]>(resource, options)
   )
 
   useEffect(() => {
@@ -38,9 +35,9 @@ const useDiscordGuilds = () => {
   }, [error])
 
   return {
-    data: data?.data,
+    data: data,
     isLoading,
-    error: error || data?.message,
+    error: error,
     mutate,
   }
 }
