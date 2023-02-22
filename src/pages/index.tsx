@@ -35,12 +35,12 @@ const Index = () => {
         <title>Morphis Network - Welcome</title>
         <meta name="description" content="morphis network welcome" />
       </Head>
-      <div className="flex flex-col overflow-x-auto overflow-y-auto min-w-[1440px]">
+      <div className="flex flex-col overflow-x-auto overflow-y-auto min-w-[1440px] pt-[96px]">
         <ConnectModal
           open={isModalVisible}
           onOpenChange={(open: boolean) => setModalVisible(open)}
         />
-        <header className="flex justify-between h-[96px] max-h-[96px] px-8 py-6">
+        <header className="flex justify-between fixed inset-x-0 top-0 h-[96px] max-h-[96px] px-8 py-6 bg-white z-[1099]">
           <div className="flex items-center gap-2 cursor-pointer">
             <Image
               alt="logo"
@@ -79,31 +79,32 @@ const Index = () => {
           </div>
         </header>
         <main className="grow overflow-hidden">
-          <div className="h-[520px] max-h-[520px] w-full relative">
-            <div className="w-[670px] absolute font-bold text-7xl leading-[96px] top-[88px] left-[96px]">
+          <section className="h-[520px] max-h-[520px] w-full relative">
+            <div className="w-[670px] absolute font-bold text-7xl leading-[96px] top-[88px] left-[96px] -translate-x-[calc(100%+96px)] animate-[fly-in-from-left_1s_ease-in-out_150ms] animation-fill-forwards">
               Connecting the NFT communities
             </div>
-            <div className="w-[580px] absolute font-medium text-2xl leading-8 top-[308px] left-[96px]">
+            <div className="w-[580px] absolute font-medium text-2xl leading-8 top-[308px] left-[96px] -translate-x-[calc(100%+96px)] animate-[fly-in-from-left_1s_ease-in-out_300ms] animation-fill-forwards">
               Morphis Network is a social platform that allows token-gated
               communities built around NFT ownership
             </div>
             <Link href="/login">
               <Button
-                className="!h-[48px] !w-auto px-8 !rounded-[60px] absolute top-[436px] left-[96px]"
+                className="!h-[48px] !w-auto px-8 !rounded-[60px] absolute top-[436px] left-[96px] -translate-x-[calc(100%+96px)] animate-[fly-in-from-left_1s_ease-in-out_450ms] animation-fill-forwards"
                 variant="contained"
               >
                 Get started
               </Button>
             </Link>
             <Image
-              alt="peepes"
-              className="absolute top-[88px] right-0 object-fit w-[40%] max-w-[888px] max-h-[518px]"
+              alt="peeps"
+              className="absolute top-[88px] right-0 object-fit w-[40%] max-w-[888px] max-h-[518px] translate-x-full animate-[fly-in-from-right_1s_ease-in-out_450ms] animation-fill-forwards"
               height={518}
+              id="peeps"
               src="/images/peeps.svg"
               width={888}
             />
-          </div>
-          <div className="flex flex-row mt-[96px]">
+          </section>
+          <section className="flex flex-row mt-[96px]">
             <div className="flex flex-col grow justify-center items-center gap-[48px] py-8 border-r border-r-black">
               <Image
                 alt="token"
@@ -132,7 +133,46 @@ const Index = () => {
                 New way to connect to like-minded members
               </span>
             </div>
-          </div>
+          </section>
+          <p
+            className="font-bold text-5xl text-center pt-[81px] pb-[157px]"
+            id="products"
+          >
+            Our Products
+          </p>
+          <section className="relative">
+            <Image
+              alt="connect"
+              className="absolute"
+              height={505}
+              src="/images/connect-preview.png"
+              width={782}
+            />
+            <div className="w-[543px] ml-[864px]">
+              <p className="text-4xl font-bold leading-[50px] mb-5">
+                Morphis Connect
+              </p>
+              <p className="text-2xl font-medium mb-8">
+                A completely new way for communities to form and interact with
+                each other. Centred around NFTs.{' '}
+              </p>
+              <p className="text-2xl font-bold mb-9">
+                Token gated communities around NFTs
+              </p>
+              <p className="text-2xl font-bold mb-9">
+                Useful tooling for community management
+              </p>
+              <p className="text-2xl font-bold mb-9">
+                Discover interesting projects & people
+              </p>
+              <Button
+                className="!w-auto !h-[48px] !rounded-[60px] px-[44px] text-lg"
+                variant="outlined"
+              >
+                Coming soon
+              </Button>
+            </div>
+          </section>
         </main>
       </div>
     </>

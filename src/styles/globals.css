@@ -79,9 +79,14 @@ body,
 #__next {
   height: 100vh;
   max-width: 100vw;
+  scroll-behavior: smooth;
 }
 
 a {
   color: inherit;
   text-decoration: none;
+}
+
+.animation-fill-forwards {
+  animation-fill-mode: forwards;
 }
