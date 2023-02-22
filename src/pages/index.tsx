@@ -8,10 +8,13 @@ import { Button } from '@/components'
 
 import { ellipsisMiddle } from '@/utils/address'
 
+let ticking = false
+
 const Index = () => {
   const { connected, address = '', disconnect } = useWallet()
 
   const [isModalVisible, setModalVisible] = useState(false)
+  const [pageYOffset, setPageYOffset] = useState(0)
 
   const onWalletClick = () => {
     if (connected) {
@@ -29,13 +32,33 @@ const Index = () => {
     }
   }, [connected, setModalVisible])
 
+  useEffect(() => {
+    const onScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          setPageYOffset(window.scrollY)
+          ticking = false
+        })
+
+        ticking = true
+      }
+    }
+
+    document.addEventListener('scroll', onScroll)
+
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+
   return (
     <>
       <Head>
         <title>Morphis Network - Welcome</title>
         <meta name="description" content="morphis network welcome" />
       </Head>
-      <div className="flex flex-col overflow-x-auto overflow-y-auto min-w-[1440px] pt-[96px]">
+      <div
+        className="flex flex-col overflow-x-auto overflow-y-auto min-w-[1440px] pt-[96px]"
+        id="index-container"
+      >
         <ConnectModal
           open={isModalVisible}
           onOpenChange={(open: boolean) => setModalVisible(open)}
@@ -97,10 +120,13 @@ const Index = () => {
             </Link>
             <Image
               alt="peeps"
-              className="absolute top-[88px] right-0 object-fit w-[40%] max-w-[888px] max-h-[518px] translate-x-full animate-[fly-in-from-right_1s_ease-in-out_450ms] animation-fill-forwards"
+              className="absolute top-[88px] right-0 object-fit w-[40%] max-w-[888px] max-h-[518px] transition-transform translate-x-full animate-[fly-in-from-right_1s_ease-in-out_450ms] animation-fill-forwards"
               height={518}
               id="peeps"
               src="/images/peeps.svg"
+              style={{
+                top: pageYOffset > 200 ? `-112px` : `${88 - pageYOffset}px`,
+              }}
               width={888}
             />
           </section>
