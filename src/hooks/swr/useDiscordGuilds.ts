@@ -20,7 +20,7 @@ const useDiscordGuilds = () => {
       'https://discord.com/api/v10/users/@me/guilds',
       {
         headers: {
-          Authorization: `Bearer ${(session as ExtendedSession).accessToken}`,
+          Authorization: `Bearer ${(session as ExtendedSession)?.accessToken}`,
         },
       },
     ],

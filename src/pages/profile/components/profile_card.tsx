@@ -55,14 +55,4 @@ const ProfileCard = () => {
   )
 }
 
-const ProfileCardWrapper = () => {
-  const { status } = useSessionGuard({ ignoreSession: true })
-
-  if (status === 'unauthenticated') {
-    return null
-  }
-
-  return <ProfileCard />
-}
-
-export default ProfileCardWrapper
+export default ProfileCard

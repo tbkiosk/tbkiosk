@@ -6,7 +6,7 @@ import Layout from '@/layouts'
 import ProfileCard from './components/profile_card'
 
 const Profile = () => {
-  const { status } = useSessionGuard({ ignoreSession: true })
+  const { session, status } = useSessionGuard({ ignoreSession: true })
 
   return (
     <>
@@ -17,10 +17,8 @@ const Profile = () => {
       <Layout>
         <div className="flex grow">
           {status === 'unauthenticated' && <span>Not logged in</span>}
-          {status === 'authenticated' && (
-            <>
-              <ProfileCard />
-            </>
+          {status === 'authenticated' && session?.accessToken && (
+            <ProfileCard />
           )}
         </div>
       </Layout>
