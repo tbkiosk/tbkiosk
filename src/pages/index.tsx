@@ -309,7 +309,7 @@ const Index = () => {
               width={353}
             />
             <div className="w-[543px] absolute" id="extension-intro">
-              <p className="text-4xl font-bold leading-[50px] mb-5">
+              <p className="text-4xl font-bold leading-[50px] mb-5 pl-[82px]">
                 Wallet Extension
               </p>
               <p
@@ -356,6 +356,7 @@ const Index = () => {
                 Transactions directly to social accounts
               </p>
               <a
+                className="pl-[82px]"
                 href="https://chrome.google.com/webstore/detail/morphis-wallet/heefohaffomkkkphnlpohglngmbcclhi"
                 rel="noreferrer"
                 target="_blank"
