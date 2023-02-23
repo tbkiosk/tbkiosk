@@ -16,7 +16,7 @@ const Index = () => {
   const { connected, address = '', disconnect } = useWallet()
 
   const [isModalVisible, setModalVisible] = useState(false)
-  const [pageYOffset, setPageYOffset] = useState(0)
+  const [scrollY, setScrollY] = useState(0)
 
   const onWalletClick = () => {
     if (connected) {
@@ -38,7 +38,7 @@ const Index = () => {
     const onScroll = () => {
       if (!ticking) {
         window.requestAnimationFrame(() => {
-          setPageYOffset(window.scrollY)
+          setScrollY(window.scrollY)
           ticking = false
         })
 
@@ -135,7 +135,7 @@ const Index = () => {
               id="peeps"
               src="/images/peeps.svg"
               style={{
-                top: pageYOffset > 200 ? `-112px` : `${88 - pageYOffset}px`,
+                top: scrollY > 200 ? `-112px` : `${88 - scrollY}px`,
               }}
               width={888}
             />
@@ -172,7 +172,7 @@ const Index = () => {
             </div>
           </section>
 
-          <section className="relative h-[896px]">
+          <section className="relative h-[896px]" id="products-section">
             <p
               className="font-bold text-5xl text-center pt-[81px] pb-[157px]"
               id="products"
@@ -184,6 +184,10 @@ const Index = () => {
               className="absolute left-0"
               height={505}
               src="/images/connect-preview.png"
+              style={{
+                top:
+                  scrollY < 544 ? '388px' : `${388 - (scrollY - 544) * 0.5}px`,
+              }}
               width={782}
             />
             <div className="w-[543px] absolute right-[68px]">
@@ -230,12 +234,18 @@ const Index = () => {
             </div>
           </section>
 
-          <section className="relative h-[604px] mt-[200px]">
+          <section className="relative h-[604px] mt-[100px]">
             <Image
               alt="wallet-preview"
               className="absolute right-[252px]"
               height={560}
               src="/images/wallet-preview-1.png"
+              style={{
+                top:
+                  scrollY < 1208
+                    ? '150px'
+                    : `${150 - (scrollY - 1208) * 0.5}px`,
+              }}
               width={353}
             />
             <Image
@@ -243,6 +253,12 @@ const Index = () => {
               className="h-[560px] absolute -right-[83px] object-contain"
               height={560}
               src="/images/wallet-preview-2.png"
+              style={{
+                top:
+                  scrollY < 1208
+                    ? '150px'
+                    : `${150 - (scrollY - 1208) * 0.5}px`,
+              }}
               width={353}
             />
             <div className="w-[543px] absolute left-[82px]">
