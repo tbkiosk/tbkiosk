@@ -1,6 +1,6 @@
 import { describe, it, expect, test } from 'vitest'
 
-import { ellipsisMiddle } from './address'
+import { ellipsisMiddle } from '../address'
 
 describe('address', () => {
   it('should not be omitted if its length is no more than 15 by default options', () => {

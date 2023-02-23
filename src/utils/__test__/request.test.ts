@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 
-import request from './request'
+import request from '../request'
 
 type MockResponse = {
   statusCode: number

@@ -5,12 +5,31 @@ import { Loading } from '@/components'
 import useSessionGuard from '@/hooks/useSessionGuard'
 import useDiscordGuilds from '@/hooks/swr/useDiscordGuilds'
 
-const ProfileCard = () => {
-  const { session } = useSessionGuard({ ignoreSession: true })
+import type { ExtendedSession } from '@/helpers/nextauth/types'
+
+type ProfileCardBaseProps = {
+  session: ExtendedSession | null
+}
+
+const ProfileCardWrapper = () => {
+  const { session, status } = useSessionGuard({ ignoreSession: true })
+
+  return (
+    <div className="flex flex-row grow gap-4 h-full px-9 py-3 rounded-[20px] shadow-[0_4px_10px_rgba(216,216,216,0.25)] overflow-hidden">
+      {status === 'authenticated' ? (
+        <ProfileCardBase session={session} />
+      ) : (
+        <span>Not logged in</span>
+      )}
+    </div>
+  )
+}
+
+const ProfileCardBase = ({ session }: ProfileCardBaseProps) => {
   const { data, isLoading } = useDiscordGuilds()
 
   return (
-    <div className="flex flex-row grow gap-4 h-[200px] px-9 py-3 rounded-[20px] shadow-[0_4px_10px_rgba(216,216,216,0.25)] overflow-hidden">
+    <>
       <div className="flex flex-1 flex-row overflow-hidden">
         <Image
           alt="avatar"
@@ -51,8 +70,8 @@ const ProfileCard = () => {
           </Loading>
         </div>
       </div>
-    </div>
+    </>
   )
 }
 
-export default ProfileCard
+export default ProfileCardWrapper

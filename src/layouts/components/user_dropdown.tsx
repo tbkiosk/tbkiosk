@@ -1,5 +1,6 @@
 import { signOut } from 'next-auth/react'
 import Image from 'next/image'
+import Link from 'next/link'
 import cl from 'classnames'
 
 import { Dropdown, Button } from '@/components'
@@ -31,7 +32,9 @@ const UserDropdown = () => {
   if (status === 'unauthenticated') {
     return (
       <Button className="!w-auto" variant="contained">
-        <span className="mx-4">Not logged in</span>
+        <Link className="mx-4" href="/login">
+          Not logged in
+        </Link>
       </Button>
     )
   }
