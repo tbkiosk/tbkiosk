@@ -2,39 +2,39 @@ import { useEffect, useState } from 'react'
 import Marquee from 'react-fast-marquee'
 import Head from 'next/head'
 import Image from 'next/image'
-import Link from 'next/link'
-import { useWallet, ConnectModal } from '@suiet/wallet-kit'
+// import Link from 'next/link'
+// import { useWallet, ConnectModal } from '@suiet/wallet-kit'
 import cl from 'classnames'
 
-import { Button } from '@/components'
+import { Button, Tooltip } from '@/components'
 
-import { ellipsisMiddle } from '@/utils/address'
+// import { ellipsisMiddle } from '@/utils/address'
 
 import useInViewport from '@/hooks/dom/useInViewport'
 
 let ticking = false
 
 const Index = () => {
-  const { connected, address = '', disconnect } = useWallet()
+  // const { connected, address = '', disconnect } = useWallet()
 
-  const [isModalVisible, setModalVisible] = useState(false)
+  // const [isModalVisible, setModalVisible] = useState(false)
   const [scrollY, setScrollY] = useState(0)
 
-  const onWalletClick = () => {
-    if (connected) {
-      disconnect()
-      setModalVisible(false)
-      return
-    }
+  // const onWalletClick = () => {
+  //   if (connected) {
+  //     disconnect()
+  //     setModalVisible(false)
+  //     return
+  //   }
 
-    setModalVisible(true)
-  }
+  //   setModalVisible(true)
+  // }
 
-  useEffect(() => {
-    if (connected) {
-      setModalVisible(false)
-    }
-  }, [connected, setModalVisible])
+  // useEffect(() => {
+  //   if (connected) {
+  //     setModalVisible(false)
+  //   }
+  // }, [connected, setModalVisible])
 
   useEffect(() => {
     const onScroll = () => {
@@ -93,10 +93,10 @@ const Index = () => {
         <meta name="description" content="morphis network welcome" />
       </Head>
       <div className="overflow-x-auto overflow-y-auto min-w-[1440px]">
-        <ConnectModal
+        {/* <ConnectModal
           open={isModalVisible}
           onOpenChange={(open: boolean) => setModalVisible(open)}
-        />
+        /> */}
         <header className="flex justify-between fixed inset-x-0 top-0 h-[96px] max-h-[96px] px-[54px] py-6 bg-white z-[1099]">
           <div className="flex items-center gap-2 cursor-pointer">
             <Image
@@ -113,16 +113,13 @@ const Index = () => {
               <a href="/#products">Products</a>
             </nav>
             <nav className="transition-opacity hover:opacity-60">
-              <a href="/#features">Features</a>
-            </nav>
-            <nav className="transition-opacity hover:opacity-60">
               <a href="/#partners">Partners</a>
             </nav>
           </div>
           <div className="flex gap-8 items-center">
             <a
               className="flex items-center justify-center shrink-0 h-[36px] w-[36px] p-2 text-white bg-black rounded-full transition-opacity hover:opacity-80"
-              href="https://twitter.com/morphis_wallet"
+              href="https://twitter.com/morphis_network"
               rel="noreferrer"
               target="_blank"
             >
@@ -136,13 +133,16 @@ const Index = () => {
             >
               <i className="fa-brands fa-discord fa-l" />
             </a>
-            <Button
-              className="!h-[48px] px-8 !rounded-[60px]"
-              onClick={onWalletClick}
-              variant="contained"
-            >
-              {connected ? ellipsisMiddle(address) : 'Connect wallet'}
-            </Button>
+            <Tooltip position="bottom" tip="Coming soon">
+              <Button
+                className="!h-[48px] px-8 !rounded-[60px]"
+                // onClick={onWalletClick}
+                variant="contained"
+              >
+                {/* {connected ? ellipsisMiddle(address) : 'Connect wallet'} */}
+                Connect wallet
+              </Button>
+            </Tooltip>
           </div>
         </header>
         <main className="overflow-hidden">
@@ -155,14 +155,12 @@ const Index = () => {
               Morphis Network is a social platform that allows token-gated
               communities built around NFT ownership
             </div>
-            <Link href="/login">
-              <Button
-                className="!h-[48px] !w-auto px-8 !rounded-[60px] absolute top-[436px] left-[96px] -translate-x-[calc(100%+96px)] animate-[fly-in-from-left_1s_ease-in-out_450ms] animation-fill-forwards"
-                variant="contained"
-              >
-                Get started
-              </Button>
-            </Link>
+            <Button
+              className="!h-[48px] !w-auto px-8 !rounded-[60px] absolute top-[436px] left-[96px] -translate-x-[calc(100%+96px)] animate-[fly-in-from-left_1s_ease-in-out_450ms] animation-fill-forwards"
+              variant="outlined"
+            >
+              Coming soon
+            </Button>
             <Image
               alt="peeps"
               className="absolute top-[88px] right-0 object-fit w-[40%] max-w-[888px] max-h-[518px] transition-transform translate-x-full animate-[fly-in-from-right_1s_ease-in-out_450ms] animation-fill-forwards"
@@ -180,6 +178,7 @@ const Index = () => {
             <div className="flex flex-col grow justify-center items-center gap-[48px] py-8 border-r border-r-black">
               <Image
                 alt="token"
+                className="animate-[step-spin_6s_ease-in-out_infinite] animation-fill-forwards"
                 height={60}
                 src="/icons/token.svg"
                 width={60}
@@ -189,7 +188,13 @@ const Index = () => {
               </span>
             </div>
             <div className="flex flex-col grow justify-center items-center gap-[48px] py-8 border-r border-r-black">
-              <Image alt="dao" height={60} src="/icons/dao.svg" width={60} />
+              <Image
+                alt="dao"
+                className="animate-[step-spin_6s_ease-in-out_2s_infinite] animation-fill-forwards"
+                height={60}
+                src="/icons/dao.svg"
+                width={60}
+              />
               <span className="w-[300px] font-bold text-2xl text-center">
                 Dao tooling & community insights
               </span>
@@ -197,6 +202,7 @@ const Index = () => {
             <div className="flex flex-col grow justify-center items-center gap-[48px] py-8">
               <Image
                 alt="connect"
+                className="animate-[step-spin_6s_ease-in-out_4s_infinite] animation-fill-forwards"
                 height={60}
                 src="/icons/connect.svg"
                 width={60}
@@ -442,22 +448,22 @@ const Index = () => {
             id="slogan"
           >
             <div
-              className="flex items-center gap-[46px] w-[360px] -mb-3 text-5xl font-bold z-[1010] opacity-0 animate-[fade-in-from-bottom_1s_linear] animation-fill-forwards animate-none"
-              style={{ animationDelay: '0.5s' }}
+              className="flex items-center gap-[46px] w-[360px] -mb-3 text-5xl font-bold z-[1010] opacity-0 animate-[fade-in-from-bottom_1.5s_linear] animation-fill-forwards animate-none"
+              style={{ animationDelay: '1s' }}
             >
               <div className="h-[66px] w-[66px] rounded-full bg-[#fce2f9]" />
               <span>Discover.</span>
             </div>
             <div
-              className="flex items-center gap-[46px] w-[360px] -mb-3 text-5xl font-bold z-[1011] opacity-0 animate-[fade-in-from-bottom_1s_linear] animation-fill-forwards animate-none"
-              style={{ animationDelay: '0.75s' }}
+              className="flex items-center gap-[46px] w-[360px] -mb-3 text-5xl font-bold z-[1011] opacity-0 animate-[fade-in-from-bottom_1.5s_linear] animation-fill-forwards animate-none"
+              style={{ animationDelay: '2s' }}
             >
               <div className="h-[66px] w-[66px] rounded-full bg-[#c481c1]" />
               <span>Connect.</span>
             </div>
             <div
-              className="flex items-center gap-[46px] w-[360px] text-5xl font-bold z-[1012] opacity-0 animate-[fade-in-from-bottom_1s_linear] animation-fill-forwards animate-none"
-              style={{ animationDelay: '1s' }}
+              className="flex items-center gap-[46px] w-[360px] text-5xl font-bold z-[1012] opacity-0 animate-[fade-in-from-bottom_1.5s_linear] animation-fill-forwards animate-none"
+              style={{ animationDelay: '3s' }}
             >
               <div className="h-[66px] w-[66px] rounded-full bg-white" />
               <span>Engage.</span>
@@ -471,7 +477,7 @@ const Index = () => {
             <div className="flex gap-[18px] justify-center">
               <a
                 className="flex items-center gap-4 w-[551px] px-10 py-4 border border-black transition-colors hover:bg-[#ddd]"
-                href="https://twitter.com/morphis_wallet"
+                href="https://twitter.com/morphis_network"
                 rel="noreferrer"
                 target="_blank"
               >
@@ -502,7 +508,7 @@ const Index = () => {
           <div className="flex gap-8">
             <a
               className="flex items-center justify-center shrink-0 h-[36px] w-[36px] p-2 text-black bg-white rounded-full transition-opacity hover:opacity-80"
-              href="https://twitter.com/morphis_wallet"
+              href="https://twitter.com/morphis_network"
               rel="noreferrer"
               target="_blank"
             >
@@ -518,7 +524,7 @@ const Index = () => {
             </a>
             <a
               className="flex items-center justify-center shrink-0 h-[36px] w-[36px] p-2 text-black bg-white rounded-full transition-opacity hover:opacity-80"
-              href=""
+              href="https://medium.com/@morphis"
               rel="noreferrer"
               target="_blank"
             >
