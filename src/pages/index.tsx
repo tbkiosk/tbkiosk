@@ -10,6 +10,8 @@ import { Button } from '@/components'
 
 import { ellipsisMiddle } from '@/utils/address'
 
+import useInViewport from '@/hooks/dom/useInViewport'
+
 let ticking = false
 
 const Index = () => {
@@ -50,6 +52,39 @@ const Index = () => {
 
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
+
+  useInViewport({
+    queryTarget: () => document.querySelector('#slogan'),
+    callback: (entries: IntersectionObserverEntry[]) => {
+      if (entries[0].isIntersecting) {
+        Array.from(entries[0].target.children || []).forEach((child) => {
+          child.classList.remove('animate-none')
+        })
+      }
+    },
+  })
+  useInViewport({
+    queryTarget: () => document.querySelector('#connect-intro'),
+    callback: (entries: IntersectionObserverEntry[]) => {
+      console.log(entries[0])
+      if (entries[0].isIntersecting) {
+        Array.from(entries[0].target.children || []).forEach((child) => {
+          child.classList.remove('!animate-none')
+        })
+      }
+    },
+  })
+  useInViewport({
+    queryTarget: () => document.querySelector('#extension-intro'),
+    callback: (entries: IntersectionObserverEntry[]) => {
+      console.log(entries[0])
+      if (entries[0].isIntersecting) {
+        Array.from(entries[0].target.children || []).forEach((child) => {
+          child.classList.remove('!animate-none')
+        })
+      }
+    },
+  })
 
   return (
     <>
@@ -172,7 +207,7 @@ const Index = () => {
             </div>
           </section>
 
-          <section className="relative h-[896px]" id="products-section">
+          <section className="relative h-[896px]">
             <p
               className="font-bold text-5xl text-center pt-[81px] pb-[157px]"
               id="products"
@@ -190,15 +225,21 @@ const Index = () => {
               }}
               width={782}
             />
-            <div className="w-[543px] absolute right-[68px]">
+            <div className="w-[573px] absolute right-0" id="connect-intro">
               <p className="text-4xl font-bold leading-[50px] mb-5">
                 Morphis Connect
               </p>
-              <p className="text-2xl font-medium mb-8">
+              <p
+                className="text-2xl font-medium mb-8 pr-[68px] translate-x-full animate-[fly-in-from-right_1s_ease-in-out] animation-fill-forwards !animate-none"
+                style={{ animationDelay: '0.5s' }}
+              >
                 A completely new way for communities to form and interact with
                 each other. Centred around NFTs.
               </p>
-              <p className="flex items-center gap-3 text-2xl font-bold mb-9">
+              <p
+                className="flex items-center gap-3 text-2xl font-bold mb-9 pr-[68px] translate-x-full animate-[fly-in-from-right_1s_ease-in-out] animation-fill-forwards !animate-none"
+                style={{ animationDelay: '0.75s' }}
+              >
                 <Image
                   alt="connect"
                   height={20}
@@ -207,7 +248,10 @@ const Index = () => {
                 />
                 Token gated communities around NFTs
               </p>
-              <p className="flex items-center gap-3 text-2xl font-bold mb-9">
+              <p
+                className="flex items-center gap-3 text-2xl font-bold mb-9 pr-[68px] translate-x-full animate-[fly-in-from-right_1s_ease-in-out] animation-fill-forwards !animate-none"
+                style={{ animationDelay: '1s' }}
+              >
                 <Image
                   alt="connect"
                   height={20}
@@ -216,7 +260,10 @@ const Index = () => {
                 />
                 Useful tooling for community management
               </p>
-              <p className="flex items-center gap-3 text-2xl font-bold mb-9">
+              <p
+                className="flex items-center gap-3 text-2xl font-bold mb-9 pr-[68px] translate-x-full animate-[fly-in-from-right_1s_ease-in-out] animation-fill-forwards !animate-none"
+                style={{ animationDelay: '1.25s' }}
+              >
                 <Image
                   alt="connect"
                   height={20}
@@ -261,15 +308,21 @@ const Index = () => {
               }}
               width={353}
             />
-            <div className="w-[543px] absolute left-[82px]">
+            <div className="w-[543px] absolute" id="extension-intro">
               <p className="text-4xl font-bold leading-[50px] mb-5">
                 Wallet Extension
               </p>
-              <p className="text-2xl font-medium mb-8">
+              <p
+                className="text-2xl font-medium mb-8 pl-[82px] -translate-x-full animate-[fly-in-from-left_1s_ease-in-out] animation-fill-forwards !animate-none"
+                style={{ animationDelay: '0.5s' }}
+              >
                 Social enabled wallet extension to get started with your web3
                 journey.
               </p>
-              <p className="flex items-center gap-3 text-2xl font-bold mb-9">
+              <p
+                className="flex items-center gap-3 text-2xl font-bold mb-9 pl-[82px] -translate-x-full animate-[fly-in-from-left_1s_ease-in-out] animation-fill-forwards !animate-none"
+                style={{ animationDelay: '0.75s' }}
+              >
                 <Image
                   alt="connect"
                   height={20}
@@ -278,7 +331,10 @@ const Index = () => {
                 />
                 Unified web2 and web3 profile
               </p>
-              <p className="flex items-center gap-3 text-2xl font-bold mb-9">
+              <p
+                className="flex items-center gap-3 text-2xl font-bold mb-9 pl-[82px] -translate-x-full animate-[fly-in-from-left_1s_ease-in-out] animation-fill-forwards !animate-none"
+                style={{ animationDelay: '1s' }}
+              >
                 <Image
                   alt="connect"
                   height={20}
@@ -287,7 +343,10 @@ const Index = () => {
                 />
                 Manage NFT portfolio with ease
               </p>
-              <p className="flex items-center gap-3 text-2xl font-bold mb-9">
+              <p
+                className="flex items-center gap-3 text-2xl font-bold mb-9 pl-[82px] -translate-x-full animate-[fly-in-from-left_1s_ease-in-out] animation-fill-forwards !animate-none"
+                style={{ animationDelay: '1.25s' }}
+              >
                 <Image
                   alt="connect"
                   height={20}
@@ -377,7 +436,32 @@ const Index = () => {
             </div>
           </section>
 
-          <section className="flex justify-center items-center h-[408px] mt-[133px] bg-black"></section>
+          <section
+            className="flex flex-col justify-center items-center h-[408px] mt-[133px] bg-black text-white"
+            id="slogan"
+          >
+            <div
+              className="flex items-center gap-[46px] w-[360px] -mb-3 text-5xl font-bold z-[1010] opacity-0 animate-[fade-in-from-bottom_1s_linear] animation-fill-forwards animate-none"
+              style={{ animationDelay: '0.5s' }}
+            >
+              <div className="h-[66px] w-[66px] rounded-full bg-[#fce2f9]" />
+              <span>Discover.</span>
+            </div>
+            <div
+              className="flex items-center gap-[46px] w-[360px] -mb-3 text-5xl font-bold z-[1011] opacity-0 animate-[fade-in-from-bottom_1s_linear] animation-fill-forwards animate-none"
+              style={{ animationDelay: '0.75s' }}
+            >
+              <div className="h-[66px] w-[66px] rounded-full bg-[#c481c1]" />
+              <span>Connect.</span>
+            </div>
+            <div
+              className="flex items-center gap-[46px] w-[360px] text-5xl font-bold z-[1012] opacity-0 animate-[fade-in-from-bottom_1s_linear] animation-fill-forwards animate-none"
+              style={{ animationDelay: '1s' }}
+            >
+              <div className="h-[66px] w-[66px] rounded-full bg-white" />
+              <span>Engage.</span>
+            </div>
+          </section>
 
           <section className="mt-[52px] mb-[90px]">
             <p className="font-bold text-5xl text-center pb-[48px]">
