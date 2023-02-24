@@ -4,7 +4,7 @@ const Document = () => (
   <Html lang="en">
     <Head>
       <meta name="description" content="morphis network" />
-      <link rel="icon" href="/morphis-logo.ico" />
+      <link rel="icon" href="/favicon.ico?v=2" />
       <script
         async
         crossOrigin="anonymous"

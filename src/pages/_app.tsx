@@ -1,8 +1,9 @@
+import Head from 'next/head'
 import { SessionProvider } from 'next-auth/react'
-import { WalletProvider } from '@suiet/wallet-kit'
-import { SWRConfig } from 'swr'
 import { ProSidebarProvider } from 'react-pro-sidebar'
 import { ToastContainer } from 'react-toastify'
+import { SWRConfig } from 'swr'
+import { WalletProvider } from '@suiet/wallet-kit'
 
 import fetcher from '@/helpers/swr/fetcher'
 
@@ -21,6 +22,12 @@ const App = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => (
     <WalletProvider autoConnect>
       <SessionProvider session={session}>
         <ProSidebarProvider>
+          <Head>
+            <meta
+              name="viewport"
+              content="width=device-width, initial-scale=1"
+            />
+          </Head>
           <Component {...pageProps} />
           <ToastContainer />
         </ProSidebarProvider>

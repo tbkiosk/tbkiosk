@@ -2,39 +2,16 @@ import { useEffect, useState } from 'react'
 import Marquee from 'react-fast-marquee'
 import Head from 'next/head'
 import Image from 'next/image'
-// import Link from 'next/link'
-// import { useWallet, ConnectModal } from '@suiet/wallet-kit'
 import cl from 'classnames'
 
 import { Button, Tooltip } from '@/components'
-
-// import { ellipsisMiddle } from '@/utils/address'
 
 import useInViewport from '@/hooks/dom/useInViewport'
 
 let ticking = false
 
 const Index = () => {
-  // const { connected, address = '', disconnect } = useWallet()
-
-  // const [isModalVisible, setModalVisible] = useState(false)
   const [scrollY, setScrollY] = useState(0)
-
-  // const onWalletClick = () => {
-  //   if (connected) {
-  //     disconnect()
-  //     setModalVisible(false)
-  //     return
-  //   }
-
-  //   setModalVisible(true)
-  // }
-
-  // useEffect(() => {
-  //   if (connected) {
-  //     setModalVisible(false)
-  //   }
-  // }, [connected, setModalVisible])
 
   useEffect(() => {
     const onScroll = () => {
