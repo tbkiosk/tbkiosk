@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@headlessui/react": "^1.7.11",
-    "@mysten/sui.js": "^0.28.0",
+    "@mysten/sui.js": "^0.29.0",
     "@next-auth/mongodb-adapter": "^1.1.1",
     "@noble/hashes": "^1.2.0",
     "@scure/bip39": "^1.1.1",
