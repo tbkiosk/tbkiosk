@@ -12,16 +12,11 @@ specifiers:
   '@types/node': 18.14.1
   '@types/react': 18.0.28
   '@types/react-dom': 18.0.11
-  '@typescript-eslint/eslint-plugin': ^5.53.0
-  '@typescript-eslint/parser': ^5.53.0
   '@vitest/coverage-c8': ^0.28.5
   autoprefixer: ^10.4.13
   classnames: ^2.3.2
   eslint: 8.34.0
   eslint-config-next: 13.2.1
-  eslint-config-prettier: ^8.6.0
-  eslint-define-config: ^1.15.0
-  eslint-plugin-prettier: ^4.2.1
   joi: ^17.8.3
   mongodb: ^4.13.0
   next: 13.2.1
@@ -65,15 +60,10 @@ devDependencies:
   '@types/node': 18.14.1
   '@types/react': 18.0.28
   '@types/react-dom': 18.0.11
-  '@typescript-eslint/eslint-plugin': registry.npmmirror.com/@typescript-eslint/eslint-plugin/5.53.0_ny4s7qc6yg74faf3d6xty2ofzy
-  '@typescript-eslint/parser': registry.npmmirror.com/@typescript-eslint/parser/5.53.0_7kw3g6rralp5ps6mg3uyzz6azm
   '@vitest/coverage-c8': 0.28.5
   autoprefixer: 10.4.13_postcss@8.4.21
   eslint: 8.34.0
   eslint-config-next: 13.2.1_7kw3g6rralp5ps6mg3uyzz6azm
-  eslint-config-prettier: 8.6.0_eslint@8.34.0
-  eslint-define-config: 1.15.0
-  eslint-plugin-prettier: 4.2.1_u5wnrdwibbfomslmnramz52buy
   postcss: 8.4.21
   prettier: 2.8.4
   tailwindcss: 3.2.7_postcss@8.4.21
@@ -4666,11 +4656,6 @@ packages:
       eslint: '>=7.0.0'
     dependencies:
       eslint: 8.34.0
-    dev: true
-
-  /eslint-define-config/1.15.0:
-    resolution: {integrity: sha512-p6K61L6HrnDNRF2HzUsTdGaGPohO0TmSX/oQ0ttBhfApWHMyDcX+FCqSziCDywSf0U0bxe4e2HOfYho1nGHTLw==}
-    engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0, npm: '>=6.14.13', pnpm: '>= 7.0.0'}
     dev: true
 
   /eslint-import-resolver-node/0.3.7:
