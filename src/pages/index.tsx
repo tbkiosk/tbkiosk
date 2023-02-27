@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import Marquee from 'react-fast-marquee'
 import Head from 'next/head'
+import Link from 'next/link'
 import Image from 'next/image'
 import cl from 'classnames'
 
@@ -87,10 +88,10 @@ const Index = () => {
           </div>
           <div className="flex gap-[60px] items-center font-bold text-lg">
             <nav className="transition-opacity hover:opacity-60">
-              <a href="/#products">Products</a>
+              <Link href="/#products">Products</Link>
             </nav>
             <nav className="transition-opacity hover:opacity-60">
-              <a href="/#partners">Partners</a>
+              <Link href="/#partners">Partners</Link>
             </nav>
           </div>
           <div className="flex gap-8 items-center">

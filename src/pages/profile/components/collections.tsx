@@ -21,7 +21,6 @@ const CollectionsWrapper = () => {
 
 const CollectionsBase = () => {
   const { nfts, loading } = useNfts()
-  console.log(nfts)
 
   return (
     <Loading isLoading={loading}>
@@ -29,6 +28,7 @@ const CollectionsBase = () => {
         {nfts.map((nft) =>
           'fields' in nft.data ? (
             <div key={nft.data.fields.id.id}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 height={32}
                 src={
