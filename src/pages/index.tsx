@@ -44,7 +44,6 @@ const Index = () => {
   useInViewport({
     queryTarget: () => document.querySelector('#connect-intro'),
     callback: (entries: IntersectionObserverEntry[]) => {
-      console.log(entries[0])
       if (entries[0].isIntersecting) {
         Array.from(entries[0].target.children || []).forEach((child) => {
           child.classList.remove('!animate-none')
@@ -55,7 +54,6 @@ const Index = () => {
   useInViewport({
     queryTarget: () => document.querySelector('#extension-intro'),
     callback: (entries: IntersectionObserverEntry[]) => {
-      console.log(entries[0])
       if (entries[0].isIntersecting) {
         Array.from(entries[0].target.children || []).forEach((child) => {
           child.classList.remove('!animate-none')
