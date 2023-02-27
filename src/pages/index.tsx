@@ -96,20 +96,30 @@ const Index = () => {
           </div>
           <div className="flex gap-8 items-center">
             <a
-              className="flex items-center justify-center shrink-0 h-[36px] w-[36px] p-2 text-white bg-black rounded-full transition-opacity hover:opacity-80"
+              className="transition-opacity hover:opacity-80"
               href="https://twitter.com/morphis_network"
               rel="noreferrer"
               target="_blank"
             >
-              <i className="fa-brands fa-twitter fa-l " />
+              <Image
+                alt="twitter"
+                height={36}
+                src="/icons/twitter-circle.svg"
+                width={36}
+              />
             </a>
             <a
-              className="flex items-center justify-center shrink-0 h-[36px] w-[36px] p-2 text-white bg-black rounded-full transition-opacity hover:opacity-80"
+              className="transition-opacity hover:opacity-80"
               href="http://discord.gg/morphis"
               rel="noreferrer"
               target="_blank"
             >
-              <i className="fa-brands fa-discord fa-l" />
+              <Image
+                alt="discord"
+                height={36}
+                src="/icons/discord-circle.svg"
+                width={36}
+              />
             </a>
             <Tooltip position="bottom" tip="Coming soon">
               <Button
@@ -459,13 +469,21 @@ const Index = () => {
                 rel="noreferrer"
                 target="_blank"
               >
-                <span className="h-[48px] w-[48px] leading-[48px] text-center bg-black text-white rounded-full">
-                  <i className="fa-brands fa-twitter fa-xl" />
-                </span>
+                <Image
+                  alt="twitter"
+                  height={48}
+                  src="/icons/twitter-circle.svg"
+                  width={48}
+                />
                 <span className="text-2xl font-black">
                   Follow Us on Twitter
                 </span>
-                <i className="fa-solid fa-arrow-up-right-from-square fa-xl" />
+                <Image
+                  alt="link"
+                  height={18}
+                  src="/icons/arrow-link.svg"
+                  width={18}
+                />
               </a>
               <a
                 className="flex items-center gap-4 w-[551px] px-10 py-4 border border-black transition-colors hover:bg-[#ddd]"
@@ -473,11 +491,19 @@ const Index = () => {
                 rel="noreferrer"
                 target="_blank"
               >
-                <span className="h-[48px] w-[48px] leading-[48px] text-center bg-black text-white rounded-full">
-                  <i className="fa-brands fa-discord fa-xl" />
-                </span>
+                <Image
+                  alt="discord"
+                  height={48}
+                  src="/icons/discord-circle.svg"
+                  width={48}
+                />
                 <span className="text-2xl font-black">Join Discord</span>
-                <i className="fa-solid fa-arrow-up-right-from-square fa-xl" />
+                <Image
+                  alt="link"
+                  height={18}
+                  src="/icons/arrow-link.svg"
+                  width={18}
+                />
               </a>
             </div>
           </section>
@@ -485,20 +511,32 @@ const Index = () => {
         <footer className="flex justify-between items-center h-[105px] px-[54px] py-6 bg-black">
           <div className="flex gap-8">
             <a
-              className="flex items-center justify-center shrink-0 h-[36px] w-[36px] p-2 text-black bg-white rounded-full transition-opacity hover:opacity-80"
+              className="transition-opacity hover:opacity-80"
               href="https://twitter.com/morphis_network"
               rel="noreferrer"
               target="_blank"
             >
-              <i className="fa-brands fa-twitter fa-l " />
+              <Image
+                alt="twitter"
+                className="invert"
+                height={36}
+                src="/icons/twitter-circle.svg"
+                width={36}
+              />
             </a>
             <a
-              className="flex items-center justify-center shrink-0 h-[36px] w-[36px] p-2 text-black bg-white rounded-full transition-opacity hover:opacity-80"
+              className="transition-opacity hover:opacity-80"
               href="http://discord.gg/morphis"
               rel="noreferrer"
               target="_blank"
             >
-              <i className="fa-brands fa-discord fa-l" />
+              <Image
+                alt="discord"
+                className="invert"
+                height={36}
+                src="/icons/discord-circle.svg"
+                width={36}
+              />
             </a>
             <a
               className="flex items-center justify-center shrink-0 h-[36px] w-[36px] p-2 text-black bg-white rounded-full transition-opacity hover:opacity-80"
@@ -506,7 +544,12 @@ const Index = () => {
               rel="noreferrer"
               target="_blank"
             >
-              <i className="fa-brands fa-medium fa-l" />
+              <Image
+                alt="medium"
+                height={36}
+                src="/icons/medium-circle.svg"
+                width={36}
+              />
             </a>
           </div>
           <div className="text-white">© 2023 Morphis Network</div>
