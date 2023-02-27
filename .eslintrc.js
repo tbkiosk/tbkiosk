@@ -1,3 +1,3 @@
 module.exports = {
-  extends: ['@morphis-labs/configs'],
+  extends: ['@morphis-labs/eslint-config', 'plugin:@next/next/recommended'],
 }
