@@ -32,7 +32,7 @@ const refreshAccessToken = async (token: AuthToken) => {
       refreshToken: refreshedTokens.refresh_token ?? token.refreshToken, // Fall back to old refresh token
     }
   } catch (error) {
-    console.log(error)
+    console.error(error)
 
     return {
       ...token,
