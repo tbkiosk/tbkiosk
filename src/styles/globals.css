@@ -2,6 +2,8 @@
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
 
+@import url('./scrollbar.css');
+
 @font-face {
   font-family: satoshi;
   font-weight: 300;
