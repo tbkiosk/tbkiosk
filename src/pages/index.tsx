@@ -86,10 +86,14 @@ const Index = () => {
           </div>
           <div className="flex gap-[60px] items-center font-bold text-lg">
             <nav className="transition-opacity hover:opacity-60">
-              <Link href="/#products">Products</Link>
+              <Link href="/#products" scroll={false}>
+                Products
+              </Link>
             </nav>
             <nav className="transition-opacity hover:opacity-60">
-              <Link href="/#partners">Partners</Link>
+              <Link href="/#partners" scroll={false}>
+                Partners
+              </Link>
             </nav>
           </div>
           <div className="flex gap-8 items-center">

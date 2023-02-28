@@ -46,15 +46,16 @@ const Login = () => {
         <title>Morphis Network - Login</title>
         <meta name="description" content="morphis network login" />
       </Head>
-      <main className="h-full flex flex-col justify-center items-center bg-[#f0f3fb] overflow-hidden">
+      <main className="h-full flex flex-col justify-center items-center bg-[#f0f3fb] overflow-y-auto">
         <ConnectModal
           open={isModalVisible}
           onOpenChange={(open: boolean) => setModalVisible(open)}
         />
-        <div className="w-[360px] min-w-[360px]">
+        <div className="w-[full] max-w-[360px]">
           <Image
-            alt="stargs"
+            alt="stars"
             height={315}
+            priority
             src="/images/stars.svg"
             width={360}
           />
