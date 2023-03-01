@@ -10,13 +10,15 @@ const chains = [evmos, mainnet, polygon]
 
 // Wagmi client
 const { provider } = configureChains(chains, [
-  walletConnectProvider({ projectId: 'e1b06f3326e6315db629550035607ce9' }),
+  walletConnectProvider({
+    projectId: process.env.WALLET_CONNECT_PROJECT_ID as string,
+  }),
 ])
 
 export const wagmiClient = createClient({
   autoConnect: true,
   connectors: modalConnectors({
-    projectId: 'e1b06f3326e6315db629550035607ce9',
+    projectId: process.env.WALLET_CONNECT_PROJECT_ID as string,
     version: '1', // or "2"
     appName: 'web3Modal',
     chains,

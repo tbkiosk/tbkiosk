@@ -43,7 +43,7 @@ const App = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => (
               <SuiWalletConnectModal />
             </WagmiConfig>
             <Web3Modal
-              projectId="e1b06f3326e6315db629550035607ce9"
+              projectId={process.env.WALLET_CONNECT_PROJECT_ID as string}
               ethereumClient={ethereumClient}
             />
           </SuiWalletConnectModalProvider>
