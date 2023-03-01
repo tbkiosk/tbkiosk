@@ -1,4 +1,7 @@
+import { useState, useEffect } from 'react'
 import { useWallet } from '@suiet/wallet-kit'
+import { useWeb3Modal } from '@web3modal/react'
+import { useAccount } from 'wagmi'
 import cl from 'classnames'
 
 import { Dropdown } from '@/components'
@@ -13,11 +16,19 @@ const WalletDropdown = () => {
     address: suiAddress = '',
     disconnect: suiDisconnect,
   } = useWallet()
+  const { address: ethAddress, isConnected: ethIsConnected } = useAccount()
 
-  const { setOpen } = useSuiWalletModal()
+  const { open: ethOpen } = useWeb3Modal()
+  const { setOpen: setSuiModalOpen } = useSuiWalletModal()
+
+  const [mounted, setMounted] = useState(false)
 
   const renderButton = () => {
-    const wallets = [suiAddress].filter((wallet) => !!wallet)
+    if (!mounted) {
+      return <span>Connect wallet</span>
+    }
+
+    const wallets = [suiAddress, ethAddress].filter((wallet) => !!wallet)
 
     if (wallets.length < 1) {
       return <span>Connect wallet</span>
@@ -27,6 +38,10 @@ const WalletDropdown = () => {
       <span>{`${wallets.length} wallet${wallets.length > 1 ? 's' : ''}`}</span>
     )
   }
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   return (
     <>
@@ -38,7 +53,9 @@ const WalletDropdown = () => {
                 className={cl(
                   'block w-full px-4 py-4 text-left text-sm text-white truncate rounded-tl-md rounded-tr-md cursor-pointer transition-colors hover:bg-[#333333]'
                 )}
-                onClick={() => (suiConnected ? suiDisconnect() : setOpen(true))}
+                onClick={() =>
+                  suiConnected ? suiDisconnect() : setSuiModalOpen(true)
+                }
               >
                 {`Sui ${suiConnected ? `: ${ellipsisMiddle(suiAddress)}` : ''}`}
               </div>
@@ -48,10 +65,13 @@ const WalletDropdown = () => {
             {() => (
               <div
                 className={cl(
-                  'block w-full px-4 py-4 text-left text-sm text-white rounded-bl-md rounded-br-md cursor-pointer transition-colors hover:bg-[#333333]'
+                  'block w-full px-4 py-4 text-left text-sm text-white truncate rounded-bl-md rounded-br-md cursor-pointer transition-colors hover:bg-[#333333]'
                 )}
+                onClick={() => ethOpen()}
               >
-                {`Ethereum`}
+                {`Ethereum ${
+                  ethIsConnected ? `: ${ellipsisMiddle(ethAddress || '')}` : ''
+                }`}
               </div>
             )}
           </Dropdown.Item>

@@ -4,6 +4,8 @@ import { ProSidebarProvider } from 'react-pro-sidebar'
 import { ToastContainer } from 'react-toastify'
 import { SWRConfig } from 'swr'
 import { WalletProvider } from '@suiet/wallet-kit'
+import { Web3Modal } from '@web3modal/react'
+import { WagmiConfig } from 'wagmi'
 
 import {
   SuiWalletConnectModalProvider,
@@ -11,6 +13,7 @@ import {
 } from '@/components'
 
 import fetcher from '@/helpers/swr/fetcher'
+import { ethereumClient, wagmiClient } from '@/lib/wallet_connect'
 
 import type { AppProps } from 'next/app'
 
@@ -28,15 +31,21 @@ const App = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => (
       <SessionProvider session={session}>
         <ProSidebarProvider>
           <SuiWalletConnectModalProvider>
-            <Head>
-              <meta
-                name="viewport"
-                content="width=device-width, initial-scale=1"
-              />
-            </Head>
-            <Component {...pageProps} />
-            <ToastContainer />
-            <SuiWalletConnectModal />
+            <WagmiConfig client={wagmiClient}>
+              <Head>
+                <meta
+                  name="viewport"
+                  content="width=device-width, initial-scale=1"
+                />
+              </Head>
+              <Component {...pageProps} />
+              <ToastContainer />
+              <SuiWalletConnectModal />
+            </WagmiConfig>
+            <Web3Modal
+              projectId="e1b06f3326e6315db629550035607ce9"
+              ethereumClient={ethereumClient}
+            />
           </SuiWalletConnectModalProvider>
         </ProSidebarProvider>
       </SessionProvider>
