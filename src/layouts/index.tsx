@@ -6,7 +6,7 @@ import cl from 'classnames'
 
 import { Sidebar, Menu, useProSidebar, sidebarClasses } from 'react-pro-sidebar'
 import { Button } from '@/components'
-import UserDropdown from './components/user_dropdown'
+import WalletDropdown from './components/wallet_dropdown'
 import ConnectStatus from './components/connect_status'
 
 type LayoutProps = {
@@ -15,6 +15,10 @@ type LayoutProps = {
 }
 
 const MENUS = [
+  {
+    key: 'profile',
+    iconClass: 'fa-house',
+  },
   {
     key: 'discover',
     iconClass: 'fa-compass',
@@ -26,10 +30,6 @@ const MENUS = [
   {
     key: 'activities',
     iconClass: 'fa-clock',
-  },
-  {
-    key: 'profile',
-    iconClass: 'fa-house',
   },
 ]
 
@@ -115,7 +115,7 @@ const Layout = ({ children }: LayoutProps) => {
               <i className="fa-regular fa-bell fa-xl" />
             </span>
             <ConnectStatus />
-            <UserDropdown />
+            <WalletDropdown />
           </div>
         </div>
         <div className="flex flex-col px-[54px]">{children}</div>

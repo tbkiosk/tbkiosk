@@ -23,7 +23,7 @@ const Dropdown = ({ renderButton, children }: DropdownProps) => (
             {renderButton?.() || null}
             <i
               className={cl([
-                'fa-solid fa-chevron-down transition-transform',
+                'fa-solid fa-chevron-down ml-2 transition-transform',
                 open && 'rotate-180',
               ])}
             />

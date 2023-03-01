@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useWallet } from '@suiet/wallet-kit'
+import { COIN_TYPE_ARG_REGEX } from '@mysten/sui.js'
 
 import { suiJsonRpcProvider } from '@/lib/sui'
 
@@ -24,7 +25,7 @@ const useNfts = () => {
       const objectData: GetObjectDataResponse[] =
         await suiJsonRpcProvider.getObjectBatch(
           objectInfos
-            .filter((obj) => obj.type.endsWith('DevNetNFT'))
+            .filter((obj) => !COIN_TYPE_ARG_REGEX.test(obj.type))
             .map((obj) => obj.objectId)
         )
 
