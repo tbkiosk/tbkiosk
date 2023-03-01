@@ -1,13 +1,15 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useSession, signIn } from 'next-auth/react'
-import { useWallet, ConnectModal } from '@suiet/wallet-kit'
+import { useWallet } from '@suiet/wallet-kit'
 import cl from 'classnames'
 
 import { Button, Tooltip } from '@/components'
+
+import { useSuiWalletModal } from '@/context/sui_wallet_modal_context'
 
 import { ellipsisMiddle } from '@/utils/address'
 
@@ -15,24 +17,23 @@ const Login = () => {
   const { data: session } = useSession()
   const { connecting, connected, address = '', disconnect } = useWallet()
   const router = useRouter()
-
-  const [isModalVisible, setModalVisible] = useState(false)
+  const { setOpen } = useSuiWalletModal()
 
   const onWalletClick = () => {
     if (connected) {
       disconnect()
-      setModalVisible(false)
+      setOpen(false)
       return
     }
 
-    setModalVisible(true)
+    setOpen(true)
   }
 
   useEffect(() => {
     if (connected) {
-      setModalVisible(false)
+      setOpen(false)
     }
-  }, [connected, setModalVisible])
+  }, [connected, setOpen])
 
   useEffect(() => {
     if (session) {
@@ -47,10 +48,6 @@ const Login = () => {
         <meta name="description" content="morphis network login" />
       </Head>
       <main className="h-full flex flex-col justify-center items-center bg-[#f0f3fb] overflow-y-auto">
-        <ConnectModal
-          open={isModalVisible}
-          onOpenChange={(open: boolean) => setModalVisible(open)}
-        />
         <div className="w-[full] max-w-[360px]">
           <Image
             alt="stars"

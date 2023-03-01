@@ -5,6 +5,11 @@ import { ToastContainer } from 'react-toastify'
 import { SWRConfig } from 'swr'
 import { WalletProvider } from '@suiet/wallet-kit'
 
+import {
+  SuiWalletConnectModalProvider,
+  SuiWalletConnectModal,
+} from '@/components'
+
 import fetcher from '@/helpers/swr/fetcher'
 
 import type { AppProps } from 'next/app'
@@ -22,14 +27,17 @@ const App = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => (
     <WalletProvider autoConnect>
       <SessionProvider session={session}>
         <ProSidebarProvider>
-          <Head>
-            <meta
-              name="viewport"
-              content="width=device-width, initial-scale=1"
-            />
-          </Head>
-          <Component {...pageProps} />
-          <ToastContainer />
+          <SuiWalletConnectModalProvider>
+            <Head>
+              <meta
+                name="viewport"
+                content="width=device-width, initial-scale=1"
+              />
+            </Head>
+            <Component {...pageProps} />
+            <ToastContainer />
+            <SuiWalletConnectModal />
+          </SuiWalletConnectModalProvider>
         </ProSidebarProvider>
       </SessionProvider>
     </WalletProvider>

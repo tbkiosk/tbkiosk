@@ -69,10 +69,6 @@ const Index = () => {
         <meta name="description" content="morphis network welcome" />
       </Head>
       <div className="overflow-x-auto overflow-y-auto min-w-[1440px]">
-        {/* <ConnectModal
-          open={isModalVisible}
-          onOpenChange={(open: boolean) => setModalVisible(open)}
-        /> */}
         <header className="flex justify-between fixed inset-x-0 top-0 h-[96px] max-h-[96px] px-[54px] py-6 bg-white z-[1099]">
           <div className="flex items-center gap-2 cursor-pointer">
             <Image
