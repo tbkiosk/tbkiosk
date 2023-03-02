@@ -2,7 +2,6 @@ import { useEffect, useMemo, useState } from 'react'
 import { useWallet } from '@suiet/wallet-kit'
 import { useEvmWalletNFTs } from '@moralisweb3/next'
 import { useAccount } from 'wagmi'
-import { useIsMounted } from 'usehooks-ts'
 
 import { Loading } from '@/components'
 
@@ -31,15 +30,20 @@ const DEFAULT_NFT_IMAGE_WIDTH = 180
 const CollectionsWrapper = () => {
   const { connected: suiConnected, address: suiAddress = '' } = useWallet()
   const { address: ethAddress, isConnected: ethConnected } = useAccount()
-  const isMounted = useIsMounted()
+
+  const [isMounted, setIsMounted] = useState(false)
 
   const collectionsBaseVisible = useMemo(() => {
-    if (!isMounted()) {
+    if (!isMounted) {
       return false
     }
 
     return (suiConnected && suiAddress) || (ethConnected && ethAddress)
-  }, [suiConnected, suiAddress, isMounted])
+  }, [suiConnected, suiAddress])
+
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
 
   return (
     <div>

@@ -1,13 +1,14 @@
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 import Image from 'next/image'
-import { useLocalStorage } from 'usehooks-ts'
 import cl from 'classnames'
 
 import { Sidebar, Menu, useProSidebar, sidebarClasses } from 'react-pro-sidebar'
 import { Button } from '@/components'
 import WalletDropdown from './components/wallet_dropdown'
 import ConnectStatus from './components/connect_status'
+
+import useLocalStorage from '@/hooks/useLocalStorage'
 
 type LayoutProps = {
   showHeader?: boolean
@@ -118,7 +119,9 @@ const Layout = ({ children }: LayoutProps) => {
             <WalletDropdown />
           </div>
         </div>
-        <div className="flex flex-col px-[54px] overflow-y-auto">{children}</div>
+        <div className="flex flex-col px-[54px] overflow-y-auto">
+          {children}
+        </div>
       </main>
     </div>
   )

@@ -31,7 +31,8 @@ const ProfileCardBase = ({ session }: ProfileCardBaseProps) => {
   return (
     <>
       <div className="flex flex-1 flex-row overflow-hidden">
-        <Image
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
           alt="avatar"
           className="h-[160px] rounded-full"
           height={160}
