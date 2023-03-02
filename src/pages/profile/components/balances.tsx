@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useAccountBalance } from '@suiet/wallet-kit'
+import { useAccountBalance, useWallet } from '@suiet/wallet-kit'
 import { useEvmNativeBalance } from '@moralisweb3/next'
 import { useAccount } from 'wagmi'
 import { Chart as ChartJS, ArcElement, Tooltip } from 'chart.js'
@@ -7,11 +7,13 @@ import { Doughnut } from 'react-chartjs-2'
 
 ChartJS.register(ArcElement, Tooltip)
 
-const MOCK_SUI_USD_RATE = 0.01
+const MOCK_SUI_USD_RATE = 0.1
 const MOCK_ETH_USD_RATE = 1650
+const MOCK_MATIC_USD_RATE = 1.28
 
 const BalancesWrapper = () => {
-  const { address: ethAddress, isConnected: ethConnected } = useAccount()
+  const { address: ethAddress } = useAccount()
+  const { address: suiAddress = '' } = useWallet()
 
   const [isMounted, setIsMounted] = useState(false)
 
@@ -24,11 +26,11 @@ const BalancesWrapper = () => {
       return null
     }
 
-    if (!ethAddress || !ethConnected) {
+    if (!ethAddress && !suiAddress) {
       return null
     }
 
-    return <BalancesBase ethAddress={ethAddress} />
+    return <BalancesBase ethAddress={ethAddress as string} />
   }
 
   return (
@@ -46,22 +48,26 @@ const BalancesBase = ({ ethAddress }: BalancesBaseProps) => {
   const suiBalanceObject = useAccountBalance()
   const ethBalanceObject = useEvmNativeBalance({
     address: ethAddress,
+    chain: 0x1,
+  })
+  const maticBalanceObject = useEvmNativeBalance({
+    address: ethAddress,
+    chain: 0x89,
   })
 
-  const suiBalance = Number(suiBalanceObject.balance) / 100_000_000 || 0
-  const ethBalance = Number(ethBalanceObject.data?.balance?.ether) || 0
-  const total = suiBalance + ethBalance
+  const suiBalanceValue =
+    (Number(suiBalanceObject.balance) / 100_000_000 || 0) * MOCK_SUI_USD_RATE
+  const ethBalanceValue =
+    (Number(ethBalanceObject.data?.balance?.ether) || 0) * MOCK_ETH_USD_RATE
+  const maticBalanceValue =
+    (Number(maticBalanceObject.data?.balance?.ether) || 0) * MOCK_MATIC_USD_RATE
+  const total = suiBalanceValue + ethBalanceValue + maticBalanceValue
 
   return (
     <div className="flex flex-row grow gap-8">
       <div className="grow">
         <p className="text-lg">Total floor</p>
-        <p className="text-4xl font-bold">
-          {`$ ${(
-            MOCK_SUI_USD_RATE * suiBalance +
-            MOCK_ETH_USD_RATE * ethBalance
-          ).toLocaleString()}`}
-        </p>
+        <p className="text-4xl font-bold">{`$ ${total.toLocaleString()}`}</p>
       </div>
       <div className="flex flex-row">
         <Doughnut
@@ -69,15 +75,20 @@ const BalancesBase = ({ ethAddress }: BalancesBaseProps) => {
             datasets: [
               {
                 backgroundColor: [
-                  'rgba(255, 99, 132, 0.2)',
-                  'rgba(54, 162, 235, 0.2)',
+                  'rgba(0, 255, 255, 0.2)',
+                  'rgba(255, 255, 0, 0.2)',
+                  'rgba(255, 0, 255, 0.2)',
                 ],
-                borderColor: ['rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)'],
+                borderColor: [
+                  'rgba(0, 255, 255, 1)',
+                  'rgba(255, 255, 0, 1)',
+                  'rgba(255, 0, 255, 1)',
+                ],
                 borderWidth: 1,
-                data: [suiBalance, ethBalance],
+                data: [suiBalanceValue, ethBalanceValue, maticBalanceValue],
               },
             ],
-            labels: ['sui', 'eth'],
+            labels: ['sui', 'eth', 'matic'],
           }}
           height={80}
           options={{
@@ -86,8 +97,11 @@ const BalancesBase = ({ ethAddress }: BalancesBaseProps) => {
           width={80}
         />
         <div className="flex flex-col justify-center text-lg font-medium ml-4">
-          <p>{`ETH ${((ethBalance / total) * 100 || 0).toFixed(0)}%`}</p>
-          <p>{`SUI ${((suiBalance / total) * 100 || 0).toFixed(0)}%`}</p>
+          <p>{`SUI ${((suiBalanceValue / total) * 100 || 0).toFixed(0)}%`}</p>
+          <p>{`ETH ${((ethBalanceValue / total) * 100 || 0).toFixed(0)}%`}</p>
+          <p>{`MATIC ${((maticBalanceValue / total) * 100 || 0).toFixed(
+            0
+          )}%`}</p>
         </div>
       </div>
     </div>
