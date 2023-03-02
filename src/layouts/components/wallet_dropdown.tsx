@@ -13,11 +13,13 @@ import { ellipsisMiddle } from '@/utils/address'
 type WalletDropdownProps = {
   classNames?: string
   containerClassNames?: string
+  onWalletSelectSuccess?: (address: string) => void
 }
 
 const WalletDropdown = ({
   classNames,
   containerClassNames,
+  onWalletSelectSuccess,
 }: WalletDropdownProps) => {
   const {
     connected: suiConnected,
@@ -50,6 +52,18 @@ const WalletDropdown = ({
   useEffect(() => {
     setIsMounted(true)
   }, [])
+
+  useEffect(() => {
+    if (suiConnected && suiAddress) {
+      onWalletSelectSuccess?.(suiAddress)
+    }
+  }, [suiConnected, suiAddress])
+
+  useEffect(() => {
+    if (ethIsConnected && ethAddress) {
+      onWalletSelectSuccess?.(ethAddress)
+    }
+  }, [ethIsConnected, ethAddress])
 
   return (
     <>

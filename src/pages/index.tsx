@@ -3,6 +3,7 @@ import Marquee from 'react-fast-marquee'
 import Head from 'next/head'
 import Link from 'next/link'
 import Image from 'next/image'
+import { useRouter } from 'next/router'
 import cl from 'classnames'
 
 import { Button } from '@/components'
@@ -13,6 +14,8 @@ import useInViewport from '@/hooks/dom/useInViewport'
 let ticking = false
 
 const Index = () => {
+  const router = useRouter()
+
   const [scrollY, setScrollY] = useState(0)
 
   useEffect(() => {
@@ -120,7 +123,9 @@ const Index = () => {
                 width={36}
               />
             </a>
-            <WalletDropdown />
+            <WalletDropdown
+              onWalletSelectSuccess={() => router.push('/login')}
+            />
           </div>
         </header>
         <main className="overflow-hidden">
