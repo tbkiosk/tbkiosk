@@ -40,7 +40,7 @@
   "devDependencies": {
     "@morphis-labs/eslint-config": "^1.0.7",
     "@testing-library/react": "^14.0.0",
-    "@types/node": "18.14.2",
+    "@types/node": "18.14.4",
     "@types/react": "18.0.28",
     "@types/react-dom": "18.0.11",
     "@typescript-eslint/eslint-plugin": "^5.54.0",
