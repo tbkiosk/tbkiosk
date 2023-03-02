@@ -2,6 +2,7 @@ import Head from 'next/head'
 
 import Layout from '@/layouts'
 import ProfileCard from './components/profile_card'
+import Balances from './components/balances'
 import Collections from './components/collections'
 import Connections from './components/connections'
 
@@ -17,7 +18,9 @@ const Profile = () => {
           <div className="col-span-2">
             <ProfileCard />
           </div>
-          <div className="bg-[#0000ff] col-span-1 ">B</div>
+          <div className="col-span-1 ">
+            <Balances />
+          </div>
           <div className="col-span-1 row-span-2">
             <Connections />
           </div>

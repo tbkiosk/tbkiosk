@@ -30,7 +30,7 @@ const ProfileCardBase = ({ session }: ProfileCardBaseProps) => {
 
   return (
     <>
-      <div className="flex flex-1 flex-row overflow-hidden">
+      <div className="flex flex-1 flex-row items-center overflow-hidden">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           alt="avatar"
