@@ -39,7 +39,7 @@ const Connections = () => {
             />
             <span className="truncate">{user.displayName}</span>
             <a
-              className='shrink-0'
+              className="shrink-0 transition-opacity hover:opacity-80"
               href={`${TWITTER_LINK_BASE_URL}${user.userName}`}
               rel="noopener noreferrer"
               target="_blank"
