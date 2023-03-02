@@ -4,7 +4,7 @@ import Image from 'next/image'
 import cl from 'classnames'
 
 import { Sidebar, Menu, useProSidebar, sidebarClasses } from 'react-pro-sidebar'
-import { Button } from '@/components'
+import { Button, Tooltip } from '@/components'
 import WalletDropdown from './components/wallet_dropdown'
 import ConnectStatus from './components/connect_status'
 
@@ -23,14 +23,17 @@ const MENUS = [
   {
     key: 'discover',
     iconClass: 'fa-compass',
+    disabled: true,
   },
   {
     key: 'communities',
     iconClass: 'fa-arrow-right-arrow-left',
+    disabled: true,
   },
   {
     key: 'activities',
     iconClass: 'fa-clock',
+    disabled: true,
   },
 ]
 
@@ -73,28 +76,51 @@ const Layout = ({ children }: LayoutProps) => {
         </div>
         <Menu className="px-[30px]">
           <div className="flex flex-col grow gap-4">
-            {MENUS.map(({ key, iconClass }) => (
-              <Link href={`/${key}`} key={key}>
-                <Button
-                  className={cl([
-                    'flex grow items-center',
-                    collapsed && 'justify-center',
-                  ])}
-                  variant={route.includes(key) ? 'outlined' : 'contained'}
-                >
-                  <i
+            {MENUS.map(({ key, iconClass, disabled }) =>
+              disabled ? (
+                <Tooltip key={key} tip={disabled ? 'Coming soon' : undefined}>
+                  <Button
                     className={cl([
-                      'fa-solid text-lg',
-                      iconClass,
-                      !collapsed && 'ml-4 mr-4',
+                      'flex grow items-center',
+                      collapsed && 'justify-center',
                     ])}
-                  />
-                  {!collapsed && (
-                    <span className="text-2xl capitalize">{key}</span>
-                  )}
-                </Button>
-              </Link>
-            ))}
+                    variant={route.includes(key) ? 'outlined' : 'contained'}
+                  >
+                    <i
+                      className={cl([
+                        'fa-solid text-lg',
+                        iconClass,
+                        !collapsed && 'ml-4 mr-4',
+                      ])}
+                    />
+                    {!collapsed && (
+                      <span className="text-2xl capitalize">{key}</span>
+                    )}
+                  </Button>
+                </Tooltip>
+              ) : (
+                <Link href={`/${key}`} key={key}>
+                  <Button
+                    className={cl([
+                      'flex grow items-center',
+                      collapsed && 'justify-center',
+                    ])}
+                    variant={route.includes(key) ? 'outlined' : 'contained'}
+                  >
+                    <i
+                      className={cl([
+                        'fa-solid text-lg',
+                        iconClass,
+                        !collapsed && 'ml-4 mr-4',
+                      ])}
+                    />
+                    {!collapsed && (
+                      <span className="text-2xl capitalize">{key}</span>
+                    )}
+                  </Button>
+                </Link>
+              )
+            )}
           </div>
           {/* <i className="fa-solid fa-bars absolute bottom-4 cursor-pointer transition-opacity hover:opacity-50" /> */}
           <i
