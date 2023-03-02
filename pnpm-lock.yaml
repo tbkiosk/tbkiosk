@@ -2,6 +2,7 @@ lockfileVersion: 5.4
 
 specifiers:
   '@headlessui/react': ^1.7.12
+  '@moralisweb3/common-evm-utils': ^2.14.3
   '@moralisweb3/next': ^2.14.3
   '@morphis-labs/eslint-config': ^1.0.7
   '@mysten/sui.js': ^0.29.0
@@ -45,6 +46,7 @@ specifiers:
 
 dependencies:
   '@headlessui/react': 1.7.12_biqbaboplfbrettd7655fr4n2y
+  '@moralisweb3/common-evm-utils': 2.14.3
   '@moralisweb3/next': 2.14.3_5twz3epvxpphgc5g6fh2o6kdwi
   '@mysten/sui.js': 0.29.1
   '@next-auth/mongodb-adapter': 1.1.1_mnvn34sskpyqnfji7bz47remva

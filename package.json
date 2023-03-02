@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@headlessui/react": "^1.7.12",
+    "@moralisweb3/common-evm-utils": "^2.14.3",
     "@moralisweb3/next": "^2.14.3",
     "@mysten/sui.js": "^0.29.0",
     "@next-auth/mongodb-adapter": "^1.1.1",
