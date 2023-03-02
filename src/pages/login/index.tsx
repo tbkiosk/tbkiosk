@@ -1,46 +1,13 @@
-import { useEffect } from 'react'
 import Head from 'next/head'
-import { useRouter } from 'next/router'
 import Image from 'next/image'
-import Link from 'next/link'
-import { useSession, signIn } from 'next-auth/react'
-import { useWallet } from '@suiet/wallet-kit'
+// import Link from 'next/link'
+import { signIn } from 'next-auth/react'
 import cl from 'classnames'
 
 import { Button, Tooltip } from '@/components'
-
-import { useSuiWalletModal } from '@/context/sui_wallet_modal_context'
-
-import { ellipsisMiddle } from '@/utils/address'
+import WalletDropdown from '@/layouts/components/wallet_dropdown'
 
 const Login = () => {
-  const { data: session } = useSession()
-  const { connecting, connected, address = '', disconnect } = useWallet()
-  const router = useRouter()
-  const { setOpen } = useSuiWalletModal()
-
-  const onWalletClick = () => {
-    if (connected) {
-      disconnect()
-      setOpen(false)
-      return
-    }
-
-    setOpen(true)
-  }
-
-  useEffect(() => {
-    if (connected) {
-      setOpen(false)
-    }
-  }, [connected, setOpen])
-
-  useEffect(() => {
-    if (session) {
-      router.push('/profile')
-    }
-  }, [session, router])
-
   return (
     <>
       <Head>
@@ -62,22 +29,10 @@ const Login = () => {
           <p className="text-base text-center leading-5 mb-6">
             Your gateway to the top NFT communities and collectors like you!
           </p>
-          <Button
-            className="border-[#d8dadc] mb-5"
-            loading={connecting}
-            onClick={() => onWalletClick()}
-            startIcon={<i className="fa-solid fa-wallet fa-xl ml-2"></i>}
-            variant={connected ? 'contained' : 'outlined'}
-          >
-            {connected ? (
-              <div className="flex justify-center items-center">
-                <div className="bg-[#82ffac] h-[14px] w-[14px] rounded-full mr-4" />
-                {ellipsisMiddle(address)}
-              </div>
-            ) : (
-              'Connect wallet'
-            )}
-          </Button>
+          <WalletDropdown
+            classNames="w-full max-w-full mb-5"
+            containerClassNames="w-full"
+          />
           <Tooltip tip="Coming soon">
             <Button
               className="border-[#d8dadc] mb-5"
@@ -106,7 +61,7 @@ const Login = () => {
           >
             Connect Discord
           </Button>
-          <div
+          {/* <div
             className={cl([
               'text-center font-bold',
               connected ? 'visible' : 'invisible',
@@ -118,7 +73,7 @@ const Login = () => {
             >
               Skip for now
             </Link>
-          </div>
+          </div> */}
         </div>
       </main>
     </>

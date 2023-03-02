@@ -5,7 +5,8 @@ import Link from 'next/link'
 import Image from 'next/image'
 import cl from 'classnames'
 
-import { Button, Tooltip } from '@/components'
+import { Button } from '@/components'
+import WalletDropdown from '@/layouts/components/wallet_dropdown'
 
 import useInViewport from '@/hooks/dom/useInViewport'
 
@@ -119,16 +120,7 @@ const Index = () => {
                 width={36}
               />
             </a>
-            <Tooltip position="bottom" tip="Coming soon">
-              <Button
-                className="!h-[48px] px-8 !rounded-[60px]"
-                // onClick={onWalletClick}
-                variant="contained"
-              >
-                {/* {connected ? ellipsisMiddle(address) : 'Connect wallet'} */}
-                Connect wallet
-              </Button>
-            </Tooltip>
+            <WalletDropdown />
           </div>
         </header>
         <main className="overflow-hidden">
@@ -141,12 +133,14 @@ const Index = () => {
               Morphis Network is a social platform that allows token-gated
               communities built around NFT ownership
             </div>
-            <Button
-              className="!h-[48px] !w-auto px-8 !rounded-[60px] absolute top-[436px] left-[96px] -translate-x-[calc(100%+96px)] animate-[fly-in-from-left_1s_ease-in-out_450ms] animation-fill-forwards"
-              variant="outlined"
-            >
-              Coming soon
-            </Button>
+            <Link href="/login">
+              <Button
+                className="!h-[48px] !w-auto px-8 !rounded-[60px] absolute top-[436px] left-[96px] -translate-x-[calc(100%+96px)] animate-[fly-in-from-left_1s_ease-in-out_450ms] animation-fill-forwards"
+                variant="outlined"
+              >
+                Get started
+              </Button>
+            </Link>
             <Image
               alt="peeps"
               className="absolute top-[88px] right-0 object-fit w-[40%] max-w-[888px] max-h-[518px] transition-transform translate-x-full animate-[fly-in-from-right_1s_ease-in-out_450ms] animation-fill-forwards"

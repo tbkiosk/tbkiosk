@@ -1,4 +1,3 @@
-import { useState, useEffect } from 'react'
 import { useWallet } from '@suiet/wallet-kit'
 import { useWeb3Modal } from '@web3modal/react'
 import { useAccount } from 'wagmi'
@@ -11,7 +10,15 @@ import { useSuiWalletModal } from '@/context/sui_wallet_modal_context'
 
 import { ellipsisMiddle } from '@/utils/address'
 
-const WalletDropdown = () => {
+type WalletDropdownProps = {
+  classNames?: string
+  containerClassNames?: string
+}
+
+const WalletDropdown = ({
+  classNames,
+  containerClassNames,
+}: WalletDropdownProps) => {
   const {
     connected: suiConnected,
     address: suiAddress = '',
@@ -42,7 +49,11 @@ const WalletDropdown = () => {
 
   return (
     <>
-      <Dropdown renderButton={renderButton}>
+      <Dropdown
+        renderButton={() => (isMounted() ? renderButton() : null)}
+        classNames={classNames}
+        containerClassNames={containerClassNames}
+      >
         <Dropdown.Items className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-black shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
           <Dropdown.Item>
             {() => (
