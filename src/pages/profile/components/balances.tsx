@@ -48,7 +48,7 @@ const BalancesBase = ({ ethAddress }: BalancesBaseProps) => {
     address: ethAddress,
   })
 
-  const suiBalance = Number(suiBalanceObject.balance) / 1_000_000_000
+  const suiBalance = Number(suiBalanceObject.balance) / 100_000_000 || 0
   const ethBalance = Number(ethBalanceObject.data?.balance?.ether) || 0
   const total = suiBalance + ethBalance
 
@@ -86,8 +86,8 @@ const BalancesBase = ({ ethAddress }: BalancesBaseProps) => {
           width={80}
         />
         <div className="flex flex-col justify-center text-lg font-medium ml-4">
-          <p>{`ETH ${((ethBalance / total) * 100).toFixed(0)}%`}</p>
-          <p>{`SUI ${((suiBalance / total) * 100).toFixed(0)}%`}</p>
+          <p>{`ETH ${((ethBalance / total) * 100 || 0).toFixed(0)}%`}</p>
+          <p>{`SUI ${((suiBalance / total) * 100 || 0).toFixed(0)}%`}</p>
         </div>
       </div>
     </div>
