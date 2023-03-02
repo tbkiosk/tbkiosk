@@ -13,7 +13,7 @@ const Profile = () => {
         <meta name="description" content="morphis network profile" />
       </Head>
       <Layout>
-        <div className="grid grow grid-rows-[200px_150px_1fr] grid-cols-[1fr_320px] gap-6">
+        <div className="grid grow grid-rows-[200px_150px_1fr] grid-cols-[1fr_320px] gap-6 pb-[54px]">
           <div className="col-span-2">
             <ProfileCard />
           </div>
