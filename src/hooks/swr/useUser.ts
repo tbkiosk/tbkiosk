@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { toast } from 'react-toastify'
 import useSWRImmutable from 'swr/immutable'
 
-import type { ResponseBase } from '@/pages/api/types'
+import type { ResponseBase } from '@/types/response'
 import type { ExtendedUser } from '@/schemas/user'
 
 const useUser = () => {

@@ -1,4 +1,4 @@
-import type { ResponseBase } from '@/pages/api/types'
+import type { ResponseBase } from '@/types/response'
 
 const request = async <T>(
   url: string,

@@ -4,7 +4,7 @@ import clientPromise from '@/lib/mongodb'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
 
 import type { NextApiRequest, NextApiResponse } from 'next'
-import type { ResponseBase } from '@/pages/api/types'
+import type { ResponseBase } from '@/types/response'
 import type { ExtendedUser } from '@/schemas/user'
 import type { ExtendedSession } from '@/helpers/nextauth/types'
 
