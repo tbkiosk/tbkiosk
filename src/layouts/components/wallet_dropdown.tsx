@@ -4,7 +4,7 @@ import { useWeb3Modal } from '@web3modal/react'
 import { useAccount } from 'wagmi'
 import cl from 'classnames'
 
-import { Dropdown } from '@/components'
+import { Dropdown, Tooltip } from '@/components'
 
 import { useSuiWalletModal } from '@/context/sui_wallet_modal_context'
 
@@ -73,6 +73,38 @@ const WalletDropdown = () => {
                   ethIsConnected ? `: ${ellipsisMiddle(ethAddress || '')}` : ''
                 }`}
               </div>
+            )}
+          </Dropdown.Item>
+          <Dropdown.Item>
+            {() => (
+              <Tooltip
+                classNames="[&>span]:text-black [&>span]:bg-white"
+                tip="Coming soon"
+              >
+                <div
+                  className={cl(
+                    'block w-full px-4 py-4 text-left text-sm text-white truncate rounded-bl-md rounded-br-md cursor-not-allowed transition-colors hover:bg-[#333333]'
+                  )}
+                >
+                  Aptos
+                </div>
+              </Tooltip>
+            )}
+          </Dropdown.Item>
+          <Dropdown.Item>
+            {() => (
+              <Tooltip
+                classNames="[&>span]:text-black [&>span]:bg-white"
+                tip="Coming soon"
+              >
+                <div
+                  className={cl(
+                    'block w-full px-4 py-4 text-left text-sm text-white truncate rounded-bl-md rounded-br-md cursor-not-allowed transition-colors hover:bg-[#333333]'
+                  )}
+                >
+                  Solana
+                </div>
+              </Tooltip>
             )}
           </Dropdown.Item>
         </Dropdown.Items>
