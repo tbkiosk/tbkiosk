@@ -118,7 +118,7 @@ const Layout = ({ children }: LayoutProps) => {
             <WalletDropdown />
           </div>
         </div>
-        <div className="flex flex-col px-[54px]">{children}</div>
+        <div className="flex flex-col px-[54px] overflow-y-auto">{children}</div>
       </main>
     </div>
   )

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useWallet } from '@suiet/wallet-kit'
 import { useWeb3Modal } from '@web3modal/react'
 import { useAccount } from 'wagmi'
+import { useIsMounted } from 'usehooks-ts'
 import cl from 'classnames'
 
 import { Dropdown, Tooltip } from '@/components'
@@ -21,10 +22,10 @@ const WalletDropdown = () => {
   const { open: ethOpen } = useWeb3Modal()
   const { setOpen: setSuiModalOpen } = useSuiWalletModal()
 
-  const [mounted, setMounted] = useState(false)
+  const isMounted = useIsMounted()
 
   const renderButton = () => {
-    if (!mounted) {
+    if (!isMounted()) {
       return <span>Connect wallet</span>
     }
 
@@ -38,10 +39,6 @@ const WalletDropdown = () => {
       <span>{`${wallets.length} wallet${wallets.length > 1 ? 's' : ''}`}</span>
     )
   }
-
-  useEffect(() => {
-    setMounted(true)
-  }, [])
 
   return (
     <>

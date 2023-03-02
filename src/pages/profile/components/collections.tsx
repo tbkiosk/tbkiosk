@@ -1,6 +1,8 @@
-import { useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useWallet } from '@suiet/wallet-kit'
-import { useEvmWalletNFTs, useEvmNFTMetadata } from '@moralisweb3/next'
+import { useEvmWalletNFTs } from '@moralisweb3/next'
+import { useAccount } from 'wagmi'
+import { useIsMounted } from 'usehooks-ts'
 
 import { Loading } from '@/components'
 
@@ -24,13 +26,20 @@ const transformNftImageURL = (url: string | undefined) => {
   return ''
 }
 
+const DEFAULT_NFT_IMAGE_WIDTH = 180
+
 const CollectionsWrapper = () => {
   const { connected: suiConnected, address: suiAddress = '' } = useWallet()
+  const { address: ethAddress, isConnected: ethConnected } = useAccount()
+  const isMounted = useIsMounted()
 
-  const collectionsBaseVisible = useMemo(
-    () => suiConnected && suiAddress,
-    [suiConnected, suiAddress]
-  )
+  const collectionsBaseVisible = useMemo(() => {
+    if (!isMounted()) {
+      return false
+    }
+
+    return (suiConnected && suiAddress) || (ethConnected && ethAddress)
+  }, [suiConnected, suiAddress, isMounted])
 
   return (
     <div>
@@ -49,11 +58,13 @@ type NftDisplay = {
 
 const CollectionsBase = () => {
   const { nfts: suiNftObjects, loading: suiNftLoading } = useNfts()
+  const { address: ethAddress } = useAccount()
   const { isFetching: ethNftLoading, data: ethNftObjects } = useEvmWalletNFTs({
-    address: '0xd8da6bf26964af9d7eed9e03e53415d37aa96045',
+    address: ethAddress as string,
     format: 'decimal',
-    limit: 10,
+    limit: 50,
   })
+
   const nfts: NftDisplay[] = useMemo(() => {
     const transformedSuiNfts: NftDisplay[] = suiNftObjects
       .map((nft) =>
@@ -78,14 +89,41 @@ const CollectionsBase = () => {
     return [...transformedSuiNfts, ...transformedEvmNfts]
   }, [suiNftObjects, ethNftObjects])
 
+  const [containerWidth, setContainerWidth] = useState(0)
+
+  useEffect(() => {
+    const setWidth = () => {
+      const container = document.querySelector('#nft-container')
+      if (container) {
+        setContainerWidth(container.clientWidth)
+      }
+    }
+
+    window.addEventListener('resize', () => setWidth())
+    setWidth()
+
+    return window.removeEventListener('resize', () => setWidth())
+  }, [])
+
+  const nftColumns = useMemo(
+    () => Math.ceil(containerWidth / DEFAULT_NFT_IMAGE_WIDTH),
+    [containerWidth]
+  )
+
   return (
     <Loading isLoading={suiNftLoading || ethNftLoading}>
       <div className="flex flex-row grow items-center justify-center">
         {nfts.length ? (
-          <div className="grow w-full grid grid-cols-3 gap-2">
+          <div
+            className="grow w-full grid grid-cols-3 gap-2"
+            id="nft-container"
+            style={{
+              gridTemplateColumns: `repeat(${nftColumns}, minmax(0, 1fr))`,
+            }}
+          >
             {nfts.map((nft) => (
               <div
-                className="bg-slate-200 rounded-[5%] overflow-hidden cursor-pointer transition-transform hover:scale-105"
+                className="bg-slate-200 rounded-[5%] aspect-square overflow-hidden cursor-pointer transition-transform hover:scale-105"
                 key={nft.id}
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
