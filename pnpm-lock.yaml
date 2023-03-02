@@ -19,6 +19,7 @@ specifiers:
   '@web3modal/ethereum': ^2.1.2
   '@web3modal/react': ^2.1.2
   autoprefixer: ^10.4.13
+  chart.js: ^4.2.1
   classnames: ^2.3.2
   eslint: 8.35.0
   eslint-config-next: 13.2.3
@@ -31,6 +32,7 @@ specifiers:
   postcss: ^8.4.21
   prettier: ^2.8.4
   react: 18.2.0
+  react-chartjs-2: ^5.2.0
   react-dom: 18.2.0
   react-fast-marquee: ^1.3.5
   react-pro-sidebar: ^1.0.0
@@ -51,6 +53,7 @@ dependencies:
   '@suiet/wallet-kit': 0.1.26_mm4iolharpqnpzrpm75acjue5m
   '@web3modal/ethereum': 2.1.2_s5q72wmkdehf4mjfxv6ejbfnfa
   '@web3modal/react': 2.1.2_biqbaboplfbrettd7655fr4n2y
+  chart.js: 4.2.1
   classnames: 2.3.2
   ethers: 5.7.2
   joi: registry.npmmirror.com/joi/17.8.3
@@ -59,6 +62,7 @@ dependencies:
   next: 13.2.3_6m24vuloj5ihw4zc5lbsktc4fu
   next-auth: 4.19.2_nvzgbose6yf6w7ijjprgspqefi
   react: 18.2.0
+  react-chartjs-2: 5.2.0_t5yjg6ab35jnsudnh2qdighszm
   react-dom: 18.2.0_react@18.2.0
   react-fast-marquee: 1.3.5_biqbaboplfbrettd7655fr4n2y
   react-pro-sidebar: 1.0.0_etgemzlavky3k4ooobeqgg2miu
@@ -3012,6 +3016,10 @@ packages:
       '@pedrouid/environment': 1.0.1
     dev: false
 
+  /@kurkle/color/0.3.2:
+    resolution: {integrity: sha512-fuscdXJ9G1qb7W8VdHi+IwRqij3lBkosAm4ydQtEmbY58OzHXqQhvlxqEkoz0yssNVn38bcpRWgA9PP+OGoisw==}
+    dev: false
+
   /@ledgerhq/connect-kit-loader/1.0.2:
     resolution: {integrity: sha512-TQ21IjcZOw/scqypaVFY3jHVqI7X7Hta3qN/us6FvTol3AY06UmrhhXGww0E9xHmAbdX241ddwXEiMBSQZFr9g==}
     dev: false
@@ -5784,6 +5792,13 @@ packages:
     dependencies:
       ansi-styles: 4.3.0
       supports-color: 7.2.0
+
+  /chart.js/4.2.1:
+    resolution: {integrity: sha512-6YbpQ0nt3NovAgOzbkSSeeAQu/3za1319dPUQTXn9WcOpywM8rGKxJHrhS8V8xEkAlk8YhEfjbuAPfUyp6jIsw==}
+    engines: {pnpm: ^7.0.0}
+    dependencies:
+      '@kurkle/color': 0.3.2
+    dev: false
 
   /check-error/1.0.2:
     resolution: {integrity: sha512-BrgHpW9NURQgzoNyjfq0Wu6VFO6D7IZEmJNdtgNqpzGG8RuNFHt2jQxWlAs4HMe119chBnv+34syEZtc6IhLtA==}
@@ -8804,6 +8819,16 @@ packages:
     resolution: {integrity: sha512-vYl3iOX+4CKUWuxGi9Ukhie6fsqXqS9FE2Zaic4tNFD2N2QQaXOMFbuKK4QmDHC0JO6B1Zp41J0LpT0oR68amQ==}
     dependencies:
       safe-buffer: 5.2.1
+    dev: false
+
+  /react-chartjs-2/5.2.0_t5yjg6ab35jnsudnh2qdighszm:
+    resolution: {integrity: sha512-98iN5aguJyVSxp5U3CblRLH67J8gkfyGNbiK3c+l1QI/G4irHMPQw44aEPmjVag+YKTyQ260NcF82GTQ3bdscA==}
+    peerDependencies:
+      chart.js: ^4.1.1
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0
+    dependencies:
+      chart.js: 4.2.1
+      react: 18.2.0
     dev: false
 
   /react-dom/18.2.0_react@18.2.0:
