@@ -49,7 +49,9 @@ const CollectionsWrapper = () => {
     <div>
       <div className="py-4 font-bold text-4xl">My collections</div>
       <div className="flex min-h-[320px]">
-        {collectionsBaseVisible && <CollectionsBase />}
+        {collectionsBaseVisible && (
+          <CollectionsBase ethAddress={ethAddress as string} />
+        )}
       </div>
     </div>
   )
@@ -60,14 +62,25 @@ type NftDisplay = {
   image?: string
 }
 
-const CollectionsBase = () => {
+type CollectionsBaseProps = {
+  ethAddress: string
+}
+
+const CollectionsBase = ({ ethAddress }: CollectionsBaseProps) => {
   const { nfts: suiNftObjects, loading: suiNftLoading } = useNfts()
-  const { address: ethAddress } = useAccount()
   const { isFetching: ethNftLoading, data: ethNftObjects } = useEvmWalletNFTs({
     address: ethAddress as string,
     format: 'decimal',
     limit: 50,
+    chain: 0x1,
   })
+  const { isFetching: polygonNftLoading, data: polygonNftObjects } =
+    useEvmWalletNFTs({
+      address: ethAddress as string,
+      format: 'decimal',
+      limit: 50,
+      chain: 0x89,
+    })
 
   const nfts: NftDisplay[] = useMemo(() => {
     const transformedSuiNfts: NftDisplay[] = suiNftObjects
@@ -90,8 +103,21 @@ const CollectionsBase = () => {
             : '',
       })) || []
 
-    return [...transformedSuiNfts, ...transformedEvmNfts]
-  }, [suiNftObjects, ethNftObjects])
+    const transformedPolygonNfts: NftDisplay[] =
+      polygonNftObjects?.map((nft) => ({
+        id: nft.tokenHash || '',
+        image:
+          nft?.metadata && 'image' in nft.metadata
+            ? transformNftImageURL(nft?.metadata.image as string | undefined)
+            : '',
+      })) || []
+
+    return [
+      ...transformedSuiNfts,
+      ...transformedEvmNfts,
+      ...transformedPolygonNfts,
+    ]
+  }, [suiNftObjects, ethNftObjects, polygonNftObjects])
 
   const [containerWidth, setContainerWidth] = useState(0)
 
@@ -115,7 +141,7 @@ const CollectionsBase = () => {
   )
 
   return (
-    <Loading isLoading={suiNftLoading || ethNftLoading}>
+    <Loading isLoading={suiNftLoading || ethNftLoading || polygonNftLoading}>
       <div className="flex flex-row grow items-center justify-center">
         {nfts.length ? (
           <div
