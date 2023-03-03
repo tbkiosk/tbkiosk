@@ -121,19 +121,24 @@ const CollectionsBase = ({ ethAddress }: CollectionsBaseProps) => {
 
   const [containerWidth, setContainerWidth] = useState(0)
 
-  useEffect(() => {
-    const setWidth = () => {
-      const container = document.querySelector('#nft-container')
-      if (container) {
-        setContainerWidth(container.clientWidth)
-      }
+  const setWidth = () => {
+    const container = document.querySelector('#nft-container')
+    if (container) {
+      setContainerWidth(container.clientWidth)
     }
+  }
 
+  useEffect(() => {
     window.addEventListener('resize', () => setWidth())
-    setWidth()
 
     return window.removeEventListener('resize', () => setWidth())
   }, [])
+
+  useEffect(() => {
+    if (!suiNftLoading && !ethNftLoading && !polygonNftLoading) {
+      setWidth()
+    }
+  }, [suiNftLoading, ethNftLoading, polygonNftLoading])
 
   const nftColumns = useMemo(
     () => Math.ceil(containerWidth / DEFAULT_NFT_IMAGE_WIDTH),
