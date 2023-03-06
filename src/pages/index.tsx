@@ -72,8 +72,8 @@ const Index = () => {
           content="morphis network welcome"
         />
       </Head>
-      <div className="overflow-x-auto overflow-y-auto min-w-[1440px]">
-        <header className="flex justify-between fixed inset-x-0 top-0 h-[96px] max-h-[96px] px-[54px] py-6 bg-white z-[1099]">
+      <div className="overflow-x-auto overflow-y-auto">
+        <header className="flex justify-between fixed inset-x-0 top-0 h-24 max-h-24 px-14 py-6 bg-white z-[1099]">
           <div className="flex items-center gap-2 cursor-pointer">
             <Image
               alt="logo"
@@ -84,7 +84,7 @@ const Index = () => {
             />
             <span className="text-xl font-black">MORPHIS</span>
           </div>
-          <div className="flex gap-[60px] items-center font-bold text-lg">
+          <div className="flex gap-[3.75rem] items-center font-bold text-lg">
             <nav className="transition-opacity hover:opacity-60">
               <Link
                 href="/#products"
@@ -132,10 +132,14 @@ const Index = () => {
             <WalletDropdown />
           </div>
         </header>
-        <main className="overflow-hidden">
-          <section className="h-[96px]" />
-          <section className="h-[520px] max-h-[520px] w-full relative">
-            <div className="w-[670px] absolute font-bold text-7xl leading-[96px] top-[88px] left-[96px] -translate-x-[calc(100%+96px)] animate-[fly-in-from-left_1s_ease-in-out_150ms] animation-fill-forwards">
+        <main className="pt-24 overflow-hidden">
+          <section className="h-[32.5rem] max-h-[32.5rem] w-full relative">
+            <div
+              className="
+                w-[50%] max-w-[42rem] absolute font-bold 2xl:text-7xl lg:text-5xl text-4xl 2xl:leading-[6rem] lg:leading-[4rem] leading-10 top-[5.5rem] left-24
+                -translate-x-[calc(100%+6rem)] animate-[fly-in-from-left_1s_ease-in-out_150ms] animation-fill-forwards
+              "
+            >
               Connecting the NFT communities
             </div>
             <div className="w-[580px] absolute font-medium text-2xl leading-8 top-[308px] left-[96px] -translate-x-[calc(100%+96px)] animate-[fly-in-from-left_1s_ease-in-out_300ms] animation-fill-forwards">
