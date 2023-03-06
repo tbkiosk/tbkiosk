@@ -42,7 +42,7 @@
   "devDependencies": {
     "@morphis-labs/eslint-config": "^1.0.7",
     "@morphis-labs/prettier-config": "^0.0.2",
-    "@morphis-labs/tsconfig": "^0.0.1",
+    "@morphis-labs/tsconfig": "^0.0.2",
     "@testing-library/react": "^14.0.0",
     "@types/node": "18.14.6",
     "@types/react": "18.0.28",
