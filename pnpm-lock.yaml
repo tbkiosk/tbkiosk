@@ -5,6 +5,8 @@ specifiers:
   '@moralisweb3/common-evm-utils': ^2.14.3
   '@moralisweb3/next': ^2.14.3
   '@morphis-labs/eslint-config': ^1.0.7
+  '@morphis-labs/prettier-config': ^0.0.2
+  '@morphis-labs/tsconfig': ^0.0.1
   '@mysten/sui.js': ^0.29.0
   '@next-auth/mongodb-adapter': ^1.1.1
   '@noble/hashes': ^1.2.0
@@ -74,6 +76,8 @@ dependencies:
 
 devDependencies:
   '@morphis-labs/eslint-config': 1.0.7_gurlcyvajbadyeqka2blpoa6oi
+  '@morphis-labs/prettier-config': 0.0.2
+  '@morphis-labs/tsconfig': 0.0.1
   '@testing-library/react': 14.0.0_biqbaboplfbrettd7655fr4n2y
   '@types/node': 18.14.6
   '@types/react': 18.0.28
@@ -3221,6 +3225,15 @@ packages:
 
   /@morphis-labs/prettier-config/0.0.1:
     resolution: {integrity: sha512-RxhUR5352yxa5AhJyoR7g2tmd5yKlGAZx3kD4YrWjkYfybUFRpsrRNOMZlh3c6i0EQDbU6EJf8EHX7Z8naCZIA==}
+    dev: true
+
+  /@morphis-labs/prettier-config/0.0.2:
+    resolution: {integrity: sha512-ENa3MNQaSq03/OHe6u/6a/oZLJiMY5SZ4bMwMyiSdmna9ne6GH2JJ6y5iao9XJk+0Zja0tRuink0yCYGbKVZMQ==}
+    dev: true
+
+  /@morphis-labs/tsconfig/0.0.1:
+    resolution: {integrity: sha512-bolCpFB4KKKYkvqqbnVugcolaCGPLNc9oN6RM15XPm6ZQ5+5kD/BVh0RvPzdH16CvsDghOMyfkq9lN4G31GqIw==}
+    engines: {node: '>=18.0.0'}
     dev: true
 
   /@motionone/animation/10.15.1:
