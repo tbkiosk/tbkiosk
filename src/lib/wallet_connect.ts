@@ -15,8 +15,8 @@ export const wagmiClient = createClient({
   autoConnect: true,
   connectors: modalConnectors({
     projectId: process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID as string,
-    version: '1', // or "2"
-    appName: 'web3Modal',
+    version: '2', // Minimum version of wagmi 0.11.3 is required to use version: "2"
+    appName: 'morphis-web3-modal',
     chains,
   }),
   provider,
