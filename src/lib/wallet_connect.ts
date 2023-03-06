@@ -1,8 +1,4 @@
-import {
-  EthereumClient,
-  modalConnectors,
-  walletConnectProvider,
-} from '@web3modal/ethereum'
+import { EthereumClient, modalConnectors, walletConnectProvider } from '@web3modal/ethereum'
 import { configureChains, createClient } from 'wagmi'
 import { evmos, mainnet, polygon } from 'wagmi/chains'
 
