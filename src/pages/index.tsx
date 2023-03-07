@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import Marquee from 'react-fast-marquee'
 import Head from 'next/head'
 import Link from 'next/link'
@@ -21,23 +21,64 @@ const generateFlyInAnimationOptions = (elementId: `#${string}`) => ({
   },
 })
 
-const Index = () => {
+type ScrollTranslateOptions = {
+  target: string
+  translateRange: [number, number]
+  maxTop: number
+}
+
+const useScrollTranslate = ({ target, translateRange, maxTop }: ScrollTranslateOptions) => {
+  const [biasPct, setBiasPct] = useState(0)
+
   const onScroll = () => {
-    const dom = document.querySelector('#peeps-container')
+    const dom = document.querySelector(target)
     if (!dom || window.matchMedia('(max-width: 768px)').matches) {
       return
+    }
+
+    const bodyHeight = document.body.clientHeight
+    const domTop = dom.getBoundingClientRect().top
+
+    if (domTop > bodyHeight) {
+      setBiasPct(translateRange[1])
+    } else if (domTop < maxTop) {
+      setBiasPct(translateRange[0])
+    } else {
+      const domOffsetTopToBodyPercentage = domTop / bodyHeight
+      setBiasPct(translateRange[0] + (translateRange[1] - translateRange[0]) * domOffsetTopToBodyPercentage)
     }
   }
 
   useEffect(() => {
     document.addEventListener('scroll', onScroll)
+    onScroll()
 
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  useInViewport(generateFlyInAnimationOptions('#slogan'))
+  return biasPct
+}
+
+const Index = () => {
+  const biasPctPeepImage = useScrollTranslate({
+    target: '#peeps-container',
+    translateRange: [-20, 10],
+    maxTop: -400,
+  })
+  const biasPctConnectImage = useScrollTranslate({
+    target: '#connect-container',
+    translateRange: [-20, 20],
+    maxTop: -400,
+  })
+  const biasPctWalletImage = useScrollTranslate({
+    target: '#wallet-container',
+    translateRange: [-20, 20],
+    maxTop: -400,
+  })
+
   useInViewport(generateFlyInAnimationOptions('#connect-intro'))
   useInViewport(generateFlyInAnimationOptions('#extension-intro'))
+  useInViewport(generateFlyInAnimationOptions('#slogan'))
 
   return (
     <>
@@ -145,17 +186,17 @@ const Index = () => {
             <div
               className={cl([
                 'absolute object-fit md:w-[40%] w-[120%] md:max-w-[55rem] max-w-[32rem] max-h-[32.5rem]',
-                'md:top-32 top-[22rem] md:right-0 -right-4',
+                'lg:top-36 md:top-32 top-[22rem] md:right-0 -right-4',
                 'transition-transform animate-[fly-in-from-right_1s_ease-in-out_450ms] animation-fill-forwards',
               ])}
               id="peeps-container"
-              style={{ transform: `translate(100%, -10%)` }}
             >
               <Image
                 alt="peeps"
                 height={518}
                 id="peeps"
                 src="/images/peeps.svg"
+                style={{ transform: `translateY(${biasPctPeepImage + 10}%)` }}
                 width={888}
               />
             </div>
@@ -210,7 +251,7 @@ const Index = () => {
             </div>
           </section>
 
-          <section className="relative h-[56rem] md:mb-0 mb-14">
+          <section className="relative md:h-[50rem] h-[56rem] md:mb-0 mb-14">
             <p
               className="font-bold text-5xl text-center pt-20 2xl:pb-40 lg:pb-28 md:pb-20 pb-10"
               id="products"
@@ -290,23 +331,32 @@ const Index = () => {
                 Coming soon
               </Button>
             </div>
-            <Image
-              alt="connect"
+            <div
               className="md:w-[45%] w-full max-w-[48.75rem] md:absolute relative left-0 md:mt-0 mt-8 md:ml-0 -ml-8"
-              height={505}
-              src="/images/connect-preview.png"
-              width={782}
-            />
+              id="connect-container"
+            >
+              <Image
+                alt="connect"
+                height={505}
+                src="/images/connect-preview.png"
+                style={{ transform: `translateY(${biasPctConnectImage + 10}%)` }}
+                width={782}
+              />
+            </div>
           </section>
 
           <section className="relative 2xl:h-[37.5rem] lg:h-[35rem] md:h-[32rem] 2xl:mt-24 lg:mt-12 mt-0 md:mb-0 mb-20">
             <div className="md:w-[50%] max-w-[50rem] w-full h-full absolute right-0 md:block hidden">
-              <div className="w-full h-full relative">
+              <div
+                className="w-full h-full relative"
+                id="wallet-container"
+              >
                 <Image
                   alt="wallet-preview"
-                  className="w-[50%] max-h-[35rem] absolute right-[35%] object-contain md:"
+                  className="w-[50%] max-h-[35rem] absolute right-[35%] object-contain"
                   height={560}
                   src="/images/wallet-preview-1.png"
+                  style={{ transform: `translateY(${biasPctWalletImage + 10}%)` }}
                   width={373}
                 />
                 <Image
@@ -314,6 +364,7 @@ const Index = () => {
                   className="w-[50%] max-h-[35rem] absolute -right-[20%] object-contain"
                   height={560}
                   src="/images/wallet-preview-2.png"
+                  style={{ transform: `translateY(${biasPctWalletImage + 10}%)` }}
                   width={373}
                 />
               </div>
@@ -464,7 +515,7 @@ const Index = () => {
             <div
               className={cl([
                 'flex items-center gap-12 w-[22.5rem] -mb-3 text-5xl font-bold z-[1010] opacity-0 overflow-hidden',
-                'animate-[fade-in-from-bottom_1.5s_linear] animation-fill-forwards animate-none',
+                'animate-[fade-in-from-bottom_1.5s_linear] animation-fill-forwards !animate-none',
               ])}
               style={{ animationDelay: '1s' }}
             >
@@ -474,7 +525,7 @@ const Index = () => {
             <div
               className={cl([
                 'flex items-center gap-12 w-[22.5rem] -mb-3 text-5xl font-bold z-[1010] opacity-0 overflow-hidden',
-                'animate-[fade-in-from-bottom_1.5s_linear] animation-fill-forwards animate-none',
+                'animate-[fade-in-from-bottom_1.5s_linear] animation-fill-forwards !animate-none',
               ])}
               style={{ animationDelay: '2s' }}
             >
@@ -484,7 +535,7 @@ const Index = () => {
             <div
               className={cl([
                 'flex items-center gap-12 w-[22.5rem] -mb-3 text-5xl font-bold z-[1010] opacity-0 overflow-hidden',
-                'animate-[fade-in-from-bottom_1.5s_linear] animation-fill-forwards animate-none',
+                'animate-[fade-in-from-bottom_1.5s_linear] animation-fill-forwards !animate-none',
               ])}
               style={{ animationDelay: '3s' }}
             >
