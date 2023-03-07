@@ -5,8 +5,8 @@ import Link from 'next/link'
 import Image from 'next/image'
 import cl from 'classnames'
 
-import { Button } from '@/components'
-import WalletDropdown from '@/layouts/components/wallet_dropdown'
+import { Button, Tooltip } from '@/components'
+// import WalletDropdown from '@/layouts/components/wallet_dropdown'
 
 import useInViewport from '@/hooks/dom/useInViewport'
 
@@ -42,6 +42,7 @@ const Index = () => {
       }
     },
   })
+
   useInViewport({
     queryTarget: () => document.querySelector('#connect-intro'),
     callback: (entries: IntersectionObserverEntry[]) => {
@@ -52,6 +53,7 @@ const Index = () => {
       }
     },
   })
+
   useInViewport({
     queryTarget: () => document.querySelector('#extension-intro'),
     callback: (entries: IntersectionObserverEntry[]) => {
@@ -73,7 +75,7 @@ const Index = () => {
         />
       </Head>
       <div className="overflow-x-auto overflow-y-auto">
-        <header className="flex justify-between fixed inset-x-0 top-0 h-24 max-h-24 px-14 py-6 bg-white z-[1099]">
+        <header className="flex justify-between fixed inset-x-0 top-0 h-24 max-h-24 2xl:px-14 lg:px-10 px-6 md:py-6 py-2 bg-white z-[1099]">
           <div className="flex items-center gap-2 cursor-pointer">
             <Image
               alt="logo"
@@ -84,7 +86,7 @@ const Index = () => {
             />
             <span className="text-xl font-black">MORPHIS</span>
           </div>
-          <div className="flex gap-[3.75rem] items-center font-bold text-lg">
+          <div className="hidden md:flex 2xl:gap-[3.75rem] lg:gap-12 gap-8 items-center font-bold lg:text-lg text-base">
             <nav className="transition-opacity hover:opacity-60">
               <Link
                 href="/#products"
@@ -102,19 +104,14 @@ const Index = () => {
               </Link>
             </nav>
           </div>
-          <div className="flex gap-8 items-center">
+          <div className="hidden md:flex gap-8 items-center">
             <a
               className="transition-opacity hover:opacity-80"
               href="https://twitter.com/morphis_network"
               rel="noreferrer"
               target="_blank"
             >
-              <Image
-                alt="twitter"
-                height={36}
-                src="/icons/twitter-circle.svg"
-                width={36}
-              />
+              <i className="fa-brands fa-twitter w-9 h-9 flex justify-center items-center text-lg text-white bg-black rounded-full" />
             </a>
             <a
               className="transition-opacity hover:opacity-80"
@@ -122,32 +119,43 @@ const Index = () => {
               rel="noreferrer"
               target="_blank"
             >
-              <Image
-                alt="discord"
-                height={36}
-                src="/icons/discord-circle.svg"
-                width={36}
-              />
+              <i className="fa-brands fa-discord w-9 h-9 flex justify-center items-center text-lg text-white bg-black rounded-full" />
             </a>
-            <WalletDropdown />
+            <Tooltip
+              position="bottom"
+              tip="Coming soon"
+            >
+              <Button className="h-12 px-6">Connect wallets</Button>
+            </Tooltip>
+          </div>
+          <div className="flex md:hidden items-center active:opacity-50">
+            <i className="fa-solid fa-bars text-xl" />
           </div>
         </header>
         <main className="pt-24 overflow-hidden">
           <section className="h-[32.5rem] max-h-[32.5rem] w-full relative">
             <div
-              className="
-                w-[50%] max-w-[42rem] absolute font-bold 2xl:text-7xl lg:text-5xl text-4xl 2xl:leading-[6rem] lg:leading-[4rem] leading-10 top-[5.5rem] left-24
-                -translate-x-[calc(100%+6rem)] animate-[fly-in-from-left_1s_ease-in-out_150ms] animation-fill-forwards
-              "
+              className="w-[50%] max-w-[42rem] absolute 2xl:top-[5.5rem] lg:top-28 top-36 2xl:left-24 lg:left-20 left-16
+                font-bold 2xl:text-7xl lg:text-5xl text-4xl 2xl:leading-[6rem] lg:leading-[4rem] leading-10
+                -translate-x-[calc(100%+6rem)] animate-[fly-in-from-left_1s_ease-in-out_150ms] animation-fill-forwards"
             >
               Connecting the NFT communities
             </div>
-            <div className="w-[580px] absolute font-medium text-2xl leading-8 top-[308px] left-[96px] -translate-x-[calc(100%+96px)] animate-[fly-in-from-left_1s_ease-in-out_300ms] animation-fill-forwards">
+            <div
+              className="
+                w-[50%] max-w-[36.25rem] absolute font-medium 2xl:top-[19.25rem] lg:top-[17rem] top-[16rem] 2xl:left-24 lg:left-20 left-16
+                2xl:text-2xl 2xl:leading-8 lg:text-xl lg:leading-7 text-lg leading-6
+                -translate-x-[calc(100%+6rem)] animate-[fly-in-from-left_1s_ease-in-out_300ms] animation-fill-forwards"
+            >
               Morphis Network is a social platform that allows token-gated communities built around NFT ownership
             </div>
-            <Link href="/login">
+            <Link
+              className="absolute 2xl:top-[27.25rem] lg:top-96 top-[22rem] 2xl:left-24 lg:left-20 left-16
+                -translate-x-[calc(100%+6rem)] animate-[fly-in-from-left_1s_ease-in-out_450ms] animation-fill-forwards"
+              href="/login"
+            >
               <Button
-                className="!h-[48px] !w-auto px-8 !rounded-[60px] absolute top-[436px] left-[96px] -translate-x-[calc(100%+96px)] animate-[fly-in-from-left_1s_ease-in-out_450ms] animation-fill-forwards"
+                className="!h-12 !w-auto px-8 !rounded-[3.75rem]"
                 variant="outlined"
               >
                 Get started
@@ -155,7 +163,8 @@ const Index = () => {
             </Link>
             <Image
               alt="peeps"
-              className="absolute top-[88px] right-0 object-fit w-[40%] max-w-[888px] max-h-[518px] transition-transform translate-x-full animate-[fly-in-from-right_1s_ease-in-out_450ms] animation-fill-forwards"
+              className="absolute top-[5.5rem] right-0 object-fit w-[40%] max-w-[55rem] max-h-[32.5rem] 
+                translate-x-full transition-transform animate-[fly-in-from-right_1s_ease-in-out_450ms] animation-fill-forwards"
               height={518}
               id="peeps"
               src="/images/peeps.svg"
@@ -166,8 +175,8 @@ const Index = () => {
             />
           </section>
 
-          <section className="flex flex-row mt-[96px]">
-            <div className="flex flex-col grow justify-center items-center gap-[48px] py-8 border-r border-r-black">
+          <section className="flex flex-row 2xl:mt-24 lg:mt-12 mt-0">
+            <div className="w-2/6 flex flex-col justify-center items-center gap-12 py-8 border-r border-r-black">
               <Image
                 alt="token"
                 className="animate-[step-spin_6s_ease-in-out_infinite] animation-fill-forwards"
@@ -175,9 +184,11 @@ const Index = () => {
                 src="/icons/token.svg"
                 width={60}
               />
-              <span className="w-[300px] font-bold text-2xl text-center">Token-gated communities centred around NFT</span>
+              <span className="w-[70%] max-w-[18.75rem] font-bold 2xl:text-2xl lg:text-xl text-lg text-center">
+                Token-gated communities centred around NFT
+              </span>
             </div>
-            <div className="flex flex-col grow justify-center items-center gap-[48px] py-8 border-r border-r-black">
+            <div className="w-2/6 flex flex-col justify-center items-center gap-12 py-8 border-r border-r-black">
               <Image
                 alt="dao"
                 className="animate-[step-spin_6s_ease-in-out_2s_infinite] animation-fill-forwards"
@@ -185,9 +196,11 @@ const Index = () => {
                 src="/icons/dao.svg"
                 width={60}
               />
-              <span className="w-[300px] font-bold text-2xl text-center">Dao tooling & community insights</span>
+              <span className="w-[70%] max-w-[18.75rem] font-bold 2xl:text-2xl lg:text-xl text-lg text-center">
+                Dao tooling & community insights
+              </span>
             </div>
-            <div className="flex flex-col grow justify-center items-center gap-[48px] py-8">
+            <div className="w-2/6 flex flex-col justify-center items-center gap-12 py-8">
               <Image
                 alt="connect"
                 className="animate-[step-spin_6s_ease-in-out_4s_infinite] animation-fill-forwards"
@@ -195,20 +208,22 @@ const Index = () => {
                 src="/icons/connect.svg"
                 width={60}
               />
-              <span className="w-[300px] font-bold text-2xl text-center">New way to connect to like-minded members</span>
+              <span className="w-[70%] max-w-[18.75rem] font-bold 2xl:text-2xl lg:text-xl text-lg text-center">
+                New way to connect to like-minded members
+              </span>
             </div>
           </section>
 
-          <section className="relative h-[896px]">
+          <section className="relative h-[56rem]">
             <p
-              className="font-bold text-5xl text-center pt-[81px] pb-[157px]"
+              className="font-bold text-5xl text-center pt-20 2xl:pb-40 lg:pb-28 pb-20"
               id="products"
             >
               Our Products
             </p>
             <Image
               alt="connect"
-              className="absolute left-0"
+              className="w-[45%] max-w-[48.75rem] absolute left-0"
               height={505}
               src="/images/connect-preview.png"
               style={{
@@ -217,18 +232,22 @@ const Index = () => {
               width={782}
             />
             <div
-              className="w-[573px] absolute right-0"
+              className="w-[45%] max-w-[37.75rem] absolute right-0"
               id="connect-intro"
             >
-              <p className="text-4xl font-bold leading-[50px] mb-5">Morphis Connect</p>
+              <p className="font-bold 2xl:text-4xl lg:text-3xl text-2xl mb-5">Morphis Connect</p>
               <p
-                className="text-2xl font-medium mb-8 pr-[68px] translate-x-full animate-[fly-in-from-right_1s_ease-in-out] animation-fill-forwards !animate-none"
+                className="2xl:text-2xl lg:text-xl text-lg font-medium mb-8
+                  2xl:pr-16 lg:pr-12 pr-8
+                  translate-x-full animate-[fly-in-from-right_1s_ease-in-out] animation-fill-forwards !animate-none"
                 style={{ animationDelay: '0.5s' }}
               >
                 A completely new way for communities to form and interact with each other. Centred around NFTs.
               </p>
               <p
-                className="flex items-center gap-3 text-2xl font-bold mb-9 pr-[68px] translate-x-full animate-[fly-in-from-right_1s_ease-in-out] animation-fill-forwards !animate-none"
+                className="flex items-center gap-3 2xl:text-2xl lg:text-xl text-lg font-bold 2xl:mb-9 lg:mb-7 mb-6
+                  2xl:pr-16 lg:pr-12 pr-8
+                  translate-x-full animate-[fly-in-from-right_1s_ease-in-out] animation-fill-forwards !animate-none"
                 style={{ animationDelay: '0.75s' }}
               >
                 <Image
@@ -240,7 +259,9 @@ const Index = () => {
                 Token gated communities around NFTs
               </p>
               <p
-                className="flex items-center gap-3 text-2xl font-bold mb-9 pr-[68px] translate-x-full animate-[fly-in-from-right_1s_ease-in-out] animation-fill-forwards !animate-none"
+                className="flex items-center gap-3 2xl:text-2xl lg:text-xl text-lg font-bold 2xl:mb-9 lg:mb-7 mb-6
+                  2xl:pr-16 lg:pr-12 pr-8
+                  translate-x-full animate-[fly-in-from-right_1s_ease-in-out] animation-fill-forwards !animate-none"
                 style={{ animationDelay: '1s' }}
               >
                 <Image
@@ -252,7 +273,9 @@ const Index = () => {
                 Useful tooling for community management
               </p>
               <p
-                className="flex items-center gap-3 text-2xl font-bold mb-9 pr-[68px] translate-x-full animate-[fly-in-from-right_1s_ease-in-out] animation-fill-forwards !animate-none"
+                className="flex items-center gap-3 2xl:text-2xl lg:text-xl text-lg font-bold 2xl:mb-9 lg:mb-7 mb-6
+                  2xl:pr-16 lg:pr-12 pr-8
+                  translate-x-full animate-[fly-in-from-right_1s_ease-in-out] animation-fill-forwards !animate-none"
                 style={{ animationDelay: '1.25s' }}
               >
                 <Image
@@ -264,7 +287,7 @@ const Index = () => {
                 Discover interesting projects & people
               </p>
               <Button
-                className="!w-auto !h-[48px] !rounded-[60px] px-[44px] text-lg"
+                className="!h-12 !w-auto px-8 !rounded-[3.75rem]"
                 variant="outlined"
               >
                 Coming soon
@@ -272,40 +295,48 @@ const Index = () => {
             </div>
           </section>
 
-          <section className="relative h-[604px] mt-[100px]">
-            <Image
-              alt="wallet-preview"
-              className="absolute right-[252px]"
-              height={560}
-              src="/images/wallet-preview-1.png"
-              style={{
-                top: scrollY < 1208 ? '150px' : `${150 - (scrollY - 1208) * 0.5}px`,
-              }}
-              width={353}
-            />
-            <Image
-              alt="wallet-preview"
-              className="h-[560px] absolute -right-[83px] object-contain"
-              height={560}
-              src="/images/wallet-preview-2.png"
-              style={{
-                top: scrollY < 1208 ? '150px' : `${150 - (scrollY - 1208) * 0.5}px`,
-              }}
-              width={353}
-            />
+          <section className="relative 2xl:h-[37.5rem] lg:h-[35rem] h-[32rem] 2xl:mt-24 lg:mt-12 mt-0">
+            <div className="w-[50%] max-w-[50rem] h-full absolute right-0">
+              <div className="w-full h-full relative">
+                <Image
+                  alt="wallet-preview"
+                  className="w-[50%] max-h-[35rem] absolute right-[35%] object-contain"
+                  height={560}
+                  src="/images/wallet-preview-1.png"
+                  style={{
+                    top: scrollY < 1208 ? '150px' : `${150 - (scrollY - 1208) * 0.5}px`,
+                  }}
+                  width={373}
+                />
+                <Image
+                  alt="wallet-preview-2"
+                  className="w-[50%] max-h-[35rem] absolute -right-[20%] object-contain"
+                  height={560}
+                  src="/images/wallet-preview-2.png"
+                  style={{
+                    top: scrollY < 1208 ? '150px' : `${150 - (scrollY - 1208) * 0.5}px`,
+                  }}
+                  width={373}
+                />
+              </div>
+            </div>
             <div
-              className="w-[543px] absolute"
+              className="w-[50%] absolute"
               id="extension-intro"
             >
-              <p className="text-4xl font-bold leading-[50px] mb-5 pl-[82px]">Wallet Extension</p>
+              <p className="font-bold 2xl:text-4xl lg:text-3xl text-2xl 2xl:pl-24 lg:pl-16 pl-8 mb-5">Wallet Extension</p>
               <p
-                className="text-2xl font-medium mb-8 pl-[82px] -translate-x-full animate-[fly-in-from-left_1s_ease-in-out] animation-fill-forwards !animate-none"
+                className="2xl:text-2xl lg:text-xl text-lg font-medium mb-8
+                  2xl:pl-24 lg:pl-16 pl-8
+                  -translate-x-full animate-[fly-in-from-left_1s_ease-in-out] animation-fill-forwards !animate-none"
                 style={{ animationDelay: '0.5s' }}
               >
                 Social enabled wallet extension to get started with your web3 journey.
               </p>
               <p
-                className="flex items-center gap-3 text-2xl font-bold mb-9 pl-[82px] -translate-x-full animate-[fly-in-from-left_1s_ease-in-out] animation-fill-forwards !animate-none"
+                className="flex items-center gap-3 font-bold
+                  2xl:mb-9 lg:mb-7 mb-6 2xl:text-2xl lg:text-xl text-lg 2xl:pl-24 lg:pl-16 pl-8
+                  -translate-x-full animate-[fly-in-from-left_1s_ease-in-out] animation-fill-forwards !animate-none"
                 style={{ animationDelay: '0.75s' }}
               >
                 <Image
@@ -317,7 +348,9 @@ const Index = () => {
                 Unified web2 and web3 profile
               </p>
               <p
-                className="flex items-center gap-3 text-2xl font-bold mb-9 pl-[82px] -translate-x-full animate-[fly-in-from-left_1s_ease-in-out] animation-fill-forwards !animate-none"
+                className="flex items-center gap-3 font-bold 
+                  2xl:mb-9 lg:mb-7 mb-6 2xl:text-2xl lg:text-xl text-lg 2xl:pl-24 lg:pl-16 pl-8
+                  -translate-x-full animate-[fly-in-from-left_1s_ease-in-out] animation-fill-forwards !animate-none"
                 style={{ animationDelay: '1s' }}
               >
                 <Image
@@ -329,7 +362,9 @@ const Index = () => {
                 Manage NFT portfolio with ease
               </p>
               <p
-                className="flex items-center gap-3 text-2xl font-bold mb-9 pl-[82px] -translate-x-full animate-[fly-in-from-left_1s_ease-in-out] animation-fill-forwards !animate-none"
+                className="flex items-center gap-3 font-bold
+                  2xl:mb-9 lg:mb-7 mb-6 2xl:text-2xl lg:text-xl text-lg 2xl:pl-24 lg:pl-16 pl-8
+                  -translate-x-full animate-[fly-in-from-left_1s_ease-in-out] animation-fill-forwards !animate-none"
                 style={{ animationDelay: '1.25s' }}
               >
                 <Image
@@ -341,13 +376,13 @@ const Index = () => {
                 Transactions directly to social accounts
               </p>
               <a
-                className="pl-[82px]"
+                className="2xl:pl-24 lg:pl-16 pl-8"
                 href="https://chrome.google.com/webstore/detail/morphis-wallet/heefohaffomkkkphnlpohglngmbcclhi"
                 rel="noreferrer"
                 target="_blank"
               >
                 <Button
-                  className="!w-auto !h-[48px] !rounded-[60px] px-[44px] text-lg"
+                  className="!h-12 !w-auto px-8 !rounded-[3.75rem]"
                   variant="contained"
                 >
                   Download extension
@@ -358,14 +393,14 @@ const Index = () => {
 
           <section>
             <p
-              className="font-bold text-5xl text-center pt-[81px] pb-[157px]"
+              className="font-bold text-5xl text-center 2xl:pt-20 lg:pt-10 pt-0 2xl:pb-36 lg:pb-28 pb-20"
               id="partners"
             >
               Our Partners
             </p>
-            <div className="h-[72px] relative overflow-hidden">
+            <div className="h-[4.5rem] relative overflow-hidden">
               <Marquee speed={60}>
-                <div className={cl(['flex flex-row items-center gap-[84px] h-full mx-[42px]'])}>
+                <div className={cl(['flex flex-row items-center gap-20 h-full mx-10'])}>
                   <Image
                     alt="clutchy"
                     height={44}
@@ -417,79 +452,59 @@ const Index = () => {
           </section>
 
           <section
-            className="flex flex-col justify-center items-center h-[408px] mt-[133px] bg-black text-white"
+            className="flex flex-col justify-center items-center h-[25rem] mt-32 bg-black text-white"
             id="slogan"
           >
             <div
-              className="flex items-center gap-[46px] w-[360px] -mb-3 text-5xl font-bold z-[1010] opacity-0 animate-[fade-in-from-bottom_1.5s_linear] animation-fill-forwards animate-none"
+              className="flex items-center gap-12 w-[22.5rem] -mb-3 text-5xl font-bold z-[1010] opacity-0 animate-[fade-in-from-bottom_1.5s_linear] animation-fill-forwards animate-none"
               style={{ animationDelay: '1s' }}
             >
-              <div className="h-[66px] w-[66px] rounded-full bg-[#fce2f9]" />
+              <div className="h-16 w-16 rounded-full bg-[#fce2f9]" />
               <span>Discover.</span>
             </div>
             <div
-              className="flex items-center gap-[46px] w-[360px] -mb-3 text-5xl font-bold z-[1011] opacity-0 animate-[fade-in-from-bottom_1.5s_linear] animation-fill-forwards animate-none"
+              className="flex items-center gap-12 w-[22.5rem] -mb-3 text-5xl font-bold z-[1011] opacity-0 animate-[fade-in-from-bottom_1.5s_linear] animation-fill-forwards animate-none"
               style={{ animationDelay: '2s' }}
             >
-              <div className="h-[66px] w-[66px] rounded-full bg-[#c481c1]" />
+              <div className="h-16 w-16 rounded-full bg-[#c481c1]" />
               <span>Connect.</span>
             </div>
             <div
-              className="flex items-center gap-[46px] w-[360px] text-5xl font-bold z-[1012] opacity-0 animate-[fade-in-from-bottom_1.5s_linear] animation-fill-forwards animate-none"
+              className="flex items-center gap-12 w-[22.5rem] text-5xl font-bold z-[1012] opacity-0 animate-[fade-in-from-bottom_1.5s_linear] animation-fill-forwards animate-none"
               style={{ animationDelay: '3s' }}
             >
-              <div className="h-[66px] w-[66px] rounded-full bg-white" />
+              <div className="h-16 w-16 rounded-full bg-white" />
               <span>Engage.</span>
             </div>
           </section>
 
-          <section className="mt-[52px] mb-[90px]">
-            <p className="font-bold text-5xl text-center pb-[48px]">Join Our Community</p>
-            <div className="flex gap-[18px] justify-center">
+          <section className="2xl:mt-28 lg:mt-20 mt-14 mb-28">
+            <p className="font-bold text-5xl text-center pb-12">Join Our Community</p>
+            <div className="flex gap-4 justify-center px-8">
               <a
-                className="flex items-center gap-4 w-[551px] px-10 py-4 border border-black transition-colors hover:bg-[#ddd]"
+                className="max-w-[35rem] flex grow items-center gap-4 px-10 py-4 border border-black transition-colors hover:bg-[#ddd]"
                 href="https://twitter.com/morphis_network"
                 rel="noreferrer"
                 target="_blank"
               >
-                <Image
-                  alt="twitter"
-                  height={48}
-                  src="/icons/twitter-circle.svg"
-                  width={48}
-                />
+                <i className="fa-brands fa-twitter w-12 h-12 flex justify-center items-center shrink-0 text-xl text-white bg-black rounded-full" />
                 <span className="text-2xl font-black">Follow Us on Twitter</span>
-                <Image
-                  alt="link"
-                  height={18}
-                  src="/icons/arrow-link.svg"
-                  width={18}
-                />
+                <i className="fa-solid fa-arrow-up-right-from-square text-lg" />
               </a>
               <a
-                className="flex items-center gap-4 w-[551px] px-10 py-4 border border-black transition-colors hover:bg-[#ddd]"
+                className="max-w-[35rem] flex grow items-center gap-4 px-10 py-4 border border-black transition-colors hover:bg-[#ddd]"
                 href="http://discord.gg/morphis"
                 rel="noreferrer"
                 target="_blank"
               >
-                <Image
-                  alt="discord"
-                  height={48}
-                  src="/icons/discord-circle.svg"
-                  width={48}
-                />
+                <i className="fa-brands fa-discord w-12 h-12 flex justify-center items-center shrink-0 text-xl text-white bg-black rounded-full" />
                 <span className="text-2xl font-black">Join Discord</span>
-                <Image
-                  alt="link"
-                  height={18}
-                  src="/icons/arrow-link.svg"
-                  width={18}
-                />
+                <i className="fa-solid fa-arrow-up-right-from-square text-lg" />
               </a>
             </div>
           </section>
         </main>
-        <footer className="flex justify-between items-center h-[105px] px-[54px] py-6 bg-black">
+        <footer className="flex justify-between items-center 2xl:px-14 lg:px-10 px-6 py-6 bg-black">
           <div className="flex gap-8">
             <a
               className="transition-opacity hover:opacity-80"
@@ -497,13 +512,7 @@ const Index = () => {
               rel="noreferrer"
               target="_blank"
             >
-              <Image
-                alt="twitter"
-                className="invert"
-                height={36}
-                src="/icons/twitter-circle.svg"
-                width={36}
-              />
+              <i className="fa-brands fa-twitter w-9 h-9 flex justify-center items-center text-lg text-black bg-white rounded-full" />
             </a>
             <a
               className="transition-opacity hover:opacity-80"
@@ -511,26 +520,15 @@ const Index = () => {
               rel="noreferrer"
               target="_blank"
             >
-              <Image
-                alt="discord"
-                className="invert"
-                height={36}
-                src="/icons/discord-circle.svg"
-                width={36}
-              />
+              <i className="fa-brands fa-discord w-9 h-9 flex justify-center items-center text-lg text-black bg-white rounded-full" />
             </a>
             <a
-              className="flex items-center justify-center shrink-0 h-[36px] w-[36px] p-2 text-black bg-white rounded-full transition-opacity hover:opacity-80"
+              className="transition-opacity hover:opacity-80"
               href="https://medium.com/@morphis"
               rel="noreferrer"
               target="_blank"
             >
-              <Image
-                alt="medium"
-                height={36}
-                src="/icons/medium-circle.svg"
-                width={36}
-              />
+              <i className="fa-brands fa-medium w-9 h-9 flex justify-center items-center text-lg text-black bg-white rounded-full" />
             </a>
           </div>
           <div className="text-white">© 2023 Morphis Network</div>
