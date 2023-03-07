@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import Marquee from 'react-fast-marquee'
 import Head from 'next/head'
 import Link from 'next/link'
@@ -6,67 +6,38 @@ import Image from 'next/image'
 import cl from 'classnames'
 
 import { Button, Tooltip } from '@/components'
-// import WalletDropdown from '@/layouts/components/wallet_dropdown'
+// import WalletDropdown from '@/layouts/components/wallet_dropdown' // currently do not allow user to connect wallet
 
 import useInViewport from '@/hooks/dom/useInViewport'
-import useMediaQuery from '@/hooks/useMediaQuery'
 
-let ticking = false
+const generateFlyInAnimationOptions = (elementId: `#${string}`) => ({
+  queryTarget: () => document.querySelector(elementId),
+  callback: (entries: IntersectionObserverEntry[]) => {
+    if (entries[0].isIntersecting) {
+      Array.from(entries[0].target.children || []).forEach(child => {
+        child.classList.remove('!animate-none')
+      })
+    }
+  },
+})
 
 const Index = () => {
-  const [scrollY, setScrollY] = useState(0)
-
-  const isMobile = useMediaQuery('(max-width: 768px)')
+  const onScroll = () => {
+    const dom = document.querySelector('#peeps-container')
+    if (!dom || window.matchMedia('(max-width: 768px)').matches) {
+      return
+    }
+  }
 
   useEffect(() => {
-    const onScroll = () => {
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          setScrollY(window.scrollY)
-          ticking = false
-        })
-
-        ticking = true
-      }
-    }
-
     document.addEventListener('scroll', onScroll)
 
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  useInViewport({
-    queryTarget: () => document.querySelector('#slogan'),
-    callback: (entries: IntersectionObserverEntry[]) => {
-      if (entries[0].isIntersecting) {
-        Array.from(entries[0].target.children || []).forEach(child => {
-          child.classList.remove('animate-none')
-        })
-      }
-    },
-  })
-
-  useInViewport({
-    queryTarget: () => document.querySelector('#connect-intro'),
-    callback: (entries: IntersectionObserverEntry[]) => {
-      if (entries[0].isIntersecting) {
-        Array.from(entries[0].target.children || []).forEach(child => {
-          child.classList.remove('!animate-none')
-        })
-      }
-    },
-  })
-
-  useInViewport({
-    queryTarget: () => document.querySelector('#extension-intro'),
-    callback: (entries: IntersectionObserverEntry[]) => {
-      if (entries[0].isIntersecting) {
-        Array.from(entries[0].target.children || []).forEach(child => {
-          child.classList.remove('!animate-none')
-        })
-      }
-    },
-  })
+  useInViewport(generateFlyInAnimationOptions('#slogan'))
+  useInViewport(generateFlyInAnimationOptions('#connect-intro'))
+  useInViewport(generateFlyInAnimationOptions('#extension-intro'))
 
   return (
     <>
@@ -171,18 +142,23 @@ const Index = () => {
                 Get started
               </Button>
             </Link>
-            <Image
-              alt="peeps"
+            <div
               className={cl([
                 'absolute object-fit md:w-[40%] w-[120%] md:max-w-[55rem] max-w-[32rem] max-h-[32.5rem]',
-                'md:top-[5.5rem] top-[22rem] md:right-0 -right-4',
-                'translate-x-full transition-transform animate-[fly-in-from-right_1s_ease-in-out_450ms] animation-fill-forwards',
+                'md:top-32 top-[22rem] md:right-0 -right-4',
+                'transition-transform animate-[fly-in-from-right_1s_ease-in-out_450ms] animation-fill-forwards',
               ])}
-              height={518}
-              id="peeps"
-              src="/images/peeps.svg"
-              width={888}
-            />
+              id="peeps-container"
+              style={{ transform: `translate(100%, -10%)` }}
+            >
+              <Image
+                alt="peeps"
+                height={518}
+                id="peeps"
+                src="/images/peeps.svg"
+                width={888}
+              />
+            </div>
           </section>
 
           <section className="flex md:flex-row flex-col items-center 2xl:mt-24 lg:mt-12 mt-0">
