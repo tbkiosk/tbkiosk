@@ -37,7 +37,7 @@
     "react-pro-sidebar": "^1.0.0",
     "react-toastify": "^9.1.1",
     "swr": "^2.0.4",
-    "wagmi": "^0.12.0"
+    "wagmi": "^0.12.1"
   },
   "devDependencies": {
     "@morphis-labs/eslint-config": "^1.0.7",

@@ -44,7 +44,7 @@ specifiers:
   tailwindcss: ^3.2.7
   typescript: 4.9.5
   vitest: ^0.29.2
-  wagmi: ^0.12.0
+  wagmi: ^0.12.1
 
 dependencies:
   '@headlessui/react': 1.7.13_biqbaboplfbrettd7655fr4n2y
@@ -55,7 +55,7 @@ dependencies:
   '@noble/hashes': 1.2.0
   '@scure/bip39': 1.1.1
   '@suiet/wallet-kit': 0.1.26_mm4iolharpqnpzrpm75acjue5m
-  '@web3modal/ethereum': 2.1.3_hnnhayjhbkmm77twdo75wb6s74
+  '@web3modal/ethereum': 2.1.3_lh25osyrdykw73pkr7puwqzska
   '@web3modal/react': 2.1.3_biqbaboplfbrettd7655fr4n2y
   chart.js: 4.2.1
   classnames: 2.3.2
@@ -72,10 +72,10 @@ dependencies:
   react-pro-sidebar: 1.0.0_etgemzlavky3k4ooobeqgg2miu
   react-toastify: 9.1.1_biqbaboplfbrettd7655fr4n2y
   swr: 2.0.4_react@18.2.0
-  wagmi: 0.12.0_jt65qio3yulndu5gtyeopsqwp4
+  wagmi: 0.12.1_jt65qio3yulndu5gtyeopsqwp4
 
 devDependencies:
-  '@morphis-labs/eslint-config': 1.0.7_gurlcyvajbadyeqka2blpoa6oi
+  '@morphis-labs/eslint-config': 1.0.7_6kdmeycvvag7pca7cbawttgqwu
   '@morphis-labs/prettier-config': 0.0.2
   '@morphis-labs/tsconfig': 0.0.2
   '@testing-library/react': 14.0.0_biqbaboplfbrettd7655fr4n2y
@@ -2231,7 +2231,7 @@ packages:
       json-rpc-engine: 6.1.0
       keccak: 3.0.3
       preact: 10.13.0
-      qs: 6.11.0
+      qs: 6.11.1
       rxjs: 6.6.7
       sha.js: 2.4.11
       stream-browserify: 3.0.0
@@ -3198,7 +3198,7 @@ packages:
       - debug
     dev: false
 
-  /@morphis-labs/eslint-config/1.0.7_gurlcyvajbadyeqka2blpoa6oi:
+  /@morphis-labs/eslint-config/1.0.7_6kdmeycvvag7pca7cbawttgqwu:
     resolution: {integrity: sha512-9t81b5089MkWmI+MrrSpm9vqTqbaE5tUQ8W2v3X6FFMVzI3/Fmthxg8OZHTDu9a6MqeaZ74nsmnu+ZSskERNSw==}
     peerDependencies:
       '@typescript-eslint/eslint-plugin': ^5.53.0
@@ -3215,9 +3215,9 @@ packages:
       '@typescript-eslint/eslint-plugin': 5.54.0_6mj2wypvdnknez7kws2nfdgupi
       '@typescript-eslint/parser': 5.54.0_ycpbpc6yetojsgtrx3mwntkhsu
       eslint: 8.35.0
-      eslint-config-prettier: 8.6.0_eslint@8.35.0
+      eslint-config-prettier: 8.7.0_eslint@8.35.0
       eslint-plugin-import: 2.27.5_ajyizmi44oc3hrc35l6ndh7p4e
-      eslint-plugin-prettier: 4.2.1_u2zha4kiojzs42thzpgwygphmy
+      eslint-plugin-prettier: 4.2.1_xprnzp4ul2bcpmfe73av4voica
       eslint-plugin-react: 7.32.2_eslint@8.35.0
       prettier: 2.8.4
       typescript: 4.9.5
@@ -4197,33 +4197,33 @@ packages:
       tslib: 2.5.0
     dev: false
 
-  /@tanstack/query-core/4.26.0:
-    resolution: {integrity: sha512-9CRqXmCH82KZDKmezoGU4FOn1Oqbzlp2/zf71n+9nC58e7NSqCIjfSCMpqQWcu9YqUcUykxZEUunOyKHVc6BJA==}
+  /@tanstack/query-core/4.26.1:
+    resolution: {integrity: sha512-Zrx2pVQUP4ndnsu6+K/m8zerXSVY8QM+YSbxA1/jbBY21GeCd5oKfYl92oXPK0hPEUtoNuunIdiq0ZMqLos+Zg==}
     dev: false
 
-  /@tanstack/query-persist-client-core/4.26.0:
-    resolution: {integrity: sha512-2sd0vf3UWkVbsmdgFxyXCHFbWat77xaOBLzfGLvjDotZ0MT0+jBiba4ZFPK4pXt1TrBV0MFC+n/RkNTqdkiXlw==}
+  /@tanstack/query-persist-client-core/4.26.1:
+    resolution: {integrity: sha512-gKO5VQuvNlMMTNSxRtB4tm3zGSx3/U9YluFkdumsHana9YMh3ngc76gUCbQZsnf5DDCwdI673F7A7oSphp/vgA==}
     dependencies:
-      '@tanstack/query-core': 4.26.0
+      '@tanstack/query-core': 4.26.1
     dev: false
 
-  /@tanstack/query-sync-storage-persister/4.26.0:
-    resolution: {integrity: sha512-X0k9eOev1NZ/LVnZs9lWqg4BU9AZkP/vi2jUr2IdDasT3hhnvdLpro9dZkyMdo0ErY1NFs+JGH+dm8X17wA0HA==}
+  /@tanstack/query-sync-storage-persister/4.26.1:
+    resolution: {integrity: sha512-Mt7Z+PKbdEiYt6KGTciLivHvsEQf2Q/G3lpGvLzqEP0S8VULJeUB3pqt6jvZBMgj4nKWBbyH3HZDtDw7pFyg2g==}
     dependencies:
-      '@tanstack/query-persist-client-core': 4.26.0
+      '@tanstack/query-persist-client-core': 4.26.1
     dev: false
 
-  /@tanstack/react-query-persist-client/4.26.0_las55kj2ynv6h7wevmsrms3jdu:
-    resolution: {integrity: sha512-T2GGIVkVytAVAtzf2KdFJxBgv4ju40yr44baiEtKRjbHH30c11t4e4d1XBP7nB89A3/0aXcVLmNIgA22Lmq4rg==}
+  /@tanstack/react-query-persist-client/4.26.1_vohxj3xpfxn57cw32hqo6tozmq:
+    resolution: {integrity: sha512-efS2hPz8z+ySCTIy1DJ4uuT7LSi8F0E4bMXwP/aj2dDuMRFn6AV3z7LItInpp0Em3JKhi90GP2vxDyvQTOhO2A==}
     peerDependencies:
-      '@tanstack/react-query': 4.26.0
+      '@tanstack/react-query': 4.26.1
     dependencies:
-      '@tanstack/query-persist-client-core': 4.26.0
-      '@tanstack/react-query': 4.26.0_biqbaboplfbrettd7655fr4n2y
+      '@tanstack/query-persist-client-core': 4.26.1
+      '@tanstack/react-query': 4.26.1_biqbaboplfbrettd7655fr4n2y
     dev: false
 
-  /@tanstack/react-query/4.26.0_biqbaboplfbrettd7655fr4n2y:
-    resolution: {integrity: sha512-Y5qKyr9AtreTHBPAsn+ulR02E7SyZXPQbwL2tkOcgUAGH2KHHcf7j7NHBhKpaAGB6/vPqkxGYW46epu29V0HqA==}
+  /@tanstack/react-query/4.26.1_biqbaboplfbrettd7655fr4n2y:
+    resolution: {integrity: sha512-i3dnz4TOARGIXrXQ5P7S25Zfi4noii/bxhcwPurh2nrf5EUCcAt/95TB2HSmMweUBx206yIMWUMEQ7ptd6zwDg==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0
       react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
@@ -4234,7 +4234,7 @@ packages:
       react-native:
         optional: true
     dependencies:
-      '@tanstack/query-core': 4.26.0
+      '@tanstack/query-core': 4.26.1
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
       use-sync-external-store: 1.2.0_react@18.2.0
@@ -4567,8 +4567,8 @@ packages:
       pretty-format: 27.5.1
     dev: true
 
-  /@wagmi/chains/0.2.10_typescript@4.9.5:
-    resolution: {integrity: sha512-MoMyQaR5cb1CmhuRu2C9Xyoddas8AZU7RwVQHIX7IHAL2LKbURjMnt0YQu2vr575yCO4llwVMmt2OyGFnq6P9w==}
+  /@wagmi/chains/0.2.11_typescript@4.9.5:
+    resolution: {integrity: sha512-aMrI1zKKXdeAaiTxBiv+3Zfgd3IajCDpxBtPPvpjXuWVRe4ikwzbyZ1HARKj3V1+wNMPng8EJiWpN966PcvROg==}
     peerDependencies:
       typescript: '>=4.9.4'
     peerDependenciesMeta:
@@ -4578,7 +4578,7 @@ packages:
       typescript: 4.9.5
     dev: false
 
-  /@wagmi/connectors/0.3.2_yksctvokmkjcgn2rkpla3nomu4:
+  /@wagmi/connectors/0.3.2_gchjej44e4qgr3acmhv5cfjllu:
     resolution: {integrity: sha512-VZ/lmzR/+Zw4xbQvgXscXvifoNJZbMB4E4rQMUvrlCtHMdK3kxb9BC2KMiPTgfsZmEldz72CMmPbrM8C8X1JCA==}
     peerDependencies:
       '@wagmi/core': '>=0.9.x'
@@ -4594,7 +4594,7 @@ packages:
       '@ledgerhq/connect-kit-loader': 1.0.2
       '@safe-global/safe-apps-provider': 0.15.2
       '@safe-global/safe-apps-sdk': 7.10.0
-      '@wagmi/core': 0.10.0_apnpkfzynlr2iok3waemyv4d5q
+      '@wagmi/core': 0.10.1_apnpkfzynlr2iok3waemyv4d5q
       '@walletconnect/ethereum-provider': 2.4.7_2jefshdpjbklgzoqwrdxhrutl4
       '@walletconnect/legacy-provider': 2.0.0
       abitype: 0.3.0_typescript@4.9.5
@@ -4617,8 +4617,8 @@ packages:
       - zod
     dev: false
 
-  /@wagmi/core/0.10.0_apnpkfzynlr2iok3waemyv4d5q:
-    resolution: {integrity: sha512-biDjKhN9H/hEsbdWfIXovV90nHdwnO3urUTlZVX8fsntg8d9TFQFxhjRCgspHfXcznfRGbUHVslPyQoup1wvrg==}
+  /@wagmi/core/0.10.1_apnpkfzynlr2iok3waemyv4d5q:
+    resolution: {integrity: sha512-UmcX4JNBRl20rg8ybPLOA5SEzKdyqEDd0TXqTfowil1T+IMjsZJhoJ/SWdTPkBXbAQyo8GlQ+Yr0lZ3/CKC1Nw==}
     peerDependencies:
       ethers: '>=5.5.1 <6'
       typescript: '>=4.9.4'
@@ -4626,8 +4626,8 @@ packages:
       typescript:
         optional: true
     dependencies:
-      '@wagmi/chains': 0.2.10_typescript@4.9.5
-      '@wagmi/connectors': 0.3.2_yksctvokmkjcgn2rkpla3nomu4
+      '@wagmi/chains': 0.2.11_typescript@4.9.5
+      '@wagmi/connectors': 0.3.2_gchjej44e4qgr3acmhv5cfjllu
       abitype: 0.3.0_typescript@4.9.5
       ethers: 5.7.2
       eventemitter3: 4.0.7
@@ -5094,13 +5094,13 @@ packages:
       - react
     dev: false
 
-  /@web3modal/ethereum/2.1.3_hnnhayjhbkmm77twdo75wb6s74:
+  /@web3modal/ethereum/2.1.3_lh25osyrdykw73pkr7puwqzska:
     resolution: {integrity: sha512-LUYAKP4FCjyQkyuo8luLWa6D40p23R+GBkc35Yrlgkc8f1c9ZbeAMkg6D3HD4A0KsacALfVcf/AQrDD35fZM2A==}
     peerDependencies:
       '@wagmi/core': '>=0.9'
       ethers: '>=5.7'
     dependencies:
-      '@wagmi/core': 0.10.0_apnpkfzynlr2iok3waemyv4d5q
+      '@wagmi/core': 0.10.1_apnpkfzynlr2iok3waemyv4d5q
       ethers: 5.7.2
     dev: false
 
@@ -6420,8 +6420,8 @@ packages:
       - supports-color
     dev: true
 
-  /eslint-config-prettier/8.6.0_eslint@8.35.0:
-    resolution: {integrity: sha512-bAF0eLpLVqP5oEVUFKpMA+NnRFICwn9X8B5jrR9FcqnYBuPbqWEjTEspPWMj5ye6czoSLDweCzSo3Ko7gGrZaA==}
+  /eslint-config-prettier/8.7.0_eslint@8.35.0:
+    resolution: {integrity: sha512-HHVXLSlVUhMSmyW4ZzEuvjpwqamgmlfkutD53cYXLikh4pt/modINRcCIApJ84czDxM4GZInwUrromsDdTImTA==}
     hasBin: true
     peerDependencies:
       eslint: '>=7.0.0'
@@ -6609,7 +6609,7 @@ packages:
       semver: 6.3.0
     dev: true
 
-  /eslint-plugin-prettier/4.2.1_u2zha4kiojzs42thzpgwygphmy:
+  /eslint-plugin-prettier/4.2.1_xprnzp4ul2bcpmfe73av4voica:
     resolution: {integrity: sha512-f/0rXLXUt0oFYs8ra4w49wYZBG5GKZpAYsJSm6rnYL5uVDjd+zowwMwVZHnAjf4edNrKpCDYfXDgmRE/Ak7QyQ==}
     engines: {node: '>=12.0.0'}
     peerDependencies:
@@ -6621,7 +6621,7 @@ packages:
         optional: true
     dependencies:
       eslint: 8.35.0
-      eslint-config-prettier: 8.6.0_eslint@8.35.0
+      eslint-config-prettier: 8.7.0_eslint@8.35.0
       prettier: 2.8.4
       prettier-linter-helpers: 1.0.0
     dev: true
@@ -8674,8 +8674,8 @@ packages:
       yargs: 15.4.1
     dev: false
 
-  /qs/6.11.0:
-    resolution: {integrity: sha512-MvjoMCJwEarSbUYk5O+nmoSzSutSsTwF85zcHPQ9OrlFoZOYIjaqBAJIqIXjptyD5vThxGq52Xu/MaJzRkIk4Q==}
+  /qs/6.11.1:
+    resolution: {integrity: sha512-0wsrzgTz/kAVIeuxSjnpGC56rzYtr6JT/2BwEvMaPhFIoYa1aGO8LbzuU1R0uUYQkLpWBTOj0l/CLAJB64J6nQ==}
     engines: {node: '>=0.6'}
     dependencies:
       side-channel: 1.0.4
@@ -9937,8 +9937,8 @@ packages:
       - terser
     dev: true
 
-  /wagmi/0.12.0_jt65qio3yulndu5gtyeopsqwp4:
-    resolution: {integrity: sha512-NUm1Z/SH+GbCVbLhQe8xPEztz3Rq0F1oxMiDrLuOMZbbydtcm2OI7QsqMDQYqL/1rXTCbniTwzlRe7sV3CeNLQ==}
+  /wagmi/0.12.1_jt65qio3yulndu5gtyeopsqwp4:
+    resolution: {integrity: sha512-O3X2D5dm3LBesuVSG8qdwSEIulDUn9pouSW/bOn/xdbKR6Q/GouphbiqOyoTn+a1urKlmDI7nq9EU6UeY8Hd3w==}
     peerDependencies:
       ethers: '>=5.5.1 <6'
       react: '>=17.0.0'
@@ -9947,10 +9947,10 @@ packages:
       typescript:
         optional: true
     dependencies:
-      '@tanstack/query-sync-storage-persister': 4.26.0
-      '@tanstack/react-query': 4.26.0_biqbaboplfbrettd7655fr4n2y
-      '@tanstack/react-query-persist-client': 4.26.0_las55kj2ynv6h7wevmsrms3jdu
-      '@wagmi/core': 0.10.0_apnpkfzynlr2iok3waemyv4d5q
+      '@tanstack/query-sync-storage-persister': 4.26.1
+      '@tanstack/react-query': 4.26.1_biqbaboplfbrettd7655fr4n2y
+      '@tanstack/react-query-persist-client': 4.26.1_vohxj3xpfxn57cw32hqo6tozmq
+      '@wagmi/core': 0.10.1_apnpkfzynlr2iok3waemyv4d5q
       abitype: 0.3.0_typescript@4.9.5
       ethers: 5.7.2
       react: 18.2.0
