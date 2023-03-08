@@ -23,11 +23,11 @@ const MENUS = [
   {
     key: 'discover',
     iconClass: 'fa-compass',
-    disabled: true,
   },
   {
     key: 'communities',
     iconClass: 'fa-arrow-right-arrow-left',
+    disabled: true,
   },
   {
     key: 'activities',
@@ -39,10 +39,7 @@ const MENUS = [
 const Layout = ({ children }: LayoutProps) => {
   const { route } = useRouter()
   const { collapsed, collapseSidebar } = useProSidebar()
-  const [isMenuDefaultCollapsed, setIsMenuDefaultCollapsed] = useLocalStorage(
-    'morphis-menu-default-collapsed',
-    false
-  )
+  const [isMenuDefaultCollapsed, setIsMenuDefaultCollapsed] = useLocalStorage('morphis-menu-default-collapsed', false)
 
   const onTogglerMenuCollapsed = (nextCollapsed: boolean) => {
     collapseSidebar()
@@ -77,45 +74,29 @@ const Layout = ({ children }: LayoutProps) => {
           <div className="flex flex-col grow gap-4">
             {MENUS.map(({ key, iconClass, disabled }) =>
               disabled ? (
-                <Tooltip key={key} tip={disabled ? 'Coming soon' : undefined}>
+                <Tooltip
+                  key={key}
+                  tip={disabled ? 'Coming soon' : undefined}
+                >
                   <Button
-                    className={cl([
-                      'flex grow items-center',
-                      collapsed && 'justify-center',
-                    ])}
+                    className={cl(['flex grow items-center', collapsed && 'justify-center'])}
                     variant={route.includes(key) ? 'outlined' : 'contained'}
                   >
-                    <i
-                      className={cl([
-                        'fa-solid text-lg',
-                        iconClass,
-                        !collapsed && 'ml-4 mr-4',
-                      ])}
-                    />
-                    {!collapsed && (
-                      <span className="text-2xl capitalize">{key}</span>
-                    )}
+                    <i className={cl(['fa-solid text-lg', iconClass, !collapsed && 'ml-4 mr-4'])} />
+                    {!collapsed && <span className="text-2xl capitalize">{key}</span>}
                   </Button>
                 </Tooltip>
               ) : (
-                <Link href={`/${key}`} key={key}>
+                <Link
+                  href={`/${key}`}
+                  key={key}
+                >
                   <Button
-                    className={cl([
-                      'flex grow items-center',
-                      collapsed && 'justify-center',
-                    ])}
+                    className={cl(['flex grow items-center', collapsed && 'justify-center'])}
                     variant={route.includes(key) ? 'outlined' : 'contained'}
                   >
-                    <i
-                      className={cl([
-                        'fa-solid text-lg',
-                        iconClass,
-                        !collapsed && 'ml-4 mr-4',
-                      ])}
-                    />
-                    {!collapsed && (
-                      <span className="text-2xl capitalize">{key}</span>
-                    )}
+                    <i className={cl(['fa-solid text-lg', iconClass, !collapsed && 'ml-4 mr-4'])} />
+                    {!collapsed && <span className="text-2xl capitalize">{key}</span>}
                   </Button>
                 </Link>
               )
@@ -133,9 +114,7 @@ const Layout = ({ children }: LayoutProps) => {
       </Sidebar>
       <main className="flex flex-col grow overflow-hidden">
         <div className="flex items-center justify-between px-[54px] py-[38px]">
-          <span className="font-bold text-5xl capitalize">
-            {route.replace('/', '')}
-          </span>
+          <span className="font-bold text-5xl capitalize">{route.replace('/', '')}</span>
           <div className="flex flex-row items-center">
             <span className="h-[48px] w-[48px] flex items-center justify-center bg-[#fdede5] rounded-full mr-4">
               <i className="fa-regular fa-bell fa-xl" />
@@ -144,9 +123,7 @@ const Layout = ({ children }: LayoutProps) => {
             <WalletDropdown />
           </div>
         </div>
-        <div className="flex flex-col px-[54px] overflow-y-auto">
-          {children}
-        </div>
+        <div className="flex flex-col px-[54px] overflow-y-auto">{children}</div>
       </main>
     </div>
   )
