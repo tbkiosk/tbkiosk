@@ -28,7 +28,6 @@ const MENUS = [
   {
     key: 'communities',
     iconClass: 'fa-arrow-right-arrow-left',
-    disabled: true,
   },
   {
     key: 'activities',

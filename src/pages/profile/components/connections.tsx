@@ -1,19 +1,15 @@
-import Image from 'next/image'
-
 const MOCK_TWITTER_USERS = [
   {
     id: '0',
     displayName: 'Gary Lenterman (Free,Own)',
     userName: 'garylenterman',
-    avatar:
-      'https://pbs.twimg.com/profile_images/1623643466852073472/bSE_78_2_reasonably_small.jpg',
+    avatar: 'https://pbs.twimg.com/profile_images/1623643466852073472/bSE_78_2_reasonably_small.jpg',
   },
   {
     id: '1',
     displayName: 'Ethereum Foundation',
     userName: 'ethereum',
-    avatar:
-      'https://pbs.twimg.com/profile_images/1627642622645878784/TP1GH9TM_x96.jpg',
+    avatar: 'https://pbs.twimg.com/profile_images/1627642622645878784/TP1GH9TM_x96.jpg',
   },
 ]
 
@@ -24,7 +20,7 @@ const Connections = () => {
     <div className="flex flex-col px-[30px] py-[36px] shadow-[0_4px_10px_rgba(216,216,216,0.25)]">
       <p className="mb-4 font-bold text-3xl">My connections</p>
       <div className="flex flex-col gap-9">
-        {MOCK_TWITTER_USERS.map((user) => (
+        {MOCK_TWITTER_USERS.map(user => (
           <div
             className="flex items-center gap-6 overflow-hidden"
             key={user.id}
@@ -44,12 +40,7 @@ const Connections = () => {
               rel="noopener noreferrer"
               target="_blank"
             >
-              <Image
-                alt="twitter"
-                height={36}
-                src="/icons/twitter-circle.svg"
-                width={36}
-              />
+              <i className="fa-brands fa-twitter fa-xl" />
             </a>
           </div>
         ))}
