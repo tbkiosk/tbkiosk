@@ -6,14 +6,14 @@ import { SWRConfig } from 'swr'
 import { WalletProvider } from '@suiet/wallet-kit'
 import { Web3Modal } from '@web3modal/react'
 import { WagmiConfig } from 'wagmi'
+import { ApolloProvider } from '@apollo/client'
 
-import {
-  SuiWalletConnectModalProvider,
-  SuiWalletConnectModal,
-} from '@/components'
+import { SuiWalletConnectModalProvider, SuiWalletConnectModal } from '@/components'
+import { CyberConnectAuthContextProvider } from '@/context/cyberconnect_auth'
 
 import fetcher from '@/helpers/swr/fetcher'
 import { ethereumClient, wagmiClient } from '@/lib/wallet_connect'
+import { apolloClient } from '@/lib/apollo'
 
 import type { AppProps } from 'next/app'
 
@@ -30,23 +30,27 @@ const App = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => (
     <WalletProvider autoConnect>
       <SessionProvider session={session}>
         <ProSidebarProvider>
-          <SuiWalletConnectModalProvider>
-            <WagmiConfig client={wagmiClient}>
-              <Head>
-                <meta
-                  name="viewport"
-                  content="width=device-width, initial-scale=1"
+          <ApolloProvider client={apolloClient}>
+            <SuiWalletConnectModalProvider>
+              <CyberConnectAuthContextProvider>
+                <WagmiConfig client={wagmiClient}>
+                  <Head>
+                    <meta
+                      name="viewport"
+                      content="width=device-width, initial-scale=1"
+                    />
+                  </Head>
+                  <Component {...pageProps} />
+                  <ToastContainer />
+                  <SuiWalletConnectModal />
+                </WagmiConfig>
+                <Web3Modal
+                  projectId={process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID as string}
+                  ethereumClient={ethereumClient}
                 />
-              </Head>
-              <Component {...pageProps} />
-              <ToastContainer />
-              <SuiWalletConnectModal />
-            </WagmiConfig>
-            <Web3Modal
-              projectId={process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID as string}
-              ethereumClient={ethereumClient}
-            />
-          </SuiWalletConnectModalProvider>
+              </CyberConnectAuthContextProvider>
+            </SuiWalletConnectModalProvider>
+          </ApolloProvider>
         </ProSidebarProvider>
       </SessionProvider>
     </WalletProvider>
