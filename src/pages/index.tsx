@@ -5,7 +5,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import cl from 'classnames'
 
-import { Button, Tooltip } from '@/components'
+import { Button, Tooltip, Modal } from '@/components'
 // import WalletDropdown from '@/layouts/components/wallet_dropdown' // currently do not allow user to connect wallet
 
 import useInViewport from '@/hooks/dom/useInViewport'
@@ -60,6 +60,8 @@ const useScrollTranslate = ({ target, translateRange, maxTop }: ScrollTranslateO
 }
 
 const Index = () => {
+  const [modalOpen, setModalOpen] = useState(false)
+
   const biasPctPeepImage = useScrollTranslate({
     target: '#peeps-container',
     translateRange: [-20, 10],
@@ -90,7 +92,64 @@ const Index = () => {
         />
       </Head>
       <div className="overflow-x-auto overflow-y-auto">
-        <header className="flex justify-between fixed inset-x-0 top-0 h-24 max-h-24 2xl:px-14 lg:px-10 px-6 md:py-6 py-2 bg-white z-[1099]">
+        <Modal
+          isOpen={modalOpen}
+          setOpen={setModalOpen}
+          classNames="!bg-black"
+        >
+          <div className="h-full w-full flex flex-col pt-32 pb-8 px-8">
+            <div className="flex flex-col gap-9 text-white">
+              <Link
+                className="text-3xl"
+                href="/#products"
+                scroll={false}
+              >
+                Products
+              </Link>
+              <Link
+                className="text-3xl"
+                href="/#partners"
+                scroll={false}
+              >
+                Partners
+              </Link>
+            </div>
+            <div className="flex flex-row grow items-end">
+              <div className="flex gap-8">
+                <a
+                  className="transition-opacity hover:opacity-80"
+                  href="https://twitter.com/morphis_network"
+                  rel="noreferrer"
+                  target="_blank"
+                >
+                  <i className="fa-brands fa-twitter w-9 h-9 flex justify-center items-center text-lg text-black bg-white rounded-full" />
+                </a>
+                <a
+                  className="transition-opacity hover:opacity-80"
+                  href="http://discord.gg/morphis"
+                  rel="noreferrer"
+                  target="_blank"
+                >
+                  <i className="fa-brands fa-discord w-9 h-9 flex justify-center items-center text-lg text-black bg-white rounded-full" />
+                </a>
+                <a
+                  className="transition-opacity hover:opacity-80"
+                  href="https://medium.com/@morphis"
+                  rel="noreferrer"
+                  target="_blank"
+                >
+                  <i className="fa-brands fa-medium w-9 h-9 flex justify-center items-center text-lg text-black bg-white rounded-full" />
+                </a>
+              </div>
+            </div>
+          </div>
+        </Modal>
+        <header
+          className={cl([
+            'flex justify-between fixed inset-x-0 top-0 h-24 max-h-24 2xl:px-14 lg:px-10 px-6 md:py-6 py-2 bg-white z-[1201]',
+            modalOpen && 'invert',
+          ])}
+        >
           <div className="flex items-center gap-2 cursor-pointer">
             <Image
               alt="logo"
@@ -144,7 +203,17 @@ const Index = () => {
             </Tooltip>
           </div>
           <div className="flex md:hidden items-center active:opacity-50">
-            <i className="fa-solid fa-bars text-xl" />
+            {modalOpen ? (
+              <i
+                className="fa-solid fa-xmark text-xl"
+                onClick={() => setModalOpen(false)}
+              />
+            ) : (
+              <i
+                className="fa-solid fa-bars text-xl"
+                onClick={() => setModalOpen(true)}
+              />
+            )}
           </div>
         </header>
         <main className="pt-24 md:px-0 px-4 overflow-hidden">
