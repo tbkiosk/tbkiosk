@@ -11,7 +11,7 @@ type MetaData = {
   bio: string
 }
 
-const CCProfileCard = () => {
+const CCPrimaryProfile = () => {
   const { primaryProfile } = useContext(CyberConnectAuthContext)
 
   const [metaData, setMetaData] = useState<MetaData>({
@@ -32,7 +32,7 @@ const CCProfileCard = () => {
         setMetaData(data)
       }
     } catch (err) {
-      toast((err as Error)?.message || 'Failed to fetch cyberconnect metadat')
+      toast((err as Error)?.message || 'Failed to fetch cyberconnect metadata')
     }
   }
 
@@ -65,4 +65,4 @@ const CCProfileCard = () => {
   )
 }
 
-export default CCProfileCard
+export default CCPrimaryProfile

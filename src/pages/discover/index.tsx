@@ -5,7 +5,8 @@ import { useLazyQuery } from '@apollo/client'
 
 import Layout from '@/layouts'
 import { Loading, Button, CCSignInButton } from '@/components'
-import CCProfileCard from '@/components/_discover/cc_profile_card'
+import CCPrimaryProfile from '@/components/_discover/cc_primary_profile'
+import CCAccountList from '@/components/_discover/cc_account_list'
 
 import { CyberConnectAuthContext } from '@/context/cyberconnect_auth'
 
@@ -75,7 +76,8 @@ const Discover = () => {
                   </a>
                 </div>
               )}
-              {primaryProfile && <CCProfileCard />}
+              {primaryProfile && <CCPrimaryProfile />}
+              {address && accessToken && <CCAccountList />}
             </>
           </Loading>
         </div>
