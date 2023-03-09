@@ -7,6 +7,9 @@ const PROFILES_BY_IDS = gql`
       profileID
       metadata
       avatar
+      owner {
+        address
+      }
       isSubscribedByMe(me: $myAddress)
       externalMetadataInfo {
         type
