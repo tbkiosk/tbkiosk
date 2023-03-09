@@ -32,7 +32,7 @@ const CCSignInButton = ({ classNames }: CCSignInButtonProps) => {
         variables: {
           input: {
             address,
-            domain: location.host,
+            domain: 'morphis.network',
           },
         },
       })
@@ -44,7 +44,7 @@ const CCSignInButton = ({ classNames }: CCSignInButtonProps) => {
         variables: {
           input: {
             address,
-            domain: location.host,
+            domain: 'morphis.network',
             signature: signature,
           },
         },
