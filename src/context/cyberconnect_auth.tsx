@@ -3,11 +3,20 @@ import { ethers } from 'ethers'
 import { Web3Provider, ExternalProvider } from '@ethersproject/providers'
 import detectEthereumProvider from '@metamask/detect-provider'
 
+type PrimaryProfile = {
+  profileID: number
+  handle: string
+  avatar: string
+  metadata: string
+}
+
 type CyberConnectAuthContextType = {
   address: string | undefined
   accessToken: string | undefined
+  primaryProfile: PrimaryProfile | undefined
   setAddress: (address: string | undefined) => void
   setAccessToken: (accessToken: string | undefined) => void
+  setPrimaryProfile: (primaryProfile: PrimaryProfile | undefined) => void
   connectWallet: () => Promise<Web3Provider>
   checkNetwork: (provider: Web3Provider) => Promise<void>
 }
@@ -15,16 +24,19 @@ type CyberConnectAuthContextType = {
 export const CyberConnectAuthContext = createContext<CyberConnectAuthContextType>({
   address: undefined,
   accessToken: undefined,
-  setAddress: () => null,
-  setAccessToken: () => null,
-  connectWallet: async () => new Promise(() => null),
-  checkNetwork: async () => new Promise(() => null),
+  primaryProfile: undefined,
+  setAddress: () => undefined,
+  setAccessToken: () => undefined,
+  setPrimaryProfile: () => undefined,
+  connectWallet: async () => new Promise(() => undefined),
+  checkNetwork: async () => new Promise(() => undefined),
 })
 
 export const CyberConnectAuthContextProvider = ({ children }: { children: ReactNode }) => {
   const [provider, setProvider] = useState<Web3Provider | undefined>(undefined)
   const [address, setAddress] = useState<string | undefined>(undefined)
   const [accessToken, setAccessToken] = useState<string | undefined>(undefined)
+  const [primaryProfile, setPrimaryProfile] = useState<PrimaryProfile | undefined>(undefined)
 
   useEffect(() => {
     const accessToken = localStorage.getItem('accessToken')
@@ -128,8 +140,10 @@ export const CyberConnectAuthContextProvider = ({ children }: { children: ReactN
       value={{
         address,
         accessToken,
+        primaryProfile,
         setAddress,
         setAccessToken,
+        setPrimaryProfile,
         checkNetwork,
         connectWallet,
       }}
