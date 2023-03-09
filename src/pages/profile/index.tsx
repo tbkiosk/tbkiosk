@@ -1,17 +1,20 @@
 import Head from 'next/head'
 
 import Layout from '@/layouts'
-import ProfileCard from './components/profile_card'
-import Balances from './components/balances'
-import Collections from './components/collections'
-import Connections from './components/connections'
+import ProfileCard from '@/components/_profile/profile_card'
+import Balances from '@/components/_profile/balances'
+import Collections from '@/components/_profile/collections'
+import Connections from '@/components/_profile/connections'
 
 const Profile = () => {
   return (
     <>
       <Head>
         <title>Morphis Network - Profile</title>
-        <meta name="description" content="morphis network profile" />
+        <meta
+          name="description"
+          content="morphis network profile"
+        />
       </Head>
       <Layout>
         <div className="grid grow grid-rows-[200px_150px_1fr] grid-cols-[1fr_320px] gap-6 pb-[54px]">

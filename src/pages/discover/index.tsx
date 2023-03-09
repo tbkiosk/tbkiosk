@@ -53,28 +53,30 @@ const Discover = () => {
         />
       </Head>
       <Layout>
-        <Loading isLoading={primaryProfileLoading}>
-          <div className="flex flex-col grow">
-            {(!address || !accessToken) && (
-              <div className="flex flex-col items-center justify-center gap-8">
-                <CCSignInButton classNames="!w-[12rem] mr-4" />
-                <a
-                  className="transition-opacity hover:opacity-80"
-                  href="https://testnet.cyberconnect.me/"
-                  rel="noreferrer"
-                  target="_blank"
-                >
-                  <Button
-                    className="!w-[12rem]"
-                    variant="contained"
+        <div className="flex flex-col grow">
+          <Loading isLoading={primaryProfileLoading}>
+            <>
+              {(!address || !accessToken) && (
+                <div className="flex flex-col items-center justify-center gap-8">
+                  <CCSignInButton classNames="!w-[12rem] mr-4" />
+                  <a
+                    className="transition-opacity hover:opacity-80"
+                    href="https://testnet.cyberconnect.me/"
+                    rel="noreferrer"
+                    target="_blank"
                   >
-                    Mint profile
-                  </Button>
-                </a>
-              </div>
-            )}
-          </div>
-        </Loading>
+                    <Button
+                      className="!w-[12rem]"
+                      variant="contained"
+                    >
+                      Mint profile
+                    </Button>
+                  </a>
+                </div>
+              )}
+            </>
+          </Loading>
+        </div>
       </Layout>
     </>
   )
