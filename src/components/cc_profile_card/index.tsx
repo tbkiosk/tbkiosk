@@ -1,14 +1,14 @@
 import { useContext, useState } from 'react'
 import { toast } from 'react-toastify'
 import Image from 'next/image'
-import { useMutation } from '@apollo/client'
+import { useMutation, useLazyQuery } from '@apollo/client'
 import cl from 'classnames'
 
 import { Button } from '@/components'
 
 import { CyberConnectAuthContext } from '@/context/cyberconnect_auth'
 
-import { CREATE_SUBSCRIBE_TYPED_DATA, RELAY } from '@/graphql'
+import { CREATE_SUBSCRIBE_TYPED_DATA, RELAY, RELAY_ACTION_STATUS } from '@/graphql'
 
 import st from './styles.module.css'
 
@@ -29,6 +29,7 @@ export const CCProfileCard = ({ handle, avatar, profileID, isSubscribedByMe }: C
 
   const [createSubscribeTypedData] = useMutation(CREATE_SUBSCRIBE_TYPED_DATA)
   const [relay] = useMutation(RELAY)
+  const [getRelayActionStatus] = useLazyQuery(RELAY_ACTION_STATUS)
 
   const [isSubscribing, setIsSubscribing] = useState(false)
 
@@ -71,9 +72,16 @@ export const CCProfileCard = ({ handle, avatar, profileID, isSubscribedByMe }: C
           },
         },
       })
-      const txHash = relayResult.data?.relay?.relayTransaction?.txHash || ''
+      const relayActionId = relayResult.data?.relay?.relayActionId
 
-      toast.success(`Subscribed to profile! Hash: ${txHash}`)
+      if (relayActionId) {
+        await getRelayActionStatus({
+          variables: { relayActionId },
+          fetchPolicy: 'network-only',
+        })
+      }
+
+      toast.success(`Subscribed to profile!`)
     } catch (err) {
       toast.error((err as Error)?.message || 'Failed to subscribe')
     } finally {
