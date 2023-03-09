@@ -12,6 +12,7 @@ const authLink = setContext((_, { headers }) => {
     headers: {
       ...headers,
       Authorization: token ? `bearer ${token}` : '',
+      'X-API-KEY': process.env.NEXT_PUBLIC_CYBERCONNECT_API_KEY,
     },
   }
 })
