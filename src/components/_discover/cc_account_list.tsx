@@ -1,5 +1,5 @@
 import { useContext, useState, useEffect } from 'react'
-import { toast } from 'react-toastify'
+// import { toast } from 'react-toastify'
 import { useLazyQuery } from '@apollo/client'
 
 import { CCProfileCard } from '@/components'
@@ -35,7 +35,9 @@ const CCAccountList = () => {
 
       setProfiles([...(data?.profilesByIDs || [])])
     } catch (err) {
-      toast.error((err as Error)?.message || 'Failed to fetch account list')
+      console.error(err)
+      // TODO: keep throwing signal is aborted without reason. try to figure out
+      // toast.error((err as Error)?.message || 'Failed to fetch account list')
     }
   }
 
@@ -43,7 +45,7 @@ const CCAccountList = () => {
     if (accessToken && address) {
       getProfiles()
     }
-  }, [accessToken, address, getProfilesByIDs])
+  }, [accessToken, address])
 
   return (
     <div className="grid 2xl:grid-cols-4 lg:grid-cols-3 grid-cols-2 gap-4">
