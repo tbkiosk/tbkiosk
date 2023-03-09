@@ -30,7 +30,7 @@ const useDiscordGuilds = () => {
 
   useEffect(() => {
     if (error) {
-      toast((error as Error)?.message || 'Failed to load user discord guilds')
+      toast.error((error as Error)?.message || 'Failed to load user discord guilds')
     }
   }, [error])
 

@@ -13,7 +13,7 @@ import { CyberConnectAuthContext } from '@/context/cyberconnect_auth'
 import { PRIMARY_PROFILE } from '@/graphql'
 
 const Discover = () => {
-  const { address, accessToken, primaryProfile, setPrimaryProfile } = useContext(CyberConnectAuthContext)
+  const { address, accessToken, setPrimaryProfile } = useContext(CyberConnectAuthContext)
   const [getPrimaryProfile] = useLazyQuery(PRIMARY_PROFILE)
 
   const [primaryProfileLoading, setPrimaryProfileLoading] = useState(false)
@@ -34,7 +34,7 @@ const Discover = () => {
 
         setPrimaryProfile(data?.address?.wallet?.primaryProfile)
       } catch (err) {
-        toast((err as Error)?.message || 'Failed to load profile')
+        toast.error((err as Error)?.message || 'Failed to load profile')
       } finally {
         setPrimaryProfileLoading(false)
       }
@@ -76,7 +76,7 @@ const Discover = () => {
                   </a>
                 </div>
               )}
-              {primaryProfile && <CCPrimaryProfile />}
+              <CCPrimaryProfile />
               {address && accessToken && <CCAccountList />}
             </>
           </Loading>

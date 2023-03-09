@@ -8,6 +8,29 @@ const PROFILES_BY_IDS = gql`
       metadata
       avatar
       isSubscribedByMe(me: $myAddress)
+      externalMetadataInfo {
+        type
+        verifiedTwitterID
+        organization {
+          cmcTokenId
+          sector
+          networks
+        }
+        personal {
+          verifiedDiscordID
+          title
+          organization {
+            id
+            handle
+            name
+            avatar
+          }
+        }
+        section {
+          type
+          name
+        }
+      }
     }
   }
 `

@@ -32,7 +32,7 @@ const CCPrimaryProfile = () => {
         setMetaData(data)
       }
     } catch (err) {
-      toast((err as Error)?.message || 'Failed to fetch cyberconnect metadata')
+      toast.error((err as Error)?.message || 'Failed to fetch cyberconnect metadata')
     }
   }
 

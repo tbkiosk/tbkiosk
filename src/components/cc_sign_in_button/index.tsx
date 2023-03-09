@@ -55,7 +55,7 @@ const CCSignInButton = ({ classNames }: CCSignInButtonProps) => {
         setAccessToken(accessToken)
       }
     } catch (err) {
-      toast((err as Error)?.message || 'Failed to sign in')
+      toast.error((err as Error)?.message || 'Failed to sign in')
     }
   }
 

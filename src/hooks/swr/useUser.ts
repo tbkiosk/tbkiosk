@@ -11,7 +11,7 @@ const useUser = () => {
 
   useEffect(() => {
     if (error) {
-      toast((error as Error)?.message || 'Failed to load user')
+      toast.error((error as Error)?.message || 'Failed to load user')
     }
   }, [error])
 
