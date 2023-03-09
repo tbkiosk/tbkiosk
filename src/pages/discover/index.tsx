@@ -5,13 +5,14 @@ import { useLazyQuery } from '@apollo/client'
 
 import Layout from '@/layouts'
 import { Loading, Button, CCSignInButton } from '@/components'
+import CCProfileCard from '@/components/_discover/cc_profile_card'
 
 import { CyberConnectAuthContext } from '@/context/cyberconnect_auth'
 
 import { PRIMARY_PROFILE } from '@/graphql'
 
 const Discover = () => {
-  const { address, accessToken, setPrimaryProfile } = useContext(CyberConnectAuthContext)
+  const { address, accessToken, primaryProfile, setPrimaryProfile } = useContext(CyberConnectAuthContext)
   const [getPrimaryProfile] = useLazyQuery(PRIMARY_PROFILE)
 
   const [primaryProfileLoading, setPrimaryProfileLoading] = useState(false)
@@ -74,6 +75,7 @@ const Discover = () => {
                   </a>
                 </div>
               )}
+              {primaryProfile && <CCProfileCard />}
             </>
           </Loading>
         </div>
