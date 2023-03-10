@@ -10,17 +10,21 @@ import Button from '../button'
 import { LOGIN_GET_MESSAGE } from '@/graphql'
 import LOGIN_VERIFY from '@/graphql/login_verify'
 
+import type { ButtonProps } from '../button'
+
 type CCSignInButtonProps = {
   classNames?: string
-}
+} & ButtonProps
 
-const CCSignInButton = ({ classNames }: CCSignInButtonProps) => {
-  const { setAccessToken, connectWallet, checkNetwork } = useContext(CyberConnectAuthContext)
+const CCSignInButton = ({ classNames, ...restProps }: CCSignInButtonProps) => {
+  const { address, accessToken, setAccessToken, connectWallet, checkNetwork } = useContext(CyberConnectAuthContext)
 
   const [loginGetMessage] = useMutation(LOGIN_GET_MESSAGE)
   const [loginVerify] = useMutation(LOGIN_VERIFY)
 
   const handleClick = async () => {
+    if (address && accessToken) return
+
     try {
       const provider = await connectWallet()
       await checkNetwork(provider)
@@ -64,8 +68,9 @@ const CCSignInButton = ({ classNames }: CCSignInButtonProps) => {
       className={cl([classNames])}
       onClick={handleClick}
       variant="outlined"
+      {...restProps}
     >
-      CyberConnect Sign in
+      CyberConnect
     </Button>
   )
 }

@@ -4,7 +4,7 @@ import { useWeb3Modal } from '@web3modal/react'
 import { useAccount } from 'wagmi'
 import cl from 'classnames'
 
-import { Dropdown, Tooltip } from '@/components'
+import { Dropdown, Tooltip, CCSignInButton } from '@/components'
 
 import { useSuiWalletModal } from '@/context/sui_wallet_modal_context'
 
@@ -16,16 +16,8 @@ type WalletDropdownProps = {
   onWalletSelectSuccess?: (address: string) => void
 }
 
-const WalletDropdown = ({
-  classNames,
-  containerClassNames,
-  onWalletSelectSuccess,
-}: WalletDropdownProps) => {
-  const {
-    connected: suiConnected,
-    address: suiAddress = '',
-    disconnect: suiDisconnect,
-  } = useWallet()
+const WalletDropdown = ({ classNames, containerClassNames, onWalletSelectSuccess }: WalletDropdownProps) => {
+  const { connected: suiConnected, address: suiAddress = '', disconnect: suiDisconnect } = useWallet()
   const { address: ethAddress, isConnected: ethIsConnected } = useAccount()
 
   const { open: ethOpen } = useWeb3Modal()
@@ -38,15 +30,13 @@ const WalletDropdown = ({
       return
     }
 
-    const wallets = [suiAddress, ethAddress].filter((wallet) => !!wallet)
+    const wallets = [suiAddress, ethAddress].filter(wallet => !!wallet)
 
     if (wallets.length < 1) {
       return <span>Connect wallet</span>
     }
 
-    return (
-      <span>{`${wallets.length} wallet${wallets.length > 1 ? 's' : ''}`}</span>
-    )
+    return <span>{`${wallets.length} wallet${wallets.length > 1 ? 's' : ''}`}</span>
   }
 
   useEffect(() => {
@@ -79,9 +69,7 @@ const WalletDropdown = ({
                 className={cl(
                   'block w-full px-4 py-4 text-left text-sm text-white truncate rounded-tl-md rounded-tr-md cursor-pointer transition-colors hover:bg-[#333333]'
                 )}
-                onClick={() =>
-                  suiConnected ? suiDisconnect() : setSuiModalOpen(true)
-                }
+                onClick={() => (suiConnected ? suiDisconnect() : setSuiModalOpen(true))}
               >
                 {`Sui ${suiConnected ? `: ${ellipsisMiddle(suiAddress)}` : ''}`}
               </div>
@@ -95,9 +83,7 @@ const WalletDropdown = ({
                 )}
                 onClick={() => ethOpen()}
               >
-                {`Ethereum ${
-                  ethIsConnected ? `: ${ellipsisMiddle(ethAddress || '')}` : ''
-                }`}
+                {`Ethereum ${ethIsConnected ? `: ${ellipsisMiddle(ethAddress || '')}` : ''}`}
               </div>
             )}
           </Dropdown.Item>
@@ -133,6 +119,7 @@ const WalletDropdown = ({
               </Tooltip>
             )}
           </Dropdown.Item>
+          <Dropdown.Item>{() => <CCSignInButton />}</Dropdown.Item>
         </Dropdown.Items>
       </Dropdown>
     </>
