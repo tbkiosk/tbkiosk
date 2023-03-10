@@ -64,7 +64,7 @@ const Discover = () => {
                   <nav className="cursor-not-allowed opacity-50">Communities</nav>
                   <nav className="cursor-not-allowed opacity-50">Opportunities</nav>
                 </div>
-                <Button className="!w-auto !h-10 px-8 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 cursor-not-allowed">
+                <Button className="!w-auto !h-10 px-8 bg-gradient-to-r from-[#e87a5e] to-[#ef7cee] cursor-not-allowed">
                   Follow All
                 </Button>
               </div>
