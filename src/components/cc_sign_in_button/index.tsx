@@ -70,7 +70,7 @@ const CCSignInButton = ({ classNames, ...restProps }: CCSignInButtonProps) => {
       variant="outlined"
       {...restProps}
     >
-      CyberConnect
+      {address && accessToken ? `cyberconnect : ${address}` : 'CyberConnect'}
     </Button>
   )
 }

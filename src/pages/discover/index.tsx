@@ -58,24 +58,6 @@ const Discover = () => {
         <div className="flex flex-col grow">
           <Loading isLoading={primaryProfileLoading}>
             <>
-              {(!address || !accessToken) && (
-                <div className="flex flex-col items-center justify-center gap-8">
-                  <CCSignInButton classNames="!w-[12rem] mr-4" />
-                  <a
-                    className="transition-opacity hover:opacity-80"
-                    href="https://testnet.cyberconnect.me/"
-                    rel="noreferrer"
-                    target="_blank"
-                  >
-                    <Button
-                      className="!w-[12rem]"
-                      variant="contained"
-                    >
-                      Mint profile
-                    </Button>
-                  </a>
-                </div>
-              )}
               <CCPrimaryProfile />
               {address && accessToken && <CCAccountList />}
             </>

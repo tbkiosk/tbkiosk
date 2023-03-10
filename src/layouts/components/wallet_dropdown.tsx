@@ -119,7 +119,17 @@ const WalletDropdown = ({ classNames, containerClassNames, onWalletSelectSuccess
               </Tooltip>
             )}
           </Dropdown.Item>
-          <Dropdown.Item>{() => <CCSignInButton />}</Dropdown.Item>
+          <Dropdown.Item>
+            {() => (
+              <div
+                className={cl(
+                  'block w-full px-4 py-4 text-left text-sm text-white truncate rounded-bl-md rounded-br-md transition-colors hover:bg-[#333333]'
+                )}
+              >
+                <CCSignInButton className="!h-auto !p-0 !bg-transparent !text-sm !text-white !font-normal !border-none" />
+              </div>
+            )}
+          </Dropdown.Item>
         </Dropdown.Items>
       </Dropdown>
     </>
