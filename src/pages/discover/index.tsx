@@ -4,8 +4,8 @@ import Head from 'next/head'
 import { useLazyQuery } from '@apollo/client'
 
 import Layout from '@/layouts'
-import { Loading, Button, CCSignInButton } from '@/components'
-import CCPrimaryProfile from '@/components/_discover/cc_primary_profile'
+import { Loading, Button } from '@/components'
+// import CCPrimaryProfile from '@/components/_discover/cc_primary_profile'
 import CCAccountList from '@/components/_discover/cc_account_list'
 
 import { CyberConnectAuthContext } from '@/context/cyberconnect_auth'
@@ -58,7 +58,16 @@ const Discover = () => {
         <div className="flex flex-col grow">
           <Loading isLoading={primaryProfileLoading}>
             <>
-              <CCPrimaryProfile />
+              <div className="flex justify-between mb-8">
+                <div className="flex flex-row gap-12 font-bold text-xl">
+                  <nav className="underline cursor-pointer transition-opacity hover:opacity-50">People</nav>
+                  <nav className="cursor-not-allowed opacity-50">Communities</nav>
+                  <nav className="cursor-not-allowed opacity-50">Opportunities</nav>
+                </div>
+                <Button className="!w-auto !h-10 px-8 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 cursor-not-allowed">
+                  Follow All
+                </Button>
+              </div>
               {address && accessToken && <CCAccountList />}
             </>
           </Loading>
