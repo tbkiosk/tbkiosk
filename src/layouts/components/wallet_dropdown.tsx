@@ -126,7 +126,7 @@ const WalletDropdown = ({ classNames, containerClassNames, onWalletSelectSuccess
                   'block w-full px-4 py-4 text-left text-sm text-white truncate rounded-bl-md rounded-br-md transition-colors hover:bg-[#333333]'
                 )}
               >
-                <CCSignInButton className="!h-auto !p-0 !bg-transparent !text-sm !text-white !font-normal !border-none" />
+                <CCSignInButton className="!h-auto !p-0 !bg-transparent !text-left !text-sm !text-white !font-normal !border-none" />
               </div>
             )}
           </Dropdown.Item>

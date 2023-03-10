@@ -66,7 +66,8 @@ const Login = () => {
             <span className="block px-16 truncate">{session?.user?.name || 'Connect Discord'}</span>
           </Button>
           <CCSignInButton
-            classNames="mb-5"
+            classNames="mb-5 truncate"
+            contentClassNames="block px-16 truncate"
             startIcon={
               <>
                 {address && accessToken && <div className="h-3.5 w-3.5 ml-2 rounded-full bg-[#82ffac]" />}

@@ -14,9 +14,10 @@ import type { ButtonProps } from '../button'
 
 type CCSignInButtonProps = {
   classNames?: string
+  contentClassNames?: string
 } & ButtonProps
 
-const CCSignInButton = ({ classNames, ...restProps }: CCSignInButtonProps) => {
+const CCSignInButton = ({ classNames, contentClassNames, ...restProps }: CCSignInButtonProps) => {
   const { address, accessToken, setAccessToken, connectWallet, checkNetwork } = useContext(CyberConnectAuthContext)
 
   const [loginGetMessage] = useMutation(LOGIN_GET_MESSAGE)
@@ -70,7 +71,7 @@ const CCSignInButton = ({ classNames, ...restProps }: CCSignInButtonProps) => {
       variant="outlined"
       {...restProps}
     >
-      {address && accessToken ? `cyberconnect : ${address}` : 'CyberConnect'}
+      <span className={cl([contentClassNames])}>{address && accessToken ? `cyberconnect : ${address}` : 'CyberConnect'}</span>
     </Button>
   )
 }
