@@ -28,7 +28,7 @@ type CCProfileCardProps = Profile & {
   classNames?: string
 }
 
-export const CCProfileCard = ({ handle, avatar, profileID, isSubscribedByMe, owner: { address } }: CCProfileCardProps) => {
+export const CCProfileCard = ({ handle, avatar, profileID, isSubscribedByMe, owner = { address: '' } }: CCProfileCardProps) => {
   const { accessToken, connectWallet, checkNetwork } = useContext(CyberConnectAuthContext)
 
   const [createSubscribeTypedData] = useMutation(CREATE_SUBSCRIBE_TYPED_DATA)
@@ -107,13 +107,13 @@ export const CCProfileCard = ({ handle, avatar, profileID, isSubscribedByMe, own
       </div>
       <div className="text-center">
         <p>@{handle}</p>
-        <p className="text-sm text-gray-500">{ellipsisMiddle(address)}</p>
+        <p className="text-sm text-gray-500">{ellipsisMiddle(owner?.address)}</p>
       </div>
       <p className="text-center text-gray-500">
         <i className="fa-brands fa-twitter mr-8 cursor-not-allowed" />
         <i className="fa-brands fa-discord cursor-not-allowed" />
       </p>
-      <NftRow address={address} />
+      <NftRow address={owner?.address} />
       <div className="grow" />
       <Button
         className={cl(['!w-32 !text-white !border-none', !isSubscribedByMe && st.button])}
