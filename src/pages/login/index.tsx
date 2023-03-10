@@ -1,13 +1,19 @@
+import { useContext } from 'react'
 import Head from 'next/head'
 import Image from 'next/image'
-// import Link from 'next/link'
-import { signIn } from 'next-auth/react'
+import Link from 'next/link'
+import { signIn, useSession } from 'next-auth/react'
 import cl from 'classnames'
 
-import { Button, Tooltip } from '@/components'
+import { Button, Tooltip, CCSignInButton } from '@/components'
 import WalletDropdown from '@/layouts/components/wallet_dropdown'
 
+import { CyberConnectAuthContext } from '@/context/cyberconnect_auth'
+
 const Login = () => {
+  const { data: session } = useSession()
+  const { address, accessToken } = useContext(CyberConnectAuthContext)
+
   return (
     <>
       <Head>
@@ -18,9 +24,10 @@ const Login = () => {
         />
       </Head>
       <main className="h-full flex flex-col justify-center items-center bg-[#f0f3fb] overflow-y-auto">
-        <div className="w-[full] max-w-[360px]">
+        <div className="w-[full] max-w-[22.5rem] flex flex-col items-center">
           <Image
             alt="stars"
+            className="md:w-[22.5rem] w-[80%] object-fit"
             height={315}
             priority
             src="/images/stars.svg"
@@ -29,12 +36,15 @@ const Login = () => {
           <p className="font-bold text-center text-3xl leading-10 mb-5">Get Started</p>
           <p className="text-base text-center leading-5 mb-6">Your gateway to the top NFT communities and collectors like you!</p>
           <WalletDropdown
-            classNames="w-full max-w-full mb-5"
+            classNames="!w-full max-w-full mb-5"
             containerClassNames="w-full"
           />
-          <Tooltip tip="Coming soon">
+          <Tooltip
+            classNames="!w-full"
+            tip="Coming soon"
+          >
             <Button
-              className="border-[#d8dadc] mb-5"
+              className="!w-full mb-5 border-[#d8dadc]"
               disabled
               startIcon={<i className="fa-brands fa-twitter fa-xl ml-2" />}
               variant="outlined"
@@ -42,37 +52,43 @@ const Login = () => {
               Connect Twitter
             </Button>
           </Tooltip>
-          <div className="group relative">
-            <span
-              className={cl([
-                'px-4 py-2 text-sm text-gray-100 rounded-md absolute left-1/2 bg-gray-800 invisible z-[1050] opacity-0 transition-opacity',
-                'group-hover:visible group-hover:opacity-90 -translate-x-1/2 -translate-y-[120%]',
-              ])}
-            >
-              Coming soon
-            </span>
-          </div>
           <Button
             className="border-[#d8dadc] mb-5"
-            onClick={() => signIn('discord', { callbackUrl: '/profile' })}
-            startIcon={<i className="fa-brands fa-discord fa-xl ml-2" />}
-            variant="outlined"
+            onClick={() => !session && signIn('discord', { callbackUrl: '/login' })}
+            startIcon={
+              <>
+                {session && <div className="h-3.5 w-3.5 ml-2 rounded-full bg-[#82ffac]" />}
+                <i className="fa-brands fa-discord fa-xl ml-2" />
+              </>
+            }
+            variant={session?.user?.email ? 'contained' : 'outlined'}
           >
-            Connect Discord
+            <span className="block px-16 truncate">{session?.user?.name || 'Connect Discord'}</span>
           </Button>
-          {/* <div
-            className={cl([
-              'text-center font-bold',
-              connected ? 'visible' : 'invisible',
-            ])}
-          >
+          <CCSignInButton
+            classNames="mb-5"
+            startIcon={
+              <>
+                {address && accessToken && <div className="h-3.5 w-3.5 ml-2 rounded-full bg-[#82ffac]" />}
+                <Image
+                  alt=""
+                  className={cl(['ml-2', address && accessToken && 'invert'])}
+                  height={15}
+                  src="/images/cyberconnect.svg"
+                  width={21}
+                />
+              </>
+            }
+            variant={address && accessToken ? 'contained' : 'outlined'}
+          />
+          <div className="text-center font-bold">
             <Link
               className="opacity-100 transition-opacity hover:opacity-50"
               href="/profile"
             >
               Skip for now
             </Link>
-          </div> */}
+          </div>
         </div>
       </main>
     </>
