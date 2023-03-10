@@ -254,9 +254,9 @@ const Index = () => {
             </Link>
             <div
               className={cl([
-                'absolute object-fit md:w-[40%] w-[120%] md:max-w-[55rem] max-w-[32rem] max-h-[32.5rem]',
+                'absolute object-fit md:w-[40%] w-[120%] h-[50%] md:max-w-[55rem] max-w-[32rem] max-h-[32.5rem]',
                 'lg:top-36 md:top-32 top-[22rem] md:right-0 -right-4',
-                'transition-transform animate-[fly-in-from-right_1s_ease-in-out_450ms] animation-fill-forwards',
+                'transition-transform translate-x-full animate-[fly-in-from-right_1s_ease-in-out_450ms] animation-fill-forwards',
               ])}
               id="peeps-container"
             >

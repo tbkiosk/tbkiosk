@@ -12,7 +12,10 @@ const Login = () => {
     <>
       <Head>
         <title>Morphis Network - Login</title>
-        <meta name="description" content="morphis network login" />
+        <meta
+          name="description"
+          content="morphis network login"
+        />
       </Head>
       <main className="h-full flex flex-col justify-center items-center bg-[#f0f3fb] overflow-y-auto">
         <div className="w-[full] max-w-[360px]">
@@ -23,12 +26,8 @@ const Login = () => {
             src="/images/stars.svg"
             width={360}
           />
-          <p className="font-bold text-center text-3xl leading-10 mb-5">
-            Get Started
-          </p>
-          <p className="text-base text-center leading-5 mb-6">
-            Your gateway to the top NFT communities and collectors like you!
-          </p>
+          <p className="font-bold text-center text-3xl leading-10 mb-5">Get Started</p>
+          <p className="text-base text-center leading-5 mb-6">Your gateway to the top NFT communities and collectors like you!</p>
           <WalletDropdown
             classNames="w-full max-w-full mb-5"
             containerClassNames="w-full"
