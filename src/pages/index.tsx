@@ -6,7 +6,6 @@ import Image from 'next/image'
 import cl from 'classnames'
 
 import { Button, Tooltip, Modal } from '@/components'
-// import WalletDropdown from '@/layouts/components/wallet_dropdown' // currently do not allow user to connect wallet
 
 import useInViewport from '@/hooks/dom/useInViewport'
 
@@ -199,7 +198,7 @@ const Index = () => {
               position="bottom"
               tip="Coming soon"
             >
-              <Button className="h-12 px-6">Connect wallets</Button>
+              <Button className="!h-9 px-6">Connect wallets</Button>
             </Tooltip>
           </div>
           <div className="flex md:hidden items-center active:opacity-50">
@@ -238,20 +237,19 @@ const Index = () => {
             >
               Morphis Network is a social platform that allows token-gated communities built around NFT ownership
             </div>
-            <Link
+            <div
               className={cl([
                 'absolute 2xl:top-[27.25rem] lg:top-96 md:top-[22rem] top-[16rem] 2xl:left-24 lg:left-20 md:left-16 left-0',
                 '-translate-x-[calc(100%+6rem)] animate-[fly-in-from-left_1s_ease-in-out_450ms] animation-fill-forwards',
               ])}
-              href="/login"
             >
               <Button
                 className="!h-12 !w-auto px-8 !rounded-[3.75rem]"
                 variant="outlined"
               >
-                Get started
+                Coming soon
               </Button>
-            </Link>
+            </div>
             <div
               className={cl([
                 'absolute object-fit md:w-[40%] w-[120%] h-[50%] md:max-w-[55rem] max-w-[32rem] max-h-[32.5rem]',
