@@ -13,17 +13,12 @@ type UserResponse = {
   twitterEmail: string | null
 }
 
-const handler = async (
-  req: NextApiRequest,
-  res: NextApiResponse<ResponseBase<UserResponse | null>>
-) => {
-  const session: ExtendedSession | null = await getServerSession(
-    req,
-    res,
-    authOptions
-  )
+const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<UserResponse | null>>) => {
+  const session: ExtendedSession | null = await getServerSession(req, res, authOptions)
   if (!session) {
-    return res.status(401)
+    return res.status(401).json({
+      message: '',
+    })
   }
 
   if (!session.user?.email) {
@@ -59,7 +54,9 @@ const handler = async (
     })
   }
 
-  return res.status(405)
+  return res.status(405).json({
+    message: '',
+  })
 }
 
 export default handler
