@@ -35,10 +35,9 @@ const Login = () => {
           />
           <p className="font-bold text-center text-3xl leading-10 mb-5">Get Started</p>
           <p className="text-base text-center leading-5 mb-6">Your gateway to the top NFT communities and collectors like you!</p>
-          <WalletDropdown
-            classNames="!w-full max-w-full mb-5"
-            containerClassNames="w-full"
-          />
+          <div className="w-full mb-5">
+            <WalletDropdown buttonClassNames="!h-[3.375rem]" />
+          </div>
           <Tooltip
             classNames="!w-full"
             tip="Coming soon"

@@ -11,12 +11,11 @@ import { useSuiWalletModal } from '@/context/sui_wallet_modal_context'
 import { ellipsisMiddle } from '@/utils/address'
 
 type WalletDropdownProps = {
-  classNames?: string
-  containerClassNames?: string
   onWalletSelectSuccess?: (address: string) => void
+  buttonClassNames?: string
 }
 
-const WalletDropdown = ({ classNames, containerClassNames, onWalletSelectSuccess }: WalletDropdownProps) => {
+const WalletDropdown = ({ onWalletSelectSuccess, buttonClassNames }: WalletDropdownProps) => {
   const { connected: suiConnected, address: suiAddress = '', disconnect: suiDisconnect } = useWallet()
   const { address: ethAddress, isConnected: ethIsConnected } = useAccount()
 
@@ -58,17 +57,19 @@ const WalletDropdown = ({ classNames, containerClassNames, onWalletSelectSuccess
   return (
     <>
       <Dropdown
+        buttonClassNames={buttonClassNames}
         renderButton={renderButton}
-        classNames={classNames}
-        containerClassNames={containerClassNames}
       >
-        <Dropdown.Items className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-black shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+        <Dropdown.Items
+          className={cl([
+            'w-full absolute top-full right-0 pb-2 z-10 rounded-b-[1.75rem] overflow-hidden',
+            'bg-black shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none',
+          ])}
+        >
           <Dropdown.Item>
             {() => (
               <div
-                className={cl(
-                  'block w-full px-4 py-4 text-left text-sm text-white truncate rounded-tl-md rounded-tr-md cursor-pointer transition-colors hover:bg-[#333333]'
-                )}
+                className="w-full px-4 py-2 text-left text-sm text-white truncate cursor-pointer transition-colors hover:bg-[#333333]"
                 onClick={() => (suiConnected ? suiDisconnect() : setSuiModalOpen(true))}
               >
                 {`Sui ${suiConnected ? `: ${ellipsisMiddle(suiAddress)}` : ''}`}
@@ -78,9 +79,7 @@ const WalletDropdown = ({ classNames, containerClassNames, onWalletSelectSuccess
           <Dropdown.Item>
             {() => (
               <div
-                className={cl(
-                  'block w-full px-4 py-4 text-left text-sm text-white truncate rounded-bl-md rounded-br-md cursor-pointer transition-colors hover:bg-[#333333]'
-                )}
+                className="w-full px-4 py-2 text-left text-sm text-white truncate cursor-pointer transition-colors hover:bg-[#333333]"
                 onClick={() => ethOpen()}
               >
                 {`Ethereum ${ethIsConnected ? `: ${ellipsisMiddle(ethAddress || '')}` : ''}`}
@@ -93,11 +92,7 @@ const WalletDropdown = ({ classNames, containerClassNames, onWalletSelectSuccess
                 classNames="[&>span]:text-black [&>span]:bg-white"
                 tip="Coming soon"
               >
-                <div
-                  className={cl(
-                    'block w-full px-4 py-4 text-left text-sm text-white truncate rounded-bl-md rounded-br-md cursor-not-allowed transition-colors hover:bg-[#333333]'
-                  )}
-                >
+                <div className="w-full px-4 py-2 text-left text-sm text-white truncate cursor-pointer transition-colors hover:bg-[#333333]">
                   Aptos
                 </div>
               </Tooltip>
@@ -109,11 +104,7 @@ const WalletDropdown = ({ classNames, containerClassNames, onWalletSelectSuccess
                 classNames="[&>span]:text-black [&>span]:bg-white"
                 tip="Coming soon"
               >
-                <div
-                  className={cl(
-                    'block w-full px-4 py-4 text-left text-sm text-white truncate rounded-bl-md rounded-br-md cursor-not-allowed transition-colors hover:bg-[#333333]'
-                  )}
-                >
+                <div className="w-full px-4 py-2 text-left text-sm text-white truncate cursor-pointer transition-colors hover:bg-[#333333]">
                   Solana
                 </div>
               </Tooltip>
@@ -121,11 +112,7 @@ const WalletDropdown = ({ classNames, containerClassNames, onWalletSelectSuccess
           </Dropdown.Item>
           <Dropdown.Item>
             {() => (
-              <div
-                className={cl(
-                  'block w-full px-4 py-4 text-left text-sm text-white truncate rounded-bl-md rounded-br-md transition-colors hover:bg-[#333333]'
-                )}
-              >
+              <div className="w-full px-4 py-2 text-left text-sm text-white rounded-b-md truncate cursor-pointer transition-colors hover:bg-[#333333]">
                 <CCSignInButton className="!h-auto !p-0 !bg-transparent !text-left !text-sm !text-white !font-normal !border-none" />
               </div>
             )}
