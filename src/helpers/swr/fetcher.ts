@@ -12,7 +12,7 @@ const fetcher = async <T>(resource: RequestInfo, options?: RequestInit): Promise
     throw error
   }
 
-  return res.json as T
+  return json as T
 }
 
 export default fetcher

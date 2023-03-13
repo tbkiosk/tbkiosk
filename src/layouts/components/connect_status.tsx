@@ -1,8 +1,8 @@
 import cl from 'classnames'
+import { useSession } from 'next-auth/react'
 
 import { Tooltip, Loading } from '@/components'
 
-import useSessionGuard from '@/hooks/useSessionGuard'
 import useUser from '@/hooks/swr/useUser'
 
 const ConnectStatusBase = () => {
@@ -11,32 +11,34 @@ const ConnectStatusBase = () => {
   return (
     <Loading isLoading={isLoading}>
       <div className="flex gap-4 mr-4">
-        <Tooltip position="bottom" tip={data?.discordEmail}>
+        <Tooltip
+          position="bottom"
+          tip={data?.discordEmail}
+        >
           <span
             className={cl([
-              'h-[48px] min-w-[48px] flex items-center justify-center bg-[#fdede5] rounded-[48px] cursor-pointer',
+              'h-12 min-w-[3rem] flex shrink-0 items-center justify-center bg-[#fdede5] rounded-[3rem] cursor-pointer',
               'transition-opacity hover:opacity-80',
-              !data?.discordEmail && 'px-4 !bg-[#d9d9d9]',
+              !data?.discordEmail && '!bg-[#d9d9d9]',
             ])}
           >
             <i className="fa-brands fa-discord fa-xl" />
-            {!data?.discordEmail && (
-              <i className="fa-solid fa-plus fa-sm ml-2" />
-            )}
+            {!data?.discordEmail && <i className="fa-solid fa-plus fa-sm ml-2" />}
           </span>
         </Tooltip>
-        <Tooltip position="bottom" tip="Coming soon">
+        <Tooltip
+          position="bottom"
+          tip="Coming soon"
+        >
           <span
             className={cl([
-              'h-[48px] min-w-[48px] flex items-center justify-center bg-[#fdede5] rounded-[48px] cursor-pointer',
+              'h-12 min-w-[3rem] flex shrink-0 items-center justify-center bg-[#fdede5] rounded-[3rem] cursor-pointer',
               'transition-opacity hover:opacity-80',
               !data?.twitterEmail && 'px-4 !bg-[#d9d9d9]',
             ])}
           >
             <i className="fa-brands fa-twitter fa-xl" />
-            {!data?.twitterEmail && (
-              <i className="fa-solid fa-plus fa-sm ml-2" />
-            )}
+            {!data?.twitterEmail && <i className="fa-solid fa-plus fa-sm ml-2" />}
           </span>
         </Tooltip>
       </div>
@@ -45,11 +47,7 @@ const ConnectStatusBase = () => {
 }
 
 const ConnectStatusWrapper = () => {
-  const { status } = useSessionGuard({ ignoreSession: true })
-
-  if (status === 'unauthenticated') {
-    return null
-  }
+  const { status } = useSession()
 
   return (
     <Loading isLoading={status === 'loading'}>

@@ -116,11 +116,13 @@ const Layout = ({ children }: LayoutProps) => {
         <div className="flex items-center justify-between px-[54px] py-[38px]">
           <span className="font-bold text-5xl capitalize">{route.replace('/', '')}</span>
           <div className="flex flex-row items-center">
-            <span className="h-[48px] w-[48px] flex items-center justify-center bg-[#fdede5] rounded-full mr-4">
+            <span className="h-12 w-12 flex shrink-0 items-center justify-center bg-[#fdede5] rounded-full cursor-pointer">
               <i className="fa-regular fa-bell fa-xl" />
             </span>
-            <ConnectStatus />
-            <WalletDropdown />
+            <div className="mx-4">
+              <ConnectStatus />
+            </div>
+            <WalletDropdown buttonClassNames="!h-[3.375rem]" />
           </div>
         </div>
         <div className="flex flex-col grow px-[54px] overflow-y-auto">{children}</div>

@@ -4,7 +4,7 @@ import { useWeb3Modal } from '@web3modal/react'
 import { useAccount } from 'wagmi'
 import cl from 'classnames'
 
-import { Dropdown, Tooltip, CCSignInButton } from '@/components'
+import { Dropdown, Tooltip } from '@/components'
 
 import { useSuiWalletModal } from '@/context/sui_wallet_modal_context'
 
@@ -108,13 +108,6 @@ const WalletDropdown = ({ onWalletSelectSuccess, buttonClassNames }: WalletDropd
                   Solana
                 </div>
               </Tooltip>
-            )}
-          </Dropdown.Item>
-          <Dropdown.Item>
-            {() => (
-              <div className="w-full px-4 py-2 text-left text-sm text-white rounded-b-md truncate cursor-pointer transition-colors hover:bg-[#333333]">
-                <CCSignInButton className="!h-auto !p-0 !bg-transparent !text-left !text-sm !text-white !font-normal !border-none" />
-              </div>
             )}
           </Dropdown.Item>
         </Dropdown.Items>
