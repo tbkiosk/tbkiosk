@@ -4,29 +4,31 @@ import cl from 'classnames'
 
 export type DropdownProps = {
   renderButton?: () => React.ReactNode | React.ReactNode[]
+  startIcon?: React.ReactNode
   buttonClassNames?: string
   children?: React.ReactNode | React.ReactNode[]
 }
 
-export const Dropdown = ({ renderButton, buttonClassNames, children }: DropdownProps) => (
+export const Dropdown = ({ renderButton, startIcon, buttonClassNames, children }: DropdownProps) => (
   <Menu
     as="div"
-    className="w-full max-w-full relative inline-block text-left"
+    className="w-full max-w-full min-w-[13rem] relative inline-block text-left"
   >
     {({ open }) => (
       <>
         <Menu.Button
           className={cl([
-            'w-full h-9 inline-flex justify-center items-center',
+            'w-full h-9 inline-flex justify-center items-center relative',
             'rounded-[1.75rem] bg-black text-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm',
-            'transition hover:bg-[#2a2a2d]',
+            'transition-all hover:bg-[#2a2a2d]',
             'focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100',
             open && 'rounded-b-none',
             buttonClassNames,
           ])}
         >
+          {startIcon}
           {renderButton?.() || null}
-          <i className={cl(['fa-solid fa-chevron-down ml-2 transition-transform', open && 'rotate-180'])} />
+          <i className={cl(['fa-solid fa-chevron-down absolute right-6 transition-transform', open && 'rotate-180'])} />
         </Menu.Button>
         <Transition
           as={Fragment}

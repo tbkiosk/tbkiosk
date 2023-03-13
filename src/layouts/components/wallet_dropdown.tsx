@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import Image from 'next/image'
 import { useWallet } from '@suiet/wallet-kit'
 import { useWeb3Modal } from '@web3modal/react'
 import { useAccount } from 'wagmi'
@@ -59,6 +60,15 @@ const WalletDropdown = ({ onWalletSelectSuccess, buttonClassNames }: WalletDropd
       <Dropdown
         buttonClassNames={buttonClassNames}
         renderButton={renderButton}
+        startIcon={
+          <Image
+            alt=""
+            className="absolute left-6"
+            height={24}
+            src="/icons/wallet.svg"
+            width={24}
+          />
+        }
       >
         <Dropdown.Items
           className={cl([
@@ -69,31 +79,52 @@ const WalletDropdown = ({ onWalletSelectSuccess, buttonClassNames }: WalletDropd
           <Dropdown.Item>
             {() => (
               <div
-                className="w-full px-4 py-2 text-left text-sm text-white truncate cursor-pointer transition-colors hover:bg-[#333333]"
-                onClick={() => (suiConnected ? suiDisconnect() : setSuiModalOpen(true))}
-              >
-                {`Sui ${suiConnected ? `: ${ellipsisMiddle(suiAddress)}` : ''}`}
-              </div>
-            )}
-          </Dropdown.Item>
-          <Dropdown.Item>
-            {() => (
-              <div
-                className="w-full px-4 py-2 text-left text-sm text-white truncate cursor-pointer transition-colors hover:bg-[#333333]"
+                className="w-full pl-16 pr-4 py-2 relative text-left text-sm text-white truncate cursor-pointer transition-colors hover:bg-[#2a2a2d]"
                 onClick={() => ethOpen()}
               >
+                <Image
+                  alt=""
+                  className="absolute inset-y-0 left-6 my-auto"
+                  height={24}
+                  src="/icons/chains/eth.svg"
+                  width={24}
+                />
                 {`Ethereum ${ethIsConnected ? `: ${ellipsisMiddle(ethAddress || '')}` : ''}`}
               </div>
             )}
           </Dropdown.Item>
           <Dropdown.Item>
             {() => (
+              <div
+                className="w-full pl-16 pr-4 py-2 relative text-left text-sm text-white truncate cursor-pointer transition-colors hover:bg-[#2a2a2d]"
+                onClick={() => (suiConnected ? suiDisconnect() : setSuiModalOpen(true))}
+              >
+                <Image
+                  alt=""
+                  className="absolute inset-y-0 left-6 my-auto"
+                  height={24}
+                  src="/icons/chains/sui.svg"
+                  width={24}
+                />
+                {`Sui ${suiConnected ? `: ${ellipsisMiddle(suiAddress)}` : ''}`}
+              </div>
+            )}
+          </Dropdown.Item>
+          <Dropdown.Item>
+            {() => (
               <Tooltip
                 classNames="[&>span]:text-black [&>span]:bg-white"
                 tip="Coming soon"
               >
-                <div className="w-full px-4 py-2 text-left text-sm text-white truncate cursor-pointer transition-colors hover:bg-[#333333]">
-                  Aptos
+                <div className="w-full pl-16 pr-4 py-2 relative text-left text-sm text-white truncate cursor-pointer transition-colors hover:bg-[#2a2a2d]">
+                  <Image
+                    alt=""
+                    className="absolute inset-y-0 left-6 my-auto"
+                    height={24}
+                    src="/icons/chains/polygon.svg"
+                    width={24}
+                  />
+                  Polygon
                 </div>
               </Tooltip>
             )}
@@ -104,10 +135,46 @@ const WalletDropdown = ({ onWalletSelectSuccess, buttonClassNames }: WalletDropd
                 classNames="[&>span]:text-black [&>span]:bg-white"
                 tip="Coming soon"
               >
-                <div className="w-full px-4 py-2 text-left text-sm text-white truncate cursor-pointer transition-colors hover:bg-[#333333]">
+                <div className="w-full pl-16 pr-4 py-2 relative text-left text-sm text-white truncate cursor-pointer transition-colors hover:bg-[#2a2a2d]">
+                  <Image
+                    alt=""
+                    className="absolute inset-y-0 left-6 my-auto"
+                    height={24}
+                    src="/icons/chains/solana.svg"
+                    width={24}
+                  />
                   Solana
                 </div>
               </Tooltip>
+            )}
+          </Dropdown.Item>
+          <hr />
+          <Dropdown.Item>
+            {() => (
+              <div className="w-full pl-16 pr-4 py-2 relative text-left text-sm text-white truncate cursor-pointer transition-colors hover:bg-[#2a2a2d]">
+                <Image
+                  alt=""
+                  className="absolute inset-y-0 left-6 my-auto"
+                  height={24}
+                  src="/icons/disconnect.svg"
+                  width={24}
+                />
+                Disconnect all
+              </div>
+            )}
+          </Dropdown.Item>
+          <Dropdown.Item>
+            {() => (
+              <div className="w-full pl-16 pr-4 py-2 relative text-left text-sm text-white truncate cursor-pointer transition-colors hover:bg-[#2a2a2d]">
+                <Image
+                  alt=""
+                  className="absolute inset-y-0 left-6 my-auto"
+                  height={24}
+                  src="/icons/switch.svg"
+                  width={24}
+                />
+                Switch to creator
+              </div>
             )}
           </Dropdown.Item>
         </Dropdown.Items>
