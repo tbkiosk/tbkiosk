@@ -39,6 +39,12 @@ const WalletDropdown = ({ onWalletSelectSuccess, buttonClassNames }: WalletDropd
     return <span>{`${wallets.length} wallet${wallets.length > 1 ? 's' : ''}`}</span>
   }
 
+  const onDisconnectAll = () => {
+    if (suiConnected) {
+      suiDisconnect()
+    }
+  }
+
   useEffect(() => {
     setIsMounted(true)
   }, [])
@@ -79,7 +85,7 @@ const WalletDropdown = ({ onWalletSelectSuccess, buttonClassNames }: WalletDropd
           <Dropdown.Item>
             {() => (
               <div
-                className="w-full pl-16 pr-4 py-2 relative text-left text-sm text-white truncate cursor-pointer transition-colors hover:bg-[#2a2a2d]"
+                className="w-full pl-16 pr-4 py-2 relative text-left text-sm text-white truncate cursor-pointer group transition-colors hover:bg-[#2a2a2d]"
                 onClick={() => ethOpen()}
               >
                 <Image
@@ -90,13 +96,22 @@ const WalletDropdown = ({ onWalletSelectSuccess, buttonClassNames }: WalletDropd
                   width={24}
                 />
                 {`Ethereum ${ethIsConnected ? `: ${ellipsisMiddle(ethAddress || '')}` : ''}`}
+                {ethIsConnected && (
+                  <Image
+                    alt=""
+                    className="absolute inset-y-0 right-2 my-auto opacity-0 transition-opacity group-hover:opacity-100"
+                    height={24}
+                    src="/icons/disconnect.svg"
+                    width={24}
+                  />
+                )}
               </div>
             )}
           </Dropdown.Item>
           <Dropdown.Item>
             {() => (
               <div
-                className="w-full pl-16 pr-4 py-2 relative text-left text-sm text-white truncate cursor-pointer transition-colors hover:bg-[#2a2a2d]"
+                className="w-full pl-16 pr-4 py-2 relative text-left text-sm text-white truncate cursor-pointer group transition-colors hover:bg-[#2a2a2d] hover:pr-8"
                 onClick={() => (suiConnected ? suiDisconnect() : setSuiModalOpen(true))}
               >
                 <Image
@@ -107,6 +122,15 @@ const WalletDropdown = ({ onWalletSelectSuccess, buttonClassNames }: WalletDropd
                   width={24}
                 />
                 {`Sui ${suiConnected ? `: ${ellipsisMiddle(suiAddress)}` : ''}`}
+                {suiConnected && (
+                  <Image
+                    alt=""
+                    className="absolute inset-y-0 right-2 my-auto opacity-0 transition-opacity group-hover:opacity-100"
+                    height={24}
+                    src="/icons/disconnect.svg"
+                    width={24}
+                  />
+                )}
               </div>
             )}
           </Dropdown.Item>
@@ -148,10 +172,13 @@ const WalletDropdown = ({ onWalletSelectSuccess, buttonClassNames }: WalletDropd
               </Tooltip>
             )}
           </Dropdown.Item>
-          <hr />
+          <hr className="my-2" />
           <Dropdown.Item>
             {() => (
-              <div className="w-full pl-16 pr-4 py-2 relative text-left text-sm text-white truncate cursor-pointer transition-colors hover:bg-[#2a2a2d]">
+              <div
+                className="w-full pl-16 pr-4 py-2 relative text-left text-sm text-white truncate cursor-pointer transition-colors hover:bg-[#2a2a2d]"
+                onClick={onDisconnectAll}
+              >
                 <Image
                   alt=""
                   className="absolute inset-y-0 left-6 my-auto"
