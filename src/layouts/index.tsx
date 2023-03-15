@@ -9,6 +9,10 @@ import { Button, Tooltip } from '@/components'
 import WalletDropdown from './components/wallet_dropdown'
 import ConnectStatus from './components/connect_status'
 
+import useRole from '@/hooks/useRole'
+
+import { ROLES } from '@/constants/roles'
+
 type LayoutProps = {
   showHeader?: boolean
   children?: React.ReactNode | React.ReactNode[]
@@ -38,6 +42,8 @@ const MENUS = [
 const Layout = ({ children }: LayoutProps) => {
   const { route } = useRouter()
   const { collapsed, collapseSidebar } = useProSidebar()
+  const [role] = useRole()
+
   const [isMenuDefaultCollapsed, setIsMenuDefaultCollapsed] = useLocalStorage('morphis_menu_collapsed', false)
 
   const onTogglerMenuCollapsed = (nextCollapsed: boolean) => {
@@ -100,8 +106,18 @@ const Layout = ({ children }: LayoutProps) => {
                 </Link>
               )
             )}
+            {role === ROLES.CREATOR && (
+              <Link href="/projects">
+                <Button
+                  className={cl(['flex grow items-center', collapsed && 'justify-center'])}
+                  variant={route.includes('projects') ? 'outlined' : 'contained'}
+                >
+                  <i className={cl(['fa-solid fa-folder-closed text-lg', !collapsed && 'ml-4 mr-4'])} />
+                  {!collapsed && <span className="text-2xl capitalize">Projects</span>}
+                </Button>
+              </Link>
+            )}
           </div>
-          {/* <i className="fa-solid fa-bars absolute bottom-4 cursor-pointer transition-opacity hover:opacity-50" /> */}
           <i
             className={cl([
               'fa-solid fa-angles-left absolute bottom-4 right-8 cursor-pointer transition-opacity transition-transform hover:opacity-50',

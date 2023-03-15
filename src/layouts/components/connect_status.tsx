@@ -19,7 +19,7 @@ const ConnectStatusBase = () => {
             className={cl([
               'h-12 min-w-[3rem] flex shrink-0 items-center justify-center bg-[#fdede5] rounded-[3rem] cursor-pointer',
               'transition-opacity hover:opacity-80',
-              !data?.discordEmail && '!bg-[#d9d9d9]',
+              !data?.discordEmail && 'px-4 !bg-[#d9d9d9]',
             ])}
           >
             <i className="fa-brands fa-discord fa-xl" />

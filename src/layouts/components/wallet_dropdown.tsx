@@ -4,16 +4,15 @@ import { useSession } from 'next-auth/react'
 import { useWallet } from '@suiet/wallet-kit'
 import { useWeb3Modal } from '@web3modal/react'
 import { useAccount } from 'wagmi'
-import { useLocalStorage } from 'usehooks-ts'
 import cl from 'classnames'
 
 import { Dropdown, Tooltip } from '@/components'
 
 import { useSuiWalletModal } from '@/context/sui_wallet_modal_context'
+import useRole from '@/hooks/useRole'
 
 import { ellipsisMiddle } from '@/utils/address'
-
-import { ROLES } from '@/types/roles'
+import { ROLES } from '@/constants/roles'
 
 type WalletDropdownProps = {
   onWalletSelectSuccess?: (address: string) => void
@@ -28,9 +27,9 @@ const WalletDropdown = ({ onWalletSelectSuccess, buttonClassNames }: WalletDropd
   const { open: ethOpen } = useWeb3Modal()
   const { setOpen: setSuiModalOpen } = useSuiWalletModal()
 
-  const [role, setRole] = useLocalStorage<ROLES>('morphis_role', ROLES.USER)
-
   const [isMounted, setIsMounted] = useState(false)
+
+  const [role, setRole] = useRole()
 
   const renderButton = () => {
     if (!isMounted) {
