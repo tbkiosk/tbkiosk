@@ -1,14 +1,13 @@
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 import Image from 'next/image'
+import { useLocalStorage } from 'usehooks-ts'
 import cl from 'classnames'
 
 import { Sidebar, Menu, useProSidebar, sidebarClasses } from 'react-pro-sidebar'
 import { Button, Tooltip } from '@/components'
 import WalletDropdown from './components/wallet_dropdown'
 import ConnectStatus from './components/connect_status'
-
-import useLocalStorage from '@/hooks/useLocalStorage'
 
 type LayoutProps = {
   showHeader?: boolean
@@ -39,7 +38,7 @@ const MENUS = [
 const Layout = ({ children }: LayoutProps) => {
   const { route } = useRouter()
   const { collapsed, collapseSidebar } = useProSidebar()
-  const [isMenuDefaultCollapsed, setIsMenuDefaultCollapsed] = useLocalStorage('morphis-menu-default-collapsed', false)
+  const [isMenuDefaultCollapsed, setIsMenuDefaultCollapsed] = useLocalStorage('morphis_menu_collapsed', false)
 
   const onTogglerMenuCollapsed = (nextCollapsed: boolean) => {
     collapseSidebar()

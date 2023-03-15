@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
+import { useSession } from 'next-auth/react'
 import { useWallet } from '@suiet/wallet-kit'
 import { useWeb3Modal } from '@web3modal/react'
 import { useAccount } from 'wagmi'
+import { useLocalStorage } from 'usehooks-ts'
 import cl from 'classnames'
 
 import { Dropdown, Tooltip } from '@/components'
@@ -10,6 +12,8 @@ import { Dropdown, Tooltip } from '@/components'
 import { useSuiWalletModal } from '@/context/sui_wallet_modal_context'
 
 import { ellipsisMiddle } from '@/utils/address'
+
+import { ROLES } from '@/types/roles'
 
 type WalletDropdownProps = {
   onWalletSelectSuccess?: (address: string) => void
@@ -19,9 +23,12 @@ type WalletDropdownProps = {
 const WalletDropdown = ({ onWalletSelectSuccess, buttonClassNames }: WalletDropdownProps) => {
   const { connected: suiConnected, address: suiAddress = '', disconnect: suiDisconnect } = useWallet()
   const { address: ethAddress, isConnected: ethIsConnected } = useAccount()
+  const { data: session } = useSession()
 
   const { open: ethOpen } = useWeb3Modal()
   const { setOpen: setSuiModalOpen } = useSuiWalletModal()
+
+  const [role, setRole] = useLocalStorage<ROLES>('morphis_role', ROLES.USER)
 
   const [isMounted, setIsMounted] = useState(false)
 
@@ -192,7 +199,13 @@ const WalletDropdown = ({ onWalletSelectSuccess, buttonClassNames }: WalletDropd
           </Dropdown.Item>
           <Dropdown.Item>
             {() => (
-              <div className="w-full pl-16 pr-4 py-2 relative text-left text-sm text-white truncate cursor-pointer transition-colors hover:bg-[#2a2a2d]">
+              <div
+                className={cl([
+                  'w-full pl-16 pr-4 py-2 relative text-left text-sm text-white truncate cursor-pointer transition-colors hover:bg-[#2a2a2d]',
+                  !session && 'cursor-not-allowed',
+                ])}
+                onClick={() => setRole(role === ROLES.USER ? ROLES.CREATOR : ROLES.USER)}
+              >
                 <Image
                   alt=""
                   className="absolute inset-y-0 left-6 my-auto"
@@ -200,7 +213,7 @@ const WalletDropdown = ({ onWalletSelectSuccess, buttonClassNames }: WalletDropd
                   src="/icons/switch.svg"
                   width={24}
                 />
-                Switch to creator
+                {`Switch to ${role === ROLES.USER ? 'creator' : 'user'}`}
               </div>
             )}
           </Dropdown.Item>
