@@ -1,4 +1,8 @@
+/* eslint-disable */
+/* @ts-nocheck */
+
 import { MongoClient } from 'mongodb'
+
 declare global {
-  const _mongoClientPromise: Promise<MongoClient>
+  var _mongoClientPromise: Promise<MongoClient>
 }
