@@ -39,7 +39,7 @@ const MENUS = [
   },
 ]
 
-const Layout = ({ children }: LayoutProps) => {
+const Layout = ({ showHeader = true, children }: LayoutProps) => {
   const { route } = useRouter()
   const { collapsed, collapseSidebar } = useProSidebar()
   const [role] = useRole()
@@ -107,13 +107,13 @@ const Layout = ({ children }: LayoutProps) => {
               )
             )}
             {role === ROLES.CREATOR && (
-              <Link href="/projects">
+              <Link href="/project">
                 <Button
                   className={cl(['flex grow items-center', collapsed && 'justify-center'])}
-                  variant={route.includes('projects') ? 'outlined' : 'contained'}
+                  variant={route.includes('project') ? 'outlined' : 'contained'}
                 >
                   <i className={cl(['fa-solid fa-folder-closed text-lg', !collapsed && 'ml-4 mr-4'])} />
-                  {!collapsed && <span className="text-2xl capitalize">Projects</span>}
+                  {!collapsed && <span className="text-2xl capitalize">Project</span>}
                 </Button>
               </Link>
             )}
@@ -128,18 +128,20 @@ const Layout = ({ children }: LayoutProps) => {
         </Menu>
       </Sidebar>
       <main className="flex flex-col grow overflow-hidden">
-        <div className="flex items-center justify-between px-[54px] py-[38px]">
-          <span className="font-bold text-5xl capitalize">{route.replace('/', '')}</span>
-          <div className="flex flex-row items-center">
-            <span className="h-12 w-12 flex shrink-0 items-center justify-center bg-[#fdede5] rounded-full cursor-pointer">
-              <i className="fa-regular fa-bell fa-xl" />
-            </span>
-            <div className="mx-4">
-              <ConnectStatus />
+        {showHeader && (
+          <div className="flex items-center justify-between px-[54px] py-[38px]">
+            <span className="font-bold text-5xl capitalize">{route.replace('/', '')}</span>
+            <div className="flex flex-row items-center">
+              <span className="h-12 w-12 flex shrink-0 items-center justify-center bg-[#fdede5] rounded-full cursor-pointer">
+                <i className="fa-regular fa-bell fa-xl" />
+              </span>
+              <div className="mx-4">
+                <ConnectStatus />
+              </div>
+              <WalletDropdown buttonClassNames="!h-[3.375rem]" />
             </div>
-            <WalletDropdown buttonClassNames="!h-[3.375rem]" />
           </div>
-        </div>
+        )}
         <div className="flex flex-col grow px-[54px] overflow-y-auto">{children}</div>
       </main>
     </div>

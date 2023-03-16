@@ -3,15 +3,12 @@ import { toast } from 'react-toastify'
 import Image from 'next/image'
 import { useMutation, useLazyQuery } from '@apollo/client'
 // import { useEvmWalletNFTs } from '@moralisweb3/next'
-import cl from 'classnames'
 
 import { Button } from '@/components'
 
 import { CyberConnectAuthContext } from '@/context/cyberconnect_auth'
 import { CREATE_SUBSCRIBE_TYPED_DATA, RELAY, RELAY_ACTION_STATUS } from '@/graphql'
 import { ellipsisMiddle } from '@/utils/address'
-
-import st from './styles.module.css'
 
 export type Profile = {
   handle: string
@@ -116,11 +113,11 @@ export const CCProfileCard = ({ handle, avatar, profileID, isSubscribedByMe, own
       <NftRow address={owner?.address} />
       <div className="grow" />
       <Button
-        className={cl(['!w-32 !text-white !border-none', !isSubscribedByMe && st.button])}
+        className="!w-32"
         disabled={isSubscribedByMe}
         loading={isSubscribing}
         onClick={() => onSubscribe(profileID)}
-        variant="outlined"
+        variant="colored"
       >
         {isSubscribedByMe ? 'Followed' : 'Follow'}
       </Button>
