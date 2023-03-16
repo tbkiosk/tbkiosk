@@ -1,0 +1,20 @@
+.button__colored {
+  background: linear-gradient(99.45deg, #e87a5e 8.75%, #ef7cee 50%, #e87a5e 62%, #ef7cee 92%);
+  background-size: 200% 200%;
+}
+
+.button__colored:hover {
+  animation: linear-gradient-kfms 2s linear infinite alternate;
+}
+
+@keyframes linear-gradient-kfms {
+  0% {
+    background-position: 0% 100%;
+  }
+  50% {
+    background-position: 100% 100%;
+  }
+  100% {
+    background-position: 0% 100%;
+  }
+}
