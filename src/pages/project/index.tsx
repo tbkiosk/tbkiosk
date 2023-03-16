@@ -33,7 +33,12 @@ const Project = () => {
         />
         <p className="mb-4 text-xl font-bold">You do not have any projects yet</p>
         <Link href="/project/new">
-          <Button variant="colored">Create a new project</Button>
+          <Button
+            className="!h-12 px-8"
+            variant="colored"
+          >
+            Create a new project
+          </Button>
         </Link>
       </div>
     </Layout>

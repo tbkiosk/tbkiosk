@@ -3,6 +3,12 @@
   background-size: 200% 200%;
 }
 
+/* tailwindcss defined classes of button type=submit, increase specifility to override */
+.button__colored.button__submit {
+  background: linear-gradient(99.45deg, #e87a5e 8.75%, #ef7cee 50%, #e87a5e 62%, #ef7cee 92%);
+  background-size: 200% 200%;
+}
+
 .button__colored:hover {
   animation: linear-gradient-kfms 2s linear infinite alternate;
 }

@@ -21,7 +21,7 @@ const VARIANT_DISABLED_STYLES = {
 const Button = ({ children, className, variant = 'contained', disabled, loading, startIcon, ...rest }: ButtonProps) => (
   <button
     className={cl([
-      'w-full h-[54px] rounded-[28px] px-4 relative font-medium text-sm truncate transition duration-100 ease-linear disabled:cursor-not-allowed',
+      'w-full h-14 rounded-[1.75rem] px-4 relative font-medium text-sm truncate transition duration-100 ease-linear disabled:cursor-not-allowed',
       VARIANT_STYLES[variant],
       disabled && VARIANT_DISABLED_STYLES[variant],
       startIcon && 'relative',
