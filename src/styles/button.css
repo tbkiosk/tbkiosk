@@ -10,7 +10,7 @@
 }
 
 .button__colored:hover {
-  animation: linear-gradient-kfms 2s linear infinite alternate;
+  animation: linear-gradient-kfms 3s ease-in-out infinite alternate;
 }
 
 @keyframes linear-gradient-kfms {
