@@ -18,3 +18,15 @@
   border-radius: 0.25rem;
   border: none;
 }
+
+textarea::-webkit-scrollbar {
+  width: 0.25rem;
+}
+
+textarea::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+textarea::-webkit-scrollbar-thumb {
+  border-radius: 0.125rem;
+}

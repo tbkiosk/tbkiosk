@@ -54,7 +54,7 @@ const Layout = ({ showHeader = true, children }: LayoutProps) => {
   return (
     <div className="h-full w-full flex grow">
       <Sidebar
-        collapsedWidth="130px"
+        collapsedWidth="8rem"
         defaultCollapsed={isMenuDefaultCollapsed}
         rootStyles={{
           [`.${sidebarClasses.container}`]: {
@@ -63,7 +63,7 @@ const Layout = ({ showHeader = true, children }: LayoutProps) => {
             position: 'relative',
           },
         }}
-        width="292px"
+        width="18rem"
       >
         <div className="flex justify-center items-center py-8">
           <Image
@@ -129,7 +129,7 @@ const Layout = ({ showHeader = true, children }: LayoutProps) => {
       </Sidebar>
       <main className="flex flex-col grow overflow-hidden">
         {showHeader && (
-          <div className="flex items-center justify-between px-[54px] py-[38px]">
+          <div className="flex items-center justify-between px-12 py-9">
             <span className="font-bold text-5xl capitalize">{route.replace('/', '')}</span>
             <div className="flex flex-row items-center">
               <span className="h-12 w-12 flex shrink-0 items-center justify-center bg-[#fdede5] rounded-full cursor-pointer">
@@ -142,7 +142,7 @@ const Layout = ({ showHeader = true, children }: LayoutProps) => {
             </div>
           </div>
         )}
-        <div className="flex flex-col grow px-[54px] overflow-y-auto">{children}</div>
+        <div className="flex flex-col grow px-12 overflow-y-auto">{children}</div>
       </main>
     </div>
   )
