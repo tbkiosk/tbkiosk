@@ -1,38 +1,39 @@
+import { forwardRef } from 'react'
 import cl from 'classnames'
 
 type InputProps = {
-  classNames?: string
-} & React.HTMLAttributes<HTMLInputElement>
+  className?: string
+  type?: React.HTMLInputTypeAttribute
+} & React.InputHTMLAttributes<HTMLInputElement>
 
-export const Input = ({ classNames, ...restProps }: InputProps) => {
-  return (
-    <input
-      autoComplete="off"
-      className={cl([
-        'block w-full rounded-md border-0 px-2 py-2 text-sm text-gray-900 placeholder:text-gray-400 shadow-sm',
-        'outline-0 ring-1 ring-inset ring-black focus:ring-1 focus:ring-inset focus:ring-indigo-600',
-        classNames,
-      ])}
-      type="text"
-      {...restProps}
-    />
-  )
-}
+export const Input = forwardRef<HTMLInputElement, InputProps>(({ className, type = 'text', ...restProps }, ref) => (
+  <input
+    autoComplete="off"
+    className={cl([
+      'block w-full px-2 py-2 text-sm text-gray-900 placeholder:text-gray-400 border border-black rounded-md shadow-sm',
+      className,
+    ])}
+    type={type}
+    ref={ref}
+    {...restProps}
+  />
+))
 
 type TextAreaProps = {
-  classNames?: string
-} & React.HTMLAttributes<HTMLTextAreaElement>
+  className?: string
+} & React.TextareaHTMLAttributes<HTMLTextAreaElement>
 
-export const TextArea = ({ classNames, ...restProps }: TextAreaProps) => {
-  return (
-    <textarea
-      autoComplete="off"
-      className={cl([
-        'block w-full rounded-md border-0 px-2 py-2 text-sm text-gray-900 placeholder:text-gray-400 shadow-sm',
-        'outline-0 ring-1 ring-inset ring-black focus:ring-1 focus:ring-inset focus:ring-indigo-600',
-        classNames,
-      ])}
-      {...restProps}
-    />
-  )
-}
+export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(({ className, ...restProps }, ref) => (
+  <textarea
+    autoComplete="off"
+    className={cl([
+      'block w-full px-2 py-2 text-sm text-gray-900 placeholder:text-gray-400 border border-black rounded-md shadow-sm resize-none',
+      className,
+    ])}
+    ref={ref}
+    {...restProps}
+  />
+))
+
+Input.displayName = 'Input'
+TextArea.displayName = 'TextArea'
