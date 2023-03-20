@@ -16,7 +16,7 @@ const ProfileCardWrapper = () => {
 
   return (
     <div className="flex flex-row grow gap-4 h-full px-9 py-3 rounded-[20px] shadow-[0_4px_10px_rgba(216,216,216,0.25)] overflow-hidden">
-      {status === 'authenticated' ? <ProfileCardBase session={session} /> : <span>Not logged in</span>}
+      {status === 'authenticated' ? <ProfileCardBase session={session as ExtendedSession} /> : <span>Not logged in</span>}
     </div>
   )
 }

@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { useForm, SubmitHandler, Controller } from 'react-hook-form'
+import { toast } from 'react-toastify'
 import { useRouter } from 'next/router'
 
 import Layout from '@/layouts'
@@ -7,16 +8,19 @@ import { Button, Input, TextArea, Select } from '@/components'
 
 import useRole from '@/hooks/useRole'
 
+import request from '@/utils/request'
+
 import { ROLES } from '@/constants/roles'
 
-import type { Project } from '@/schemas/project'
+import type { ProjectForm } from '@/schemas/project'
+import type { ResponseBase } from '@/types/response'
 
 const NewProject = () => {
   const router = useRouter()
 
   const [role] = useRole()
 
-  const { control, handleSubmit } = useForm<Project>({
+  const { control, handleSubmit } = useForm<ProjectForm>({
     defaultValues: {
       projectName: '',
       customURL: '',
@@ -31,7 +35,20 @@ const NewProject = () => {
     },
   })
 
-  const onSubmit: SubmitHandler<Project> = data => data
+  const onSubmit: SubmitHandler<ProjectForm> = async formData => {
+    const transformedData = {
+      ...formData,
+      mintDate: +new Date(formData.mintDate),
+      mintPrice: +formData.mintPrice,
+      totalSupply: +formData.totalSupply,
+    }
+
+    const { data } = await request<ResponseBase<boolean>>('/api/project', { method: 'POST', body: JSON.stringify(transformedData) })
+
+    if (data.data) {
+      toast.success(data.message)
+    }
+  }
 
   useEffect(() => {
     if (role === ROLES.USER) {
@@ -209,8 +226,8 @@ const NewProject = () => {
                       control={control}
                       render={({ field }) => (
                         <Select
-                          buttonClassName="rounded-[1.5rem]"
-                          className="w-[7rem]"
+                          buttonClassName="!rounded-[1.5rem]"
+                          className="!w-[7rem]"
                           onChange={option => field.onChange(option.id)}
                           options={[
                             { id: 'ETH', name: 'ETH' },

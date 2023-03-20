@@ -11,7 +11,7 @@ import type { ResponseBase } from '@/types/response'
 import type { ExtendedSession } from '@/helpers/nextauth/types'
 import type { ProjectData } from '@/schemas/project'
 
-const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<ProjectData[] | null>>) => {
+const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<ProjectData[] | boolean>>) => {
   const session: ExtendedSession | null = await getServerSession(req, res, authOptions)
   if (!session) {
     return res.status(401).json({
@@ -37,9 +37,22 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<Pr
     const {
       query: { creatorId },
     } = req
-    return res.status(200).json({
-      data: [],
-    })
+
+    try {
+      const result = await collection
+        .find({
+          creatorId: new ObjectId((creatorId as string) || session.user.id),
+        })
+        .toArray()
+
+      return res.status(200).json({
+        data: result ?? [],
+      })
+    } catch (err) {
+      return res.status(500).json({
+        message: err.message,
+      })
+    }
   }
 
   /**
@@ -68,11 +81,12 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<Pr
       await collection.insertOne({ ...transformedData, creatorId: new ObjectId(transformedData.creatorId) })
 
       return res.status(200).json({
-        data: null,
+        data: true,
         message: `Created project project ${transformedData.projectName}`,
       })
     } catch (err) {
       return res.status(500).json({
+        data: false,
         message: err.message,
       })
     }
