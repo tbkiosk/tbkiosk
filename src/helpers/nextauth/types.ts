@@ -16,6 +16,7 @@ export type SessionType = {
 }
 
 export type ExtendedSession = Session & {
+  user: ExtendedUser
   provider?: string
   accessToken?: string
   error?: string
