@@ -12,9 +12,7 @@ import useRole from '@/hooks/useRole'
 import { ROLES } from '@/constants/roles'
 
 import type { ResponseBase } from '@/types/response'
-import type { ProjectData } from '@/schemas/project'
-
-type ProjectDataWithId = ProjectData & { _id: string }
+import type { ProjectDataWithId } from '@/schemas/project'
 
 const Project = () => {
   const router = useRouter()
