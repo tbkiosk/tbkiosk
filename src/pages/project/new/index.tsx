@@ -45,8 +45,8 @@ const NewProject = () => {
 
     const { data } = await request<ResponseBase<boolean>>('/api/project', { method: 'POST', body: JSON.stringify(transformedData) })
 
-    if (data.data) {
-      toast.success(data.message)
+    if (data?.data) {
+      toast.success(data?.message ?? 'Success')
     }
   }
 

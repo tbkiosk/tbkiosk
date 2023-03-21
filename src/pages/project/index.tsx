@@ -30,7 +30,7 @@ const Project = () => {
 
     const { data } = await request<ResponseBase<ProjectDataWithId[]>>('/api/project')
 
-    setProjects(data.data ?? [])
+    setProjects(data?.data ?? [])
     setLoading(false)
   }
 

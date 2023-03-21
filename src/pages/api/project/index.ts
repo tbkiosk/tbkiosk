@@ -50,7 +50,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<Pr
       })
     } catch (err) {
       return res.status(500).json({
-        message: err.message,
+        message: (err as Error)?.message ?? 'Interval server error',
       })
     }
   }
@@ -87,7 +87,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<Pr
     } catch (err) {
       return res.status(500).json({
         data: false,
-        message: err.message,
+        message: (err as Error)?.message ?? 'Interval server error',
       })
     }
   }
