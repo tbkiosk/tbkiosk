@@ -17,10 +17,8 @@ const POLICY = {
   statement: [
     {
       action: [
-        // 简单上传
         'name/cos:PutObject',
         'name/cos:PostObject',
-        // 分片上传
         'name/cos:InitiateMultipartUpload',
         'name/cos:ListMultipartUploads',
         'name/cos:ListParts',
@@ -30,18 +28,11 @@ const POLICY = {
       effect: 'allow',
       principal: { qcs: ['*'] },
       resource: ['qcs::cos:' + CONFIG.region + ':uid/' + appId + ':prefix//' + appId + '/' + shortBucketName + '/' + CONFIG.allowPrefix],
-      // condition生效条件，关于 condition 的详细设置规则和COS支持的condition类型可以参考https://cloud.tencent.com/document/product/436/71306
-      // 'condition': {
-      //   // 比如限定ip访问
-      //   'ip_equal': {
-      //     'qcs:ip': '10.121.2.10/24'
-      //   }
-      // }
     },
   ],
 }
 
-export const getCredential = async () =>
+export const getCredential = async (): Promise<STS.CredentialData> =>
   new Promise((res, rej) => {
     STS.getCredential(
       {
