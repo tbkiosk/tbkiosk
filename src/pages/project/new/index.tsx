@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { useForm, SubmitHandler, Controller } from 'react-hook-form'
 import { toast } from 'react-toastify'
 import { useRouter } from 'next/router'
+import Link from 'next/link'
 
 import Layout from '@/layouts'
 import { Button, Input, TextArea, Select } from '@/components'
@@ -20,7 +21,7 @@ const NewProject = () => {
 
   const [role] = useRole()
 
-  const { control, handleSubmit } = useForm<ProjectForm>({
+  const { control, handleSubmit, formState } = useForm<ProjectForm>({
     defaultValues: {
       projectName: '',
       customURL: '',
@@ -57,7 +58,17 @@ const NewProject = () => {
   }, [role])
 
   return (
-    <Layout>
+    <Layout
+      headerLeft={
+        <Link
+          className="flex items-center"
+          href="/project"
+        >
+          <i className="fa-solid fa-arrow-left-long text-2xl mr-4 cursor-pointer transition hover:opacity-70 hover:scale-110" />
+          <span>New project</span>
+        </Link>
+      }
+    >
       <form
         className="flex flex-row gap-24 grow py-6 text-base overflow-y-auto"
         onSubmit={handleSubmit(onSubmit)}
@@ -176,6 +187,7 @@ const NewProject = () => {
           />
           <Button
             className="!h-12 button__colored button__submit"
+            loading={formState.isSubmitting}
             type="submit"
             variant="colored"
           >

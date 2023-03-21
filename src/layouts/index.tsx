@@ -1,10 +1,10 @@
+import { Sidebar, Menu, useProSidebar, sidebarClasses } from 'react-pro-sidebar'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useLocalStorage } from 'usehooks-ts'
 import cl from 'classnames'
 
-import { Sidebar, Menu, useProSidebar, sidebarClasses } from 'react-pro-sidebar'
 import { Button, Tooltip } from '@/components'
 import WalletDropdown from './components/wallet_dropdown'
 import ConnectStatus from './components/connect_status'
@@ -15,6 +15,7 @@ import { ROLES } from '@/constants/roles'
 
 type LayoutProps = {
   showHeader?: boolean
+  headerLeft?: React.ReactNode
   children?: React.ReactNode | React.ReactNode[]
 }
 
@@ -39,7 +40,7 @@ const MENUS = [
   },
 ]
 
-const Layout = ({ showHeader = true, children }: LayoutProps) => {
+const Layout = ({ showHeader = true, headerLeft, children }: LayoutProps) => {
   const { route } = useRouter()
   const { collapsed, collapseSidebar } = useProSidebar()
   const [role] = useRole()
@@ -130,7 +131,7 @@ const Layout = ({ showHeader = true, children }: LayoutProps) => {
       <main className="flex flex-col grow overflow-hidden">
         {showHeader && (
           <div className="flex items-center justify-between px-12 py-9">
-            <span className="font-bold text-5xl capitalize">{route.replace('/', '')}</span>
+            <span className="font-bold text-3xl capitalize">{headerLeft || route.replace('/', '')}</span>
             <div className="flex flex-row items-center">
               <span className="h-12 w-12 flex shrink-0 items-center justify-center bg-[#fdede5] rounded-full cursor-pointer">
                 <i className="fa-regular fa-bell fa-xl" />

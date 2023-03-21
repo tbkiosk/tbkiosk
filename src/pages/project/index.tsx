@@ -2,13 +2,12 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import Image from 'next/image'
 import Link from 'next/link'
+import useSWR from 'swr'
 
 import Layout from '@/layouts'
 import { Button, Loading } from '@/components'
 
 import useRole from '@/hooks/useRole'
-
-import request from '@/utils/request'
 
 import { ROLES } from '@/constants/roles'
 
@@ -22,30 +21,18 @@ const Project = () => {
 
   const [role] = useRole()
 
-  const [projects, setProjects] = useState<ProjectDataWithId[]>([])
-  const [loading, setLoading] = useState(false)
-
-  const onLoadProjects = async () => {
-    setLoading(true)
-
-    const { data } = await request<ResponseBase<ProjectDataWithId[]>>('/api/project')
-
-    setProjects(data?.data ?? [])
-    setLoading(false)
-  }
+  const { data: { data: projects = [] } = {}, isLoading } = useSWR<ResponseBase<ProjectDataWithId[]>>('/api/project')
 
   useEffect(() => {
     if (role === ROLES.USER) {
       router.push('/profile')
       return
     }
-
-    onLoadProjects()
   }, [role])
 
   return (
     <Layout>
-      <Loading isLoading={loading}>
+      <Loading isLoading={isLoading}>
         <div className="flex flex-col justify-center items-center grow">
           {!projects.length ? (
             <>
@@ -70,17 +57,20 @@ const Project = () => {
             <>
               <div className="w-full flex items-center justify-between py-4">
                 <div className="font-bold text-lg">{`${projects.length} Project${projects.length > 1 ? 's' : ''}`}</div>
-                <Button
-                  className="!h-10 !w-auto px-8"
-                  variant="colored"
-                >
-                  Create a new project
-                </Button>
+                <Link href="/project/new">
+                  <Button
+                    className="!h-10 !w-auto px-8"
+                    variant="colored"
+                  >
+                    Create a new project
+                  </Button>
+                </Link>
               </div>
               <div className="w-full grow grid 2xl:grid-cols-6 lg:grid-cols-4 grid-cols-3 auto-rows-min gap-4">
                 {projects.map(_project => (
-                  <div
+                  <Link
                     className="p-4 shadow-[0_4px_10px_rgba(175,175,175,0.25)] cursor-pointer transition-transform hover:scale-105"
+                    href={`/project/${_project._id}`}
                     key={_project._id}
                   >
                     <Image
@@ -94,7 +84,7 @@ const Project = () => {
                       <div className="truncate">{_project.projectName}</div>
                       <div className="shrink-0 px-4 py-1 ml-2 rounded-[1.875rem] bg-[#82ffac]">Active</div>
                     </div>
-                  </div>
+                  </Link>
                 ))}
               </div>
             </>
