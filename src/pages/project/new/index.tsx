@@ -5,7 +5,7 @@ import { useRouter } from 'next/router'
 import Link from 'next/link'
 
 import Layout from '@/layouts'
-import { Button, Input, TextArea, Select } from '@/components'
+import { Button, Input, TextArea, Select, Upload } from '@/components'
 
 import useRole from '@/hooks/useRole'
 
@@ -33,6 +33,8 @@ const NewProject = () => {
       mintPrice: '',
       coinType: 'ETH',
       totalSupply: '',
+      profileImage: '',
+      bannerImage: '',
     },
   })
 
@@ -47,7 +49,7 @@ const NewProject = () => {
     const { data } = await request<ResponseBase<boolean>>('/api/project', { method: 'POST', body: JSON.stringify(transformedData) })
 
     if (data?.data) {
-      toast.success(data?.message ?? 'Success')
+      router.push('/project').then(() => toast.success(data?.message ?? 'Success'))
     }
   }
 
@@ -70,7 +72,7 @@ const NewProject = () => {
       }
     >
       <form
-        className="flex flex-row gap-24 grow py-6 text-base overflow-y-auto"
+        className="flex flex-row gap-24 py-6 text-base"
         onSubmit={handleSubmit(onSubmit)}
       >
         <div className="w-2/4">
@@ -83,7 +85,7 @@ const NewProject = () => {
             render={({ field }) => (
               <div className="mb-6">
                 <label
-                  className="block mb-1"
+                  className="block mb-1 font-medium"
                   htmlFor="projectName"
                 >
                   Project name
@@ -101,7 +103,7 @@ const NewProject = () => {
             render={({ field }) => (
               <div className="mb-6">
                 <label
-                  className="block mb-1"
+                  className="block mb-1 font-medium"
                   htmlFor="customURL"
                 >
                   Custom url
@@ -119,7 +121,7 @@ const NewProject = () => {
             render={({ field }) => (
               <div className="mb-6">
                 <label
-                  className="block mb-1"
+                  className="block mb-1 font-medium"
                   htmlFor="description"
                 >
                   Description
@@ -137,7 +139,7 @@ const NewProject = () => {
             render={({ field }) => (
               <div className="mb-6">
                 <label
-                  className="block mb-1"
+                  className="block mb-1 font-medium"
                   htmlFor="website"
                 >
                   Website
@@ -155,7 +157,7 @@ const NewProject = () => {
             render={({ field }) => (
               <div className="mb-6">
                 <label
-                  className="block mb-1"
+                  className="block mb-1 font-medium"
                   htmlFor="twitter"
                 >
                   Twitter
@@ -173,7 +175,7 @@ const NewProject = () => {
             render={({ field }) => (
               <div className="mb-6">
                 <label
-                  className="block mb-1"
+                  className="block mb-1 font-medium"
                   htmlFor="discord"
                 >
                   Discord
@@ -182,6 +184,45 @@ const NewProject = () => {
                   placeholder="Enter Discord url"
                   {...field}
                 />
+              </div>
+            )}
+          />
+          <Controller
+            name="profileImage"
+            control={control}
+            render={({ field }) => (
+              <div className="mb-6">
+                <label className="block mb-1 font-medium">Profile Image</label>
+                <div className="flex items-center gap-4">
+                  <span className="grow font-normal">
+                    This image will be used as the profile image on your project homepage and any allow list pages. 350x350 recommended
+                  </span>
+                  <Upload
+                    id="profileImage"
+                    onChange={(newValue: string) => field.onChange(newValue)}
+                    ref={field.ref}
+                    value={field.value}
+                  />
+                </div>
+              </div>
+            )}
+          />
+          <Controller
+            name="bannerImage"
+            control={control}
+            render={({ field }) => (
+              <div className="mb-6">
+                <label className="block mb-1 font-medium">Banner Image</label>
+                <div className="flex items-center gap-4">
+                  <span className="grow font-normal">1400x420 recommended</span>
+                  <Upload
+                    id="bannerImage"
+                    maxSize={5 * 1024 * 1024}
+                    onChange={(newValue: string) => field.onChange(newValue)}
+                    ref={field.ref}
+                    value={field.value}
+                  />
+                </div>
               </div>
             )}
           />
@@ -202,7 +243,7 @@ const NewProject = () => {
               render={({ field }) => (
                 <div className="mb-6">
                   <label
-                    className="block mb-1"
+                    className="block mb-1 font-medium"
                     htmlFor="mintDate"
                   >
                     Mint date
@@ -223,7 +264,7 @@ const NewProject = () => {
               render={({ field }) => (
                 <div className="mb-6">
                   <label
-                    className="block mb-1"
+                    className="block mb-1 font-medium"
                     htmlFor="mintPrice"
                   >
                     Mint price
@@ -259,7 +300,7 @@ const NewProject = () => {
               render={({ field }) => (
                 <div className="mb-6">
                   <label
-                    className="block mb-1"
+                    className="block mb-1 font-medium"
                     htmlFor="totalSupply"
                   >
                     Total supply

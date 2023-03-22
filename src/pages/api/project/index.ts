@@ -82,7 +82,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<Pr
 
       return res.status(200).json({
         data: true,
-        message: `Created project project ${transformedData.projectName}`,
+        message: `Created project ${transformedData.projectName}`,
       })
     } catch (err) {
       return res.status(500).json({

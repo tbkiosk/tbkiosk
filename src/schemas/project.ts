@@ -1,4 +1,4 @@
-import * as Joi from 'joi'
+import Joi from 'joi'
 import { ObjectId } from 'mongodb'
 
 export const projectFormSchema = Joi.object({
@@ -12,6 +12,8 @@ export const projectFormSchema = Joi.object({
   mintPrice: Joi.number().required().positive(),
   coinType: Joi.string().required(),
   totalSupply: Joi.number().positive().required(),
+  profileImage: Joi.string().required(),
+  bannerImage: Joi.string().required(),
 })
 
 export const projectDbSchema = projectFormSchema.append({
@@ -27,6 +29,8 @@ type ProjectBase = {
   website?: string
   twitter?: string
   discord?: string
+  profileImage?: string
+  bannerImage?: string
 }
 
 export type ProjectForm = ProjectBase & {
