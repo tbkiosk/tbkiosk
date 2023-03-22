@@ -3,7 +3,7 @@ type LoadingProps = {
   children: JSX.Element
 }
 
-const Loading = ({ isLoading, children }: LoadingProps) => {
+export const Loading = ({ isLoading, children }: LoadingProps) => {
   if (isLoading) {
     return (
       <div className="flex grow items-center justify-center h-full w-full">
@@ -14,5 +14,3 @@ const Loading = ({ isLoading, children }: LoadingProps) => {
 
   return children
 }
-
-export default Loading

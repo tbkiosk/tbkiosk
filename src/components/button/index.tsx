@@ -18,7 +18,7 @@ const VARIANT_DISABLED_STYLES = {
   colored: 'disabled:grayscale-[50%] disabled:hover:animate-none',
 }
 
-const Button = ({ children, className, variant = 'contained', disabled, loading, startIcon, ...rest }: ButtonProps) => (
+export const Button = ({ children, className, variant = 'contained', disabled, loading, startIcon, ...rest }: ButtonProps) => (
   <button
     className={cl([
       'w-full h-14 rounded-[1.75rem] px-4 relative font-medium text-sm truncate transition duration-100 ease-linear disabled:cursor-not-allowed',
@@ -34,5 +34,3 @@ const Button = ({ children, className, variant = 'contained', disabled, loading,
     {loading ? <i className="fa-solid fa-spin fa-circle-notch" /> : children}
   </button>
 )
-
-export default Button

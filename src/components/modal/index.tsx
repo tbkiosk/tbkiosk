@@ -10,7 +10,7 @@ type ModalProps = {
   classNames?: string
 }
 
-const Modal = ({ isOpen, setOpen, children, classNames }: ModalProps) => {
+export const Modal = ({ isOpen, setOpen, children, classNames }: ModalProps) => {
   if (!isOpen) return null
 
   useEffect(() => {
@@ -31,5 +31,3 @@ const Modal = ({ isOpen, setOpen, children, classNames }: ModalProps) => {
     </Portal>
   )
 }
-
-export default Modal

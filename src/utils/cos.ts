@@ -1,9 +1,11 @@
 import STS from 'qcloud-cos-sts'
 
+const DEFAULT_TEMP_CREDENTIAL_DURATION = 1800
+
 const CONFIG = {
   secretId: (process.env.TENCENT_COS_SECRET_ID as string) || 'AKIDyhCRZIXKXw71g1QLH5ey0e0iCPKttJ9k',
   secretKey: (process.env.TENCENT_COS_SECRET_KEY as string) || 'GNGtfEXkh17weDwShgAQRAUggfRQ9euu',
-  durationSeconds: 1800,
+  durationSeconds: DEFAULT_TEMP_CREDENTIAL_DURATION,
   bucket: (process.env.TENCENT_COS_BUCKET as string) || 'morphis-img-dev-1256253626',
   region: (process.env.TENCENT_COS_REGION as string) || 'ap-singapore',
   allowPrefix: '',
@@ -38,7 +40,7 @@ export const getCredential = async (): Promise<STS.CredentialData> =>
       {
         secretId: CONFIG.secretId,
         secretKey: CONFIG.secretKey,
-        durationSeconds: 1800,
+        durationSeconds: CONFIG.durationSeconds,
         policy: POLICY,
       },
       function (err, credential) {

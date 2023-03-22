@@ -5,7 +5,7 @@ import cl from 'classnames'
 
 import { CyberConnectAuthContext } from '@/context/cyberconnect_auth'
 
-import Button from '../button'
+import { Button } from '../button'
 
 import { LOGIN_GET_MESSAGE } from '@/graphql'
 import LOGIN_VERIFY from '@/graphql/login_verify'
@@ -17,7 +17,7 @@ type CCSignInButtonProps = {
   contentClassNames?: string
 } & ButtonProps
 
-const CCSignInButton = ({ classNames, contentClassNames, ...restProps }: CCSignInButtonProps) => {
+export const CCSignInButton = ({ classNames, contentClassNames, ...restProps }: CCSignInButtonProps) => {
   const { address, accessToken, setAccessToken, connectWallet, checkNetwork } = useContext(CyberConnectAuthContext)
 
   const [loginGetMessage] = useMutation(LOGIN_GET_MESSAGE)
@@ -75,5 +75,3 @@ const CCSignInButton = ({ classNames, contentClassNames, ...restProps }: CCSignI
     </Button>
   )
 }
-
-export default CCSignInButton

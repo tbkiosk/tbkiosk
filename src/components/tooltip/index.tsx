@@ -8,7 +8,7 @@ type TooltipProps = {
   position?: 'top' | 'bottom'
 }
 
-const Tooltip = forwardRef<HTMLDivElement, React.PropsWithChildren<TooltipProps>>(
+export const Tooltip = forwardRef<HTMLDivElement, React.PropsWithChildren<TooltipProps>>(
   ({ tip, children, classNames, position = 'top' }, ref) => (
     <div
       className={cl(['group relative', classNames])}
@@ -31,5 +31,3 @@ const Tooltip = forwardRef<HTMLDivElement, React.PropsWithChildren<TooltipProps>
 )
 
 Tooltip.displayName = 'Tooltip'
-
-export default Tooltip
