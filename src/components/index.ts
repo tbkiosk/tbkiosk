@@ -6,6 +6,7 @@ export * from './modal'
 export * from './sui_wallet_connect_modal'
 export * from './input'
 export * from './select'
+export * from './upload'
 
 export * from './cc_sign_in_button'
 export * from './cc_profile_card'
