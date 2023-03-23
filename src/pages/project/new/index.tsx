@@ -14,6 +14,7 @@ import useRole from '@/hooks/useRole'
 import request from '@/utils/request'
 
 import { ROLES } from '@/constants/roles'
+import { DEFAULT_DATE_FORMAT } from '@/constants/date'
 
 import type { ProjectForm } from '@/schemas/project'
 import type { ResponseBase } from '@/types/response'
@@ -46,7 +47,7 @@ const NewProject = () => {
       website: '',
       twitter: '',
       discord: '',
-      mintDate: dayjs(tomorrow).format('YYYY-MM-DD'),
+      mintDate: dayjs(tomorrow).format(DEFAULT_DATE_FORMAT),
       mintPrice: '',
       coinType: 'ETH',
       totalSupply: '',
@@ -268,8 +269,9 @@ const NewProject = () => {
                   <div className="relative flex items-center">
                     <DatePicker
                       customInput={<DatePickerContainer />}
+                      dateFormat={DEFAULT_DATE_FORMAT}
                       minDate={tomorrow}
-                      onChange={newDate => field.onChange(dayjs(newDate).format('YYYY-MM-DD'))}
+                      onChange={newDate => field.onChange(dayjs(newDate).format(DEFAULT_DATE_FORMAT))}
                       selected={dayjs(field.value).toDate()}
                     />
                     <span className="ml-4 font-bold text-base">GMT</span>
