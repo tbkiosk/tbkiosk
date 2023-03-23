@@ -28,6 +28,7 @@
     "chart.js": "^4.2.1",
     "classnames": "^2.3.2",
     "cos-js-sdk-v5": "^1.4.16",
+    "cos-nodejs-sdk-v5": "^2.11.19",
     "dotenv": "^16.0.3",
     "ethers": "^5",
     "graphql": "^16.6.0",
