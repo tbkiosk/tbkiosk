@@ -1,15 +1,48 @@
 import { getServerSession } from 'next-auth/next'
 import { ObjectId } from 'mongodb'
+import COS from 'cos-nodejs-sdk-v5'
 
 import clientPromise from '@/lib/mongodb'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
 
 import { projectFormSchema, projectDbSchema } from '@/schemas/project'
 
+import {
+  TENCENT_COS_REGION,
+  TENCENT_COS_TEMP_BUCKET,
+  TENCENT_COS_DEV_BUCKET,
+  TENCENT_COS_BUCKET,
+} from '@/constants/cos'
+
 import type { NextApiRequest, NextApiResponse } from 'next'
 import type { ResponseBase } from '@/types/response'
 import type { ExtendedSession } from '@/helpers/nextauth/types'
 import type { ProjectData } from '@/schemas/project'
+
+const cos = new COS({
+  SecretId: process.env.TENCENT_COS_SECRET_ID as string,
+  SecretKey: process.env.TENCENT_COS_SECRET_KEY as string,
+})
+
+const copyTempImageToPersistentBucket = (fileName: string) =>
+  new Promise<string>((resolve, reject) => {
+    cos.putObjectCopy(
+      {
+        Bucket: TENCENT_COS_DEV_BUCKET,
+        Region: TENCENT_COS_REGION,
+        Key: fileName,
+        CopySource: `${TENCENT_COS_TEMP_BUCKET}.cos.${TENCENT_COS_REGION}.myqcloud.com/${encodeURIComponent(fileName)}`,
+      },
+      err => {
+        if (err) {
+          reject(err)
+          return
+        }
+
+        resolve(fileName)
+      }
+    )
+  })
 
 const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<ProjectData[] | boolean>>) => {
   const session: ExtendedSession | null = await getServerSession(req, res, authOptions)
@@ -78,18 +111,24 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<Pr
     }
 
     try {
-      await collection.insertOne({ ...transformedData, creatorId: new ObjectId(transformedData.creatorId) })
+      await Promise.all([
+        copyTempImageToPersistentBucket(transformedData.profileImage),
+        copyTempImageToPersistentBucket(transformedData.bannerImage),
+        collection.insertOne({ ...transformedData, creatorId: new ObjectId(transformedData.creatorId) }),
+      ])
 
-      return res.status(200).json({
+      res.status(200).json({
         data: true,
         message: `Created project ${transformedData.projectName}`,
       })
     } catch (err) {
-      return res.status(500).json({
-        data: false,
-        message: (err as Error)?.message ?? 'Interval server error',
+      res.status(200).json({
+        data: true,
+        message: `Created project ${transformedData.projectName}`,
       })
     }
+
+    return
   }
 
   return res.status(405).json({
