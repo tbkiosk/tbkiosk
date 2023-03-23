@@ -117,9 +117,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<Pr
         message: `Created project ${transformedData.projectName}`,
       })
     } catch (err) {
-      res.status(200).json({
-        data: true,
-        message: `Created project ${transformedData.projectName}`,
+      res.status(500).json({
+        message: (err as Error)?.message ?? 'Failed to create project',
       })
     }
 
