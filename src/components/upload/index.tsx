@@ -2,15 +2,35 @@ import { forwardRef, useState } from 'react'
 import Image from 'next/image'
 import { toast } from 'react-toastify'
 import COS from 'cos-js-sdk-v5'
-import STS from 'qcloud-cos-sts'
 import cl from 'classnames'
-
-import request from '@/utils/request'
-import { TENCENT_COS_TEMP_BUCKET, TENCENT_COS_REGION, TENCENT_COS_CDN_DOMAIN } from '@/constants/cos'
 
 import { Loading } from '../loading'
 
+import request from '@/utils/request'
+
+import { TENCENT_COS_TEMP_BUCKET, TENCENT_COS_REGION, TENCENT_COS_CDN_DOMAIN } from '@/constants/cos'
+
 import type { ResponseBase } from '@/types/response'
+import type { CredentialData } from 'qcloud-cos-sts'
+
+const cosJS = new COS({
+  getAuthorization: async (options, callback) => {
+    const res = await request<ResponseBase<CredentialData>>(`/api/cos/credentials/${TENCENT_COS_TEMP_BUCKET}`)
+
+    const data = res?.data?.data
+    if (!data) {
+      throw new Error('No credentials received')
+    }
+
+    callback({
+      TmpSecretId: data.credentials.tmpSecretId,
+      TmpSecretKey: data.credentials.tmpSecretKey,
+      SecurityToken: data.credentials.sessionToken,
+      StartTime: data.startTime,
+      ExpiredTime: data.expiredTime,
+    })
+  },
+})
 
 type UploadProps = {
   className?: string
@@ -49,43 +69,24 @@ export const Upload = forwardRef<HTMLInputElement, UploadProps>(({ className, id
       return
     }
 
-    const cos = new COS({
-      getAuthorization: async (options, callback) => {
-        const res = await request<ResponseBase<STS.CredentialData>>(`/api/cos/credentials/${TENCENT_COS_TEMP_BUCKET}`)
+    const filePath = `${fileName}-${+new Date()}.${extension}` // make upload file name exclusive
 
-        const data = res?.data?.data
-        if (!data) {
-          toast.error('No credentials received')
-          return
-        }
-
-        callback({
-          TmpSecretId: data.credentials.tmpSecretId,
-          TmpSecretKey: data.credentials.tmpSecretKey,
-          SecurityToken: data.credentials.sessionToken,
-          StartTime: data.startTime,
-          ExpiredTime: data.expiredTime,
-        })
-      },
-    })
-
-    cos.uploadFile(
+    cosJS.uploadFile(
       {
         Bucket: TENCENT_COS_TEMP_BUCKET,
         Region: TENCENT_COS_REGION,
-        Key: `${fileName}-${+new Date()}.${extension}`, // make upload file exclusive
+        Key: filePath,
         Body: file,
         onProgress: progressData => progressData,
       },
-      (err, data) => {
+      err => {
         if (err) {
-          toast.error(err.message || 'No credentials received')
+          toast.error(err.message || 'Failed to upload file')
           setUploading(false)
           return
         }
 
-        const imgUrl = `https://${TENCENT_COS_CDN_DOMAIN}/${data.Location.split('/').slice(1).join('')}`
-        onChange(imgUrl)
+        onChange(filePath)
         setUploading(false)
       }
     )
@@ -109,7 +110,7 @@ export const Upload = forwardRef<HTMLInputElement, UploadProps>(({ className, id
                 alt=""
                 className="h-full w-full object-contain cursor-pointer transition hover:opacity-70 hover:scale-105"
                 height={128}
-                src={value}
+                src={`https://${TENCENT_COS_TEMP_BUCKET}.${TENCENT_COS_CDN_DOMAIN}/${value}`}
                 width={128}
               />
             ) : (
