@@ -2,7 +2,7 @@ import STS from 'qcloud-cos-sts'
 
 import { TENCENT_COS_TEMP_BUCKET, TENCENT_COS_REGION } from '@/constants/cos'
 
-const DEFAULT_TEMP_CREDENTIAL_DURATION = 180
+const DEFAULT_TEMP_CREDENTIAL_DURATION = 600
 
 type GetCredential = {
   bucket?: string

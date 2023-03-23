@@ -5,7 +5,7 @@ import { authOptions } from '@/pages/api/auth/[...nextauth]'
 
 import { getCredential } from '@/utils/cos'
 
-import { TENCENT_COS_BUCKET, TENCENT_COS_TEMP_BUCKET } from '@/constants/cos'
+import { TENCENT_COS_BUCKET, TENCENT_COS_DEV_BUCKET, TENCENT_COS_TEMP_BUCKET } from '@/constants/cos'
 
 import type { NextApiRequest, NextApiResponse } from 'next'
 import type { ResponseBase } from '@/types/response'
@@ -34,7 +34,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<ST
       query: { bucket },
     } = req
 
-    if ([TENCENT_COS_BUCKET, TENCENT_COS_TEMP_BUCKET].indexOf(bucket as string) < 0) {
+    if ([TENCENT_COS_BUCKET, TENCENT_COS_DEV_BUCKET, TENCENT_COS_TEMP_BUCKET].indexOf(bucket as string) < 0) {
       return res.status(400).json({
         message: 'Unknown bucket',
       })

@@ -29,8 +29,8 @@ type ProjectBase = {
   website?: string
   twitter?: string
   discord?: string
-  profileImage?: string
-  bannerImage?: string
+  profileImage: string
+  bannerImage: string
 }
 
 export type ProjectForm = ProjectBase & {
