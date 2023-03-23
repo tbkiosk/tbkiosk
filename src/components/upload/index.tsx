@@ -13,7 +13,7 @@ import { TENCENT_COS_TEMP_BUCKET, TENCENT_COS_REGION, TENCENT_COS_CDN_DOMAIN } f
 import type { ResponseBase } from '@/types/response'
 import type { CredentialData } from 'qcloud-cos-sts'
 
-const cosJS = new COS({
+const cos = new COS({
   getAuthorization: async (options, callback) => {
     const res = await request<ResponseBase<CredentialData>>(`/api/cos/credentials/${TENCENT_COS_TEMP_BUCKET}`)
 
@@ -71,7 +71,7 @@ export const Upload = forwardRef<HTMLInputElement, UploadProps>(({ className, id
 
     const filePath = `${fileName}-${+new Date()}.${extension}` // make upload file name exclusive
 
-    cosJS.uploadFile(
+    cos.uploadFile(
       {
         Bucket: TENCENT_COS_TEMP_BUCKET,
         Region: TENCENT_COS_REGION,
