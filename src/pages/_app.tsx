@@ -19,6 +19,7 @@ import type { AppProps } from 'next/app'
 
 import '@suiet/wallet-kit/style.css'
 import 'react-toastify/dist/ReactToastify.css'
+import 'react-datepicker/dist/react-datepicker.css'
 import '../styles/globals.css'
 
 const App = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => (

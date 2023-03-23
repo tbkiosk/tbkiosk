@@ -1,8 +1,10 @@
-import { useEffect } from 'react'
+import { useEffect, useMemo, forwardRef } from 'react'
 import { useForm, SubmitHandler, Controller } from 'react-hook-form'
 import { toast } from 'react-toastify'
+import DatePicker from 'react-datepicker'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
+import dayjs from 'dayjs'
 
 import Layout from '@/layouts'
 import { Button, Input, TextArea, Select, Upload } from '@/components'
@@ -16,10 +18,25 @@ import { ROLES } from '@/constants/roles'
 import type { ProjectForm } from '@/schemas/project'
 import type { ResponseBase } from '@/types/response'
 
+const DatePickerContainer = forwardRef<HTMLInputElement>((props, ref) => (
+  <div className="relative">
+    <i className="fa-solid fa-calendar absolute right-4 top-[11px]" />
+    <Input
+      {...props}
+      className="pr-8"
+      ref={ref}
+    />
+  </div>
+))
+
+DatePickerContainer.displayName = 'DatePickerContainer'
+
 const NewProject = () => {
   const router = useRouter()
 
   const [role] = useRole()
+
+  const tomorrow = useMemo(() => dayjs().add(1, 'day').toDate(), [])
 
   const { control, handleSubmit, formState } = useForm<ProjectForm>({
     defaultValues: {
@@ -29,7 +46,7 @@ const NewProject = () => {
       website: '',
       twitter: '',
       discord: '',
-      mintDate: '',
+      mintDate: dayjs(tomorrow).format('YYYY-MM-DD'),
       mintPrice: '',
       coinType: 'ETH',
       totalSupply: '',
@@ -248,12 +265,14 @@ const NewProject = () => {
                   >
                     Mint date
                   </label>
-                  <div className="flex items-center gap-4">
-                    <Input
-                      type="date"
-                      {...field}
+                  <div className="relative flex items-center">
+                    <DatePicker
+                      customInput={<DatePickerContainer />}
+                      minDate={tomorrow}
+                      onChange={newDate => field.onChange(dayjs(newDate).format('YYYY-MM-DD'))}
+                      selected={dayjs(field.value).toDate()}
                     />
-                    <span className="font-bold text-base">GMT</span>
+                    <span className="ml-4 font-bold text-base">GMT</span>
                   </div>
                 </div>
               )}
