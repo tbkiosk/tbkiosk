@@ -10,7 +10,7 @@ import { Button, Loading } from '@/components'
 import useRole from '@/hooks/useRole'
 
 import { ROLES } from '@/constants/roles'
-import { TENCENT_COS_DEV_BUCKET, TENCENT_COS_CDN_DOMAIN } from '@/constants/cos'
+import { TENCENT_COS_DEV_BUCKET, TENCENT_COS_BUCKET, TENCENT_COS_CDN_DOMAIN } from '@/constants/cos'
 
 import type { ResponseBase } from '@/types/response'
 import type { ProjectDataWithId } from '@/schemas/project'
@@ -77,7 +77,9 @@ const Project = () => {
                       className="w-full rounded-lg aspect-square object-contain"
                       height={256}
                       loader={({ src }) => src}
-                      src={`https://${TENCENT_COS_DEV_BUCKET}.${TENCENT_COS_CDN_DOMAIN}/${_project.profileImage}`}
+                      src={`https://${
+                        process.env.NODE_ENV === 'production' ? TENCENT_COS_BUCKET : TENCENT_COS_DEV_BUCKET
+                      }.${TENCENT_COS_CDN_DOMAIN}/${_project.profileImage}`}
                       unoptimized
                       width={256}
                     />

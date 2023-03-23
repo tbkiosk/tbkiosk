@@ -7,12 +7,7 @@ import { authOptions } from '@/pages/api/auth/[...nextauth]'
 
 import { projectFormSchema, projectDbSchema } from '@/schemas/project'
 
-import {
-  TENCENT_COS_REGION,
-  TENCENT_COS_TEMP_BUCKET,
-  TENCENT_COS_DEV_BUCKET,
-  TENCENT_COS_BUCKET,
-} from '@/constants/cos'
+import { TENCENT_COS_REGION, TENCENT_COS_TEMP_BUCKET, TENCENT_COS_DEV_BUCKET, TENCENT_COS_BUCKET } from '@/constants/cos'
 
 import type { NextApiRequest, NextApiResponse } from 'next'
 import type { ResponseBase } from '@/types/response'
@@ -28,7 +23,7 @@ const copyTempImageToPersistentBucket = (fileName: string) =>
   new Promise<string>((resolve, reject) => {
     cos.putObjectCopy(
       {
-        Bucket: TENCENT_COS_DEV_BUCKET,
+        Bucket: process.env.NODE_ENV === 'production' ? TENCENT_COS_BUCKET : TENCENT_COS_DEV_BUCKET,
         Region: TENCENT_COS_REGION,
         Key: fileName,
         CopySource: `${TENCENT_COS_TEMP_BUCKET}.cos.${TENCENT_COS_REGION}.myqcloud.com/${encodeURIComponent(fileName)}`,
