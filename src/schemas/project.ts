@@ -8,7 +8,7 @@ export const projectFormSchema = Joi.object({
   website: Joi.string(),
   twitter: Joi.string(),
   discord: Joi.string(),
-  mintDate: Joi.number().required(),
+  mintDate: Joi.string().required(),
   mintPrice: Joi.number().required().positive(),
   coinType: Joi.string().required(),
   totalSupply: Joi.number().positive().required(),

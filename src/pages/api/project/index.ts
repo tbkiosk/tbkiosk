@@ -1,6 +1,7 @@
 import { getServerSession } from 'next-auth/next'
 import { ObjectId } from 'mongodb'
 import COS from 'cos-nodejs-sdk-v5'
+import dayjs from 'dayjs'
 
 import clientPromise from '@/lib/mongodb'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
@@ -92,6 +93,12 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<Pr
     if (formSchemaError) {
       return res.status(400).send({
         message: formSchemaError.message || 'Invalid project options',
+      })
+    }
+
+    if (!dayjs(req.body.mintDate).isValid()) {
+      return res.status(400).send({
+        message: 'Invalid mint date format',
       })
     }
 
