@@ -3,6 +3,7 @@ import Link from 'next/link'
 import useSWR from 'swr'
 
 import Layout from '@/layouts'
+import { Loading } from '@/components'
 
 import type { ResponseBase } from '@/types/response'
 import type { ProjectDataWithId } from '@/schemas/project'
@@ -26,7 +27,7 @@ const ProjectDetail = () => {
         </Link>
       }
     >
-      {project && <div></div>}
+      <Loading isLoading={isLoading}>{project && <div>{project.projectName}</div>}</Loading>
     </Layout>
   )
 }

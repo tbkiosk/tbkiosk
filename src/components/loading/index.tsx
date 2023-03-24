@@ -1,9 +1,9 @@
 type LoadingProps = {
   isLoading: boolean
-  children: JSX.Element
+  children: JSX.Element | null
 }
 
-export const Loading = ({ isLoading, children }: LoadingProps) => {
+export const Loading = ({ isLoading, children }: LoadingProps): JSX.Element | null => {
   if (isLoading) {
     return (
       <div className="flex grow items-center justify-center h-full w-full">
