@@ -3,18 +3,19 @@ import { configureChains, createClient } from 'wagmi'
 import { evmos, mainnet, polygon } from 'wagmi/chains'
 
 const chains = [evmos, mainnet, polygon]
+const projectId = process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID as string
 
 // Wagmi client
 const { provider } = configureChains(chains, [
   w3mProvider({
-    projectId: process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID as string,
+    projectId,
   }),
 ])
 
 export const wagmiClient = createClient({
   autoConnect: true,
   connectors: w3mConnectors({
-    projectId: process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID as string,
+    projectId,
     version: 2, // Minimum version of wagmi 0.11.3 is required to use version: "2"
     chains,
   }),
