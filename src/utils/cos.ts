@@ -1,6 +1,7 @@
 import STS from 'qcloud-cos-sts'
+import COS from 'cos-nodejs-sdk-v5'
 
-import { TENCENT_COS_TEMP_BUCKET, TENCENT_COS_REGION } from '@/constants/cos'
+import { TENCENT_COS_REGION, TENCENT_COS_TEMP_BUCKET, TENCENT_COS_DEV_BUCKET, TENCENT_COS_BUCKET } from '@/constants/cos'
 
 const DEFAULT_TEMP_CREDENTIAL_DURATION = 600
 
@@ -49,6 +50,26 @@ export const getCredential = async ({ bucket }: GetCredential = {}): Promise<STS
         }
 
         res(credential)
+      }
+    )
+  })
+
+export const copyTempImageToPersistentBucket = (fileName: string, cos: COS) =>
+  new Promise<string>((resolve, reject) => {
+    cos.putObjectCopy(
+      {
+        Bucket: process.env.NODE_ENV === 'production' ? TENCENT_COS_BUCKET : TENCENT_COS_DEV_BUCKET,
+        Region: TENCENT_COS_REGION,
+        Key: fileName,
+        CopySource: `${TENCENT_COS_TEMP_BUCKET}.cos.${TENCENT_COS_REGION}.myqcloud.com/${encodeURIComponent(fileName)}`,
+      },
+      err => {
+        if (err) {
+          reject(err)
+          return
+        }
+
+        resolve(fileName)
       }
     )
   })
