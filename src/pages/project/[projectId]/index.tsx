@@ -88,7 +88,7 @@ const ProjectDetail = () => {
               </div>
               <Link
                 className="ml-8"
-                href={`/project/${router.query.projectId}/edit`}
+                href={`/project/${router.query.projectId}/update`}
               >
                 <div className="cursor-pointer transition hover:scale-105 hover:opacity-70">
                   <span>Edit</span>
