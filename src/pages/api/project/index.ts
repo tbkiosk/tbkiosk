@@ -119,17 +119,83 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<Pr
         collection.insertOne({ ...transformedData, creatorId: new ObjectId(transformedData.creatorId) }),
       ])
 
-      res.status(200).json({
+      return res.status(200).json({
         data: true,
         message: `Created project ${transformedData.projectName}`,
       })
     } catch (err) {
-      res.status(500).json({
+      return res.status(500).json({
         message: (err as Error)?.message ?? 'Failed to create project',
       })
     }
+  }
 
-    return
+  /**
+   * @method PUT
+   * @returns update existing project
+   */
+  if (req.method === 'PUT') {
+    const projectId = req.body.projectId
+    if (!projectId) {
+      return res.status(400).send({
+        message: 'Missing projectId',
+      })
+    }
+
+    try {
+      const project = await collection.findOne({
+        _id: new ObjectId(projectId as string),
+      })
+      if (!project) {
+        return res.status(400).json({
+          message: 'Project not found',
+        })
+      }
+
+      if (project.creatorId.toString() !== session.user.id) {
+        return res.status(401).json({
+          message: "You cannnot update other creator's project",
+        })
+      }
+
+      const { error: formSchemaError } = projectFormSchema.validate(req.body)
+      if (formSchemaError) {
+        return res.status(400).send({
+          message: formSchemaError.message || 'Invalid project options',
+        })
+      }
+
+      if (!dayjs(req.body.mintDate).isValid()) {
+        return res.status(400).send({
+          message: 'Invalid mint date format',
+        })
+      }
+
+      const now = +new Date()
+      const transformedData: ProjectData = { ...req.body, updatedTime: now }
+
+      await Promise.all([
+        transformedData.profileImage === project.profileImage ? null : copyTempImageToPersistentBucket(transformedData.profileImage),
+        transformedData.bannerImage === project.bannerImage ? null : copyTempImageToPersistentBucket(transformedData.bannerImage),
+        collection.updateOne(
+          {
+            _id: new ObjectId(projectId),
+          },
+          {
+            $set: transformedData,
+          }
+        ),
+      ])
+
+      return res.status(200).json({
+        data: true,
+        message: `Successfully updated project ${transformedData.projectName}`,
+      })
+    } catch (err) {
+      return res.status(500).json({
+        message: (err as Error)?.message ?? 'Interval server error',
+      })
+    }
   }
 
   return res.status(405).json({
