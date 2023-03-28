@@ -69,7 +69,7 @@ dependencies:
   '@mysten/sui.js': 0.29.1
   '@next-auth/mongodb-adapter': 1.1.1_ekl6mgou7ynshj3llzs5q4xzui
   '@noble/hashes': 1.3.0
-  '@suiet/wallet-kit': 0.2.0_adlwaj2ob5nphogmj5g7o6rusa
+  '@suiet/wallet-kit': 0.2.0_wqgtmvujjupqxxbtw7ch4j7ipe
   '@web3modal/ethereum': 2.2.2_k7oochb6hvkigdjxb5epommrwu
   '@web3modal/react': 2.2.2_biqbaboplfbrettd7655fr4n2y
   chart.js: 4.2.1
@@ -3254,7 +3254,7 @@ packages:
     resolution: {integrity: sha512-bprE8+K5V+DPX7q2e2K57ImqNBdfGHDIWaGI5xHxZoxbKOuQZn4wzPiUxOAHnsUr3w3xHrWXwN7gnG/iIuEMIg==}
     dev: false
 
-  /@suiet/wallet-kit/0.2.0_adlwaj2ob5nphogmj5g7o6rusa:
+  /@suiet/wallet-kit/0.2.0_wqgtmvujjupqxxbtw7ch4j7ipe:
     resolution: {integrity: sha512-bk7nfThGZtQ8zYqFUAu6n9XJsjbYVPSIgk2aw4gt16u+yXGby4rrA39EJPGa0pB2YYRMTfMRGWrGWn6T1ZLYCA==}
     peerDependencies:
       '@mysten/sui.js': 0.0.0-experimental-20230326165705
@@ -3262,7 +3262,7 @@ packages:
     dependencies:
       '@mysten/sui.js': 0.29.1
       '@mysten/wallet-standard': 0.4.3
-      '@radix-ui/react-dialog': 1.0.2_aen5vu2fkbnw3ssyd5drxdxkh4
+      '@radix-ui/react-dialog': 1.0.2_4qaawyptjkcgzqorucvhm3koke
       '@suiet/wallet-sdk': 0.2.0_@mysten+sui.js@0.29.1
       '@svgr/rollup': 6.5.1
       '@wallet-standard/core': 1.0.3
