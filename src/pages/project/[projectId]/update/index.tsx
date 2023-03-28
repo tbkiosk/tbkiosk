@@ -16,8 +16,9 @@ import request from '@/utils/request'
 
 import { ROLES } from '@/constants/roles'
 
-import type { ProjectForm, ProjectDataWithId } from '@/schemas/project'
+import type { ProjectForm, ProjectData } from '@/schemas/project'
 import type { ResponseBase } from '@/types/response'
+import type { WithObjectId } from '@/types/schema'
 
 const DatePickerContainer = forwardRef<HTMLInputElement>((props, ref) => (
   <div className="relative">
@@ -37,7 +38,7 @@ const UpdateProjectWrapper = () => {
 
   const [role] = useRole()
 
-  const { data: { data: project = null } = {}, isLoading } = useSWRImmutable<ResponseBase<ProjectDataWithId>>(
+  const { data: { data: project = null } = {}, isLoading } = useSWRImmutable<ResponseBase<WithObjectId<ProjectData>>>(
     router.query.projectId ? `/api/project/${router.query.projectId}` : null
   )
 
@@ -65,7 +66,7 @@ const UpdateProjectWrapper = () => {
 }
 
 type UpdateProjectProps = {
-  project: ProjectDataWithId
+  project: WithObjectId<ProjectData>
 }
 
 const UpdateProject = ({ project }: UpdateProjectProps) => {

@@ -10,12 +10,13 @@ import { Loading, Button } from '@/components'
 import { TENCENT_COS_DEV_BUCKET, TENCENT_COS_BUCKET, TENCENT_COS_CDN_DOMAIN } from '@/constants/cos'
 
 import type { ResponseBase } from '@/types/response'
-import type { ProjectDataWithId } from '@/schemas/project'
+import type { ProjectData } from '@/schemas/project'
+import type { WithObjectId } from '@/types/schema'
 
 const ProjectDetail = () => {
   const router = useRouter()
 
-  const { data: { data: project = null } = {}, isLoading } = useSWR<ResponseBase<ProjectDataWithId>>(
+  const { data: { data: project = null } = {}, isLoading } = useSWR<ResponseBase<WithObjectId<ProjectData>>>(
     router.query.projectId ? `/api/project/${router.query.projectId}` : null
   )
 

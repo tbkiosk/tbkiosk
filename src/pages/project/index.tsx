@@ -13,14 +13,15 @@ import { ROLES } from '@/constants/roles'
 import { TENCENT_COS_DEV_BUCKET, TENCENT_COS_BUCKET, TENCENT_COS_CDN_DOMAIN } from '@/constants/cos'
 
 import type { ResponseBase } from '@/types/response'
-import type { ProjectDataWithId } from '@/schemas/project'
+import type { WithObjectId } from '@/types/schema'
+import type { ProjectData } from '@/schemas/project'
 
 const Project = () => {
   const router = useRouter()
 
   const [role] = useRole()
 
-  const { data: { data: projects = [] } = {}, isLoading } = useSWR<ResponseBase<ProjectDataWithId[]>>('/api/project')
+  const { data: { data: projects = [] } = {}, isLoading } = useSWR<ResponseBase<WithObjectId<ProjectData>[]>>('/api/project')
 
   useEffect(() => {
     if (role === ROLES.USER) {

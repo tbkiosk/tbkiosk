@@ -49,5 +49,3 @@ export type ProjectData = ProjectBase & {
   updatedTime: number
   creatorId: ObjectId
 }
-
-export type ProjectDataWithId = ProjectData & { _id: string }
