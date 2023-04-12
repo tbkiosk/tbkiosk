@@ -6,7 +6,7 @@ import dayjs from 'dayjs'
 import clientPromise from '@/lib/mongodb'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
 
-import { projectFormSchema, projectDbSchema } from '@/schemas/project'
+import { PROJECT_TABLE, projectFormSchema, projectDbSchema } from '@/schemas/project'
 
 import { copyTempImageToPersistentBucket } from '@/utils/cos'
 
@@ -36,7 +36,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<Pr
 
   const client = await clientPromise
   const db = client.db(`${process.env.NODE_ENV}`)
-  const collection = db.collection<ProjectData>('project')
+  const collection = db.collection<ProjectData>(PROJECT_TABLE)
 
   /**
    * @method GET

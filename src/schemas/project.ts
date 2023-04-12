@@ -1,6 +1,8 @@
 import Joi from 'joi'
 import { ObjectId } from 'mongodb'
 
+export const PROJECT_TABLE = 'project'
+
 export const projectFormSchema = Joi.object({
   projectName: Joi.string().required(),
   customURL: Joi.string(),

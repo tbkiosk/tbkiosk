@@ -6,7 +6,7 @@ import dayjs from 'dayjs'
 import clientPromise from '@/lib/mongodb'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
 
-import { projectFormSchema } from '@/schemas/project'
+import { PROJECT_TABLE, projectFormSchema } from '@/schemas/project'
 
 import { copyTempImageToPersistentBucket } from '@/utils/cos'
 
@@ -35,15 +35,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<Pr
   }
 
   const projectId = req.query.projectId
-  if (!projectId || typeof projectId !== 'string') {
-    return res.status(400).send({
-      message: 'Missing projectId',
-    })
-  }
-
   const client = await clientPromise
   const db = client.db(`${process.env.NODE_ENV}`)
-  const collection = db.collection<ProjectData>('project')
+  const collection = db.collection<ProjectData>(PROJECT_TABLE)
 
   /**
    * @method GET
