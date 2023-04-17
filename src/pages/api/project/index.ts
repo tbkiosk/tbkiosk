@@ -21,23 +21,32 @@ const cos = new COS({
 })
 
 const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<ProjectData[] | boolean>>) => {
+  const session: ExtendedSession | null = await getServerSession(req, res, authOptions)
+  if (!session) {
+    return res.status(401).json({
+      message: '',
+    })
+  }
+
+  if (!session.user?.id) {
+    return res.status(500).json({
+      message: 'Missing user in session, try to sign out and sign in again',
+    })
+  }
+
   const client = await clientPromise
   const db = client.db(`${process.env.NODE_ENV}`)
   const collection = db.collection<ProjectData>(PROJECT_TABLE)
 
   /**
    * @method GET
-   * @returns created projects
+   * @returns projects created by the creator
    */
   if (req.method === 'GET') {
-    const {
-      query: { creatorId },
-    } = req
-
     try {
       const result = await collection
         .find({
-          creatorId: creatorId ? new ObjectId(creatorId as string) : undefined,
+          creatorId: new ObjectId(session.user.id),
         })
         .toArray()
 
@@ -56,19 +65,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<Pr
    * @returns create a new project
    */
   if (req.method === 'POST') {
-    const session: ExtendedSession | null = await getServerSession(req, res, authOptions)
-    if (!session) {
-      return res.status(401).json({
-        message: '',
-      })
-    }
-
-    if (!session.user?.id) {
-      return res.status(500).json({
-        message: 'Missing user in session, try to sign out and sign in again',
-      })
-    }
-
     const { error: formSchemaError } = projectFormSchema.validate(req.body)
     if (formSchemaError) {
       return res.status(400).send({

@@ -4,7 +4,7 @@ import { ObjectId } from 'mongodb'
 import clientPromise from '@/lib/mongodb'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
 
-import { ALLOWLIST_TABLE, allowlistFormSchema, allowlistDBSchema, CriteriaKeys } from '@/schemas/allowlist'
+import { ALLOWLIST_TABLE, allowlistFormSchema, allowlistDBSchema } from '@/schemas/allowlist'
 
 import type { NextApiRequest, NextApiResponse } from 'next'
 import type { ResponseBase } from '@/types/response'
@@ -63,12 +63,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<Al
       })
     }
 
-    if (req.body.projectId !== projectId) {
-      return res.status(403).json({
-        message: 'Not allowed to create allowlist under different projects',
-      })
-    }
-
     const { error: formSchemaError } = allowlistFormSchema.validate(req.body)
     if (formSchemaError) {
       return res.status(400).send({
@@ -79,17 +73,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<Al
     const now = +new Date()
     const transformedData: AllowlistData = {
       ...req.body,
-      projectId: new ObjectId(projectId),
+      projectId,
       amount: +req.body.amount,
-      criteria: {
-        ...req.body.criteria,
-        ...(req.body.criteria[CriteriaKeys.MINIMUN_NFT]
-          ? { [CriteriaKeys.MINIMUN_NFT]: +req.body.criteria[CriteriaKeys.MINIMUN_NFT] }
-          : undefined),
-        ...(req.body.criteria[CriteriaKeys.MINIMUN_TWITTER_FOLLOWERS]
-          ? { [CriteriaKeys.MINIMUN_TWITTER_FOLLOWERS]: +req.body.criteria[CriteriaKeys.MINIMUN_TWITTER_FOLLOWERS] }
-          : undefined),
-      },
       applicants: [],
       createdTime: now,
       updatedTime: now,
@@ -105,6 +90,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<Al
     try {
       await collection.insertOne({
         ...transformedData,
+        projectId: new ObjectId(projectId),
       })
 
       return res.status(200).json({
