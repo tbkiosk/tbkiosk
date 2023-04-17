@@ -21,20 +21,13 @@ const cos = new COS({
 })
 
 const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<ProjectData | boolean | null>>) => {
-  const session: ExtendedSession | null = await getServerSession(req, res, authOptions)
-  if (!session) {
-    return res.status(401).json({
-      message: '',
-    })
-  }
-
-  if (!session.user?.id) {
-    return res.status(500).json({
-      message: 'Missing user in session, try to sign out and sign in again',
-    })
-  }
-
   const projectId = req.query.projectId
+  if (!projectId || typeof projectId !== 'string') {
+    return res.status(400).json({
+      message: 'Invalid projectId',
+    })
+  }
+
   const client = await clientPromise
   const db = client.db(`${process.env.NODE_ENV}`)
   const collection = db.collection<ProjectData>(PROJECT_TABLE)
@@ -65,6 +58,19 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<Pr
    * @returns update existing project
    */
   if (req.method === 'PUT') {
+    const session: ExtendedSession | null = await getServerSession(req, res, authOptions)
+    if (!session) {
+      return res.status(401).json({
+        message: '',
+      })
+    }
+
+    if (!session.user?.id) {
+      return res.status(500).json({
+        message: 'Missing user in session, try to sign out and sign in again',
+      })
+    }
+
     try {
       const project = await collection.findOne({
         _id: new ObjectId(projectId),

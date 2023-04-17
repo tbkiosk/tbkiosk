@@ -8,7 +8,7 @@ export enum AllocationMethod {
   Raffle = 'Raffle',
 }
 
-enum CriteriaKeys {
+export enum CriteriaKeys {
   MINIMUN_NFT = 'MINIMUN_NFT',
   MINIMUN_TWITTER_FOLLOWERS = 'MINIMUN_TWITTER_FOLLOWERS',
   PROJECT_TWITTER_FOLLOWED = 'PROJECT_TWITTER_FOLLOWED',
@@ -32,7 +32,7 @@ type Applicant = {
 
 export const allowlistFormSchema = Joi.object({
   amount: Joi.string().required(),
-  criteira: Joi.object({
+  criteria: Joi.object({
     [CriteriaKeys.MINIMUN_NFT]: Joi.string(),
     [CriteriaKeys.MINIMUN_TWITTER_FOLLOWERS]: Joi.string(),
     [CriteriaKeys.PROJECT_TWITTER_FOLLOWED]: Joi.boolean(),
@@ -46,7 +46,7 @@ export const allowlistDBSchema = Joi.object({
   createdTime: Joi.number().required(),
   updatedTime: Joi.number().required(),
   amount: Joi.number().integer().required(),
-  criteira: Joi.object({
+  criteria: Joi.object({
     [CriteriaKeys.MINIMUN_NFT]: Joi.string(),
     [CriteriaKeys.MINIMUN_TWITTER_FOLLOWERS]: Joi.string(),
     [CriteriaKeys.PROJECT_TWITTER_FOLLOWED]: Joi.boolean(),
@@ -69,16 +69,16 @@ export const allowlistDBSchema = Joi.object({
 
 export type AllowlistForm = {
   amount: string
-  criteira: Criteria[]
+  criteria: Criteria[]
   allocationMethod: AllocationMethod
 }
 
 export type AllowlistData = {
-  projectId: string
+  projectId: ObjectId
   createdTime: number
   updatedTime: number
   amount: number
-  criteira: Criteria[]
+  criteria: Criteria[]
   allocationMethod: AllocationMethod
   applicants: Applicant[]
 }
