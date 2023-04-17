@@ -1,24 +1,36 @@
+import { useState } from 'react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 import Image from 'next/image'
-import useSWR from 'swr'
+import useSWRImmutable from 'swr/immutable'
 import dayjs from 'dayjs'
 
 import Layout from '@/layouts'
 import { Loading, Button } from '@/components'
+import { AllowlistDialog } from '@/components/_project/allowlist_dialog'
 
 import { TENCENT_COS_DEV_BUCKET, TENCENT_COS_BUCKET, TENCENT_COS_CDN_DOMAIN } from '@/constants/cos'
 
 import type { ResponseBase } from '@/types/response'
 import type { ProjectData } from '@/schemas/project'
+import type { AllowlistData } from '@/schemas/allowlist'
 import type { WithObjectId } from '@/types/schema'
 
 const ProjectDetail = () => {
   const router = useRouter()
 
-  const { data: { data: project = null } = {}, isLoading } = useSWR<ResponseBase<WithObjectId<ProjectData>>>(
+  const { data: { data: project = null } = {}, isLoading: isProjectsLoading } = useSWRImmutable<ResponseBase<WithObjectId<ProjectData>>>(
     router.query.projectId ? `/api/project/${router.query.projectId}` : null
   )
+  const {
+    data: { data: allowlists = null } = {},
+    isLoading: isAllowlistLoading,
+    mutate,
+  } = useSWRImmutable<ResponseBase<WithObjectId<AllowlistData>[]>>(
+    router.query.projectId ? `/api/project/${router.query.projectId}/allowlist` : null
+  )
+
+  const [open, setOpen] = useState(false)
 
   return (
     <Layout
@@ -32,9 +44,15 @@ const ProjectDetail = () => {
         </Link>
       }
     >
-      <Loading isLoading={isLoading}>
-        {project && (
-          <div>
+      <div className="mb-8">
+        <AllowlistDialog
+          open={open}
+          project={project}
+          setOpen={setOpen}
+          onRefresh={() => mutate()}
+        />
+        <Loading isLoading={isProjectsLoading}>
+          {project && (
             <div className="flex gap-8">
               <Image
                 alt="logo"
@@ -62,6 +80,7 @@ const ProjectDetail = () => {
                 <div className="grow" />
                 <Button
                   className="block !h-10 mb-2"
+                  onClick={() => setOpen(true)}
                   variant="colored"
                 >
                   Create new allowlist
@@ -97,9 +116,30 @@ const ProjectDetail = () => {
                 </div>
               </Link>
             </div>
-          </div>
-        )}
-      </Loading>
+          )}
+        </Loading>
+      </div>
+      <div className="flex flex-wrap gap-x-4">
+        <Loading isLoading={isAllowlistLoading}>
+          <>
+            {allowlists?.map(_allowlist => (
+              <div
+                className="w-1/3 min-w-[17.5rem] flex flex-col p-8 rounded-2xl shadow-[0_4px_10px_rgba(216,216,216,0.25)] cursor-pointer transition hover:scale-105"
+                key={_allowlist._id}
+              >
+                <span className="self-end px-6 mb-2 bg-[#82ffac] font-bold rounded-2xl">Live</span>
+                <p className="font-bold text-lg">
+                  {_allowlist.amount} allowlist {_allowlist.allocationMethod}
+                </p>
+                <hr className="-mx-8 my-6" />
+                <p className="font-bold">
+                  {_allowlist.applicants.length}/{_allowlist.amount} filled
+                </p>
+              </div>
+            ))}
+          </>
+        </Loading>
+      </div>
     </Layout>
   )
 }
