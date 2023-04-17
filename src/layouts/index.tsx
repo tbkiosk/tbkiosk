@@ -5,7 +5,7 @@ import Image from 'next/image'
 import { useLocalStorage } from 'usehooks-ts'
 import cl from 'classnames'
 
-import { Button, Tooltip } from '@/components'
+import { Button } from '@/components'
 import WalletDropdown from './components/wallet_dropdown'
 import ConnectStatus from './components/connect_status'
 

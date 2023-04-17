@@ -48,11 +48,7 @@ const CollectionsWrapper = () => {
   return (
     <div>
       <div className="py-4 font-bold text-4xl">My collections</div>
-      <div className="flex min-h-[320px]">
-        {collectionsBaseVisible && (
-          <CollectionsBase ethAddress={ethAddress as string} />
-        )}
-      </div>
+      <div className="flex min-h-[320px]">{collectionsBaseVisible && <CollectionsBase ethAddress={ethAddress as string} />}</div>
     </div>
   )
 }
@@ -74,49 +70,28 @@ const CollectionsBase = ({ ethAddress }: CollectionsBaseProps) => {
     limit: 50,
     chain: 0x1,
   })
-  const { isFetching: polygonNftLoading, data: polygonNftObjects } =
-    useEvmWalletNFTs({
-      address: ethAddress as string,
-      format: 'decimal',
-      limit: 50,
-      chain: 0x89,
-    })
+  const { isFetching: polygonNftLoading, data: polygonNftObjects } = useEvmWalletNFTs({
+    address: ethAddress as string,
+    format: 'decimal',
+    limit: 50,
+    chain: 0x89,
+  })
 
   const nfts: NftDisplay[] = useMemo(() => {
-    const transformedSuiNfts: NftDisplay[] = suiNftObjects
-      .map((nft) =>
-        'fields' in nft.data
-          ? {
-              id: (nft.data.fields?.id?.id || '') as string,
-              image: transformNftImageURL(nft.data.fields?.url),
-            }
-          : null
-      )
-      .filter((nft) => !!nft) as NftDisplay[]
-
+    const transformedSuiNfts: NftDisplay[] = [] // TODO: update Sui NFT display
     const transformedEvmNfts: NftDisplay[] =
-      ethNftObjects?.map((nft) => ({
+      ethNftObjects?.map(nft => ({
         id: nft.tokenHash || '',
-        image:
-          nft?.metadata && 'image' in nft.metadata
-            ? transformNftImageURL(nft?.metadata.image as string | undefined)
-            : '',
+        image: nft?.metadata && 'image' in nft.metadata ? transformNftImageURL(nft?.metadata.image as string | undefined) : '',
       })) || []
 
     const transformedPolygonNfts: NftDisplay[] =
-      polygonNftObjects?.map((nft) => ({
+      polygonNftObjects?.map(nft => ({
         id: nft.tokenHash || '',
-        image:
-          nft?.metadata && 'image' in nft.metadata
-            ? transformNftImageURL(nft?.metadata.image as string | undefined)
-            : '',
+        image: nft?.metadata && 'image' in nft.metadata ? transformNftImageURL(nft?.metadata.image as string | undefined) : '',
       })) || []
 
-    return [
-      ...transformedSuiNfts,
-      ...transformedEvmNfts,
-      ...transformedPolygonNfts,
-    ]
+    return [...transformedSuiNfts, ...transformedEvmNfts, ...transformedPolygonNfts]
   }, [suiNftObjects, ethNftObjects, polygonNftObjects])
 
   const [containerWidth, setContainerWidth] = useState(0)
@@ -140,10 +115,7 @@ const CollectionsBase = ({ ethAddress }: CollectionsBaseProps) => {
     }
   }, [suiNftLoading, ethNftLoading, polygonNftLoading])
 
-  const nftColumns = useMemo(
-    () => Math.ceil(containerWidth / DEFAULT_NFT_IMAGE_WIDTH),
-    [containerWidth]
-  )
+  const nftColumns = useMemo(() => Math.ceil(containerWidth / DEFAULT_NFT_IMAGE_WIDTH), [containerWidth])
 
   return (
     <Loading isLoading={suiNftLoading || ethNftLoading || polygonNftLoading}>
@@ -156,7 +128,7 @@ const CollectionsBase = ({ ethAddress }: CollectionsBaseProps) => {
               gridTemplateColumns: `repeat(${nftColumns}, minmax(0, 1fr))`,
             }}
           >
-            {nfts.map((nft) => (
+            {nfts.map(nft => (
               <div
                 className="bg-slate-200 rounded-[5%] aspect-square overflow-hidden cursor-pointer transition-transform hover:scale-105"
                 key={nft.id}

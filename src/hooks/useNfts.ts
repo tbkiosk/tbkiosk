@@ -1,39 +1,30 @@
 import { useState, useEffect } from 'react'
 import { useWallet } from '@suiet/wallet-kit'
-import { COIN_TYPE_ARG_REGEX } from '@mysten/sui.js'
 
 import { suiJsonRpcProvider } from '@/lib/sui'
 
-import type {
-  SuiObjectInfo,
-  SuiObject,
-  GetObjectDataResponse,
-} from '@mysten/sui.js'
+import type { SuiObjectData } from '@mysten/sui.js'
 
 const useNfts = () => {
   const { address = '' } = useWallet()
 
-  const [nfts, setNfts] = useState<SuiObject[]>([])
+  const [nfts, setNfts] = useState<SuiObjectData[]>([])
   const [loading, setLoading] = useState(false)
 
   const init = async () => {
     setLoading(true)
 
     try {
-      const objectInfos: SuiObjectInfo[] =
-        await suiJsonRpcProvider.getObjectsOwnedByAddress(address)
-      const objectData: GetObjectDataResponse[] =
-        await suiJsonRpcProvider.getObjectBatch(
-          objectInfos
-            .filter((obj) => !COIN_TYPE_ARG_REGEX.test(obj.type))
-            .map((obj) => obj.objectId)
-        )
+      const res = await suiJsonRpcProvider.getOwnedObjects({
+        owner: address,
+        options: { showType: true, showDisplay: true },
+      })
+      const _nfts: SuiObjectData[] =
+        res?.data
+          ?.filter(({ data }) => typeof data === 'object' && 'display' in data && data.display)
+          .map(({ data }) => data as SuiObjectData) || []
 
-      const existingObjects = objectData
-        .filter((obj) => obj.status === 'Exists')
-        .map((obj) => obj.details) as SuiObject[]
-
-      setNfts(existingObjects)
+      setNfts(_nfts)
     } catch (error) {
       setNfts([])
     } finally {
