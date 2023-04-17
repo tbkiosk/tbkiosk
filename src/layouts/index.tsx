@@ -28,16 +28,6 @@ const MENUS = [
     key: 'discover',
     iconClass: 'fa-compass',
   },
-  {
-    key: 'communities',
-    iconClass: 'fa-arrow-right-arrow-left',
-    disabled: true,
-  },
-  {
-    key: 'activities',
-    iconClass: 'fa-clock',
-    disabled: true,
-  },
 ]
 
 const Layout = ({ showHeader = true, headerLeft, children }: LayoutProps) => {
@@ -78,35 +68,20 @@ const Layout = ({ showHeader = true, headerLeft, children }: LayoutProps) => {
         </div>
         <Menu className="px-[30px]">
           <div className="flex flex-col grow gap-4">
-            {MENUS.map(({ key, iconClass, disabled }) =>
-              disabled ? (
-                <Tooltip
-                  key={key}
-                  tip={disabled ? 'Coming soon' : undefined}
+            {MENUS.map(({ key, iconClass }) => (
+              <Link
+                href={`/${key}`}
+                key={key}
+              >
+                <Button
+                  className={cl(['flex grow items-center', collapsed && 'justify-center'])}
+                  variant={route.includes(key) ? 'outlined' : 'contained'}
                 >
-                  <Button
-                    className={cl(['flex grow items-center', collapsed && 'justify-center'])}
-                    variant={route.includes(key) ? 'outlined' : 'contained'}
-                  >
-                    <i className={cl(['fa-solid text-lg', iconClass, !collapsed && 'ml-4 mr-4'])} />
-                    {!collapsed && <span className="text-2xl capitalize">{key}</span>}
-                  </Button>
-                </Tooltip>
-              ) : (
-                <Link
-                  href={`/${key}`}
-                  key={key}
-                >
-                  <Button
-                    className={cl(['flex grow items-center', collapsed && 'justify-center'])}
-                    variant={route.includes(key) ? 'outlined' : 'contained'}
-                  >
-                    <i className={cl(['fa-solid text-lg', iconClass, !collapsed && 'ml-4 mr-4'])} />
-                    {!collapsed && <span className="text-2xl capitalize">{key}</span>}
-                  </Button>
-                </Link>
-              )
-            )}
+                  <i className={cl(['fa-solid text-lg', iconClass, !collapsed && 'ml-4 mr-4'])} />
+                  {!collapsed && <span className="text-2xl capitalize">{key}</span>}
+                </Button>
+              </Link>
+            ))}
             {role === ROLES.CREATOR && (
               <Link href="/project">
                 <Button

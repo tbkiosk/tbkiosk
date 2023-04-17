@@ -10,9 +10,13 @@ import WalletDropdown from '@/layouts/components/wallet_dropdown'
 
 import { CyberConnectAuthContext } from '@/context/cyberconnect_auth'
 
+import type { ExtendedSession } from '@/helpers/nextauth/types'
+
 const Login = () => {
-  const { data: session } = useSession()
+  const { data } = useSession()
   const { address, accessToken } = useContext(CyberConnectAuthContext)
+
+  const session = data as ExtendedSession | null
 
   return (
     <>
@@ -53,16 +57,16 @@ const Login = () => {
           </Tooltip>
           <Button
             className="border-[#d8dadc] mb-5"
-            onClick={() => !session && signIn('discord', { callbackUrl: '/login' })}
+            onClick={() => signIn('discord', { callbackUrl: '/login' })}
             startIcon={
               <>
-                {session && <div className="h-3.5 w-3.5 ml-2 rounded-full bg-[#82ffac]" />}
+                {session && !session?.error && <div className="h-3.5 w-3.5 ml-2 rounded-full bg-[#82ffac]" />}
                 <i className="fa-brands fa-discord fa-xl ml-2" />
               </>
             }
-            variant={session?.user?.email ? 'contained' : 'outlined'}
+            variant={!session?.error && session?.user?.email ? 'contained' : 'outlined'}
           >
-            <span className="block px-16 truncate">{session?.user?.name || 'Connect Discord'}</span>
+            <span className="block px-16 truncate">{(!session?.error && session?.user?.name) || 'Connect Discord'}</span>
           </Button>
           <CCSignInButton
             classNames="mb-5 truncate"

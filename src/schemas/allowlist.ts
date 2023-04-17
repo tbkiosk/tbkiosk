@@ -69,7 +69,7 @@ export const allowlistDBSchema = Joi.object({
 
 export type AllowlistForm = {
   amount: string
-  criteria: Criteria[]
+  criteria: Criteria
   allocationMethod: AllocationMethod
 }
 
@@ -78,7 +78,7 @@ export type AllowlistData = {
   createdTime: number
   updatedTime: number
   amount: number
-  criteria: Criteria[]
+  criteria: Criteria
   allocationMethod: AllocationMethod
   applicants: Applicant[]
 }
