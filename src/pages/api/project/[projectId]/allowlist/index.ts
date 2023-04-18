@@ -47,7 +47,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<Al
 
   /**
    * @method POST
-   * @returns create a new allowlist
+   * create a new allowlist
    */
   if (req.method === 'POST') {
     const session: ExtendedSession | null = await getServerSession(req, res, authOptions)

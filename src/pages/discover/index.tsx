@@ -1,49 +1,19 @@
-import { useContext, useState, useEffect } from 'react'
-import { toast } from 'react-toastify'
 import Head from 'next/head'
-import { useLazyQuery } from '@apollo/client'
+import Link from 'next/link'
+import Image from 'next/image'
+import useSWR from 'swr'
 
 import Layout from '@/layouts'
-import { Loading, Button } from '@/components'
-// import CCPrimaryProfile from '@/components/_discover/cc_primary_profile'
-import CCAccountList from '@/components/_discover/cc_account_list'
+import { Loading } from '@/components'
 
-import { CyberConnectAuthContext } from '@/context/cyberconnect_auth'
+import { TENCENT_COS_DEV_BUCKET, TENCENT_COS_BUCKET, TENCENT_COS_CDN_DOMAIN } from '@/constants/cos'
 
-import { PRIMARY_PROFILE } from '@/graphql'
+import type { ResponseBase } from '@/types/response'
+import type { WithObjectId } from '@/types/schema'
+import type { ProjectData } from '@/schemas/project'
 
 const Discover = () => {
-  const { address, accessToken, setPrimaryProfile } = useContext(CyberConnectAuthContext)
-  const [getPrimaryProfile] = useLazyQuery(PRIMARY_PROFILE)
-
-  const [primaryProfileLoading, setPrimaryProfileLoading] = useState(false)
-
-  useEffect(() => {
-    if (!address || !accessToken) {
-      return
-    }
-
-    const getProfiles = async () => {
-      setPrimaryProfileLoading(true)
-      try {
-        const { data } = await getPrimaryProfile({
-          variables: {
-            address,
-          },
-        })
-
-        setPrimaryProfile(data?.address?.wallet?.primaryProfile)
-      } catch (err) {
-        toast.error((err as Error)?.message || 'Failed to load profile')
-      } finally {
-        setPrimaryProfileLoading(false)
-      }
-    }
-
-    if (accessToken && address) {
-      getProfiles()
-    }
-  }, [accessToken, address, getPrimaryProfile])
+  const { data: { data: projects = [] } = {}, isLoading } = useSWR<ResponseBase<WithObjectId<ProjectData>[]>>('/api/project')
 
   return (
     <>
@@ -55,26 +25,33 @@ const Discover = () => {
         />
       </Head>
       <Layout>
-        <div className="flex flex-col grow">
-          <Loading isLoading={primaryProfileLoading}>
-            <>
-              <div className="flex justify-between mb-8">
-                <div className="flex flex-row gap-12 font-bold text-xl">
-                  <nav className="underline cursor-pointer transition-opacity hover:opacity-50">People</nav>
-                  <nav className="cursor-not-allowed opacity-50">Communities</nav>
-                  <nav className="cursor-not-allowed opacity-50">Opportunities</nav>
+        <Loading isLoading={isLoading}>
+          <div className="w-full grow grid 2xl:grid-cols-6 lg:grid-cols-4 grid-cols-3 auto-rows-min gap-4">
+            {projects.map(_project => (
+              <Link
+                className="p-4 shadow-[0_4px_10px_rgba(175,175,175,0.25)] cursor-pointer transition-transform hover:scale-105"
+                href={`/discover/${_project._id}`}
+                key={_project._id}
+              >
+                <Image
+                  alt="logo"
+                  className="w-full rounded-lg aspect-square object-contain"
+                  height={256}
+                  loader={({ src }) => src}
+                  src={`https://${
+                    process.env.NODE_ENV === 'production' ? TENCENT_COS_BUCKET : TENCENT_COS_DEV_BUCKET
+                  }.${TENCENT_COS_CDN_DOMAIN}/${_project.profileImage}`}
+                  unoptimized
+                  width={256}
+                />
+                <div className="flex justify-between items-center mt-4">
+                  <div className="truncate">{_project.projectName}</div>
+                  <div className="shrink-0 px-4 py-1 ml-2 rounded-[1.875rem] bg-[#82ffac]">Active</div>
                 </div>
-                <Button
-                  className="!w-auto !h-10 px-8 cursor-not-allowed"
-                  variant="colored"
-                >
-                  Follow All
-                </Button>
-              </div>
-              {address && accessToken && <CCAccountList />}
-            </>
-          </Loading>
-        </div>
+              </Link>
+            ))}
+          </div>
+        </Loading>
       </Layout>
     </>
   )
