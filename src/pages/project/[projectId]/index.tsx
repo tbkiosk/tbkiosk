@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 import Image from 'next/image'
-import useSWRImmutable from 'swr/immutable'
+import useSWR from 'swr'
 import dayjs from 'dayjs'
 
 import Layout from '@/layouts'
@@ -10,6 +10,7 @@ import { Loading, Button } from '@/components'
 import { AllowlistDialog } from '@/components/_project/allowlist_dialog'
 
 import { TENCENT_COS_DEV_BUCKET, TENCENT_COS_BUCKET, TENCENT_COS_CDN_DOMAIN } from '@/constants/cos'
+import { CriteriaKeys, renderCriteriaText } from '@/schemas/allowlist'
 
 import type { ResponseBase } from '@/types/response'
 import type { ProjectData } from '@/schemas/project'
@@ -19,14 +20,14 @@ import type { WithObjectId } from '@/types/schema'
 const ProjectDetail = () => {
   const router = useRouter()
 
-  const { data: { data: project = null } = {}, isLoading: isProjectsLoading } = useSWRImmutable<ResponseBase<WithObjectId<ProjectData>>>(
+  const { data: { data: project = null } = {}, isLoading: isProjectsLoading } = useSWR<ResponseBase<WithObjectId<ProjectData>>>(
     router.query.projectId ? `/api/project/${router.query.projectId}` : null
   )
   const {
     data: { data: allowlists = null } = {},
     isLoading: isAllowlistLoading,
     mutate,
-  } = useSWRImmutable<ResponseBase<WithObjectId<AllowlistData>[]>>(
+  } = useSWR<ResponseBase<WithObjectId<AllowlistData>[]>>(
     router.query.projectId ? `/api/project/${router.query.projectId}/allowlist` : null
   )
 
@@ -69,11 +70,11 @@ const ProjectDetail = () => {
                 <p className="mb-4 flex gap-2">
                   <span className="py-0.5 flex-1 bg-[#e8e8ff] text-center text-sm rounded-2xl">
                     <i className="fa-brands fa-twitter mr-2" />
-                    <span className="font-bold">85k</span>
+                    <span className="font-bold">-</span>
                   </span>
                   <span className="py-0.5 flex-1 bg-[#e8e8ff] text-center text-sm rounded-2xl">
                     <i className="fa-brands fa-discord mr-2" />
-                    <span className="font-bold">135k</span>
+                    <span className="font-bold">-</span>
                   </span>
                 </p>
                 <div className="grow" />
@@ -127,9 +128,14 @@ const ProjectDetail = () => {
                 key={_allowlist._id}
               >
                 <span className="self-end px-6 mb-2 bg-[#82ffac] font-bold rounded-2xl">Live</span>
-                <p className="font-bold text-lg">
+                <p className="font-bold text-lg truncate">
                   {_allowlist.amount} allowlist {_allowlist.allocationMethod}
                 </p>
+                <hr className="-mx-8 my-6" />
+                {!Object.keys(_allowlist.criteria)?.length && <p className="text-gray-300">No criteria</p>}
+                {Object.entries(_allowlist.criteria).map(([_criteria, _content]) => (
+                  <div key={_criteria}>{renderCriteriaText(_criteria as CriteriaKeys, _content)}</div>
+                ))}
                 <hr className="-mx-8 my-6" />
                 <p className="font-bold">
                   {_allowlist.applicants.length}/{_allowlist.amount} filled

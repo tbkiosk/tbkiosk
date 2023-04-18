@@ -75,7 +75,7 @@ const Layout = ({ showHeader = true, headerLeft, children }: LayoutProps) => {
               >
                 <Button
                   className={cl(['flex grow items-center', collapsed && 'justify-center'])}
-                  variant={route.includes(key) ? 'outlined' : 'contained'}
+                  variant={route.startsWith(`/${key}`) ? 'outlined' : 'contained'}
                 >
                   <i className={cl(['fa-solid text-lg', iconClass, !collapsed && 'ml-4 mr-4'])} />
                   {!collapsed && <span className="text-2xl capitalize">{key}</span>}
@@ -86,7 +86,7 @@ const Layout = ({ showHeader = true, headerLeft, children }: LayoutProps) => {
               <Link href="/project">
                 <Button
                   className={cl(['flex grow items-center', collapsed && 'justify-center'])}
-                  variant={route.includes('project') ? 'outlined' : 'contained'}
+                  variant={route.startsWith('/project') ? 'outlined' : 'contained'}
                 >
                   <i className={cl(['fa-solid fa-folder-closed text-lg', !collapsed && 'ml-4 mr-4'])} />
                   {!collapsed && <span className="text-2xl capitalize">Project</span>}

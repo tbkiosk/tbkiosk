@@ -9,39 +9,12 @@ import { Modal, Input, Button, Dropdown } from '@/components'
 import request from '@/utils/request'
 
 import { TENCENT_COS_DEV_BUCKET, TENCENT_COS_BUCKET, TENCENT_COS_CDN_DOMAIN } from '@/constants/cos'
-import { AllocationMethod, CriteriaKeys } from '@/schemas/allowlist'
+import { AllocationMethod, CriteriaKeys, CRITERIA_DEFAULT_VALUE, renderCriteriaText } from '@/schemas/allowlist'
 
 import type { ProjectData } from '@/schemas/project'
 import type { AllowlistForm } from '@/schemas/allowlist'
 import type { WithObjectId } from '@/types/schema'
 import type { ResponseBase } from '@/types/response'
-
-const CRITERIA_DEFAULT_VALUE = {
-  [CriteriaKeys.MINIMUN_NFT]: 1,
-  [CriteriaKeys.MINIMUN_TWITTER_FOLLOWERS]: 100,
-  [CriteriaKeys.PROJECT_DISCORD_JOINED]: true,
-  [CriteriaKeys.PROJECT_TWITTER_FOLLOWED]: true,
-}
-
-const renderCriteriaText = (criteria: CriteriaKeys, content?: string | number | boolean) => {
-  switch (criteria) {
-    case CriteriaKeys.MINIMUN_NFT: {
-      return `Have at least ${content ?? CRITERIA_DEFAULT_VALUE[CriteriaKeys.MINIMUN_NFT]} NFT in wallet`
-    }
-    case CriteriaKeys.MINIMUN_TWITTER_FOLLOWERS: {
-      return `Have at least ${content ?? CRITERIA_DEFAULT_VALUE[CriteriaKeys.MINIMUN_TWITTER_FOLLOWERS]} Followers on Twitter`
-    }
-    case CriteriaKeys.PROJECT_DISCORD_JOINED: {
-      return `Follow ${content ? `@${content}` : ''} twitter`
-    }
-    case CriteriaKeys.PROJECT_TWITTER_FOLLOWED: {
-      return 'Join Discord Server'
-    }
-    default: {
-      return ''
-    }
-  }
-}
 
 type AllowlistDialogProps = {
   open: boolean

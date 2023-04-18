@@ -22,12 +22,12 @@ type Criteria = Partial<{
   [CriteriaKeys.PROJECT_DISCORD_JOINED]: boolean
 }>
 
-type Applicant = {
+export type Applicant = {
   userId?: ObjectId
   address: string
   approved: boolean
   approvedTime: number
-  updateTime: number
+  applicationTime: number
 }
 
 export const allowlistFormSchema = Joi.object({
@@ -81,4 +81,31 @@ export type AllowlistData = {
   criteria: Criteria
   allocationMethod: AllocationMethod
   applicants: Applicant[]
+}
+
+export const CRITERIA_DEFAULT_VALUE = {
+  [CriteriaKeys.MINIMUN_NFT]: 1,
+  [CriteriaKeys.MINIMUN_TWITTER_FOLLOWERS]: 100,
+  [CriteriaKeys.PROJECT_DISCORD_JOINED]: true,
+  [CriteriaKeys.PROJECT_TWITTER_FOLLOWED]: true,
+}
+
+export const renderCriteriaText = (criteria: CriteriaKeys, content?: string | number | boolean) => {
+  switch (criteria) {
+    case CriteriaKeys.MINIMUN_NFT: {
+      return `Have at least ${content ?? CRITERIA_DEFAULT_VALUE[CriteriaKeys.MINIMUN_NFT]} NFT in wallet`
+    }
+    case CriteriaKeys.MINIMUN_TWITTER_FOLLOWERS: {
+      return `Have at least ${content ?? CRITERIA_DEFAULT_VALUE[CriteriaKeys.MINIMUN_TWITTER_FOLLOWERS]} Followers on Twitter`
+    }
+    case CriteriaKeys.PROJECT_DISCORD_JOINED: {
+      return `Follow ${content ? `@${content}` : ''} twitter`
+    }
+    case CriteriaKeys.PROJECT_TWITTER_FOLLOWED: {
+      return 'Join Discord Server'
+    }
+    default: {
+      return ''
+    }
+  }
 }
