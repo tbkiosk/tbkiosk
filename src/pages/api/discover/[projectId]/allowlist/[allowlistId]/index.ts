@@ -6,7 +6,7 @@ import { ALLOWLIST_TABLE } from '@/schemas/allowlist'
 
 import type { NextApiRequest, NextApiResponse } from 'next'
 import type { ResponseBase } from '@/types/response'
-import type { AllowlistData } from '@/schemas/allowlist'
+import type { AllowlistData, Applicant } from '@/schemas/allowlist'
 
 const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<AllowlistData | null>>) => {
   const allowlistId = req.query.allowlistId
@@ -44,6 +44,47 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<Al
    * @method POST
    * apply for a allowlist
    */
+  if (req.method === 'POST') {
+    if (!req.body.address) {
+      return res.status(400).json({
+        message: 'Missing address',
+      })
+    }
+
+    try {
+      const result = await allowlistCollection.findOne({
+        _id: new ObjectId(allowlistId),
+      })
+      if (!result) {
+        return res.status(400).json({
+          message: 'Allowlist not found',
+        })
+      }
+
+      const now = +new Date()
+      const applicant: Applicant = {
+        address: req.body.address,
+        approved: false,
+        approvedTime: now,
+        applicationTime: now,
+      }
+
+      await allowlistCollection.updateOne(
+        {
+          _id: new ObjectId(allowlistId),
+        },
+        {
+          $push: {
+            applicants: applicant,
+          },
+        }
+      )
+    } catch (err) {
+      return res.status(500).json({
+        message: (err as Error)?.message ?? 'Interval server error',
+      })
+    }
+  }
 
   return res.status(405).json({
     message: 'Method now allowed',
