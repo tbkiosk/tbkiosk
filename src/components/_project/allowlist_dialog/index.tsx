@@ -1,19 +1,47 @@
-import Image from 'next/image'
+import { useMemo } from 'react'
 import { useForm, SubmitHandler, Controller } from 'react-hook-form'
 import { toast } from 'react-toastify'
+import Image from 'next/image'
 import cl from 'classnames'
 
-import { Modal, Input, Button } from '@/components'
+import { Modal, Input, Button, Dropdown } from '@/components'
 
 import request from '@/utils/request'
 
 import { TENCENT_COS_DEV_BUCKET, TENCENT_COS_BUCKET, TENCENT_COS_CDN_DOMAIN } from '@/constants/cos'
-import { AllocationMethod } from '@/schemas/allowlist'
+import { AllocationMethod, CriteriaKeys } from '@/schemas/allowlist'
 
 import type { ProjectData } from '@/schemas/project'
 import type { AllowlistForm } from '@/schemas/allowlist'
 import type { WithObjectId } from '@/types/schema'
 import type { ResponseBase } from '@/types/response'
+
+const CRITERIA_DEFAULT_VALUE = {
+  [CriteriaKeys.MINIMUN_NFT]: 1,
+  [CriteriaKeys.MINIMUN_TWITTER_FOLLOWERS]: 100,
+  [CriteriaKeys.PROJECT_DISCORD_JOINED]: true,
+  [CriteriaKeys.PROJECT_TWITTER_FOLLOWED]: true,
+}
+
+const renderCriteriaText = (criteria: CriteriaKeys, content?: string | number | boolean) => {
+  switch (criteria) {
+    case CriteriaKeys.MINIMUN_NFT: {
+      return `Have at least ${content ?? CRITERIA_DEFAULT_VALUE[CriteriaKeys.MINIMUN_NFT]} NFT in wallet`
+    }
+    case CriteriaKeys.MINIMUN_TWITTER_FOLLOWERS: {
+      return `Have at least ${content ?? CRITERIA_DEFAULT_VALUE[CriteriaKeys.MINIMUN_TWITTER_FOLLOWERS]} Followers on Twitter`
+    }
+    case CriteriaKeys.PROJECT_DISCORD_JOINED: {
+      return `Follow ${content ? `@${content}` : ''} twitter`
+    }
+    case CriteriaKeys.PROJECT_TWITTER_FOLLOWED: {
+      return 'Join Discord Server'
+    }
+    default: {
+      return ''
+    }
+  }
+}
 
 type AllowlistDialogProps = {
   open: boolean
@@ -23,7 +51,7 @@ type AllowlistDialogProps = {
 }
 
 export const AllowlistDialog = ({ open, project, setOpen, onRefresh }: AllowlistDialogProps) => {
-  const { control, handleSubmit, formState } = useForm<AllowlistForm>({
+  const { control, handleSubmit, formState, getValues, setValue, watch } = useForm<AllowlistForm>({
     defaultValues: {
       amount: '',
       criteria: {},
@@ -45,6 +73,8 @@ export const AllowlistDialog = ({ open, project, setOpen, onRefresh }: Allowlist
       toast.error(data?.message ?? 'Failed to create allowlist')
     }
   }
+
+  const criteriaValue = useMemo(() => getValues('criteria'), [watch('criteria')])
 
   return (
     <Modal
@@ -98,7 +128,56 @@ export const AllowlistDialog = ({ open, project, setOpen, onRefresh }: Allowlist
               rules={{ required: true, min: 1, validate: value => !isNaN(+value) }}
             />
             <hr className="-mx-8 my-6 border-[#e6e6e9]" />
-            <p className="font-bold">Criteria</p>
+            <p className="mb-4 font-bold">Criteria</p>
+            <div className="flex flex-col gap-2 mb-4">
+              {Object.entries(criteriaValue).map(([_criteria, _criteriaValue]) => (
+                <div
+                  className="flex justify-between items-center"
+                  key={_criteria}
+                >
+                  <span>{renderCriteriaText(_criteria as CriteriaKeys, _criteriaValue)}</span>
+                  <span>
+                    <i className="fa-solid fa-pencil text-sm mr-2 cursor-pointer hover:opacity-50" />
+                    <i
+                      className="fa-solid fa-xmark text-sm cursor-pointer hover:opacity-50"
+                      onClick={() =>
+                        setValue('criteria', Object.fromEntries(Object.entries(criteriaValue).filter(([key]) => key !== _criteria)))
+                      }
+                    />
+                  </span>
+                </div>
+              ))}
+            </div>
+            <Dropdown
+              buttonClassNames="!bg-white !text-black !border !border-gray-200 !shadow-none !outline-none !ring-0 !ring-offset-0"
+              renderButton={() => <span>Add new</span>}
+            >
+              <Dropdown.Items
+                className={cl([
+                  'w-full absolute top-full right-0 pb-2 z-10 border border-t-0 border-gray-200 rounded-b-[1.75rem] overflow-hidden',
+                  'bg-white focus:outline-none',
+                ])}
+              >
+                {Object.values(CriteriaKeys).map(_criteria => {
+                  const disabled = !!criteriaValue[_criteria]
+                  return (
+                    <Dropdown.Item
+                      disabled={disabled}
+                      key={_criteria}
+                    >
+                      <div
+                        className={cl(['px-4 py-2 cursor-pointer hover:bg-gray-100', disabled && 'text-gray-300 !cursor-not-allowed'])}
+                        onClick={() =>
+                          !disabled && setValue('criteria', { ...criteriaValue, [_criteria]: CRITERIA_DEFAULT_VALUE[_criteria] })
+                        }
+                      >
+                        {renderCriteriaText(_criteria)}
+                      </div>
+                    </Dropdown.Item>
+                  )
+                })}
+              </Dropdown.Items>
+            </Dropdown>
             <hr className="-mx-8 my-6 border-[#e6e6e9]" />
             <p className="mb-4 font-bold">Allocation method</p>
             <Controller
