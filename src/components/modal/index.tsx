@@ -11,9 +11,9 @@ type ModalProps = {
 }
 
 export const Modal = ({ isOpen, setOpen, children, classNames }: ModalProps) => {
-  if (!isOpen) return null
-
   useEffect(() => {
+    if (!isOpen) return
+
     const onEscPress = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         setOpen(false)
@@ -23,7 +23,9 @@ export const Modal = ({ isOpen, setOpen, children, classNames }: ModalProps) => 
     window.addEventListener('keydown', e => onEscPress(e))
 
     return () => window.removeEventListener('keydown', e => onEscPress(e))
-  }, [])
+  }, [isOpen])
+
+  if (!isOpen) return null
 
   return (
     <Portal>
