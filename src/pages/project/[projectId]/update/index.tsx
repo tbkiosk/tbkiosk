@@ -51,13 +51,12 @@ const UpdateProjectWrapper = () => {
   return (
     <Layout
       headerLeft={
-        <Link
-          className="flex items-center"
-          href="/project"
-        >
-          <i className="fa-solid fa-arrow-left-long text-2xl mr-4 cursor-pointer transition hover:opacity-70 hover:scale-110" />
+        <>
+          <Link href={`/project/${router.query.projectId}`}>
+            <i className="fa-solid fa-arrow-left-long text-2xl mr-4 cursor-pointer transition hover:opacity-70 hover:scale-110" />
+          </Link>
           <span>Update project</span>
-        </Link>
+        </>
       }
     >
       <Loading isLoading={isLoading}>{project && <UpdateProject project={project} />}</Loading>
