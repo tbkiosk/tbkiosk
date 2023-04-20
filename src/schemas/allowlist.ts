@@ -22,12 +22,18 @@ type Criteria = Partial<{
   [CriteriaKeys.PROJECT_DISCORD_JOINED]: boolean
 }>
 
+export enum ApplicantStatus {
+  PENDING = 'PENDING',
+  APPROVED = 'APPROVED',
+  REJECTED = 'REJECTED',
+}
+
 export type Applicant = {
   userId?: ObjectId
   address: string
-  approved: boolean
-  approvedTime: number
-  applicationTime: number
+  status: ApplicantStatus
+  createdTime: Date
+  updatedTime: Date
 }
 
 export const allowlistFormSchema = Joi.object({
@@ -43,8 +49,8 @@ export const allowlistFormSchema = Joi.object({
 
 export const allowlistDBSchema = Joi.object({
   projectId: Joi.string().required(),
-  createdTime: Joi.number().required(),
-  updatedTime: Joi.number().required(),
+  createdTime: Joi.date().required(),
+  updatedTime: Joi.date().required(),
   amount: Joi.number().integer().required(),
   criteria: Joi.object({
     [CriteriaKeys.MINIMUN_NFT]: Joi.string(),
@@ -58,9 +64,9 @@ export const allowlistDBSchema = Joi.object({
       Joi.object({
         userId: Joi.string(),
         address: Joi.string(),
-        approved: Joi.boolean(),
-        approvedTime: Joi.number(),
-        updateTime: Joi.number(),
+        status: Joi.string().valid(...Object.values(ApplicantStatus)),
+        createdTime: Joi.date(),
+        updatedTime: Joi.date(),
       })
     )
     .default([])
@@ -75,8 +81,8 @@ export type AllowlistForm = {
 
 export type AllowlistData = {
   projectId: ObjectId
-  createdTime: number
-  updatedTime: number
+  createdTime: Date
+  updatedTime: Date
   amount: number
   criteria: Criteria
   allocationMethod: AllocationMethod
@@ -109,3 +115,17 @@ export const renderCriteriaText = (criteria: CriteriaKeys, content?: string | nu
     }
   }
 }
+
+export enum ApplicationOperations {
+  APPROVE = 'APPROVE',
+  REJECT = 'REJECT',
+  APPROVE_ALL = 'APPROVE_ALL',
+  REJECT_ALL = 'REJECT_ALL',
+}
+
+export const applicationOperationSchema = Joi.object({
+  address: Joi.string(),
+  operation: Joi.string()
+    .valid(...Object.values(ApplicationOperations))
+    .required(),
+})

@@ -9,6 +9,8 @@ import Layout from '@/layouts'
 import { Loading, Button } from '@/components'
 import { AllowlistDialog } from '@/components/_project/allowlist_dialog'
 
+import request from '@/utils/request'
+
 import { TENCENT_COS_DEV_BUCKET, TENCENT_COS_BUCKET, TENCENT_COS_CDN_DOMAIN } from '@/constants/cos'
 import { CriteriaKeys, renderCriteriaText } from '@/schemas/allowlist'
 
@@ -32,6 +34,14 @@ const ProjectDetail = () => {
   )
 
   const [open, setOpen] = useState(false)
+
+  const approve = async (_allowlist: WithObjectId<AllowlistData>) => {
+    const res = await request(`/api/project/${router.query.projectId}/allowlist/${_allowlist._id}`, {
+      method: 'PUT',
+      body: JSON.stringify({ operation: 'APPROVE_ALL' }),
+    })
+    console.log(123, res)
+  }
 
   return (
     <Layout
@@ -103,29 +113,32 @@ const ProjectDetail = () => {
                 </p>
                 <p className="flex justify-between">
                   <span>Price</span>
-                  <span className="font-bold">{project.mintPrice}</span>
+                  <span className="font-bold">
+                    {project.mintPrice} {project.coinType}
+                  </span>
                 </p>
               </div>
-              <Link
-                className="ml-8"
-                href={`/project/${router.query.projectId}/update`}
-              >
-                <div className="cursor-pointer transition hover:scale-105 hover:opacity-70">
+              <div>
+                <Link
+                  className="block cursor-pointer transition hover:scale-105 hover:opacity-70"
+                  href={`/project/${router.query.projectId}/update`}
+                >
                   <span>Edit</span>
                   <i className="fa-solid fa-pencil ml-2" />
-                </div>
-              </Link>
+                </Link>
+              </div>
             </div>
           )}
         </Loading>
       </div>
-      <div className="flex flex-wrap gap-x-4">
+      <div className="flex flex-wrap gap-4">
         <Loading isLoading={isAllowlistLoading}>
           <>
             {allowlists?.map(_allowlist => (
               <div
-                className="w-1/3 min-w-[17.5rem] flex flex-col p-8 rounded-2xl shadow-[0_4px_10px_rgba(216,216,216,0.25)] cursor-pointer transition hover:scale-105"
+                className="w-[calc(33.33%_-_1rem)] min-w-[17.5rem] flex flex-col p-8 rounded-2xl shadow-[0_4px_10px_rgba(216,216,216,0.25)] cursor-pointer transition hover:scale-105"
                 key={_allowlist._id}
+                onClick={() => approve(_allowlist)}
               >
                 <span className="self-end px-6 mb-2 bg-[#82ffac] font-bold rounded-2xl">Live</span>
                 <p className="font-bold text-lg truncate">

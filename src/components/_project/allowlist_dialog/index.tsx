@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useForm, SubmitHandler, Controller } from 'react-hook-form'
 import { toast } from 'react-toastify'
 import Image from 'next/image'
@@ -20,16 +20,19 @@ type AllowlistDialogProps = {
   open: boolean
   project: WithObjectId<ProjectData> | null
   setOpen: (open: boolean) => void
-  onRefresh: () => void
+  onClose?: () => void
+  onRefresh?: () => void
 }
 
-export const AllowlistDialog = ({ open, project, setOpen, onRefresh }: AllowlistDialogProps) => {
-  const { control, handleSubmit, formState, getValues, setValue, watch } = useForm<AllowlistForm>({
-    defaultValues: {
-      amount: '',
-      criteria: {},
-      allocationMethod: AllocationMethod.FCFS,
-    },
+const DEFAULT_VALUES = {
+  amount: '',
+  criteria: {},
+  allocationMethod: AllocationMethod.FCFS,
+}
+
+export const AllowlistDialog = ({ open, project, setOpen, onRefresh, onClose }: AllowlistDialogProps) => {
+  const { control, handleSubmit, formState, getValues, setValue, watch, reset } = useForm<AllowlistForm>({
+    defaultValues: DEFAULT_VALUES,
   })
 
   const onSubmit: SubmitHandler<AllowlistForm> = async formData => {
@@ -41,13 +44,21 @@ export const AllowlistDialog = ({ open, project, setOpen, onRefresh }: Allowlist
     if (data?.data) {
       toast.success(data?.message ?? 'Success')
       setOpen(false)
-      onRefresh()
+      onRefresh?.()
     } else {
       toast.error(data?.message ?? 'Failed to create allowlist')
     }
   }
 
   const criteriaValue = useMemo(() => getValues('criteria'), [watch('criteria')])
+
+  useEffect(() => {
+    if (open) {
+      reset(DEFAULT_VALUES)
+    } else {
+      onClose?.()
+    }
+  }, [open])
 
   return (
     <Modal

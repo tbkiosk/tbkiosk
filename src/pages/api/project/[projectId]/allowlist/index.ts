@@ -19,6 +19,19 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<Al
     })
   }
 
+  const session: ExtendedSession | null = await getServerSession(req, res, authOptions)
+  if (!session) {
+    return res.status(401).json({
+      message: '',
+    })
+  }
+
+  if (!session.user?.id) {
+    return res.status(500).json({
+      message: 'Missing user in session, try to sign out and sign in again',
+    })
+  }
+
   const client = await clientPromise
   const db = client.db(`${process.env.NODE_ENV}`)
   const collection = db.collection<AllowlistData>(ALLOWLIST_TABLE)
@@ -50,19 +63,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<Al
    * create a new allowlist
    */
   if (req.method === 'POST') {
-    const session: ExtendedSession | null = await getServerSession(req, res, authOptions)
-    if (!session) {
-      return res.status(401).json({
-        message: '',
-      })
-    }
-
-    if (!session.user?.id) {
-      return res.status(500).json({
-        message: 'Missing user in session, try to sign out and sign in again',
-      })
-    }
-
     const { error: formSchemaError } = allowlistFormSchema.validate(req.body)
     if (formSchemaError) {
       return res.status(400).send({
@@ -105,7 +105,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<Al
   }
 
   return res.status(405).json({
-    message: 'Method now allowed',
+    message: 'Method not allowed',
   })
 }
 

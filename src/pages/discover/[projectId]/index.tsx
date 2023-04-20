@@ -82,7 +82,9 @@ const DiscoverProjectDetail = () => {
                 </p>
                 <p className="flex justify-between">
                   <span>Price</span>
-                  <span className="font-bold">{project.mintPrice}</span>
+                  <span className="font-bold">
+                    {project.mintPrice} {project.coinType}
+                  </span>
                 </p>
               </div>
             </div>

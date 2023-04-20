@@ -43,7 +43,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<Al
   }
 
   return res.status(405).json({
-    message: 'Method now allowed',
+    message: 'Method not allowed',
   })
 }
 
