@@ -1,5 +1,5 @@
 import { getServerSession } from 'next-auth/next'
-import {  ObjectId } from 'mongodb'
+import { ObjectId } from 'mongodb'
 
 import clientPromise from '@/lib/mongodb'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
@@ -75,9 +75,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<Al
       })
     }
 
-    if (req.body.operation === ApplicationOperations.APPROVE_ALL || req.body.operation === ApplicationOperations.REJECT_ALL) {
-      const now = new Date()
-      try {
+    const now = new Date()
+    const isBatch = req.body.operation === ApplicationOperations.APPROVE_ALL || req.body.operation === ApplicationOperations.REJECT_ALL
+
+    try {
+      if (isBatch) {
         await allowlistCollection.updateOne(
           { _id: new ObjectId(allowlistId) },
           {
@@ -88,15 +90,26 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<Al
             },
           }
         )
-
-        return res.status(200).json({
-          data: true,
-        })
-      } catch (err) {
-        return res.status(500).json({
-          message: (err as Error)?.message ?? 'Interval server error',
-        })
+      } else {
+        await allowlistCollection.updateOne(
+          { _id: new ObjectId(allowlistId), 'applicants.address': req.body.address as string },
+          {
+            $set: {
+              'applicants.$.status':
+                req.body.operation === ApplicationOperations.APPROVE ? ApplicantStatus.APPROVED : ApplicantStatus.REJECTED,
+              'applicants.$.updatedTime': now,
+            },
+          }
+        )
       }
+
+      return res.status(200).json({
+        data: true,
+      })
+    } catch (err) {
+      return res.status(500).json({
+        message: (err as Error)?.message ?? 'Interval server error',
+      })
     }
   }
 
