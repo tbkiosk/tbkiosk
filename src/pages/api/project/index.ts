@@ -78,8 +78,14 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<Pr
       })
     }
 
-    const now = +new Date()
-    const transformedData: ProjectData = { ...req.body, createdTime: now, updatedTime: now, creatorId: session.user.id }
+    const now = new Date()
+    const transformedData: ProjectData = {
+      ...req.body,
+      mintDate: new Date(req.body.mintDate),
+      createdTime: now,
+      updatedTime: now,
+      creatorId: session.user.id,
+    }
 
     const { error: dbSchemaError } = projectDbSchema.validate(transformedData)
     if (dbSchemaError) {

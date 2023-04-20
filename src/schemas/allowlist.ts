@@ -39,8 +39,8 @@ export type Applicant = {
 export const allowlistFormSchema = Joi.object({
   amount: Joi.string().required(),
   criteria: Joi.object({
-    [CriteriaKeys.MINIMUN_NFT]: Joi.string(),
-    [CriteriaKeys.MINIMUN_TWITTER_FOLLOWERS]: Joi.string(),
+    [CriteriaKeys.MINIMUN_NFT]: Joi.number(),
+    [CriteriaKeys.MINIMUN_TWITTER_FOLLOWERS]: Joi.number(),
     [CriteriaKeys.PROJECT_TWITTER_FOLLOWED]: Joi.boolean(),
     [CriteriaKeys.PROJECT_DISCORD_JOINED]: Joi.boolean(),
   }),
@@ -53,8 +53,8 @@ export const allowlistDBSchema = Joi.object({
   updatedTime: Joi.date().required(),
   amount: Joi.number().integer().required(),
   criteria: Joi.object({
-    [CriteriaKeys.MINIMUN_NFT]: Joi.string(),
-    [CriteriaKeys.MINIMUN_TWITTER_FOLLOWERS]: Joi.string(),
+    [CriteriaKeys.MINIMUN_NFT]: Joi.number(),
+    [CriteriaKeys.MINIMUN_TWITTER_FOLLOWERS]: Joi.number(),
     [CriteriaKeys.PROJECT_TWITTER_FOLLOWED]: Joi.boolean(),
     [CriteriaKeys.PROJECT_DISCORD_JOINED]: Joi.boolean(),
   }),

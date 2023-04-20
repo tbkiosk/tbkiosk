@@ -70,7 +70,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<Al
       })
     }
 
-    const now = +new Date()
+    const now = new Date()
     const transformedData: AllowlistData = {
       ...req.body,
       projectId,

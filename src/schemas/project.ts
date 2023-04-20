@@ -1,6 +1,8 @@
 import Joi from 'joi'
 import { ObjectId } from 'mongodb'
 
+import type { Dayjs } from 'dayjs'
+
 export const PROJECT_TABLE = 'project'
 
 export const projectFormSchema = Joi.object({
@@ -10,7 +12,7 @@ export const projectFormSchema = Joi.object({
   website: Joi.string(),
   twitter: Joi.string(),
   discord: Joi.string(),
-  mintDate: Joi.string().required(),
+  mintDate: Joi.date().required(),
   mintPrice: Joi.number().required().positive(),
   coinType: Joi.string().required(),
   totalSupply: Joi.number().positive().required(),
@@ -19,8 +21,8 @@ export const projectFormSchema = Joi.object({
 })
 
 export const projectDbSchema = projectFormSchema.append({
-  createdTime: Joi.number().required(),
-  updatedTime: Joi.number().required(),
+  createdTime: Joi.date().required(),
+  updatedTime: Joi.date().required(),
   creatorId: Joi.string().required(),
 })
 
@@ -36,18 +38,18 @@ type ProjectBase = {
 }
 
 export type ProjectForm = ProjectBase & {
-  mintDate: string
+  mintDate: Date | Dayjs
   mintPrice: string
   coinType: string
   totalSupply: string
 }
 
 export type ProjectData = ProjectBase & {
-  mintDate: number
+  mintDate: Date
   mintPrice: number
   coinType: string
   totalSupply: number
-  createdTime: number
-  updatedTime: number
+  createdTime: Date
+  updatedTime: Date
   creatorId: ObjectId
 }
