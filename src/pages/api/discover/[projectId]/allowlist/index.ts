@@ -2,13 +2,13 @@ import { ObjectId } from 'mongodb'
 
 import clientPromise from '@/lib/mongodb'
 
-import { ALLOWLIST_TABLE } from '@/schemas/allowlist'
+import { ALLOWLIST_TABLE, ApplicantStatus } from '@/schemas/allowlist'
 
 import type { NextApiRequest, NextApiResponse } from 'next'
 import type { ResponseBase } from '@/types/response'
-import type { AllowlistData } from '@/schemas/allowlist'
+import type { AllowlistRawData, AllowlistPreviewData } from '@/schemas/allowlist'
 
-const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<AllowlistData[]>>) => {
+const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<AllowlistPreviewData[]>>) => {
   const projectId = req.query.projectId
   if (!projectId || typeof projectId !== 'string') {
     return res.status(400).json({
@@ -18,7 +18,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<Al
 
   const client = await clientPromise
   const db = client.db(`${process.env.NODE_ENV}`)
-  const collection = db.collection<AllowlistData>(ALLOWLIST_TABLE)
+  const collection = db.collection<AllowlistRawData>(ALLOWLIST_TABLE)
 
   /**
    * @method GET
@@ -33,11 +33,15 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<Al
         .toArray()
 
       return res.status(200).json({
-        data: result ?? [],
+        data:
+          result?.map(({ applicants, ...rest }) => ({
+            ...rest,
+            filled: applicants.filter(_applicant => _applicant.status === ApplicantStatus.APPROVED).length,
+          })) || [],
       })
     } catch (err) {
       return res.status(500).json({
-        message: (err as Error)?.message ?? 'Interval server error',
+        message: (err as Error)?.message || 'Interval server error',
       })
     }
   }

@@ -9,11 +9,11 @@ import { Loading, Button } from '@/components'
 import { AllowlistDialog } from '@/components/_project/allowlist_dialog'
 
 import { TENCENT_COS_DEV_BUCKET, TENCENT_COS_BUCKET, TENCENT_COS_CDN_DOMAIN } from '@/constants/cos'
-import { CriteriaKeys, renderCriteriaText } from '@/schemas/allowlist'
+import { Applicant, CriteriaKeys, renderCriteriaText } from '@/schemas/allowlist'
 
 import type { ResponseBase } from '@/types/response'
 import type { ProjectData } from '@/schemas/project'
-import type { AllowlistData } from '@/schemas/allowlist'
+import type { AllowlistPreviewData } from '@/schemas/allowlist'
 import type { WithObjectId } from '@/types/schema'
 
 const ProjectDetail = () => {
@@ -26,8 +26,13 @@ const ProjectDetail = () => {
     data: { data: allowlists = null } = {},
     isLoading: isAllowlistLoading,
     mutate,
-  } = useSWR<ResponseBase<WithObjectId<AllowlistData>[]>>(
+  } = useSWR<ResponseBase<WithObjectId<AllowlistPreviewData>[]>>(
     router.query.projectId ? `/api/project/${router.query.projectId}/allowlist` : null
+  )
+  const {
+    data: { data } = {},
+  } = useSWR<ResponseBase<Applicant[]>>(
+    router.query.projectId ? `/api/project/${router.query.projectId}/allowlist/64411324bf3a38f7f737d995/applicants` : null
   )
 
   return (
@@ -137,7 +142,7 @@ const ProjectDetail = () => {
                 ))}
                 <hr className="-mx-8 my-6" />
                 <p className="font-bold">
-                  {_allowlist.applicants.length}/{_allowlist.amount} filled
+                  {_allowlist.filled}/{_allowlist.amount} filled
                 </p>
               </div>
             ))}

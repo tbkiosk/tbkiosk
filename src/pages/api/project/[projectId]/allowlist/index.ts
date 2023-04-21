@@ -4,14 +4,14 @@ import { ObjectId } from 'mongodb'
 import clientPromise from '@/lib/mongodb'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
 
-import { ALLOWLIST_TABLE, allowlistFormSchema, allowlistDBSchema } from '@/schemas/allowlist'
+import { ALLOWLIST_TABLE, allowlistFormSchema, allowlistDBSchema, ApplicantStatus } from '@/schemas/allowlist'
 
 import type { NextApiRequest, NextApiResponse } from 'next'
 import type { ResponseBase } from '@/types/response'
 import type { ExtendedSession } from '@/helpers/nextauth/types'
-import type { AllowlistData } from '@/schemas/allowlist'
+import type { AllowlistRawData, AllowlistPreviewData } from '@/schemas/allowlist'
 
-const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<AllowlistData[] | boolean>>) => {
+const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<AllowlistPreviewData[] | boolean>>) => {
   const projectId = req.query.projectId
   if (!projectId || typeof projectId !== 'string') {
     return res.status(400).json({
@@ -34,7 +34,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<Al
 
   const client = await clientPromise
   const db = client.db(`${process.env.NODE_ENV}`)
-  const collection = db.collection<AllowlistData>(ALLOWLIST_TABLE)
+  const collection = db.collection<AllowlistRawData>(ALLOWLIST_TABLE)
 
   /**
    * @method GET
@@ -49,7 +49,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<Al
         .toArray()
 
       return res.status(200).json({
-        data: result ?? [],
+        data:
+          result?.map(({ applicants, ...rest }) => ({
+            ...rest,
+            filled: applicants.filter(_applicant => _applicant.status === ApplicantStatus.APPROVED).length,
+          })) || [],
       })
     } catch (err) {
       return res.status(500).json({
@@ -71,7 +75,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<Al
     }
 
     const now = new Date()
-    const transformedData: AllowlistData = {
+    const transformedData: AllowlistRawData = {
       ...req.body,
       projectId,
       amount: +req.body.amount,

@@ -8,10 +8,10 @@ import { ALLOWLIST_TABLE, applicationOperationSchema, ApplicantStatus, Applicati
 
 import type { NextApiRequest, NextApiResponse } from 'next'
 import type { ResponseBase } from '@/types/response'
-import type { AllowlistRawData, AllowlistPreviewData } from '@/schemas/allowlist'
+import type { AllowlistRawData, Applicant } from '@/schemas/allowlist'
 import type { ExtendedSession } from '@/helpers/nextauth/types'
 
-const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<AllowlistPreviewData | boolean | null>>) => {
+const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<Applicant[] | boolean | null>>) => {
   const projectId = req.query.projectId
   if (!projectId || typeof projectId !== 'string') {
     return res.status(400).json({
@@ -45,7 +45,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<Al
 
   /**
    * @method GET
-   * allowlist by allowlistId
+   * applicants in allowlist by allowlistId
    */
   if (req.method === 'GET') {
     try {
@@ -60,9 +60,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<Al
         })
       }
 
-      const { applicants, ...rest } = result
       return res.status(200).json({
-        data: { ...rest, filled: applicants.filter(_applicant => _applicant.status === ApplicantStatus.APPROVED).length },
+        data: result.applicants,
       })
     } catch (err) {
       return res.status(500).json({
@@ -72,23 +71,47 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<Al
   }
 
   /**
-   * @method DELETE
-   * delete an allowedlist by allowlistId
+   * @method PUT
+   * approve/reject allowlist applications
    */
-  if (req.method === 'DELETE') {
-    try {
-      const { acknowledged } = await allowlistCollection.deleteOne({
-        _id: new ObjectId(allowlistId),
+  if (req.method === 'PUT') {
+    const { error } = applicationOperationSchema.validate(req.body)
+    if (error) {
+      return res.status(400).send({
+        message: error.message || 'Invalid allowlist operation',
       })
+    }
 
-      if (acknowledged) {
-        return res.status(200).json({
-          data: true,
-        })
+    const now = new Date()
+    const isBatch = req.body.operation === ApplicationOperations.APPROVE_ALL || req.body.operation === ApplicationOperations.REJECT_ALL
+
+    try {
+      if (isBatch) {
+        await allowlistCollection.updateOne(
+          { _id: new ObjectId(allowlistId) },
+          {
+            $set: {
+              'applicants.$[].status':
+                req.body.operation === ApplicationOperations.APPROVE_ALL ? ApplicantStatus.APPROVED : ApplicantStatus.REJECTED,
+              'applicants.$[].updatedTime': now,
+            },
+          }
+        )
+      } else {
+        await allowlistCollection.updateOne(
+          { _id: new ObjectId(allowlistId), 'applicants.address': req.body.address as string },
+          {
+            $set: {
+              'applicants.$.status':
+                req.body.operation === ApplicationOperations.APPROVE ? ApplicantStatus.APPROVED : ApplicantStatus.REJECTED,
+              'applicants.$.updatedTime': now,
+            },
+          }
+        )
       }
 
-      return res.status(500).json({
-        message: 'Failed to delete allowlist',
+      return res.status(200).json({
+        data: true,
       })
     } catch (err) {
       return res.status(500).json({

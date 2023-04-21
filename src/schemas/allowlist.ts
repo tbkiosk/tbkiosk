@@ -79,7 +79,7 @@ export type AllowlistForm = {
   allocationMethod: AllocationMethod
 }
 
-export type AllowlistData = {
+export type AllowlistRawData = {
   projectId: ObjectId
   createdTime: Date
   updatedTime: Date
@@ -88,6 +88,8 @@ export type AllowlistData = {
   allocationMethod: AllocationMethod
   applicants: Applicant[]
 }
+
+export type AllowlistPreviewData = Omit<AllowlistRawData, 'applicants'> & { filled: number }
 
 export const CRITERIA_DEFAULT_VALUE = {
   [CriteriaKeys.MINIMUN_NFT]: 1,
