@@ -7,7 +7,6 @@ import dayjs from 'dayjs'
 
 import Layout from '@/layouts'
 import { Loading } from '@/components'
-import { AllowlistApplicationDialog } from '@/components/_discover/allowlist_application_dialog'
 
 import { TENCENT_COS_DEV_BUCKET, TENCENT_COS_BUCKET, TENCENT_COS_CDN_DOMAIN } from '@/constants/cos'
 import { CriteriaKeys, renderCriteriaText } from '@/schemas/allowlist'
@@ -41,11 +40,6 @@ const DiscoverProjectDetail = () => {
       }
     >
       <div className="mb-8">
-        <AllowlistApplicationDialog
-          open={open}
-          project={project}
-          setOpen={setOpen}
-        />
         <Loading isLoading={isProjectsLoading}>
           {project && (
             <div className="flex gap-8">

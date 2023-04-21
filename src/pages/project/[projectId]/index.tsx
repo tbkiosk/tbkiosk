@@ -7,9 +7,10 @@ import dayjs from 'dayjs'
 import Layout from '@/layouts'
 import { Loading, Button } from '@/components'
 import { AllowlistDialog } from '@/components/_project/allowlist_dialog'
+import { AllowlistApplicationDialog } from '@/components/_project/allowlist_application_dialog'
 
 import { TENCENT_COS_DEV_BUCKET, TENCENT_COS_BUCKET, TENCENT_COS_CDN_DOMAIN } from '@/constants/cos'
-import { Applicant, CriteriaKeys, renderCriteriaText } from '@/schemas/allowlist'
+import { CriteriaKeys, renderCriteriaText } from '@/schemas/allowlist'
 
 import type { ResponseBase } from '@/types/response'
 import type { ProjectData } from '@/schemas/project'
@@ -29,11 +30,6 @@ const ProjectDetail = () => {
   } = useSWR<ResponseBase<WithObjectId<AllowlistPreviewData>[]>>(
     router.query.projectId ? `/api/project/${router.query.projectId}/allowlist` : null
   )
-  const {
-    data: { data } = {},
-  } = useSWR<ResponseBase<Applicant[]>>(
-    router.query.projectId ? `/api/project/${router.query.projectId}/allowlist/64411324bf3a38f7f737d995/applicants` : null
-  )
 
   return (
     <Layout
@@ -52,6 +48,10 @@ const ProjectDetail = () => {
           setOpen={(nextOpen: boolean) => router.push(`/project/${router.query.projectId}${nextOpen ? '?allowlist=new' : ''}`)}
           project={project}
           onRefresh={() => mutate()}
+        />
+        <AllowlistApplicationDialog
+          open={!!router.query.allowlist && router.query.allowlist !== 'new'}
+          setOpen={nextOpen => !nextOpen && router.push(`/project/${router.query.projectId}`)}
         />
         <Loading isLoading={isProjectsLoading}>
           {project && (
@@ -130,6 +130,7 @@ const ProjectDetail = () => {
               <div
                 className="w-[calc(33.33%_-_1rem)] min-w-[17.5rem] flex flex-col p-8 rounded-2xl shadow-[0_4px_10px_rgba(216,216,216,0.25)] cursor-pointer transition hover:scale-105"
                 key={_allowlist._id}
+                onClick={() => router.push(`/project/${router.query.projectId}?allowlist=${_allowlist._id}`)}
               >
                 <span className="self-end px-6 mb-2 bg-[#82ffac] font-bold rounded-2xl">Live</span>
                 <p className="font-bold text-lg truncate">
