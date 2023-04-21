@@ -18,10 +18,10 @@ import type { ResponseBase } from '@/types/response'
 
 type AllowlistDialogProps = {
   open: boolean
-  project: WithObjectId<ProjectData> | null
-  setOpen: (open: boolean) => void
+  setOpen: (nextOpen: boolean) => void
   onClose?: () => void
   onRefresh?: () => void
+  project: WithObjectId<ProjectData> | null
 }
 
 const DEFAULT_VALUES = {
@@ -30,7 +30,7 @@ const DEFAULT_VALUES = {
   allocationMethod: AllocationMethod.FCFS,
 }
 
-export const AllowlistDialog = ({ open, project, setOpen, onRefresh, onClose }: AllowlistDialogProps) => {
+export const AllowlistDialog = ({ open, setOpen, project, onRefresh, onClose }: AllowlistDialogProps) => {
   const { control, handleSubmit, formState, getValues, setValue, watch, reset } = useForm<AllowlistForm>({
     defaultValues: DEFAULT_VALUES,
   })

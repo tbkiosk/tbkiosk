@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -31,8 +30,6 @@ const ProjectDetail = () => {
     router.query.projectId ? `/api/project/${router.query.projectId}/allowlist` : null
   )
 
-  const [open, setOpen] = useState(false)
-
   return (
     <Layout
       headerLeft={
@@ -46,9 +43,9 @@ const ProjectDetail = () => {
     >
       <div className="mb-8">
         <AllowlistDialog
-          open={open}
+          open={router.query.allowlist === 'new'}
+          setOpen={(nextOpen: boolean) => router.push(`/project/${router.query.projectId}${nextOpen ? '?allowlist=new' : ''}`)}
           project={project}
-          setOpen={setOpen}
           onRefresh={() => mutate()}
         />
         <Loading isLoading={isProjectsLoading}>
@@ -80,7 +77,7 @@ const ProjectDetail = () => {
                 <div className="grow" />
                 <Button
                   className="block !h-10 mb-2"
-                  onClick={() => setOpen(true)}
+                  onClick={() => router.push(`/project/${router.query.projectId}?allowlist=new`)}
                   variant="colored"
                 >
                   Create new allowlist
