@@ -98,6 +98,12 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<Ap
           }
         )
       } else {
+        if (!req.body.address) {
+          return res.status(400).send({
+            message: 'Invalid address',
+          })
+        }
+
         await allowlistCollection.updateOne(
           { _id: new ObjectId(allowlistId), 'applicants.address': req.body.address as string },
           {

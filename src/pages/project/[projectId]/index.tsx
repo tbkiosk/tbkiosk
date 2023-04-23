@@ -44,13 +44,13 @@ const ProjectDetail = () => {
     >
       <div className="mb-8">
         <AllowlistDialog
-          open={router.query.allowlist === 'new'}
-          setOpen={(nextOpen: boolean) => router.push(`/project/${router.query.projectId}${nextOpen ? '?allowlist=new' : ''}`)}
+          open={router.query.allowlistId === 'new'}
+          setOpen={(nextOpen: boolean) => router.push(`/project/${router.query.projectId}${nextOpen ? '?allowlistId=new' : ''}`)}
           project={project}
           onRefresh={() => mutate()}
         />
         <AllowlistApplicationDialog
-          open={!!router.query.allowlist && router.query.allowlist !== 'new'}
+          open={!!router.query.allowlistId && router.query.allowlistId !== 'new'}
           setOpen={nextOpen => !nextOpen && router.push(`/project/${router.query.projectId}`)}
         />
         <Loading isLoading={isProjectsLoading}>
@@ -82,7 +82,7 @@ const ProjectDetail = () => {
                 <div className="grow" />
                 <Button
                   className="block !h-10 mb-2"
-                  onClick={() => router.push(`/project/${router.query.projectId}?allowlist=new`)}
+                  onClick={() => router.push(`/project/${router.query.projectId}?allowlistId=new`)}
                   variant="colored"
                 >
                   Create new allowlist
@@ -130,7 +130,7 @@ const ProjectDetail = () => {
               <div
                 className="w-[calc(33.33%_-_1rem)] min-w-[17.5rem] flex flex-col p-8 rounded-2xl shadow-[0_4px_10px_rgba(216,216,216,0.25)] cursor-pointer transition hover:scale-105"
                 key={_allowlist._id}
-                onClick={() => router.push(`/project/${router.query.projectId}?allowlist=${_allowlist._id}`)}
+                onClick={() => router.push(`/project/${router.query.projectId}?allowlistId=${_allowlist._id}`)}
               >
                 <span className="self-end px-6 mb-2 bg-[#82ffac] font-bold rounded-2xl">Live</span>
                 <p className="font-bold text-lg truncate">

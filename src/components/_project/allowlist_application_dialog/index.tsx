@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useRouter } from 'next/router'
 import useSWR from 'swr'
 import { formatAddress } from '@mysten/sui.js'
@@ -6,7 +7,7 @@ import { Modal, Button } from '@/components'
 
 import request from '@/utils/request'
 
-import { ApplicantStatus } from '@/schemas/allowlist'
+import { ApplicantStatus, ApplicationOperations } from '@/schemas/allowlist'
 
 import type { Applicant } from '@/schemas/allowlist'
 import type { ResponseBase } from '@/types/response'
@@ -20,8 +21,41 @@ export const AllowlistApplicationDialog = ({ open, setOpen }: AllowlistApplicati
   const router = useRouter()
 
   const { data: { data: applicants } = {} } = useSWR<ResponseBase<Applicant[]>>(
-    router.query.projectId && open ? `/api/project/${router.query.projectId}/allowlist/${router.query.allowlist}/applicants` : null
+    router.query.projectId && router.query.allowlistId && open
+      ? `/api/project/${router.query.projectId}/allowlist/${router.query.allowlistId}/applicants`
+      : null
   )
+
+  const [isLoading, setIsLoading] = useState(false)
+
+  if (typeof router.query.projectId !== 'string' || typeof router.query.allowlistId !== 'string') {
+    return null
+  }
+
+  const projectId = router.query.projectId as string
+  const allowlistId = router.query.allowlistId as string
+
+  const onApproveAll = async () => {
+    setIsLoading(true)
+
+    const res = await request(`/api/project/${projectId}/allowlist/${allowlistId}/applicants`, {
+      method: 'PUT',
+      body: JSON.stringify({ operation: ApplicationOperations.APPROVE_ALL }),
+    })
+
+    setIsLoading(false)
+  }
+
+  const onRejectAll = async () => {
+    setIsLoading(true)
+
+    const res = await request(`/api/project/${projectId}/allowlist/${allowlistId}/applicants`, {
+      method: 'PUT',
+      body: JSON.stringify({ operation: ApplicationOperations.REJECT_ALL }),
+    })
+
+    setIsLoading(false)
+  }
 
   return (
     <Modal
@@ -42,13 +76,15 @@ export const AllowlistApplicationDialog = ({ open, setOpen }: AllowlistApplicati
           <p className="mb-6">Total: {applicants?.length ?? 0} application(s)</p>
           <p className="text-center">
             <Button
-              className="!h-9 !w-auto !px-8 mr-4"
+              className="!h-9 !w-[8.75rem] mr-4"
+              onClick={() => onApproveAll()}
               variant="contained"
             >
               Approval all
             </Button>
             <Button
-              className="!h-9 !w-auto !px-8"
+              className="!h-9 !w-[8.75rem]"
+              onClick={() => onRejectAll()}
               variant="outlined"
             >
               Reject all
@@ -56,10 +92,13 @@ export const AllowlistApplicationDialog = ({ open, setOpen }: AllowlistApplicati
           </p>
           <hr className="-mx-8 my-8" />
           <div className="flex flex-col gap-4">
+            {/* TODO: pagination */}
             {applicants?.map(_applicant => (
               <ApplicantCard
                 applicant={_applicant}
                 key={_applicant.address}
+                projectId={router.query.projectId as string}
+                allowlistId={router.query.allowlistId as string}
               />
             ))}
           </div>
@@ -69,10 +108,36 @@ export const AllowlistApplicationDialog = ({ open, setOpen }: AllowlistApplicati
   )
 }
 
-const ApplicantCard = ({ applicant }: { applicant: Applicant }) => {
-  const onApprove = async () => {}
+type ApplicantCardProps = {
+  applicant: Applicant
+  projectId: string
+  allowlistId: string
+}
 
-  const onReject = async () => {}
+const ApplicantCard = ({ applicant, projectId, allowlistId }: ApplicantCardProps) => {
+  const [isLoading, setIsLoading] = useState(false)
+
+  const onApprove = async () => {
+    setIsLoading(true)
+
+    const res = await request(`/api/project/${projectId}/allowlist/${allowlistId}/applicants`, {
+      method: 'PUT',
+      body: JSON.stringify({ address: applicant.address, operation: ApplicationOperations.APPROVE }),
+    })
+
+    setIsLoading(false)
+  }
+
+  const onReject = async () => {
+    setIsLoading(true)
+
+    const res = await request(`/api/project/${projectId}/allowlist/${allowlistId}/applicants`, {
+      method: 'PUT',
+      body: JSON.stringify({ address: applicant.address, operation: ApplicationOperations.REJECT }),
+    })
+
+    setIsLoading(false)
+  }
 
   return (
     <div className="flex items-center">
@@ -82,8 +147,14 @@ const ApplicantCard = ({ applicant }: { applicant: Applicant }) => {
       </div>
       {applicant.status === ApplicantStatus.PENDING ? (
         <div>
-          <i className="fa-solid fa-check mr-4 cursor-pointer transition-opacity hover:opacity-50" />
-          <i className="fa-solid fa-xmark cursor-pointer transition-opacity hover:opacity-50" />
+          <i
+            className="fa-solid fa-check mr-4 cursor-pointer transition-opacity hover:opacity-50"
+            onClick={() => onApprove()}
+          />
+          <i
+            className="fa-solid fa-xmark cursor-pointer transition-opacity hover:opacity-50"
+            onClick={() => onReject()}
+          />
         </div>
       ) : (
         <div>
