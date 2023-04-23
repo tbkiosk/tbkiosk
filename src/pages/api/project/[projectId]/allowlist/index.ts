@@ -4,11 +4,13 @@ import { ObjectId } from 'mongodb'
 import clientPromise from '@/lib/mongodb'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
 
+import { PROJECT_TABLE } from '@/schemas/project'
 import { ALLOWLIST_TABLE, allowlistFormSchema, allowlistDBSchema, ApplicantStatus } from '@/schemas/allowlist'
 
 import type { NextApiRequest, NextApiResponse } from 'next'
 import type { ResponseBase } from '@/types/response'
 import type { ExtendedSession } from '@/helpers/nextauth/types'
+import type { ProjectData } from '@/schemas/project'
 import type { AllowlistRawData, AllowlistPreviewData } from '@/schemas/allowlist'
 
 const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<AllowlistPreviewData[] | boolean>>) => {
@@ -34,7 +36,24 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<Al
 
   const client = await clientPromise
   const db = client.db(`${process.env.NODE_ENV}`)
+  const projectCollection = db.collection<ProjectData>(PROJECT_TABLE)
   const collection = db.collection<AllowlistRawData>(ALLOWLIST_TABLE)
+
+  try {
+    const target = await projectCollection.findOne({
+      _id: new ObjectId(projectId),
+      creatorId: new ObjectId(session.user.id),
+    })
+    if (!target) {
+      return res.status(403).json({
+        message: 'Not allowed to check the allowlists not belong to you',
+      })
+    }
+  } catch (err) {
+    return res.status(500).json({
+      message: (err as Error)?.message || 'Interval server error',
+    })
+  }
 
   /**
    * @method GET
@@ -103,7 +122,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<Al
       })
     } catch (err) {
       return res.status(500).json({
-        message: (err as Error)?.message ?? 'Failed to create project',
+        message: (err as Error)?.message || 'Failed to create project',
       })
     }
   }
