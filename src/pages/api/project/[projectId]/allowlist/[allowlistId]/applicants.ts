@@ -137,8 +137,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<Ap
           })
         }
 
-        const applicant = target.applicants.find(_applicant => _applicant.address === req.body.address)
-        if ()
+        // TODO: check if the address has already applied
+        // const applicant = target.applicants.find(_applicant => _applicant.address === req.body.address)
 
         result = await allowlistCollection.updateOne(
           { _id: new ObjectId(allowlistId), projectId: new ObjectId(projectId), 'applicants.address': req.body.address },
