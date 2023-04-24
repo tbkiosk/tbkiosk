@@ -1,9 +1,6 @@
 import type { ResponseBase } from '@/types/response'
 
-const request = async <T>(
-  url: string,
-  options?: RequestInit
-): Promise<ResponseBase<T>> => {
+const request = async <T>(url: string, options?: RequestInit): Promise<ResponseBase<T>> => {
   try {
     const res = await fetch(url, {
       headers: {
@@ -12,14 +9,14 @@ const request = async <T>(
       },
       ...options,
     })
+    const data = await res.json()
+
     if (!res.ok) {
       return {
         status: res.status,
-        message: res.statusText,
+        message: data?.message || res.statusText,
       }
     }
-
-    const data: T = await res.json()
 
     return { data }
   } catch (e) {

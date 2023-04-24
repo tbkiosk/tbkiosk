@@ -97,7 +97,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<Pr
     try {
       await Promise.all([
         copyTempImageToPersistentBucket(transformedData.profileImage, cos),
-        copyTempImageToPersistentBucket(transformedData.bannerImage, cos),
+        transformedData.bannerImage && copyTempImageToPersistentBucket(transformedData.bannerImage, cos),
         collection.insertOne({ ...transformedData, creatorId: new ObjectId(transformedData.creatorId) }),
       ])
 

@@ -57,7 +57,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<Pr
       })
 
       return res.status(200).json({
-        data: result ?? null,
+        data: result || null,
       })
     } catch (err) {
       return res.status(500).json({

@@ -7,17 +7,17 @@ export const PROJECT_TABLE = 'project'
 
 export const projectFormSchema = Joi.object({
   projectName: Joi.string().required(),
-  customURL: Joi.string(),
-  description: Joi.string(),
-  website: Joi.string(),
-  twitter: Joi.string(),
-  discord: Joi.string(),
-  mintDate: Joi.date().required(),
-  mintPrice: Joi.number().required().positive(),
-  coinType: Joi.string().required(),
-  totalSupply: Joi.number().positive().required(),
+  customURL: Joi.string().allow(''),
+  description: Joi.string().required(),
+  website: Joi.string().allow(''),
+  twitter: Joi.string().allow(''),
+  discord: Joi.string().allow(''),
+  mintDate: Joi.date().allow(''),
+  mintPrice: Joi.number().positive(),
+  coinType: Joi.string(),
+  totalSupply: Joi.number().integer().positive(),
   profileImage: Joi.string().required(),
-  bannerImage: Joi.string().required(),
+  bannerImage: Joi.string().allow(''),
 })
 
 export const projectDbSchema = projectFormSchema.append({
@@ -29,26 +29,26 @@ export const projectDbSchema = projectFormSchema.append({
 type ProjectBase = {
   projectName: string
   customURL?: string
-  description?: string
+  description: string
   website?: string
   twitter?: string
   discord?: string
   profileImage: string
-  bannerImage: string
+  bannerImage?: string
 }
 
 export type ProjectForm = ProjectBase & {
-  mintDate: Date | Dayjs
-  mintPrice: string
+  mintDate?: Date | Dayjs
+  mintPrice?: string
   coinType: string
-  totalSupply: string
+  totalSupply?: string
 }
 
 export type ProjectData = ProjectBase & {
-  mintDate: Date
-  mintPrice: number
+  mintDate?: Date
+  mintPrice?: number
   coinType: string
-  totalSupply: number
+  totalSupply?: number
   createdTime: Date
   updatedTime: Date
   creatorId: ObjectId

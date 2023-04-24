@@ -93,8 +93,8 @@ const UpdateProject = ({ project }: UpdateProjectProps) => {
   const onSubmit: SubmitHandler<ProjectForm> = async formData => {
     const transformedData = {
       ...formData,
-      mintPrice: +formData.mintPrice,
-      totalSupply: +formData.totalSupply,
+      mintPrice: isNaN(Number(formData.mintPrice)) ? undefined : Number(formData.mintPrice),
+      totalSupply: isNaN(Number(formData.totalSupply)) ? undefined : Number(formData.totalSupply),
     }
 
     const { data } = await request<ResponseBase<boolean>>(`/api/project/${project._id}`, {
@@ -103,7 +103,7 @@ const UpdateProject = ({ project }: UpdateProjectProps) => {
     })
 
     if (data?.data) {
-      router.push(`/project/${project._id}`).then(() => toast.success(data?.message ?? 'Success'))
+      router.push(`/project/${project._id}`).then(() => toast.success(data?.message || 'Success'))
     }
   }
 
@@ -119,7 +119,7 @@ const UpdateProject = ({ project }: UpdateProjectProps) => {
         <Controller
           name="projectName"
           control={control}
-          render={({ field }) => (
+          render={({ field, fieldState }) => (
             <div className="mb-6">
               <label
                 className="block mb-1 font-medium"
@@ -128,6 +128,7 @@ const UpdateProject = ({ project }: UpdateProjectProps) => {
                 Project name
               </label>
               <Input
+                isError={fieldState.invalid}
                 placeholder="Enter the name of your project here"
                 {...field}
               />
@@ -155,7 +156,7 @@ const UpdateProject = ({ project }: UpdateProjectProps) => {
         <Controller
           name="description"
           control={control}
-          render={({ field }) => (
+          render={({ field, fieldState }) => (
             <div className="mb-6">
               <label
                 className="block mb-1 font-medium"
@@ -165,6 +166,7 @@ const UpdateProject = ({ project }: UpdateProjectProps) => {
               </label>
               <TextArea
                 className="resize-none"
+                isError={fieldState.invalid}
                 {...field}
               />
             </div>
@@ -227,7 +229,7 @@ const UpdateProject = ({ project }: UpdateProjectProps) => {
         <Controller
           name="profileImage"
           control={control}
-          render={({ field }) => (
+          render={({ field, fieldState }) => (
             <div className="mb-6">
               <label className="block mb-1 font-medium">Profile Image</label>
               <div className="flex items-center gap-4">
@@ -236,6 +238,7 @@ const UpdateProject = ({ project }: UpdateProjectProps) => {
                 </span>
                 <Upload
                   id="profileImage"
+                  isError={fieldState.invalid}
                   onChange={(newValue: string) => field.onChange(newValue)}
                   ref={field.ref}
                   value={field.value}

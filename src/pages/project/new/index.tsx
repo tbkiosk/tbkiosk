@@ -58,14 +58,19 @@ const NewProject = () => {
   const onSubmit: SubmitHandler<ProjectForm> = async formData => {
     const transformedData = {
       ...formData,
-      mintPrice: +formData.mintPrice,
-      totalSupply: +formData.totalSupply,
+      mintPrice: !formData.mintPrice ? undefined : Number(formData.mintPrice),
+      totalSupply: !formData.totalSupply ? undefined : Number(formData.totalSupply),
     }
 
-    const { data } = await request<ResponseBase<boolean>>('/api/project', { method: 'POST', body: JSON.stringify(transformedData) })
+    const { data, message } = await request<ResponseBase<boolean>>('/api/project', {
+      method: 'POST',
+      body: JSON.stringify(transformedData),
+    })
 
     if (data?.data) {
-      router.push('/project').then(() => toast.success(data?.message ?? 'Success'))
+      router.push('/project').then(() => toast.success(data?.message || 'Success'))
+    } else {
+      toast.error(message || 'Failed to create project')
     }
   }
 
@@ -98,7 +103,7 @@ const NewProject = () => {
           <Controller
             name="projectName"
             control={control}
-            render={({ field }) => (
+            render={({ field, fieldState }) => (
               <div className="mb-6">
                 <label
                   className="block mb-1 font-medium"
@@ -107,11 +112,13 @@ const NewProject = () => {
                   Project name
                 </label>
                 <Input
+                  isError={fieldState.invalid}
                   placeholder="Enter the name of your project here"
                   {...field}
                 />
               </div>
             )}
+            rules={{ required: true }}
           />
           <Controller
             name="customURL"
@@ -123,6 +130,7 @@ const NewProject = () => {
                   htmlFor="customURL"
                 >
                   Custom url
+                  <span className="ml-2 font-normal text-gray-300">(optional)</span>
                 </label>
                 <Input
                   placeholder="your custom url"
@@ -134,7 +142,7 @@ const NewProject = () => {
           <Controller
             name="description"
             control={control}
-            render={({ field }) => (
+            render={({ field, fieldState }) => (
               <div className="mb-6">
                 <label
                   className="block mb-1 font-medium"
@@ -144,10 +152,12 @@ const NewProject = () => {
                 </label>
                 <TextArea
                   className="resize-none"
+                  isError={fieldState.invalid}
                   {...field}
                 />
               </div>
             )}
+            rules={{ required: true }}
           />
           <Controller
             name="website"
@@ -159,6 +169,7 @@ const NewProject = () => {
                   htmlFor="website"
                 >
                   Website
+                  <span className="ml-2 font-normal text-gray-300">(optional)</span>
                 </label>
                 <Input
                   placeholder="Enter your website url"
@@ -177,6 +188,7 @@ const NewProject = () => {
                   htmlFor="twitter"
                 >
                   Twitter
+                  <span className="ml-2 font-normal text-gray-300">(optional)</span>
                 </label>
                 <Input
                   placeholder="Enter Twitter profile url"
@@ -195,6 +207,7 @@ const NewProject = () => {
                   htmlFor="discord"
                 >
                   Discord
+                  <span className="ml-2 font-normal text-gray-300">(optional)</span>
                 </label>
                 <Input
                   placeholder="Enter Discord url"
@@ -206,7 +219,7 @@ const NewProject = () => {
           <Controller
             name="profileImage"
             control={control}
-            render={({ field }) => (
+            render={({ field, fieldState }) => (
               <div className="mb-6">
                 <label className="block mb-1 font-medium">Profile Image</label>
                 <div className="flex items-center gap-4">
@@ -215,6 +228,7 @@ const NewProject = () => {
                   </span>
                   <Upload
                     id="profileImage"
+                    isError={fieldState.invalid}
                     onChange={(newValue: string) => field.onChange(newValue)}
                     ref={field.ref}
                     value={field.value}
@@ -222,13 +236,17 @@ const NewProject = () => {
                 </div>
               </div>
             )}
+            rules={{ required: true }}
           />
           <Controller
             name="bannerImage"
             control={control}
             render={({ field }) => (
               <div className="mb-6">
-                <label className="block mb-1 font-medium">Banner Image</label>
+                <label className="block mb-1 font-medium">
+                  Banner Image
+                  <span className="ml-2 font-normal text-gray-300">(optional)</span>
+                </label>
                 <div className="flex items-center gap-4">
                   <span className="grow font-normal">1400x420 recommended</span>
                   <Upload
@@ -279,7 +297,7 @@ const NewProject = () => {
             <Controller
               name="mintPrice"
               control={control}
-              render={({ field }) => (
+              render={({ field, fieldState }) => (
                 <div className="mb-6">
                   <label
                     className="block mb-1 font-medium"
@@ -290,6 +308,7 @@ const NewProject = () => {
                   <div className="flex items-center gap-4">
                     <Input
                       className="grow"
+                      isError={fieldState.invalid}
                       {...field}
                     />
                     <Controller
@@ -311,11 +330,12 @@ const NewProject = () => {
                   </div>
                 </div>
               )}
+              rules={{ pattern: /^\d+(\.\d+)?$/ }}
             />
             <Controller
               name="totalSupply"
               control={control}
-              render={({ field }) => (
+              render={({ field, fieldState }) => (
                 <div className="mb-6">
                   <label
                     className="block mb-1 font-medium"
@@ -323,9 +343,13 @@ const NewProject = () => {
                   >
                     Total supply
                   </label>
-                  <Input {...field} />
+                  <Input
+                    {...field}
+                    isError={fieldState.invalid}
+                  />
                 </div>
               )}
+              rules={{ pattern: /^[0-9]*$/ }}
             />
           </div>
         </div>
