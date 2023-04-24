@@ -15,6 +15,7 @@ import useRole from '@/hooks/useRole'
 import request from '@/utils/request'
 
 import { ROLES } from '@/constants/roles'
+import { projectTypes } from '@/schemas/project'
 
 import type { ProjectForm, ProjectData } from '@/schemas/project'
 import type { ResponseBase } from '@/types/response'
@@ -75,6 +76,7 @@ const UpdateProject = ({ project }: UpdateProjectProps) => {
 
   const { control, handleSubmit, formState } = useForm<ProjectForm>({
     defaultValues: {
+      projectType: project.projectType,
       projectName: project.projectName,
       customURL: project.customURL,
       description: project.description,
@@ -116,6 +118,32 @@ const UpdateProject = ({ project }: UpdateProjectProps) => {
         <p className="mb-4 font-bold text-lg">Update project</p>
         <p className="mb-4">Provide information about your project and criteria for the allow list.</p>
         <p className="mb-4 font-bold">Project information</p>
+        <Controller
+          name="projectType"
+          control={control}
+          render={({ field }) => (
+            <div className="mb-6">
+              <label
+                className="block mb-1 font-medium"
+                htmlFor="projectType"
+              >
+                Project type
+              </label>
+              <Select
+                buttonClassName="h-9 py-2 text-left"
+                className=""
+                onChange={option => field.onChange(option.id)}
+                options={Object.values(projectTypes).map(_value => ({
+                  id: _value,
+                  name: _value,
+                }))}
+                showArrow
+                value={field.value}
+              />
+            </div>
+          )}
+          rules={{ required: true }}
+        />
         <Controller
           name="projectName"
           control={control}

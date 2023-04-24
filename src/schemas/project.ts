@@ -5,7 +5,19 @@ import type { Dayjs } from 'dayjs'
 
 export const PROJECT_TABLE = 'project'
 
+export enum projectTypes {
+  Airdrop = 'Airdrop',
+  'NFT Mint' = 'NFT Mint',
+  Discount = 'Discount',
+  Event = 'Event',
+  Merch = 'Merch',
+  Other = 'Other',
+}
+
 export const projectFormSchema = Joi.object({
+  projectType: Joi.string()
+    .valid(...Object.values(projectTypes))
+    .required(),
   projectName: Joi.string().required(),
   customURL: Joi.string().allow(''),
   description: Joi.string().required(),
@@ -27,6 +39,7 @@ export const projectDbSchema = projectFormSchema.append({
 })
 
 type ProjectBase = {
+  projectType: projectTypes
   projectName: string
   customURL?: string
   description: string

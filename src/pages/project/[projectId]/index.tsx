@@ -97,7 +97,7 @@ const ProjectDetail = () => {
               <div className="w-56 max-w-56 flex flex-col gap-2">
                 <p className="flex justify-between">
                   <span>Supply</span>
-                  <span className="font-bold">{project.totalSupply}</span>
+                  <span className="font-bold">{project.totalSupply ?? '-'}</span>
                 </p>
                 <p className="flex justify-between">
                   <span>Mint date</span>
@@ -106,7 +106,7 @@ const ProjectDetail = () => {
                 <p className="flex justify-between">
                   <span>Price</span>
                   <span className="font-bold">
-                    {project.mintPrice} {project.coinType}
+                    {project.mintPrice ?? '-'} {project.coinType}
                   </span>
                 </p>
               </div>

@@ -68,7 +68,7 @@ const DiscoverProjectDetail = () => {
                 </p>
                 <p className="flex justify-between">
                   <span>Supply</span>
-                  <span className="font-bold">{project.totalSupply}</span>
+                  <span className="font-bold">{project.totalSupply ?? '-'}</span>
                 </p>
                 <p className="flex justify-between">
                   <span>Mint date</span>
@@ -77,7 +77,7 @@ const DiscoverProjectDetail = () => {
                 <p className="flex justify-between">
                   <span>Price</span>
                   <span className="font-bold">
-                    {project.mintPrice} {project.coinType}
+                    {project.mintPrice ?? '-'} {project.coinType}
                   </span>
                 </p>
               </div>

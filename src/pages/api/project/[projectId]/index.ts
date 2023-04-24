@@ -105,7 +105,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<Pr
 
       await Promise.all([
         transformedData.profileImage === project.profileImage ? null : copyTempImageToPersistentBucket(transformedData.profileImage, cos),
-        transformedData.bannerImage === project.bannerImage ? null : copyTempImageToPersistentBucket(transformedData.bannerImage, cos),
+        transformedData.bannerImage === project.bannerImage
+          ? null
+          : transformedData.bannerImage && copyTempImageToPersistentBucket(transformedData.bannerImage, cos),
         collection.updateOne(
           {
             _id: new ObjectId(projectId),
