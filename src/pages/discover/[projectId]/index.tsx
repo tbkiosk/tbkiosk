@@ -39,7 +39,7 @@ const DiscoverProjectDetail = () => {
         </>
       }
     >
-      <div className="mb-8">
+      <div className="h-[14.5rem] mb-8">
         <Loading isLoading={isProjectsLoading}>
           {project && (
             <div className="flex gap-8">

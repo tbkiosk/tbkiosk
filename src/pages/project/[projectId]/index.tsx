@@ -42,7 +42,7 @@ const ProjectDetail = () => {
         </>
       }
     >
-      <div className="mb-8">
+      <div className="h-[14.5rem] mb-8">
         <AllowlistDialog
           open={router.query.allowlistId === 'new'}
           setOpen={(nextOpen: boolean) => router.push(`/project/${router.query.projectId}${nextOpen ? '?allowlistId=new' : ''}`)}
@@ -123,7 +123,7 @@ const ProjectDetail = () => {
           )}
         </Loading>
       </div>
-      <div className="flex flex-wrap gap-4">
+      <div className="flex flex-wrap gap-4 min-h-24">
         <Loading isLoading={isAllowlistLoading}>
           <>
             {allowlists?.map(_allowlist => (

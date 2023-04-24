@@ -21,12 +21,12 @@ type LayoutProps = {
 
 const MENUS = [
   {
-    key: 'profile',
-    iconClass: 'fa-house',
-  },
-  {
     key: 'discover',
     iconClass: 'fa-compass',
+  },
+  {
+    key: 'portfolio',
+    iconClass: 'fa-house',
   },
 ]
 

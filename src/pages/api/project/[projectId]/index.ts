@@ -100,8 +100,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<Pr
         })
       }
 
-      const now = +new Date()
-      const transformedData: ProjectData = { ...req.body, updatedTime: now }
+      const now = new Date()
+      const transformedData: ProjectData = { ...req.body, mintDate: new Date(req.body.mintDate), updatedTime: now }
 
       await Promise.all([
         transformedData.profileImage === project.profileImage ? null : copyTempImageToPersistentBucket(transformedData.profileImage, cos),
