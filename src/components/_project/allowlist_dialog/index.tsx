@@ -1,5 +1,5 @@
 import { useEffect, useMemo } from 'react'
-import { useForm, SubmitHandler, Controller } from 'react-hook-form'
+import { useForm, SubmitHandler, Controller, useFieldArray } from 'react-hook-form'
 import { toast } from 'react-toastify'
 import Image from 'next/image'
 import cl from 'classnames'
@@ -9,7 +9,7 @@ import { Modal, Input, Button, Dropdown } from '@/components'
 import request from '@/utils/request'
 
 import { TENCENT_COS_DEV_BUCKET, TENCENT_COS_BUCKET, TENCENT_COS_CDN_DOMAIN } from '@/constants/cos'
-import { AllocationMethod, CriteriaKeys, CRITERIA_DEFAULT_VALUE, renderCriteriaText } from '@/schemas/allowlist'
+import { AllocationMethod, CriteriaKeys, CRITERIA_DEFAULT_VALUE, criteriaDisplayText } from '@/schemas/allowlist'
 
 import type { ProjectData } from '@/schemas/project'
 import type { AllowlistForm } from '@/schemas/allowlist'
@@ -26,7 +26,9 @@ type AllowlistDialogProps = {
 
 const DEFAULT_VALUES = {
   amount: '',
-  criteria: {},
+  criteria: {
+    [CriteriaKeys.MINIMUN_TOKEN_AND_ADDRESS]: [],
+  },
   allocationMethod: AllocationMethod.FCFS,
 }
 
@@ -34,19 +36,23 @@ export const AllowlistDialog = ({ open, setOpen, project, onRefresh, onClose }: 
   const { control, handleSubmit, formState, getValues, setValue, watch, reset } = useForm<AllowlistForm>({
     defaultValues: DEFAULT_VALUES,
   })
+  const { append, remove, fields } = useFieldArray({
+    control,
+    name: 'criteria.MINIMUN_TOKEN_AND_ADDRESS',
+  })
 
   const onSubmit: SubmitHandler<AllowlistForm> = async formData => {
-    const { data } = await request<ResponseBase<boolean>>(`/api/project/${(project as WithObjectId<ProjectData>)._id}/allowlist`, {
+    const { data, message } = await request<ResponseBase<boolean>>(`/api/project/${(project as WithObjectId<ProjectData>)._id}/allowlist`, {
       method: 'POST',
       body: JSON.stringify(formData),
     })
 
     if (data?.data) {
-      toast.success(data?.message ?? 'Success')
+      toast.success(data?.message || 'Success')
       setOpen(false)
       onRefresh?.()
     } else {
-      toast.error(data?.message ?? 'Failed to create allowlist')
+      toast.error(message || 'Failed to create allowlist')
     }
   }
 
@@ -68,7 +74,7 @@ export const AllowlistDialog = ({ open, setOpen, project, onRefresh, onClose }: 
       {project && (
         <div className="h-full w-full flex flex-col items-center justify-center">
           <form
-            className="min-w-[28rem] flex flex-col p-8 bg-white rounded"
+            className="w-[28rem] max-w-[28rem] max-h-[720px] flex flex-col p-8 bg-white rounded overflow-y-auto"
             onSubmit={handleSubmit(onSubmit)}
           >
             <div className="flex justify-between items-center mb-6">
@@ -114,24 +120,84 @@ export const AllowlistDialog = ({ open, setOpen, project, onRefresh, onClose }: 
             />
             <hr className="-mx-8 my-6 border-[#e6e6e9]" />
             <p className="mb-4 font-bold">Criteria</p>
-            <div className="flex flex-col gap-2 mb-4">
-              {Object.entries(criteriaValue).map(([_criteria, _criteriaValue]) => (
-                <div
-                  className="flex justify-between items-center"
-                  key={_criteria}
-                >
-                  <span>{renderCriteriaText(_criteria as CriteriaKeys, _criteriaValue)}</span>
-                  <span>
-                    <i className="fa-solid fa-pencil text-sm mr-2 cursor-pointer hover:opacity-50" />
+            <div className="flex flex-col gap-2">
+              {fields.map((_field, index) => (
+                <div key={_field.id}>
+                  <label className="flex justify-between items-center mb-2">
+                    {criteriaDisplayText[CriteriaKeys.MINIMUN_TOKEN_AND_ADDRESS]} {index + 1}
                     <i
                       className="fa-solid fa-xmark text-sm cursor-pointer hover:opacity-50"
-                      onClick={() =>
-                        setValue('criteria', Object.fromEntries(Object.entries(criteriaValue).filter(([key]) => key !== _criteria)))
-                      }
+                      onClick={() => remove(index)}
                     />
-                  </span>
+                  </label>
+                  <Controller
+                    control={control}
+                    name={`criteria.MINIMUN_TOKEN_AND_ADDRESS.${index}.contractAddress`}
+                    render={({ field, fieldState }) => (
+                      <Input
+                        className="border-gray-200 mb-2"
+                        isError={fieldState.invalid}
+                        placeholder="Enter NFT/Token contract address"
+                        {...field}
+                      />
+                    )}
+                    rules={{ required: true, pattern: /0x[a-fA-F0-9]+$/ }}
+                  />
+                  <Controller
+                    control={control}
+                    name={`criteria.MINIMUN_TOKEN_AND_ADDRESS.${index}.number`}
+                    render={({ field, fieldState }) => (
+                      <Input
+                        className="border-gray-200 mb-2"
+                        isError={fieldState.invalid}
+                        placeholder="Enter number of tokens"
+                        {...field}
+                      />
+                    )}
+                    rules={{ required: true, pattern: /^[0-9]*$/ }}
+                  />
                 </div>
               ))}
+              <Controller
+                control={control}
+                name="criteria.PROJECT_DISCORD_JOINED"
+                render={({ field }) =>
+                  field.value && (
+                    <p className="flex justify-between items-center mb-2">
+                      <span>Join Discord server</span>
+                      <i
+                        className="fa-solid fa-xmark text-sm cursor-pointer hover:opacity-50"
+                        onClick={() =>
+                          setValue('criteria', {
+                            ...criteriaValue,
+                            [CriteriaKeys.PROJECT_DISCORD_JOINED]: undefined,
+                          })
+                        }
+                      />
+                    </p>
+                  )
+                }
+              />
+              <Controller
+                control={control}
+                name="criteria.PROJECT_TWITTER_FOLLOWED"
+                render={({ field }) =>
+                  field.value && (
+                    <p className="flex justify-between items-center mb-2">
+                      <span className="truncate">Follow @{project.projectName} Twitter</span>
+                      <i
+                        className="fa-solid fa-xmark text-sm cursor-pointer hover:opacity-50"
+                        onClick={() =>
+                          setValue('criteria', {
+                            ...criteriaValue,
+                            [CriteriaKeys.PROJECT_TWITTER_FOLLOWED]: undefined,
+                          })
+                        }
+                      />
+                    </p>
+                  )
+                }
+              />
             </div>
             <Dropdown
               buttonClassName="!justify-start !bg-white !text-black !border !border-gray-200 !outline-none !ring-0 !ring-offset-0 !rounded-md"
@@ -148,24 +214,46 @@ export const AllowlistDialog = ({ open, setOpen, project, onRefresh, onClose }: 
                   'bg-white focus:outline-none',
                 ])}
               >
-                {Object.values(CriteriaKeys).map(_criteria => {
-                  const disabled = !!criteriaValue[_criteria]
-                  return (
-                    <Dropdown.Item
-                      disabled={disabled}
-                      key={_criteria}
-                    >
-                      <div
-                        className={cl(['px-4 py-2 cursor-pointer hover:bg-gray-100', disabled && 'text-gray-300 !cursor-not-allowed'])}
-                        onClick={() =>
-                          !disabled && setValue('criteria', { ...criteriaValue, [_criteria]: CRITERIA_DEFAULT_VALUE[_criteria] })
-                        }
-                      >
-                        {renderCriteriaText(_criteria)}
-                      </div>
-                    </Dropdown.Item>
-                  )
-                })}
+                <Dropdown.Item>
+                  <div
+                    className="px-4 py-2 cursor-pointer hover:bg-gray-100"
+                    onClick={() => append({ contractAddress: '', number: '' })}
+                  >
+                    {criteriaDisplayText[CriteriaKeys.MINIMUN_TOKEN_AND_ADDRESS]}
+                  </div>
+                </Dropdown.Item>
+                <Dropdown.Item disabled={!!criteriaValue.PROJECT_DISCORD_JOINED}>
+                  <div
+                    className={cl([
+                      'px-4 py-2 cursor-pointer hover:bg-gray-100',
+                      criteriaValue.PROJECT_DISCORD_JOINED && 'text-gray-300 !cursor-not-allowed',
+                    ])}
+                    onClick={() =>
+                      setValue('criteria', {
+                        ...criteriaValue,
+                        [CriteriaKeys.PROJECT_DISCORD_JOINED]: CRITERIA_DEFAULT_VALUE[CriteriaKeys.PROJECT_DISCORD_JOINED],
+                      })
+                    }
+                  >
+                    {criteriaDisplayText[CriteriaKeys.PROJECT_DISCORD_JOINED]}
+                  </div>
+                </Dropdown.Item>
+                <Dropdown.Item disabled={!!criteriaValue.PROJECT_TWITTER_FOLLOWED}>
+                  <div
+                    className={cl([
+                      'px-4 py-2 cursor-pointer hover:bg-gray-100',
+                      criteriaValue.PROJECT_TWITTER_FOLLOWED && 'text-gray-300 !cursor-not-allowed',
+                    ])}
+                    onClick={() =>
+                      setValue('criteria', {
+                        ...criteriaValue,
+                        [CriteriaKeys.PROJECT_TWITTER_FOLLOWED]: CRITERIA_DEFAULT_VALUE[CriteriaKeys.PROJECT_TWITTER_FOLLOWED],
+                      })
+                    }
+                  >
+                    {criteriaDisplayText[CriteriaKeys.PROJECT_TWITTER_FOLLOWED]}
+                  </div>
+                </Dropdown.Item>
               </Dropdown.Items>
             </Dropdown>
             <hr className="-mx-8 my-6 border-[#e6e6e9]" />
@@ -209,7 +297,7 @@ export const AllowlistDialog = ({ open, setOpen, project, onRefresh, onClose }: 
               )}
             />
             <Button
-              className="!h-10"
+              className="!h-10 shrink-0"
               loading={formState.isLoading}
               variant="colored"
             >

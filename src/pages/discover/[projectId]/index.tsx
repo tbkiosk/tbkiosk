@@ -9,7 +9,7 @@ import Layout from '@/layouts'
 import { Loading } from '@/components'
 
 import { TENCENT_COS_DEV_BUCKET, TENCENT_COS_BUCKET, TENCENT_COS_CDN_DOMAIN } from '@/constants/cos'
-import { CriteriaKeys, renderCriteriaText } from '@/schemas/allowlist'
+import { CriteriaKeys } from '@/schemas/allowlist'
 
 import type { ResponseBase } from '@/types/response'
 import type { ProjectData } from '@/schemas/project'
@@ -100,7 +100,7 @@ const DiscoverProjectDetail = () => {
                 <hr className="-mx-8 my-6" />
                 {!Object.keys(_allowlist.criteria)?.length && <p className="text-gray-300">No criteria</p>}
                 {Object.entries(_allowlist.criteria).map(([_criteria, _content]) => (
-                  <div key={_criteria}>{renderCriteriaText(_criteria as CriteriaKeys, _content)}</div>
+                  <div key={_criteria}>{}</div>
                 ))}
                 <hr className="-mx-8 my-6" />
                 <p className="font-bold">

@@ -27,12 +27,13 @@ export const projectFormSchema = Joi.object({
   mintDate: Joi.date(),
   mintPrice: Joi.number().positive(),
   coinType: Joi.string(),
-  totalSupply: Joi.number().integer().positive(),
+  totalSupply: Joi.string(),
   profileImage: Joi.string().required(),
   bannerImage: Joi.string().allow(''),
 })
 
 export const projectDbSchema = projectFormSchema.append({
+  totalSupply: Joi.number().integer().positive().strict(),
   createdTime: Joi.date().required(),
   updatedTime: Joi.date().required(),
   creatorId: Joi.string().required(),
