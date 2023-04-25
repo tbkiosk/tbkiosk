@@ -114,7 +114,7 @@ const Layout = ({ showHeader = true, headerLeft, children }: LayoutProps) => {
               <div className="mx-4">
                 <ConnectStatus />
               </div>
-              <WalletDropdown buttonClassNames="!h-[3.375rem]" />
+              <WalletDropdown buttonClassName="!h-[3.375rem]" />
             </div>
           </div>
         )}

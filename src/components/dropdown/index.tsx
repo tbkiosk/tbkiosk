@@ -5,12 +5,12 @@ import cl from 'classnames'
 export type DropdownProps = {
   renderButton?: () => React.ReactNode | React.ReactNode[]
   startIcon?: React.ReactNode
-  buttonClassNames?: string
+  buttonClassName?: string
   children?: React.ReactNode | React.ReactNode[]
   disabled?: boolean
 }
 
-export const Dropdown = ({ renderButton, startIcon, buttonClassNames, children, disabled }: DropdownProps) => (
+export const Dropdown = ({ renderButton, startIcon, buttonClassName, children, disabled }: DropdownProps) => (
   <Menu
     as="div"
     className="w-full max-w-full min-w-[13rem] relative inline-block text-left"
@@ -25,7 +25,7 @@ export const Dropdown = ({ renderButton, startIcon, buttonClassNames, children, 
             'focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100',
             open && 'rounded-b-none',
             disabled && 'cursor-not-allowed pointer-events-none',
-            buttonClassNames,
+            buttonClassName,
           ])}
         >
           {startIcon}

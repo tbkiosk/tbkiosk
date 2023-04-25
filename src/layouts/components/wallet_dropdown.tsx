@@ -16,10 +16,10 @@ import { ROLES } from '@/constants/roles'
 
 type WalletDropdownProps = {
   onWalletSelectSuccess?: (address: string) => void
-  buttonClassNames?: string
+  buttonClassName?: string
 }
 
-const WalletDropdown = ({ onWalletSelectSuccess, buttonClassNames }: WalletDropdownProps) => {
+const WalletDropdown = ({ onWalletSelectSuccess, buttonClassName }: WalletDropdownProps) => {
   const { connected: suiConnected, address: suiAddress = '', disconnect: suiDisconnect } = useWallet()
   const { address: ethAddress, isConnected: ethIsConnected } = useAccount()
   const { data: session } = useSession()
@@ -70,7 +70,7 @@ const WalletDropdown = ({ onWalletSelectSuccess, buttonClassNames }: WalletDropd
   return (
     <>
       <Dropdown
-        buttonClassNames={buttonClassNames}
+        buttonClassName={buttonClassName}
         renderButton={renderButton}
         startIcon={
           <Image

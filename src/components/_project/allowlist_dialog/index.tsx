@@ -102,9 +102,10 @@ export const AllowlistDialog = ({ open, setOpen, project, onRefresh, onClose }: 
               render={({ field, fieldState }) => (
                 <div className="relative">
                   <span className="absolute text-xs right-4 top-[11px]">WL</span>
+                  <span className="absolute text-[10px] left-2 top-[2px]">Amount</span>
                   <Input
-                    className={cl(['pr-12 text-right', fieldState.error && 'text-red-700 border-red-700 outline-red-700'])}
-                    placeholder="Amount of allowlist"
+                    className="!px-12 border-gray-200 text-right"
+                    isError={fieldState.invalid}
                     {...field}
                   />
                 </div>
@@ -133,12 +134,17 @@ export const AllowlistDialog = ({ open, setOpen, project, onRefresh, onClose }: 
               ))}
             </div>
             <Dropdown
-              buttonClassNames="!bg-white !text-black !border !border-gray-200 !shadow-none !outline-none !ring-0 !ring-offset-0"
-              renderButton={() => <span>Add new</span>}
+              buttonClassName="!justify-start !bg-white !text-black !border !border-gray-200 !outline-none !ring-0 !ring-offset-0 !rounded-md"
+              renderButton={() => (
+                <span>
+                  <i className="fa-solid fa-plus fa-sm mr-2" />
+                  Add new
+                </span>
+              )}
             >
               <Dropdown.Items
                 className={cl([
-                  'w-full absolute top-full right-0 pb-2 z-10 border border-t-0 border-gray-200 rounded-b-[1.75rem] overflow-hidden',
+                  'w-full absolute top-full right-0 pb-2 z-10 border border-t-0 border-gray-200 rounded-md overflow-hidden',
                   'bg-white focus:outline-none',
                 ])}
               >

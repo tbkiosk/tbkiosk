@@ -9,15 +9,15 @@ export enum AllocationMethod {
 }
 
 export enum CriteriaKeys {
-  MINIMUN_NFT = 'MINIMUN_NFT',
-  MINIMUN_TWITTER_FOLLOWERS = 'MINIMUN_TWITTER_FOLLOWERS',
+  MINIMUN_TOKEN = 'MINIMUN_TOKEN',
+  CONTRACT_ADDRESS = 'CONTRACT_ADDRESS',
   PROJECT_TWITTER_FOLLOWED = 'PROJECT_TWITTER_FOLLOWED',
   PROJECT_DISCORD_JOINED = 'PROJECT_DISCORD_JOINED',
 }
 
 type Criteria = Partial<{
-  [CriteriaKeys.MINIMUN_NFT]: string | number
-  [CriteriaKeys.MINIMUN_TWITTER_FOLLOWERS]: string | number
+  [CriteriaKeys.MINIMUN_TOKEN]: string | number
+  [CriteriaKeys.CONTRACT_ADDRESS]: string
   [CriteriaKeys.PROJECT_TWITTER_FOLLOWED]: boolean
   [CriteriaKeys.PROJECT_DISCORD_JOINED]: boolean
 }>
@@ -36,29 +36,23 @@ export type Applicant = {
   updatedTime: Date
 }
 
-export const allowlistFormSchema = Joi.object({
+const allowlistBaseSchema = Joi.object({
   amount: Joi.string().required(),
   criteria: Joi.object({
-    [CriteriaKeys.MINIMUN_NFT]: Joi.number(),
-    [CriteriaKeys.MINIMUN_TWITTER_FOLLOWERS]: Joi.number(),
+    [CriteriaKeys.MINIMUN_TOKEN]: Joi.number(),
+    [CriteriaKeys.CONTRACT_ADDRESS]: Joi.string(),
     [CriteriaKeys.PROJECT_TWITTER_FOLLOWED]: Joi.boolean(),
     [CriteriaKeys.PROJECT_DISCORD_JOINED]: Joi.boolean(),
   }),
   allocationMethod: Joi.string().valid(...Object.values(AllocationMethod)),
 })
 
-export const allowlistDBSchema = Joi.object({
+export const allowlistFormSchema = allowlistBaseSchema
+
+export const allowlistDBSchema = allowlistFormSchema.append({
   projectId: Joi.string().required(),
   createdTime: Joi.date().required(),
   updatedTime: Joi.date().required(),
-  amount: Joi.number().integer().required(),
-  criteria: Joi.object({
-    [CriteriaKeys.MINIMUN_NFT]: Joi.number(),
-    [CriteriaKeys.MINIMUN_TWITTER_FOLLOWERS]: Joi.number(),
-    [CriteriaKeys.PROJECT_TWITTER_FOLLOWED]: Joi.boolean(),
-    [CriteriaKeys.PROJECT_DISCORD_JOINED]: Joi.boolean(),
-  }),
-  allocationMethod: Joi.string().valid(...Object.values(AllocationMethod)),
   applicants: Joi.array()
     .items(
       Joi.object({
@@ -92,30 +86,10 @@ export type AllowlistRawData = {
 export type AllowlistPreviewData = Omit<AllowlistRawData, 'applicants'> & { filled: number }
 
 export const CRITERIA_DEFAULT_VALUE = {
-  [CriteriaKeys.MINIMUN_NFT]: 1,
-  [CriteriaKeys.MINIMUN_TWITTER_FOLLOWERS]: 100,
+  [CriteriaKeys.MINIMUN_TOKEN]: undefined,
+  [CriteriaKeys.CONTRACT_ADDRESS]: '',
   [CriteriaKeys.PROJECT_DISCORD_JOINED]: true,
   [CriteriaKeys.PROJECT_TWITTER_FOLLOWED]: true,
-}
-
-export const renderCriteriaText = (criteria: CriteriaKeys, content?: string | number | boolean) => {
-  switch (criteria) {
-    case CriteriaKeys.MINIMUN_NFT: {
-      return `Have at least ${content ?? CRITERIA_DEFAULT_VALUE[CriteriaKeys.MINIMUN_NFT]} NFT in wallet`
-    }
-    case CriteriaKeys.MINIMUN_TWITTER_FOLLOWERS: {
-      return `Have at least ${content ?? CRITERIA_DEFAULT_VALUE[CriteriaKeys.MINIMUN_TWITTER_FOLLOWERS]} Followers on Twitter`
-    }
-    case CriteriaKeys.PROJECT_DISCORD_JOINED: {
-      return `Follow ${content ? `@${content}` : ''} twitter`
-    }
-    case CriteriaKeys.PROJECT_TWITTER_FOLLOWED: {
-      return 'Join Discord Server'
-    }
-    default: {
-      return ''
-    }
-  }
 }
 
 export enum ApplicationOperations {
