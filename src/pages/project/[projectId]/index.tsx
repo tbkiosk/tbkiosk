@@ -3,6 +3,8 @@ import Link from 'next/link'
 import Image from 'next/image'
 import useSWR from 'swr'
 import dayjs from 'dayjs'
+import cl from 'classnames'
+import { Tab } from '@headlessui/react'
 
 import Layout from '@/layouts'
 import { Loading, Button } from '@/components'
@@ -123,31 +125,47 @@ const ProjectDetail = () => {
           )}
         </Loading>
       </div>
-      <div className="flex flex-wrap gap-4 min-h-24">
+      <div className="flex flex-col gap-4 min-h-[12rem]">
         <Loading isLoading={isAllowlistLoading}>
-          <>
-            {allowlists?.map(_allowlist => (
-              <div
-                className="w-[calc(33.33%_-_1rem)] min-w-[17.5rem] flex flex-col p-8 rounded-2xl shadow-[0_4px_10px_rgba(216,216,216,0.25)] cursor-pointer transition hover:scale-105"
-                key={_allowlist._id}
-                onClick={() => router.push(`/project/${router.query.projectId}?allowlistId=${_allowlist._id}`)}
-              >
-                <span className="self-end px-6 mb-2 bg-[#82ffac] font-bold rounded-2xl">Live</span>
-                <p className="font-bold text-lg truncate">
-                  {_allowlist.amount} allowlist {_allowlist.allocationMethod}
-                </p>
-                <hr className="-mx-8 my-6" />
-                {!Object.keys(_allowlist.criteria)?.length && <p className="text-gray-300">No criteria</p>}
-                {Object.entries(_allowlist.criteria).map(([_criteria, _content]) => (
-                  <div key={_criteria}>{renderCriteriaText(_criteria as CriteriaKeys, _content)}</div>
-                ))}
-                <hr className="-mx-8 my-6" />
-                <p className="font-bold">
-                  {_allowlist.filled}/{_allowlist.amount} filled
-                </p>
-              </div>
-            ))}
-          </>
+          <Tab.Group>
+            <Tab.List>
+              <Tab>
+                {({ selected }) => (
+                  <span className={cl(['px-4 py-1 transition-opacity hover:opacity-50', selected && 'font-bold border-b border-b-black'])}>
+                    My lists
+                  </span>
+                )}
+              </Tab>
+            </Tab.List>
+            <Tab.Panels>
+              <Tab.Panel>
+                <div className="flex flex-wrap">
+                  {allowlists?.map(_allowlist => (
+                    <div
+                      className="w-[calc(33.33%_-_1rem)] min-w-[17.5rem] flex flex-col p-8 rounded-2xl shadow-[0_4px_10px_rgba(216,216,216,0.25)] cursor-pointer transition hover:scale-105"
+                      key={_allowlist._id}
+                      onClick={() => router.push(`/project/${router.query.projectId}?allowlistId=${_allowlist._id}`)}
+                    >
+                      <span className="self-end px-6 mb-2 bg-[#82ffac] font-bold rounded-2xl">Live</span>
+                      <p className="font-bold text-lg truncate">
+                        {_allowlist.amount} allowlist {_allowlist.allocationMethod}
+                      </p>
+                      <hr className="-mx-8 my-6" />
+                      {!Object.keys(_allowlist.criteria)?.length && <p className="text-gray-300">No criteria</p>}
+                      {Object.entries(_allowlist.criteria).map(([_criteria, _content]) => (
+                        <div key={_criteria}>{renderCriteriaText(_criteria as CriteriaKeys, _content)}</div>
+                      ))}
+                      <hr className="-mx-8 my-6" />
+                      <p className="font-bold">
+                        {_allowlist.filled}/{_allowlist.amount} filled
+                      </p>
+                    </div>
+                  ))}
+                  {!allowlists?.length && <p className="w-full mt-12 text-center text-gray-400">No lists</p>}
+                </div>
+              </Tab.Panel>
+            </Tab.Panels>
+          </Tab.Group>
         </Loading>
       </div>
     </Layout>
