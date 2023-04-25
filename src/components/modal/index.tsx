@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import cl from 'classnames'
+import { Transition } from '@headlessui/react'
 
 import Portal from '../portal'
 
@@ -29,7 +30,20 @@ export const Modal = ({ isOpen, setOpen, children, classNames }: ModalProps) => 
 
   return (
     <Portal>
-      <div className={cl(['fixed inset-0 bg-black/50 z-[1200]', classNames])}>{children}</div>
+      <Transition
+        appear
+        as="div"
+        show={isOpen}
+        className={cl(['fixed inset-0 bg-black/50 z-[1200]', classNames])}
+        enter="transition-opacity duration-200"
+        enterFrom="opacity-0"
+        enterTo="opacity-100"
+        leave="transition-opacity duration-200"
+        leaveFrom="opacity-100"
+        leaveTo="opacity-0"
+      >
+        {children}
+      </Transition>
     </Portal>
   )
 }
