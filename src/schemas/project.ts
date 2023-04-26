@@ -14,7 +14,7 @@ export enum projectTypes {
   Other = 'Other',
 }
 
-export const projectFormSchema = Joi.object({
+const projectBaseSchema = Joi.object({
   projectType: Joi.string()
     .valid(...Object.values(projectTypes))
     .required(),
@@ -24,19 +24,24 @@ export const projectFormSchema = Joi.object({
   website: Joi.string().allow(''),
   twitter: Joi.string().allow(''),
   discord: Joi.string().allow(''),
-  mintDate: Joi.date(),
-  mintPrice: Joi.number().positive(),
-  coinType: Joi.string(),
-  totalSupply: Joi.string(),
   profileImage: Joi.string().required(),
   bannerImage: Joi.string().allow(''),
+  mintDate: Joi.date(),
+  coinType: Joi.string().required(),
 })
 
-export const projectDbSchema = projectFormSchema.append({
+export const projectFormSchema = projectBaseSchema.append({
+  mintPrice: Joi.string().allow(''),
+  totalSupply: Joi.string().allow(''),
+})
+
+export const projectDbSchema = projectBaseSchema.append({
+  mintPrice: Joi.number().positive().strict(),
   totalSupply: Joi.number().integer().positive().strict(),
   createdTime: Joi.date().required(),
   updatedTime: Joi.date().required(),
   creatorId: Joi.string().required(),
+  allowlists: Joi.array().items(Joi.string()).default([]).required(),
 })
 
 type ProjectBase = {
@@ -66,4 +71,5 @@ export type ProjectData = ProjectBase & {
   createdTime: Date
   updatedTime: Date
   creatorId: ObjectId
+  allowlists: ObjectId[]
 }
