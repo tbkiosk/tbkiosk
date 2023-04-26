@@ -9,11 +9,10 @@ import Layout from '@/layouts'
 import { Loading } from '@/components'
 
 import { TENCENT_COS_DEV_BUCKET, TENCENT_COS_BUCKET, TENCENT_COS_CDN_DOMAIN } from '@/constants/cos'
-import { CriteriaKeys } from '@/schemas/allowlist'
 
 import type { ResponseBase } from '@/types/response'
 import type { ProjectData } from '@/schemas/project'
-import type { AllowlistPreviewData } from '@/schemas/allowlist'
+import type { AllowlistRawData } from '@/schemas/allowlist'
 import type { WithObjectId } from '@/types/schema'
 
 const DiscoverProjectDetail = () => {
@@ -22,9 +21,9 @@ const DiscoverProjectDetail = () => {
   const { data: { data: project = null } = {}, isLoading: isProjectsLoading } = useSWR<ResponseBase<WithObjectId<ProjectData>>>(
     router.query.projectId ? `/api/discover/${router.query.projectId}` : null
   )
-  const { data: { data: allowlists = null } = {}, isLoading: isAllowlistLoading } = useSWR<
-    ResponseBase<WithObjectId<AllowlistPreviewData>[]>
-  >(router.query.projectId ? `/api/discover/${router.query.projectId}/allowlist` : null)
+  const { data: { data: allowlists = null } = {}, isLoading: isAllowlistLoading } = useSWR<ResponseBase<WithObjectId<AllowlistRawData>[]>>(
+    router.query.projectId ? `/api/discover/${router.query.projectId}/allowlist` : null
+  )
 
   const [open, setOpen] = useState(false)
 
@@ -104,7 +103,7 @@ const DiscoverProjectDetail = () => {
                 ))}
                 <hr className="-mx-8 my-6" />
                 <p className="font-bold">
-                  {_allowlist.filled}/{_allowlist.amount} filled
+                  {_allowlist.approvees.length}/{_allowlist.amount} filled
                 </p>
               </div>
             ))}

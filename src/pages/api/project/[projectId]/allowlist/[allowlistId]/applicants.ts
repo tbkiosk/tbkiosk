@@ -66,101 +66,101 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<Ap
    * @method GET
    * applicants in allowlist by allowlistId
    */
-  if (req.method === 'GET') {
-    try {
-      const result = await allowlistCollection.findOne({
-        _id: new ObjectId(allowlistId),
-        projectId: new ObjectId(projectId),
-      })
+  // if (req.method === 'GET') {
+  //   try {
+  //     const result = await allowlistCollection.findOne({
+  //       _id: new ObjectId(allowlistId),
+  //       projectId: new ObjectId(projectId),
+  //     })
 
-      if (!result) {
-        return res.status(200).json({
-          data: null,
-        })
-      }
+  //     if (!result) {
+  //       return res.status(200).json({
+  //         data: null,
+  //       })
+  //     }
 
-      return res.status(200).json({
-        data: result.applicants,
-      })
-    } catch (err) {
-      return res.status(500).json({
-        message: (err as Error)?.message ?? 'Interval server error',
-      })
-    }
-  }
+  //     return res.status(200).json({
+  //       data: result.applicants,
+  //     })
+  //   } catch (err) {
+  //     return res.status(500).json({
+  //       message: (err as Error)?.message ?? 'Interval server error',
+  //     })
+  //   }
+  // }
 
   /**
    * @method PUT
    * approve/reject allowlist applications
    */
-  if (req.method === 'PUT') {
-    const { error } = applicationOperationSchema.validate(req.body)
-    if (error) {
-      return res.status(400).send({
-        message: error.message || 'Invalid allowlist operation',
-      })
-    }
+  // if (req.method === 'PUT') {
+  //   const { error } = applicationOperationSchema.validate(req.body)
+  //   if (error) {
+  //     return res.status(400).send({
+  //       message: error.message || 'Invalid allowlist operation',
+  //     })
+  //   }
 
-    const now = new Date()
-    const isBatch = req.body.operation === ApplicationOperations.APPROVE_ALL || req.body.operation === ApplicationOperations.REJECT_ALL
+  //   const now = new Date()
+  //   const isBatch = req.body.operation === ApplicationOperations.APPROVE_ALL || req.body.operation === ApplicationOperations.REJECT_ALL
 
-    try {
-      let result: undefined | UpdateResult
+  //   try {
+  //     let result: undefined | UpdateResult
 
-      if (isBatch) {
-        result = await allowlistCollection.updateOne(
-          { _id: new ObjectId(allowlistId), projectId: new ObjectId(projectId) },
-          {
-            $set: {
-              'applicants.$[].status':
-                req.body.operation === ApplicationOperations.APPROVE_ALL ? ApplicantStatus.APPROVED : ApplicantStatus.REJECTED,
-              'applicants.$[].updatedTime': now,
-            },
-          }
-        )
-      } else {
-        if (!req.body.address) {
-          return res.status(400).send({
-            message: 'Invalid address',
-          })
-        }
+  //     if (isBatch) {
+  //       result = await allowlistCollection.updateOne(
+  //         { _id: new ObjectId(allowlistId), projectId: new ObjectId(projectId) },
+  //         {
+  //           $set: {
+  //             'applicants.$[].status':
+  //               req.body.operation === ApplicationOperations.APPROVE_ALL ? ApplicantStatus.APPROVED : ApplicantStatus.REJECTED,
+  //             'applicants.$[].updatedTime': now,
+  //           },
+  //         }
+  //       )
+  //     } else {
+  //       if (!req.body.address) {
+  //         return res.status(400).send({
+  //           message: 'Invalid address',
+  //         })
+  //       }
 
-        const target = await allowlistCollection.findOne({
-          _id: new ObjectId(allowlistId),
-          projectId: new ObjectId(projectId),
-          'applicants.address': req.body.address as string,
-        })
+  //       const target = await allowlistCollection.findOne({
+  //         _id: new ObjectId(allowlistId),
+  //         projectId: new ObjectId(projectId),
+  //         'applicants.address': req.body.address as string,
+  //       })
 
-        if (!target) {
-          return res.status(400).json({
-            message: 'There is no application of this address',
-          })
-        }
+  //       if (!target) {
+  //         return res.status(400).json({
+  //           message: 'There is no application of this address',
+  //         })
+  //       }
 
-        // TODO: check if the address has already applied
-        // const applicant = target.applicants.find(_applicant => _applicant.address === req.body.address)
+  //       // TODO: check if the address has already applied
+  //       // const applicant = target.applicants.find(_applicant => _applicant.address === req.body.address)
 
-        result = await allowlistCollection.updateOne(
-          { _id: new ObjectId(allowlistId), projectId: new ObjectId(projectId), 'applicants.address': req.body.address },
-          {
-            $set: {
-              'applicants.$.status':
-                req.body.operation === ApplicationOperations.APPROVE ? ApplicantStatus.APPROVED : ApplicantStatus.REJECTED,
-              'applicants.$.updatedTime': now,
-            },
-          }
-        )
-      }
+  //       result = await allowlistCollection.updateOne(
+  //         { _id: new ObjectId(allowlistId), projectId: new ObjectId(projectId), 'applicants.address': req.body.address },
+  //         {
+  //           $set: {
+  //             'applicants.$.status':
+  //               req.body.operation === ApplicationOperations.APPROVE ? ApplicantStatus.APPROVED : ApplicantStatus.REJECTED,
+  //             'applicants.$.updatedTime': now,
+  //           },
+  //         }
+  //       )
+  //     }
 
-      return res.status(200).json({
-        data: result.acknowledged,
-      })
-    } catch (err) {
-      return res.status(500).json({
-        message: (err as Error)?.message ?? 'Interval server error',
-      })
-    }
-  }
+  //     return res.status(200).json({
+  //       data: result.acknowledged,
+  //     })
+  //   } catch (err) {
+  //     return res.status(500).json({
+  //       message: (err as Error)?.message ?? 'Interval server error',
+  //     })
+  //   }
+  // }
 
   return res.status(405).json({
     message: 'Method not allowed',

@@ -84,9 +84,9 @@ const UpdateProject = ({ project }: UpdateProjectProps) => {
       twitter: project.twitter,
       discord: project.discord,
       mintDate: dayjs(project?.mintDate).format(),
-      mintPrice: String(project.mintPrice),
+      mintPrice: String(project.mintPrice ?? ''),
       coinType: project.coinType,
-      totalSupply: String(project.totalSupply),
+      totalSupply: String(project.totalSupply ?? ''),
       profileImage: project.profileImage,
       bannerImage: project.bannerImage,
     },
@@ -331,7 +331,7 @@ const UpdateProject = ({ project }: UpdateProjectProps) => {
           <Controller
             name="mintPrice"
             control={control}
-            render={({ field }) => (
+            render={({ field, fieldState }) => (
               <div className="mb-6">
                 <label
                   className="block mb-1 font-medium"
@@ -342,6 +342,7 @@ const UpdateProject = ({ project }: UpdateProjectProps) => {
                 <div className="flex items-center gap-4">
                   <Input
                     className="grow"
+                    isError={fieldState.invalid}
                     {...field}
                   />
                   <Controller
@@ -363,11 +364,12 @@ const UpdateProject = ({ project }: UpdateProjectProps) => {
                 </div>
               </div>
             )}
+            rules={{ validate: value => !isNaN(Number(value)) }}
           />
           <Controller
             name="totalSupply"
             control={control}
-            render={({ field }) => (
+            render={({ field, fieldState }) => (
               <div className="mb-6">
                 <label
                   className="block mb-1 font-medium"
@@ -375,9 +377,13 @@ const UpdateProject = ({ project }: UpdateProjectProps) => {
                 >
                   Total supply
                 </label>
-                <Input {...field} />
+                <Input
+                  isError={fieldState.invalid}
+                  {...field}
+                />
               </div>
             )}
+            rules={{ validate: value => !isNaN(Number(value)) && Number.isInteger(Number(value)) }}
           />
         </div>
       </div>

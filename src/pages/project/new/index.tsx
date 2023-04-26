@@ -358,7 +358,7 @@ const NewProject = () => {
                   </div>
                 </div>
               )}
-              rules={{ pattern: /^\d+(\.\d+)?$/ }}
+              rules={{ validate: value => !isNaN(Number(value)) }}
             />
             <Controller
               name="totalSupply"
@@ -377,7 +377,7 @@ const NewProject = () => {
                   />
                 </div>
               )}
-              rules={{ pattern: /^[0-9]*$/ }}
+              rules={{ validate: value => !isNaN(Number(value)) && Number.isInteger(Number(value)) }}
             />
           </div>
         </div>
