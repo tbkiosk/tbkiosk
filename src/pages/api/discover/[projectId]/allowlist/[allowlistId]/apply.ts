@@ -2,11 +2,11 @@ import { ObjectId } from 'mongodb'
 
 import clientPromise from '@/lib/mongodb'
 
-import { ALLOWLIST_TABLE, ApplicantStatus } from '@/schemas/allowlist'
+import { ALLOWLIST_TABLE } from '@/schemas/allowlist'
 
 import type { NextApiRequest, NextApiResponse } from 'next'
 import type { ResponseBase } from '@/types/response'
-import type { AllowlistRawData, Applicant } from '@/schemas/allowlist'
+import type { AllowlistRawData } from '@/schemas/allowlist'
 
 const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<boolean>>) => {
   const projectId = req.query.projectId
@@ -39,28 +39,28 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<bo
     }
 
     const now = new Date()
-    const newApplicant: Applicant = {
-      address: req.body.address,
-      status: ApplicantStatus.PENDING,
-      createdTime: now,
-      updatedTime: now,
-    }
+    // const newApplicant: Applicant = {
+    //   address: req.body.address,
+    //   status: ApplicantStatus.PENDING,
+    //   createdTime: now,
+    //   updatedTime: now,
+    // }
 
     try {
-      const result = await allowlistCollection.updateOne(
-        {
-          _id: new ObjectId(allowlistId),
-          projectId: new ObjectId(projectId),
-        },
-        {
-          $push: {
-            applicants: newApplicant,
-          },
-        }
-      )
+      // const result = await allowlistCollection.updateOne(
+      //   {
+      //     _id: new ObjectId(allowlistId),
+      //     projectId: new ObjectId(projectId),
+      //   },
+      //   {
+      //     $push: {
+      //       applicants: ,
+      //     },
+      //   }
+      // )
 
       return res.status(200).send({
-        data: result.acknowledged,
+        data: true,
       })
     } catch (err) {
       return res.status(500).json({

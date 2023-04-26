@@ -2,13 +2,13 @@ import { ObjectId } from 'mongodb'
 
 import clientPromise from '@/lib/mongodb'
 
-import { ALLOWLIST_TABLE, ApplicantStatus } from '@/schemas/allowlist'
+import { ALLOWLIST_TABLE } from '@/schemas/allowlist'
 
 import type { NextApiRequest, NextApiResponse } from 'next'
 import type { ResponseBase } from '@/types/response'
-import type { AllowlistRawData, AllowlistPreviewData } from '@/schemas/allowlist'
+import type { AllowlistRawData } from '@/schemas/allowlist'
 
-const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<AllowlistPreviewData[]>>) => {
+const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<AllowlistRawData[]>>) => {
   const projectId = req.query.projectId
   if (!projectId || typeof projectId !== 'string') {
     return res.status(400).json({
@@ -33,11 +33,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<Al
         .toArray()
 
       return res.status(200).json({
-        data:
-          result?.map(({ applicants, ...rest }) => ({
-            ...rest,
-            filled: applicants.filter(_applicant => _applicant.status === ApplicantStatus.APPROVED).length,
-          })) || [],
+        data: result || [],
       })
     } catch (err) {
       return res.status(500).json({

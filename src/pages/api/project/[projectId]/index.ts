@@ -6,7 +6,7 @@ import dayjs from 'dayjs'
 import clientPromise from '@/lib/mongodb'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
 
-import { PROJECT_TABLE, projectFormSchema } from '@/schemas/project'
+import { PROJECT_TABLE, projectFormSchema, projectDbSchema } from '@/schemas/project'
 
 import { copyTempImageToPersistentBucket } from '@/utils/cos'
 
@@ -52,7 +52,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<Pr
   if (req.method === 'GET') {
     try {
       const result = await collection.findOne({
-        creatorId: new ObjectId((req.query.creatorId as string) || session.user.id),
         _id: new ObjectId(projectId as string),
       })
 
@@ -61,7 +60,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<Pr
       })
     } catch (err) {
       return res.status(500).json({
-        message: (err as Error)?.message ?? 'Interval server error',
+        message: (err as Error)?.message || 'Interval server error',
       })
     }
   }
@@ -75,6 +74,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<Pr
       const project = await collection.findOne({
         _id: new ObjectId(projectId),
       })
+
       if (!project) {
         return res.status(400).json({
           message: 'Project not found',
@@ -82,7 +82,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<Pr
       }
 
       if (project.creatorId.toString() !== session.user.id) {
-        return res.status(401).json({
+        return res.status(403).json({
           message: "You cannnot update other creator's project",
         })
       }
@@ -101,7 +101,20 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<Pr
       }
 
       const now = new Date()
-      const transformedData: ProjectData = { ...req.body, mintDate: new Date(req.body.mintDate), updatedTime: now }
+      const transformedData: ProjectData = {
+        ...req.body,
+        mintDate: new Date(req.body.mintDate),
+        ...(+req.body.mintPrice ? { mintPrice: +req.body.mintPrice } : null),
+        ...(+req.body.totalSupply ? { mintPrice: +req.body.totalSupply } : null),
+        updatedTime: now,
+      }
+
+      const { error: dbSchemaError } = projectDbSchema.validate(transformedData)
+      if (dbSchemaError) {
+        return res.status(500).send({
+          message: dbSchemaError.message || 'Failed to transform project data',
+        })
+      }
 
       await Promise.all([
         transformedData.profileImage === project.profileImage ? null : copyTempImageToPersistentBucket(transformedData.profileImage, cos),
@@ -113,7 +126,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<Pr
             _id: new ObjectId(projectId),
           },
           {
-            $set: transformedData,
+            $set: { ...transformedData },
           }
         ),
       ])
@@ -124,7 +137,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<Pr
       })
     } catch (err) {
       return res.status(500).json({
-        message: (err as Error)?.message ?? 'Interval server error',
+        message: (err as Error)?.message || 'Interval server error',
       })
     }
   }

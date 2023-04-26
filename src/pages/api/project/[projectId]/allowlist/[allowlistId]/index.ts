@@ -5,15 +5,15 @@ import clientPromise from '@/lib/mongodb'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
 
 import { PROJECT_TABLE } from '@/schemas/project'
-import { ALLOWLIST_TABLE, ApplicantStatus } from '@/schemas/allowlist'
+import { ALLOWLIST_TABLE } from '@/schemas/allowlist'
 
 import type { NextApiRequest, NextApiResponse } from 'next'
 import type { ResponseBase } from '@/types/response'
 import type { ProjectData } from '@/schemas/project'
-import type { AllowlistRawData, AllowlistPreviewData } from '@/schemas/allowlist'
+import type { AllowlistRawData } from '@/schemas/allowlist'
 import type { ExtendedSession } from '@/helpers/nextauth/types'
 
-const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<AllowlistPreviewData | boolean | null>>) => {
+const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<AllowlistRawData | boolean | null>>) => {
   const projectId = req.query.projectId
   if (!projectId || typeof projectId !== 'string') {
     return res.status(400).json({
@@ -46,22 +46,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<Al
   const projectCollection = db.collection<ProjectData>(PROJECT_TABLE)
   const allowlistCollection = db.collection<AllowlistRawData>(ALLOWLIST_TABLE)
 
-  try {
-    const target = await projectCollection.findOne({
-      _id: new ObjectId(projectId),
-      creatorId: new ObjectId(session.user.id),
-    })
-    if (!target) {
-      return res.status(403).json({
-        message: 'Not allowed to check the allowlists not belong to you',
-      })
-    }
-  } catch (err) {
-    return res.status(500).json({
-      message: (err as Error)?.message || 'Interval server error',
-    })
-  }
-
   /**
    * @method GET
    * allowlist by allowlistId
@@ -73,15 +57,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<Al
         projectId: new ObjectId(projectId),
       })
 
-      if (!result) {
-        return res.status(200).json({
-          data: null,
-        })
-      }
-
-      const { applicants, ...rest } = result
       return res.status(200).json({
-        data: { ...rest, filled: applicants.filter(_applicant => _applicant.status === ApplicantStatus.APPROVED).length },
+        data: result || null,
       })
     } catch (err) {
       return res.status(500).json({
@@ -96,17 +73,65 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<Al
    */
   if (req.method === 'DELETE') {
     try {
-      const { acknowledged } = await allowlistCollection.deleteOne({
-        _id: new ObjectId(allowlistId),
+      const project = await projectCollection.findOne({
+        _id: new ObjectId(projectId),
       })
 
-      if (acknowledged) {
-        return res.status(200).json({
-          data: true,
+      if (!project) {
+        return res.status(400).json({
+          message: 'Project not found',
         })
       }
 
+      if (project.allowlists.map(_objectId => _objectId.toString()).indexOf(allowlistId) < 0) {
+        return res.status(400).json({
+          message: 'Allowlist does not exist in this project',
+        })
+      }
+
+      if (project.creatorId.toString() !== session.user.id) {
+        return res.status(403).json({
+          message: "You cannnot operate other creator's project",
+        })
+      }
+    } catch (err) {
       return res.status(500).json({
+        message: (err as Error)?.message || 'Interval server error',
+      })
+    }
+
+    const transactionSession = client.startSession()
+
+    try {
+      await transactionSession.withTransaction(
+        async () => {
+          await projectCollection.updateOne(
+            {
+              _id: new ObjectId(projectId),
+            },
+            {
+              $pull: {
+                allowlists: new ObjectId(allowlistId),
+              },
+            }
+          )
+
+          const { acknowledged } = await allowlistCollection.deleteOne({
+            _id: new ObjectId(allowlistId),
+          })
+
+          if (!acknowledged) {
+            throw new Error('Failed to delete allowlist')
+          }
+        },
+        {
+          readPreference: 'primary',
+          readConcern: { level: 'local' },
+          writeConcern: { w: 'majority' },
+        }
+      )
+
+      return res.status(200).json({
         message: 'Failed to delete allowlist',
       })
     } catch (err) {

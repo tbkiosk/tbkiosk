@@ -5,12 +5,13 @@ import clientPromise from '@/lib/mongodb'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
 
 import { PROJECT_TABLE } from '@/schemas/project'
-import { ALLOWLIST_TABLE, applicationOperationSchema, ApplicantStatus, ApplicationOperations } from '@/schemas/allowlist'
+import { ALLOWLIST_TABLE } from '@/schemas/allowlist'
 
 import type { NextApiRequest, NextApiResponse } from 'next'
 import type { ResponseBase } from '@/types/response'
 import type { ProjectData } from '@/schemas/project'
-import type { AllowlistRawData, Applicant } from '@/schemas/allowlist'
+import type { AllowlistRawData } from '@/schemas/allowlist'
+import type { Applicant } from '@/schemas/applicant'
 import type { ExtendedSession } from '@/helpers/nextauth/types'
 
 const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<Applicant[] | boolean | null>>) => {

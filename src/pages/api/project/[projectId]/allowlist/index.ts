@@ -5,15 +5,15 @@ import clientPromise from '@/lib/mongodb'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
 
 import { PROJECT_TABLE } from '@/schemas/project'
-import { ALLOWLIST_TABLE, allowlistFormSchema, allowlistDBSchema, ApplicantStatus } from '@/schemas/allowlist'
+import { ALLOWLIST_TABLE, allowlistFormSchema, allowlistDBSchema } from '@/schemas/allowlist'
 
 import type { NextApiRequest, NextApiResponse } from 'next'
 import type { ResponseBase } from '@/types/response'
 import type { ExtendedSession } from '@/helpers/nextauth/types'
 import type { ProjectData } from '@/schemas/project'
-import type { AllowlistRawData, AllowlistPreviewData } from '@/schemas/allowlist'
+import type { AllowlistRawData } from '@/schemas/allowlist'
 
-const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<AllowlistPreviewData[] | boolean>>) => {
+const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<AllowlistRawData[] | boolean>>) => {
   const projectId = req.query.projectId
   if (!projectId || typeof projectId !== 'string') {
     return res.status(400).json({
@@ -37,23 +37,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<Al
   const client = await clientPromise
   const db = client.db(`${process.env.NODE_ENV}`)
   const projectCollection = db.collection<ProjectData>(PROJECT_TABLE)
-  const collection = db.collection<AllowlistRawData>(ALLOWLIST_TABLE)
-
-  try {
-    const target = await projectCollection.findOne({
-      _id: new ObjectId(projectId),
-      creatorId: new ObjectId(session.user.id),
-    })
-    if (!target) {
-      return res.status(403).json({
-        message: 'Not allowed to check the allowlists not belong to you',
-      })
-    }
-  } catch (err) {
-    return res.status(500).json({
-      message: (err as Error)?.message || 'Interval server error',
-    })
-  }
+  const allowlistCollection = db.collection<AllowlistRawData>(ALLOWLIST_TABLE)
 
   /**
    * @method GET
@@ -61,18 +45,14 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<Al
    */
   if (req.method === 'GET') {
     try {
-      const result = await collection
+      const allowlist = await allowlistCollection
         .find({
           projectId: new ObjectId(projectId),
         })
         .toArray()
 
       return res.status(200).json({
-        data:
-          result?.map(({ applicants, ...rest }) => ({
-            ...rest,
-            filled: applicants.filter(_applicant => _applicant.status === ApplicantStatus.APPROVED).length,
-          })) || [],
+        data: allowlist || [],
       })
     } catch (err) {
       return res.status(500).json({
@@ -86,6 +66,28 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<Al
    * create a new allowlist
    */
   if (req.method === 'POST') {
+    try {
+      const project = await projectCollection.findOne({
+        _id: new ObjectId(projectId),
+      })
+
+      if (!project) {
+        return res.status(400).json({
+          message: 'Project not found',
+        })
+      }
+
+      if (project.creatorId.toString() !== session.user.id) {
+        return res.status(403).json({
+          message: "You cannnot update other creator's project",
+        })
+      }
+    } catch (err) {
+      return res.status(500).json({
+        message: (err as Error)?.message || 'Interval server error',
+      })
+    }
+
     const { error: formSchemaError } = allowlistFormSchema.validate(req.body)
     if (formSchemaError) {
       return res.status(400).send({
@@ -94,11 +96,12 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<Al
     }
 
     const now = new Date()
-    const transformedData: AllowlistRawData = {
+    const transformedData = {
       ...req.body,
       projectId,
       amount: +req.body.amount,
       applicants: [],
+      approvees: [],
       createdTime: now,
       updatedTime: now,
     }
@@ -111,7 +114,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<Al
     }
 
     try {
-      await collection.insertOne({
+      await allowlistCollection.insertOne({
         ...transformedData,
         projectId: new ObjectId(projectId),
       })

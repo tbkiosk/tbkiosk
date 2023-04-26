@@ -51,11 +51,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<Pr
         .toArray()
 
       return res.status(200).json({
-        data: result ?? [],
+        data: result || [],
       })
     } catch (err) {
       return res.status(500).json({
-        message: (err as Error)?.message ?? 'Interval server error',
+        message: (err as Error)?.message || 'Interval server error',
       })
     }
   }
@@ -82,9 +82,12 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<Pr
     const transformedData: ProjectData = {
       ...req.body,
       mintDate: new Date(req.body.mintDate),
+      ...(+req.body.mintPrice ? { mintPrice: +req.body.mintPrice } : null),
+      ...(+req.body.totalSupply ? { mintPrice: +req.body.totalSupply } : null),
       createdTime: now,
       updatedTime: now,
       creatorId: session.user.id,
+      allowlists: [],
     }
 
     const { error: dbSchemaError } = projectDbSchema.validate(transformedData)
