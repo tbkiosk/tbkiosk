@@ -30,7 +30,7 @@ export const Dropdown = ({ renderButton, startIcon, buttonClassName, children, d
         >
           {startIcon}
           {renderButton?.() || null}
-          <i className={cl(['fa-solid fa-chevron-up absolute right-6 transition-transform', open && 'rotate-180'])} />
+          <i className={cl(['fa-solid fa-chevron-down absolute right-6 transition-transform', open && 'rotate-180'])} />
         </Menu.Button>
         <Transition
           as={Fragment}

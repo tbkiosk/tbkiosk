@@ -10,12 +10,13 @@ import Layout from '@/layouts'
 import { Loading, Button } from '@/components'
 import { AllowlistDialog } from '@/components/_project/allowlist_dialog'
 import { AllowlistApplicationDialog } from '@/components/_project/allowlist_application_dialog'
+import { CriteriaList } from '@/components/_shared/criteria_list'
 
 import { TENCENT_COS_DEV_BUCKET, TENCENT_COS_BUCKET, TENCENT_COS_CDN_DOMAIN } from '@/constants/cos'
 
 import type { ResponseBase } from '@/types/response'
 import type { ProjectData } from '@/schemas/project'
-import type { AllowlistRawData } from '@/schemas/allowlist'
+import { AllowlistRawData } from '@/schemas/allowlist'
 import type { WithObjectId } from '@/types/schema'
 
 const ProjectDetail = () => {
@@ -150,7 +151,10 @@ const ProjectDetail = () => {
                         {_allowlist.amount} allowlist {_allowlist.allocationMethod}
                       </p>
                       <hr className="-mx-8 my-6" />
-                      {!Object.keys(_allowlist.criteria)?.length && <p className="text-gray-300">No criteria</p>}
+                      <CriteriaList
+                        criteria={_allowlist.criteria}
+                        projectName={project?.projectName}
+                      />
                       <hr className="-mx-8 my-6" />
                       <p className="font-bold">
                         {_allowlist.approvees.length}/{_allowlist.amount} filled

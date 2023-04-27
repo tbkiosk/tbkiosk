@@ -91,7 +91,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<Pr
     }
 
     const { error: dbSchemaError } = projectCreationDbSchema.validate(transformedData)
-    console.log(333, transformedData)
     if (dbSchemaError) {
       return res.status(500).send({
         message: dbSchemaError.message || 'Failed to transform project data',
