@@ -139,15 +139,15 @@ const ProjectDetail = () => {
             </Tab.List>
             <Tab.Panels>
               <Tab.Panel className="outline-none">
-                <div className="flex flex-wrap">
+                <div className="flex flex-wrap gap-4">
                   {allowlists?.map(_allowlist => (
                     <div
-                      className="w-[calc(33.33%_-_1rem)] min-w-[17.5rem] flex flex-col p-8 rounded-2xl shadow-[0_4px_10px_rgba(216,216,216,0.25)] cursor-pointer transition hover:scale-105"
+                      className="w-[calc(33.33%_-_1rem)] min-w-[17.5rem] max-h-[20rem] flex flex-col p-8 rounded-2xl shadow-[0_4px_10px_rgba(216,216,216,0.25)] overflow-y-auto cursor-pointer transition-transform hover:scale-[1.01]"
                       key={_allowlist._id}
                       onClick={() => router.push(`/project/${router.query.projectId}?allowlistId=${_allowlist._id}`)}
                     >
                       <span className="self-end px-6 mb-2 bg-[#82ffac] font-bold rounded-2xl">Live</span>
-                      <p className="font-bold text-lg truncate">
+                      <p className="shrink-0 font-bold text-lg truncate">
                         {_allowlist.amount} allowlist {_allowlist.allocationMethod}
                       </p>
                       <hr className="-mx-8 my-6" />

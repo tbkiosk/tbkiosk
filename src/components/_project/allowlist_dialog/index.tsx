@@ -26,9 +26,7 @@ type AllowlistDialogProps = {
 
 const DEFAULT_VALUES = {
   amount: '',
-  criteria: {
-    [CriteriaKeys.MINIMUN_TOKEN_AND_ADDRESS]: [],
-  },
+  criteria: {},
   allocationMethod: AllocationMethod.FCFS,
 }
 
@@ -116,7 +114,7 @@ export const AllowlistDialog = ({ open, setOpen, project, onRefresh, onClose }: 
                   />
                 </div>
               )}
-              rules={{ required: true, min: 1, validate: value => !isNaN(+value) }}
+              rules={{ required: true, min: 1, validate: value => Number.isInteger(Number(value)) }}
             />
             <hr className="-mx-8 my-6 border-[#e6e6e9]" />
             <p className="mb-4 font-bold">Criteria</p>
@@ -154,7 +152,7 @@ export const AllowlistDialog = ({ open, setOpen, project, onRefresh, onClose }: 
                         {...field}
                       />
                     )}
-                    rules={{ required: true, pattern: /^[0-9]*$/ }}
+                    rules={{ required: true, min: 1, validate: value => Number.isInteger(+value) }}
                   />
                 </div>
               ))}

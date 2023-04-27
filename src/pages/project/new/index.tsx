@@ -371,7 +371,7 @@ const NewProject = () => {
                   />
                 </div>
               )}
-              rules={{ validate: value => !isNaN(Number(value)) && Number.isInteger(Number(value)) }}
+              rules={{ validate: value => Number.isInteger(Number(value)) }}
             />
           </div>
         </div>

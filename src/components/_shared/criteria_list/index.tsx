@@ -16,10 +16,10 @@ export const CriteriaList = ({ criteria, projectName = '' }: CriteriaListProps) 
 
   return (
     <div>
-      {criteria[CriteriaKeys.MINIMUN_TOKEN_AND_ADDRESS]?.length && (
+      {!!criteria[CriteriaKeys.MINIMUN_TOKEN_AND_ADDRESS]?.length && (
         <div>
           {criteria[CriteriaKeys.MINIMUN_TOKEN_AND_ADDRESS].map((_tokenAndAddress, i) => (
-            <p key={i}>{`Hold at least ${_tokenAndAddress.number} NFT/token(s) from ${_tokenAndAddress}`}</p>
+            <p key={i}>{`Hold at least ${_tokenAndAddress.number} NFT/token(s) from ${_tokenAndAddress.contractAddress}`}</p>
           ))}
         </div>
       )}

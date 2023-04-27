@@ -5,13 +5,13 @@ import clientPromise from '@/lib/mongodb'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
 
 import { PROJECT_TABLE } from '@/schemas/project'
-import { ALLOWLIST_TABLE, allowlistFormSchema, allowlistDBSchema } from '@/schemas/allowlist'
+import { ALLOWLIST_TABLE, allowlistFormSchema, allowlistDBSchema, CriteriaKeys } from '@/schemas/allowlist'
 
 import type { NextApiRequest, NextApiResponse } from 'next'
 import type { ResponseBase } from '@/types/response'
 import type { ExtendedSession } from '@/helpers/nextauth/types'
 import type { ProjectData } from '@/schemas/project'
-import type { AllowlistRawData } from '@/schemas/allowlist'
+import type { AllowlistRawData, MininumTokenAndAddress } from '@/schemas/allowlist'
 
 const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<AllowlistRawData[] | boolean>>) => {
   const projectId = req.query.projectId
@@ -100,6 +100,19 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<Al
       ...req.body,
       projectId,
       amount: +req.body.amount,
+      criteria: {
+        ...req.body.criteria,
+        ...(req.body.criteria?.[CriteriaKeys.MINIMUN_TOKEN_AND_ADDRESS]?.length
+          ? {
+              [CriteriaKeys.MINIMUN_TOKEN_AND_ADDRESS]: (
+                req.body.criteria[CriteriaKeys.MINIMUN_TOKEN_AND_ADDRESS] as MininumTokenAndAddress[]
+              ).map(_minAndAddress => ({
+                ..._minAndAddress,
+                number: +_minAndAddress.number,
+              })),
+            }
+          : null),
+      },
       applicants: [],
       approvees: [],
       createdTime: now,
@@ -114,10 +127,32 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<Al
     }
 
     try {
-      await allowlistCollection.insertOne({
-        ...transformedData,
-        projectId: new ObjectId(projectId),
-      })
+      const transactionSession = client.startSession()
+
+      await transactionSession.withTransaction(
+        async () => {
+          const newAllowlist = await allowlistCollection.insertOne({
+            ...transformedData,
+            projectId: new ObjectId(projectId),
+          })
+
+          await projectCollection.updateOne(
+            {
+              _id: new ObjectId(projectId),
+            },
+            {
+              $push: {
+                allowlists: newAllowlist.insertedId,
+              },
+            }
+          )
+        },
+        {
+          readPreference: 'primary',
+          readConcern: { level: 'local' },
+          writeConcern: { w: 'majority' },
+        }
+      )
 
       return res.status(200).json({
         data: true,

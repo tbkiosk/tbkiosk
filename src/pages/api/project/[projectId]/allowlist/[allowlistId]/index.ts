@@ -100,9 +100,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<Al
       })
     }
 
-    const transactionSession = client.startSession()
-
     try {
+      const transactionSession = client.startSession()
+
       await transactionSession.withTransaction(
         async () => {
           await projectCollection.updateOne(
