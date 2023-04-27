@@ -5,7 +5,7 @@ import clientPromise from '@/lib/mongodb'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
 
 import { PROJECT_TABLE } from '@/schemas/project'
-import { ALLOWLIST_TABLE, allowlistFormSchema, allowlistDBSchema, CriteriaKeys } from '@/schemas/allowlist'
+import { ALLOWLIST_TABLE, allowlistFormSchema, allowlistDBSchema, CriteriaKeys, MAX_NFT_HOLD_CONDITIONS } from '@/schemas/allowlist'
 
 import type { NextApiRequest, NextApiResponse } from 'next'
 import type { ResponseBase } from '@/types/response'
@@ -92,6 +92,12 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<Al
     if (formSchemaError) {
       return res.status(400).send({
         message: formSchemaError.message || 'Invalid allowlist options',
+      })
+    }
+
+    if (req.body.criteria[CriteriaKeys.MINIMUN_TOKEN_AND_ADDRESS]?.length > MAX_NFT_HOLD_CONDITIONS) {
+      return res.status(400).send({
+        message: `NFT/token holding condition shoule not be greater than ${MAX_NFT_HOLD_CONDITIONS}`,
       })
     }
 

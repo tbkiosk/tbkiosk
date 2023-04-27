@@ -9,7 +9,7 @@ import { Modal, Input, Button, Dropdown } from '@/components'
 import request from '@/utils/request'
 
 import { TENCENT_COS_DEV_BUCKET, TENCENT_COS_BUCKET, TENCENT_COS_CDN_DOMAIN } from '@/constants/cos'
-import { AllocationMethod, CriteriaKeys, CRITERIA_DEFAULT_VALUE, criteriaDisplayText } from '@/schemas/allowlist'
+import { AllocationMethod, CriteriaKeys, CRITERIA_DEFAULT_VALUE, criteriaDisplayText, MAX_NFT_HOLD_CONDITIONS } from '@/schemas/allowlist'
 
 import type { ProjectData } from '@/schemas/project'
 import type { AllowlistForm } from '@/schemas/allowlist'
@@ -212,10 +212,13 @@ export const AllowlistDialog = ({ open, setOpen, project, onRefresh, onClose }: 
                   'bg-white focus:outline-none',
                 ])}
               >
-                <Dropdown.Item>
+                <Dropdown.Item disabled={fields.length >= MAX_NFT_HOLD_CONDITIONS}> 
                   <div
-                    className="px-4 py-2 cursor-pointer hover:bg-gray-100"
-                    onClick={() => append({ contractAddress: '', number: '' })}
+                    className={cl([
+                      'px-4 py-2 cursor-pointer hover:bg-gray-100',
+                      fields.length >= MAX_NFT_HOLD_CONDITIONS && 'text-gray-300 !cursor-not-allowed',
+                    ])}
+                    onClick={() => fields.length < MAX_NFT_HOLD_CONDITIONS && append({ contractAddress: '', number: '' })}
                   >
                     {criteriaDisplayText[CriteriaKeys.MINIMUN_TOKEN_AND_ADDRESS]}
                   </div>

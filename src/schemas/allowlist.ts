@@ -14,6 +14,8 @@ export enum CriteriaKeys {
   PROJECT_DISCORD_JOINED = 'PROJECT_DISCORD_JOINED',
 }
 
+export const MAX_NFT_HOLD_CONDITIONS = 3
+
 export type MininumTokenAndAddress = {
   contractAddress: string
   number: number | string
