@@ -12,7 +12,7 @@ export enum ApplicantStatus {
 export type Applicant = {
   userId?: ObjectId
   address: string
-  allowlist: ObjectId
+  allowlistId: ObjectId
   status: ApplicantStatus
   createdTime: Date
   updatedTime: Date
@@ -28,7 +28,7 @@ export enum ApplicationOperations {
 export const appliantDBSchema = Joi.object({
   userId: Joi.string().optional(),
   address: Joi.string().required(),
-  allowlist: Joi.string().required(),
+  allowlistId: Joi.string().required(),
   status: Joi.string()
     .valid(...Object.values(ApplicantStatus))
     .required(),

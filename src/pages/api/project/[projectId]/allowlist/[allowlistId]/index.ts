@@ -91,7 +91,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<Al
 
       if (project.creatorId.toString() !== session.user.id) {
         return res.status(403).json({
-          message: "You cannnot operate other creator's project",
+          message: "You cannnot operate other's project",
         })
       }
     } catch (err) {
@@ -116,13 +116,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<Al
             }
           )
 
-          const { acknowledged } = await allowlistCollection.deleteOne({
+          await allowlistCollection.deleteOne({
             _id: new ObjectId(allowlistId),
           })
-
-          if (!acknowledged) {
-            throw new Error('Failed to delete allowlist')
-          }
         },
         {
           readPreference: 'primary',

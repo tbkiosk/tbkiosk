@@ -83,7 +83,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<Pr
 
       if (project.creatorId.toString() !== session.user.id) {
         return res.status(403).json({
-          message: "You cannnot update other creator's project",
+          message: "You cannnot update other's project",
         })
       }
 

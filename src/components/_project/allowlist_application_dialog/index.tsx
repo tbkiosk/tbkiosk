@@ -19,11 +19,11 @@ type AllowlistApplicationDialogProps = {
 export const AllowlistApplicationDialog = ({ open, setOpen }: AllowlistApplicationDialogProps) => {
   const router = useRouter()
 
-  // const { data: { data: applicants } = {} } = useSWR<ResponseBase<Applicant[]>>(
-  //   router.query.projectId && router.query.allowlistId && open
-  //     ? `/api/project/${router.query.projectId}/allowlist/${router.query.allowlistId}/applicants`
-  //     : null
-  // )
+  const { data: { data: applicants } = {} } = useSWR<ResponseBase<Applicant[]>>(
+    router.query.projectId && router.query.allowlistId && open
+      ? `/api/project/${router.query.projectId}/allowlist/${router.query.allowlistId}/applicants`
+      : null
+  )
 
   const [isLoading, setIsLoading] = useState(false)
 
@@ -91,15 +91,14 @@ export const AllowlistApplicationDialog = ({ open, setOpen }: AllowlistApplicati
           </p>
           <hr className="-mx-8 my-8" />
           <div className="flex flex-col gap-4">
-            {/* TODO: pagination */}
-            {/* {applicants?.map(_applicant => (
+            {applicants?.map(_applicant => (
               <ApplicantCard
                 applicant={_applicant}
                 key={_applicant.address}
                 projectId={router.query.projectId as string}
                 allowlistId={router.query.allowlistId as string}
               />
-            ))} */}
+            ))}
           </div>
         </div>
       </div>
