@@ -6,7 +6,7 @@ import dayjs from 'dayjs'
 import clientPromise from '@/lib/mongodb'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
 
-import { PROJECT_TABLE, projectFormSchema, projectDbSchema } from '@/schemas/project'
+import { PROJECT_TABLE, projectFormSchema, projectUpdateDbSchema } from '@/schemas/project'
 
 import { copyTempImageToPersistentBucket } from '@/utils/cos'
 
@@ -101,15 +101,15 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<Pr
       }
 
       const now = new Date()
-      const transformedData: ProjectData = {
+      const transformedData: Omit<ProjectData, 'createdTime' | 'creatorId' | 'allowlists'> = {
         ...req.body,
         mintDate: new Date(req.body.mintDate),
-        ...(+req.body.mintPrice ? { mintPrice: +req.body.mintPrice } : null),
-        ...(+req.body.totalSupply ? { mintPrice: +req.body.totalSupply } : null),
+        mintPrice: +req.body.mintPrice || null,
+        totalSupply: +req.body.totalSupply || null,
         updatedTime: now,
       }
 
-      const { error: dbSchemaError } = projectDbSchema.validate(transformedData)
+      const { error: dbSchemaError } = projectUpdateDbSchema.validate(transformedData)
       if (dbSchemaError) {
         return res.status(500).send({
           message: dbSchemaError.message || 'Failed to transform project data',

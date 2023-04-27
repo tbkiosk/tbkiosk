@@ -58,15 +58,9 @@ const NewProject = () => {
   })
 
   const onSubmit: SubmitHandler<ProjectForm> = async formData => {
-    const transformedData = {
-      ...formData,
-      mintPrice: !formData.mintPrice ? undefined : Number(formData.mintPrice),
-      totalSupply: !formData.totalSupply ? undefined : Number(formData.totalSupply),
-    }
-
     const { data, message } = await request<ResponseBase<boolean>>('/api/project', {
       method: 'POST',
-      body: JSON.stringify(transformedData),
+      body: JSON.stringify(formData),
     })
 
     if (data?.data) {

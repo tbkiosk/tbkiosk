@@ -35,11 +35,14 @@ export const projectFormSchema = projectBaseSchema.append({
   totalSupply: Joi.string().allow(''),
 })
 
-export const projectDbSchema = projectBaseSchema.append({
+export const projectUpdateDbSchema = projectBaseSchema.append({
   mintPrice: Joi.number().positive().strict(),
   totalSupply: Joi.number().integer().positive().strict(),
-  createdTime: Joi.date().required(),
   updatedTime: Joi.date().required(),
+})
+
+export const projectCreationDbSchema = projectUpdateDbSchema.append({
+  createdTime: Joi.date().required(),
   creatorId: Joi.string().required(),
   allowlists: Joi.array().items(Joi.string()).default([]).required(),
 })
@@ -47,27 +50,27 @@ export const projectDbSchema = projectBaseSchema.append({
 type ProjectBase = {
   projectType: projectTypes
   projectName: string
-  customURL?: string
+  customURL: string
   description: string
-  website?: string
-  twitter?: string
-  discord?: string
+  website: string
+  twitter: string
+  discord: string
   profileImage: string
-  bannerImage?: string
+  bannerImage: string
 }
 
 export type ProjectForm = ProjectBase & {
-  mintDate?: Date | Dayjs
-  mintPrice?: string
+  mintDate: Date | Dayjs
+  mintPrice: string
   coinType: string
-  totalSupply?: string
+  totalSupply: string
 }
 
 export type ProjectData = ProjectBase & {
-  mintDate?: Date
-  mintPrice?: number
+  mintDate: Date
+  mintPrice: number | null
   coinType: string
-  totalSupply?: number
+  totalSupply: number | null
   createdTime: Date
   updatedTime: Date
   creatorId: ObjectId

@@ -93,15 +93,9 @@ const UpdateProject = ({ project }: UpdateProjectProps) => {
   })
 
   const onSubmit: SubmitHandler<ProjectForm> = async formData => {
-    const transformedData = {
-      ...formData,
-      mintPrice: isNaN(Number(formData.mintPrice)) ? undefined : Number(formData.mintPrice),
-      totalSupply: isNaN(Number(formData.totalSupply)) ? undefined : Number(formData.totalSupply),
-    }
-
     const { data } = await request<ResponseBase<boolean>>(`/api/project/${project._id}`, {
       method: 'PUT',
-      body: JSON.stringify(transformedData),
+      body: JSON.stringify(formData),
     })
 
     if (data?.data) {
