@@ -1,3 +1,5 @@
+import { formatAddress } from '@mysten/sui.js'
+
 import { CriteriaKeys, type Criteria } from '@/schemas/allowlist'
 
 type CriteriaListProps = {
@@ -17,14 +19,16 @@ export const CriteriaList = ({ criteria, projectName = '' }: CriteriaListProps) 
   return (
     <div>
       {!!criteria[CriteriaKeys.MINIMUN_TOKEN_AND_ADDRESS]?.length && (
-        <div>
+        <ul className="list-disc">
           {criteria[CriteriaKeys.MINIMUN_TOKEN_AND_ADDRESS].map((_tokenAndAddress, i) => (
-            <p key={i}>{`Hold at least ${_tokenAndAddress.number} NFT/token(s) from ${_tokenAndAddress.contractAddress}`}</p>
+            <li key={i}>{`Hold at least ${_tokenAndAddress.number} NFT/token(s) from ${formatAddress(
+              _tokenAndAddress.contractAddress
+            )}`}</li>
           ))}
-        </div>
+          {criteria[CriteriaKeys.PROJECT_DISCORD_JOINED] && <li>Join Discord server</li>}
+          {criteria[CriteriaKeys.PROJECT_TWITTER_FOLLOWED] && <li>Follow @{projectName} Twitter</li>}
+        </ul>
       )}
-      {criteria[CriteriaKeys.PROJECT_DISCORD_JOINED] && <p>Join Discord server</p>}
-      {criteria[CriteriaKeys.PROJECT_TWITTER_FOLLOWED] && <p>Follow @{projectName} Twitter</p>}
     </div>
   )
 }
