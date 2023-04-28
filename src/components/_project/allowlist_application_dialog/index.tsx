@@ -21,7 +21,7 @@ export const AllowlistApplicationDialog = ({ open, setOpen }: AllowlistApplicati
 
   const { data: { data: applicants } = {} } = useSWR<ResponseBase<Applicant[]>>(
     router.query.projectId && router.query.allowlistId && open
-      ? `/api/project/${router.query.projectId}/allowlist/${router.query.allowlistId}/applicants`
+      ? `/api/project/${router.query.projectId}/allowlist/${router.query.allowlistId}/applicant`
       : null
   )
 

@@ -32,11 +32,11 @@ dependencies:
     specifier: ^0.2.7
     version: 0.2.7(@mysten/sui.js@0.32.2)(@types/react@18.2.0)(react-dom@18.2.0)(react@18.2.0)(typescript@5.0.4)
   '@web3modal/ethereum':
-    specifier: ^2.3.3
-    version: 2.3.3(@wagmi/core@0.10.10)(ethers@5.7.2)
+    specifier: ^2.3.7
+    version: 2.3.7(@wagmi/core@0.10.10)(ethers@5.7.2)
   '@web3modal/react':
-    specifier: ^2.3.3
-    version: 2.3.3(react-dom@18.2.0)(react@18.2.0)
+    specifier: ^2.3.7
+    version: 2.3.7(react-dom@18.2.0)(react@18.2.0)
   chart.js:
     specifier: ^4.2.1
     version: 4.2.1
@@ -2382,6 +2382,10 @@ packages:
     resolution: {integrity: sha512-92uQ5ARf7UXYrzaFcAX3T2rTvaS9Z1//ukV+DqjACM4c8s0ZBQd7ayJU5Dh2AFLD/Ayuyz4uMmxQec8q3U4Ong==}
     dev: false
 
+  /@lit-labs/ssr-dom-shim@1.1.1:
+    resolution: {integrity: sha512-kXOeFbfCm4fFf2A3WwVEeQj55tMZa8c8/f9AKHMobQMkzNUfUj+antR3fRPaZJawsa1aZiP/Da3ndpZrwEe4rQ==}
+    dev: false
+
   /@lit/reactive-element@1.6.1:
     resolution: {integrity: sha512-va15kYZr7KZNNPZdxONGQzpUr+4sxVu7V/VG7a8mRfPPXUyhEYj5RzXCQmGrlP3tAh0L3HHm5AjBMFYRqlM9SA==}
     dependencies:
@@ -4433,8 +4437,17 @@ packages:
       - react
     dev: false
 
-  /@web3modal/ethereum@2.3.3(@wagmi/core@0.10.10)(ethers@5.7.2):
-    resolution: {integrity: sha512-bZi9PBrSiYjjvWt7OHM2YnSXid0rKqXMULJx9VKmbjQ8/SkGKwlo9CL7XggRCr5VJrBF4/S8ey7J34eZYRVXvA==}
+  /@web3modal/core@2.3.7(react@18.2.0):
+    resolution: {integrity: sha512-ggl9+tkAzz43npj97iTj6p4oQYaklxADQyCKAX7AnMfglZg5bRseMDGnfmpvnjlDn8TI+DGGO6da3ITmYRIDYQ==}
+    dependencies:
+      buffer: 6.0.3
+      valtio: 1.10.4(react@18.2.0)
+    transitivePeerDependencies:
+      - react
+    dev: false
+
+  /@web3modal/ethereum@2.3.7(@wagmi/core@0.10.10)(ethers@5.7.2):
+    resolution: {integrity: sha512-CuqgWEMtCWS8tKDT2VpnzeaEfrlNYRQxyrFs8fTtrD6/NYIlinqv/sc9W/PcIMETrhReBwcrpjf+jG6He3261g==}
     peerDependencies:
       '@wagmi/core': '>=0.10'
       ethers: '>=5.7'
@@ -4443,15 +4456,15 @@ packages:
       ethers: 5.7.2
     dev: false
 
-  /@web3modal/react@2.3.3(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-nyKFoSlqw1ok4GXFHTgIgz1ZXX3ldUtiZ+xtt+GXs/F14NGZ/jBc0OGEzDaY4snwua56E/QbHXBJ6tHlaxoYVg==}
+  /@web3modal/react@2.3.7(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-PA3uOo9zSynYJhXbYMgohIjYfD9LC2Gf7BSSe2HhUdPwGsRmUtBttHJSQ9xypUH7Qi8haMKrpEPmr2rZZU4IRA==}
     peerDependencies:
       react: '>=17'
       react-dom: '>=17'
     dependencies:
-      '@web3modal/core': 2.3.3(react@18.2.0)
-      '@web3modal/standalone': 2.3.3(react@18.2.0)
-      '@web3modal/ui': 2.3.3(react@18.2.0)
+      '@web3modal/core': 2.3.7(react@18.2.0)
+      '@web3modal/standalone': 2.3.7(react@18.2.0)
+      '@web3modal/ui': 2.3.7(react@18.2.0)
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
     dev: false
@@ -4465,6 +4478,15 @@ packages:
       - react
     dev: false
 
+  /@web3modal/standalone@2.3.7(react@18.2.0):
+    resolution: {integrity: sha512-zgavWcimRVXnLdup2WQ0fFEnBnH+Wwn+k1/XzhwVpdJ//mrExWNYQaXt139RijxGUcux68ExRCyMqm1jkXTq3g==}
+    dependencies:
+      '@web3modal/core': 2.3.7(react@18.2.0)
+      '@web3modal/ui': 2.3.7(react@18.2.0)
+    transitivePeerDependencies:
+      - react
+    dev: false
+
   /@web3modal/ui@2.3.3(react@18.2.0):
     resolution: {integrity: sha512-tb/zT8qNw3jYUrClN2H20XfxXoOKjnXuVzuWd3kyDXzEN+jdQoaYtj0/KBI8fRYoEYb6FaZeEkI9mdGEcRfeYA==}
     dependencies:
@@ -4472,6 +4494,17 @@ packages:
       lit: 2.7.2
       motion: 10.15.5
       qrcode: 1.5.1
+    transitivePeerDependencies:
+      - react
+    dev: false
+
+  /@web3modal/ui@2.3.7(react@18.2.0):
+    resolution: {integrity: sha512-mNDXY4ElcvXXixKHZTLcEjKC9zs3O8BD1EtaC8cKIy+RKFyHMpLB1DOQmz77tn91jNjOkrvEryqUwCbsJ7hjfA==}
+    dependencies:
+      '@web3modal/core': 2.3.7(react@18.2.0)
+      lit: 2.7.3
+      motion: 10.15.5
+      qrcode: 1.5.3
     transitivePeerDependencies:
       - react
     dev: false
@@ -7441,8 +7474,22 @@ packages:
       lit-html: 2.7.2
     dev: false
 
+  /lit-element@3.3.2:
+    resolution: {integrity: sha512-xXAeVWKGr4/njq0rGC9dethMnYCq5hpKYrgQZYTzawt9YQhMiXfD+T1RgrdY3NamOxwq2aXlb0vOI6e29CKgVQ==}
+    dependencies:
+      '@lit-labs/ssr-dom-shim': 1.1.1
+      '@lit/reactive-element': 1.6.1
+      lit-html: 2.7.3
+    dev: false
+
   /lit-html@2.7.2:
     resolution: {integrity: sha512-ZJCfKlA2XELu5tn7XuzOziGFGvf1SeQm+ngLWoJ8bXtSkRrrR3ms6SWy+gsdxeYwySLij5xAhdd2C3EX0ftxdQ==}
+    dependencies:
+      '@types/trusted-types': 2.0.3
+    dev: false
+
+  /lit-html@2.7.3:
+    resolution: {integrity: sha512-9DyLzcn/kbRGowz2vFmSANFbRZTxYUgYYFqzie89w6GLpPUiBCDHfcdeRUV/k3Q2ueYxNjfv46yPCtKAEAPOVw==}
     dependencies:
       '@types/trusted-types': 2.0.3
     dev: false
@@ -7453,6 +7500,14 @@ packages:
       '@lit/reactive-element': 1.6.1
       lit-element: 3.3.1
       lit-html: 2.7.2
+    dev: false
+
+  /lit@2.7.3:
+    resolution: {integrity: sha512-0a+u+vVbmgSfPu+fyvqjMPBX0Kwbyj9QOv9MbQFZhWGlV2cyk3lEwgfUQgYN+i/lx++1Z3wZknSIp3QCKxHLyg==}
+    dependencies:
+      '@lit/reactive-element': 1.6.1
+      lit-element: 3.3.2
+      lit-html: 2.7.3
     dev: false
 
   /local-pkg@0.4.3:
@@ -8481,6 +8536,17 @@ packages:
 
   /qrcode@1.5.1:
     resolution: {integrity: sha512-nS8NJ1Z3md8uTjKtP+SGGhfqmTCs5flU/xR623oI0JX+Wepz9R8UrRVCTBTJm3qGw3rH6jJ6MUHjkDx15cxSSg==}
+    engines: {node: '>=10.13.0'}
+    hasBin: true
+    dependencies:
+      dijkstrajs: 1.0.3
+      encode-utf8: 1.0.3
+      pngjs: 5.0.0
+      yargs: 15.4.1
+    dev: false
+
+  /qrcode@1.5.3:
+    resolution: {integrity: sha512-puyri6ApkEHYiVl4CFzo1tDkAZ+ATcnbJrJ6RiBM1Fhctdn/ix9MTE3hRph33omisEbC/2fcfemsseiKgBPKZg==}
     engines: {node: '>=10.13.0'}
     hasBin: true
     dependencies:

@@ -107,7 +107,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<Ap
 
   /**
    * @method PUT
-   * approve/reject allowlist applications
+   * approve/reject allowlist applicants
    */
   if (req.method === 'PUT') {
     const { error } = applicantOperationSchema.validate(req.body)
@@ -213,7 +213,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<Ap
                 },
                 {
                   $pull: {
-                    applicants: address,
+                    applicants: upsertedId,
                   },
                   $push: {
                     approvees: upsertedId,
@@ -290,12 +290,16 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<Ap
 
           await transactionSession.withTransaction(
             async () => {
-              await applicantCollection.updateOne(
+              const { upsertedId } = await applicantCollection.updateOne(
                 { address },
                 {
                   $set: { status: ApplicantStatus.REJECTED, updatedTime: now },
                 }
               )
+
+              if (!upsertedId) {
+                throw new Error('Failed to approve')
+              }
 
               await allowlistCollection.updateOne(
                 {
@@ -303,7 +307,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<Ap
                 },
                 {
                   $pull: {
-                    applicants: address,
+                    applicants: upsertedId,
                   },
                   $set: {
                     updatedTime: now,
@@ -330,7 +334,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<Ap
       }
     } catch (err) {
       return res.status(500).json({
-        message: (err as Error)?.message ?? 'Interval server error',
+        message: (err as Error)?.message || 'Interval server error',
       })
     }
   }
