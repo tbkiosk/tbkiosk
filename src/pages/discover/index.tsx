@@ -1,3 +1,5 @@
+import { useEffect } from 'react'
+import { toast } from 'react-toastify'
 import Head from 'next/head'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -10,10 +12,21 @@ import { TENCENT_COS_DEV_BUCKET, TENCENT_COS_BUCKET, TENCENT_COS_CDN_DOMAIN } fr
 
 import type { ResponseBase } from '@/types/response'
 import type { WithObjectId } from '@/types/schema'
-import type { ProjectData } from '@/schemas/project'
+import type { ProjectBase } from '@/schemas/project'
+import type { AllowlistRawData } from '@/schemas/allowlist'
 
 const Discover = () => {
-  const { data: { data: projects = [] } = {}, isLoading } = useSWR<ResponseBase<WithObjectId<ProjectData>[]>>('/api/project')
+  const {
+    data: { data: allowlistsWithProjectInfo = [] } = {},
+    isLoading,
+    error,
+  } = useSWR<ResponseBase<(WithObjectId<AllowlistRawData> & { project: ProjectBase })[]>>('/api/discover')
+
+  useEffect(() => {
+    if (error) {
+      toast.error((error as Error)?.message || 'Failed to load discover')
+    }
+  }, [error])
 
   return (
     <>
@@ -26,28 +39,31 @@ const Discover = () => {
       </Head>
       <Layout>
         <Loading isLoading={isLoading}>
-          <div className="w-full grow grid 2xl:grid-cols-6 lg:grid-cols-4 grid-cols-3 auto-rows-min gap-4">
-            {projects.map(_project => (
+          <div className="flex flex-col gap-4">
+            {allowlistsWithProjectInfo.map(_allowlist => (
               <Link
-                className="p-4 shadow-[0_4px_10px_rgba(175,175,175,0.25)] cursor-pointer transition-transform hover:scale-105"
-                href={`/discover/${_project._id}`}
-                key={_project._id}
+                className="relative p-4 rounded-lg shadow-[0_4px_10px_rgba(175,175,175,0.25)] cursor-pointer transition-transform hover:scale-[1.003]"
+                href={`/discover/${_allowlist._id}`}
+                key={_allowlist._id}
               >
-                <Image
-                  alt="logo"
-                  className="w-full rounded-lg aspect-square object-contain"
-                  height={256}
-                  loader={({ src }) => src}
-                  src={`https://${
-                    process.env.NODE_ENV === 'production' ? TENCENT_COS_BUCKET : TENCENT_COS_DEV_BUCKET
-                  }.${TENCENT_COS_CDN_DOMAIN}/${_project.profileImage}`}
-                  unoptimized
-                  width={256}
-                />
-                <div className="flex justify-between items-center mt-4">
-                  <div className="truncate">{_project.projectName}</div>
-                  <div className="shrink-0 px-4 py-1 ml-2 rounded-[1.875rem] bg-[#82ffac]">Active</div>
+                <span className="absolute right-4 top-2 px-3 bg-[#fff3ec] text-[#9c9d9e] rounded-3xl">
+                  {_allowlist.project.projectType}
+                </span>
+                <div className="flex items-center gap-4 mb-2">
+                  <Image
+                    alt="logo"
+                    className="w-8 h-8 rounded-full aspect-square object-contain"
+                    height={32}
+                    loader={({ src }) => src}
+                    src={`https://${
+                      process.env.NODE_ENV === 'production' ? TENCENT_COS_BUCKET : TENCENT_COS_DEV_BUCKET
+                    }.${TENCENT_COS_CDN_DOMAIN}/${_allowlist.project.profileImage}`}
+                    unoptimized
+                    width={32}
+                  />
+                  <span className="font-bold text-xl truncate">{_allowlist.project.projectName}</span>
                 </div>
+                <div className="font-medium text-lg">{_allowlist.project.description}</div>
               </Link>
             ))}
           </div>

@@ -47,7 +47,7 @@ export const projectCreationDbSchema = projectUpdateDbSchema.append({
   allowlists: Joi.array().items(Joi.string()).default([]).required(),
 })
 
-type ProjectBase = {
+export type ProjectBase = {
   projectType: projectTypes
   projectName: string
   customURL: string
