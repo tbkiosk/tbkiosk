@@ -12,7 +12,7 @@ const Login = () => {
   const router = useRouter()
   const { data: session } = useSession()
 
-  const isConnected = useMemo(() => session && !(session as ExtendedSession)?.error, [session])
+  const isConnected = useMemo(() => session && !!(session as ExtendedSession)?.user?.name, [session])
 
   return (
     <>

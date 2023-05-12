@@ -7,7 +7,6 @@ import cl from 'classnames'
 
 import { Button } from '@/components'
 import WalletDropdown from './components/wallet_dropdown'
-import ConnectStatus from './components/connect_status'
 
 type LayoutProps = {
   showHeader?: boolean
@@ -91,9 +90,6 @@ const Layout = ({ showHeader = true, headerLeft, children }: LayoutProps) => {
               <span className="h-12 w-12 flex shrink-0 items-center justify-center bg-[#fdede5] rounded-full cursor-pointer">
                 <i className="fa-regular fa-bell fa-xl" />
               </span>
-              <div className="mx-4">
-                <ConnectStatus />
-              </div>
               <WalletDropdown buttonClassName="!h-[3.375rem]" />
             </div>
           </div>
