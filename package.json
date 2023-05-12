@@ -2,6 +2,11 @@
   "name": "morphis-network",
   "version": "0.1.4",
   "private": true,
+  "engines": {
+    "node": ">=16.18.0",
+    "pnpm": ">=8.0.0"
+  },
+  "packageManager": "pnpm@8.0.0+",
   "scripts": {
     "dev": "next dev",
     "build": "next build",

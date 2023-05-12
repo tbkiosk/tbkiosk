@@ -195,7 +195,7 @@ const Index = () => {
               <i className="fa-brands fa-discord w-9 h-9 flex justify-center items-center text-lg text-white bg-black rounded-full" />
             </a>
             <Link href="/login">
-              <Button disabled className="!h-9 px-6">Get started</Button>
+              <Button className="!h-9 px-6">Get started</Button>
             </Link>
           </div>
           <div className="flex md:hidden items-center active:opacity-50">
