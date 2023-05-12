@@ -3,6 +3,7 @@
 @import 'tailwindcss/utilities';
 
 @import url('./scrollbar.css');
+@import url('./variables.css');
 
 @font-face {
   font-family: satoshi;

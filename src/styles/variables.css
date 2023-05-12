@@ -1,0 +1,22 @@
+:root {
+  /* primary colors */
+  /* confirm button, accept button, etc */
+  --primary-color: #000000;
+  --primary-color--hover: #2a2a2d;
+  --primary-color--active: #4a4a4a;
+  --primary-color--disabled: #4a4a4a;
+  --primary-text-color: #ffffff;
+  --primary-text-color--disabled: #c4c4c4;
+  --primary-border-color: #000000;
+
+  /* secondary colors */
+  /* cancel button, return button, etc */
+  --secondary-color: #ffffff;
+  --secondary-color--hover: #e3e3e4;
+  --secondary-color--active: #d1d1d1;
+  --secondary-color--disabled: #ffffff;
+  --secondary-text-color: #000000;
+  --secondary-text-color--disabled: #c4c4c4;
+  --secondary-border-color: #000000;
+  --secondary-border-color--disabled: #c4c4c4;
+}
