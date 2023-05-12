@@ -1,10 +1,10 @@
 import useSWRImmutable from 'swr/immutable'
 
+import type { User } from 'next-auth'
 import type { ResponseBase } from '@/types/response'
-import type { ExtendedUser } from '@/schemas/user'
 
 const useUser = () => {
-  const { data, error, isLoading, mutate } = useSWRImmutable<ResponseBase<ExtendedUser>>('/api/user')
+  const { data, error, isLoading, mutate } = useSWRImmutable<ResponseBase<User>>('/api/user')
 
   return {
     data: data?.data,

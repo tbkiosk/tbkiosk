@@ -1,66 +1,60 @@
 import NextAuth, { type NextAuthOptions } from 'next-auth'
-import DiscordProvider from 'next-auth/providers/discord'
+import TwitterProvider from 'next-auth/providers/twitter'
 import { MongoDBAdapter } from '@next-auth/mongodb-adapter'
 
 import clientPromise from '@/lib/mongodb'
 
-import refreshDiscordAccessToken from '@/helpers/nextauth/refreshDiscordToken'
-import updateUserByProvider from '@/helpers/nextauth/updateUserByProvider'
+import type { SessionType, ExtendedSession } from '@/types/nextauth'
 
-import type { AuthToken, SessionType } from '@/helpers/nextauth/types'
+if (!process.env.TWITTER_CLIENT_ID || !process.env.TWITTER_CLIENT_SECRET) {
+  throw new Error('Invalid/Missing Twitter client ID or client secret')
+}
+
+if (!process.env.NEXTAUTH_SECRET) {
+  throw new Error('Invalid/Missing next auth secret')
+}
 
 export const authOptions: NextAuthOptions = {
   providers: [
-    DiscordProvider({
-      clientId: process.env.DISCORD_CLIENT_ID as string,
-      clientSecret: process.env.DISCORD_CLIENT_SECRET as string,
-      authorization: {
-        params: {
-          prompt: 'consent',
-          grant_type: 'authorization_code',
-          response_type: 'code',
-          scope: 'identify email guilds',
-        },
-      },
+    TwitterProvider({
+      clientId: process.env.TWITTER_CLIENT_ID,
+      clientSecret: process.env.TWITTER_CLIENT_SECRET,
     }),
   ],
   adapter: MongoDBAdapter(clientPromise),
-  secret: process.env.JWT_SECRET as string,
+  debug: process.env.NODE_ENV === 'development',
+  secret: process.env.NEXTAUTH_SECRET,
   session: {
     strategy: 'jwt',
   },
   callbacks: {
-    jwt: async ({ token, account, user }) => {
-      // Initial sign in
+    jwt: ({ token, account, user }) => {
+      /**
+       * if jwt callback has account and user, it means
+       * it is to create a new user account. for Twitter oauth 1.0A,
+       * there is oauth_token and oauth_token_secret. put them into
+       * session for further Twitter API calls
+       */
       if (account && user) {
-        // update user discord or twitter email in users collection
-        await updateUserByProvider({ account, user })
+        if (!account.oauth_token || !account.oauth_token_secret) {
+          throw new Error('missing oauth_token or oauth_token_secret')
+        }
 
         return {
-          accessToken: account.access_token,
-          accessTokenExpires: (account.expires_at || 0) * 1000,
-          refreshToken: account.refresh_token,
-          provider: account.provider,
+          oauth_token: account.oauth_token as string,
+          oauth_token_secret: account.oauth_token_secret as string,
           user,
         }
       }
 
-      // Return previous token if the access token has not expired yet
-      if (!token?.accessTokenExpires || Date.now() < +token.accessTokenExpires) {
-        return token
-      }
-
-      return await refreshDiscordAccessToken(token as AuthToken)
+      return token
     },
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    session: async ({ session, token }: SessionType) => {
-      session.user = token.user
-      session.accessToken = token.accessToken
-      session.error = token.error
-
-      return session
-    },
+    session: ({ session, token }: SessionType): ExtendedSession => ({
+      ...session,
+      user: token.user,
+      oauth_token: token.oauth_token,
+      oauth_token_secret: token.oauth_token_secret,
+    }),
   },
   pages: {
     signIn: '/',

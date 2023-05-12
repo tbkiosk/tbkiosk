@@ -7,14 +7,17 @@ export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
 }
 
 const VARIANT_STYLES = {
-  contained: 'bg-black text-white hover:bg-[#2a2a2d] active:bg-[#4a4a4a]',
-  outlined: 'bg-white text-black border border-black hover:bg-[#e3e3e4] active:bg-[#d1d1d1]',
-  colored: 'text-white button__colored',
+  contained:
+    'bg-[var(--primary-color)] text-[var(--primary-text-color)] hover:bg-[var(--primary-color--hover)] active:bg-[var(--primary-color--active)]',
+  outlined:
+    'bg-[var(--secondary-color)] text-[var(--secondary-text-color)] border border-[var(--secondary-border-color)] hover:bg-[var(--secondary-color--hover)] active:bg-[var(--secondary-color--active)]',
+  colored: 'text-white button--colored',
 }
 
 const VARIANT_DISABLED_STYLES = {
-  contained: 'disabled:bg-[#c4c4c4]',
-  outlined: 'disabled:text-[#c4c4c4] disabled:border-[#c4c4c4] disabled:bg-white disabled:hover:bg-white',
+  contained: 'disabled:bg-[var(--primary-color--disabled)] disabled:text-[var(--primary-text-color--disabled)]',
+  outlined:
+    'disabled:bg-[var(--secondary-color--disabled)] disabled:text-[var(--secondary-color--disabled)] disabled:border-[var(--secondary-border-color--disabled)]',
   colored: 'disabled:grayscale-[50%] disabled:hover:animate-none',
 }
 

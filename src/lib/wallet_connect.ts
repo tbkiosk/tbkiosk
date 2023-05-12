@@ -1,26 +1,16 @@
 import { EthereumClient, w3mConnectors, w3mProvider } from '@web3modal/ethereum'
-import { configureChains, createClient } from 'wagmi'
+import { configureChains, createConfig } from 'wagmi'
 import { evmos, mainnet, polygon } from 'wagmi/chains'
 
 const chains = [evmos, mainnet, polygon]
 const projectId = process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID as string
 
-// Wagmi client
-const { provider } = configureChains(chains, [
-  w3mProvider({
-    projectId,
-  }),
-])
+const { publicClient } = configureChains(chains, [w3mProvider({ projectId })])
 
-export const wagmiClient = createClient({
+export const wagmiConfig = createConfig({
   autoConnect: true,
-  connectors: w3mConnectors({
-    projectId,
-    version: 2, // Minimum version of wagmi 0.11.3 is required to use version: "2"
-    chains,
-  }),
-  provider,
+  connectors: w3mConnectors({ projectId, version: 1, chains }),
+  publicClient,
 })
 
-// Web3Modal Ethereum Client
-export const ethereumClient = new EthereumClient(wagmiClient, chains)
+export const ethereumClient = new EthereumClient(wagmiConfig, chains)

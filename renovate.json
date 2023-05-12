@@ -1,6 +1,4 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:base", ":dependencyDashboard"],
-  "ignoreDeps": ["mongodb", "ethers"],
-  "bumpVersion": "patch"
+  "extends": ["config:base", ":dependencyDashboard"]
 }

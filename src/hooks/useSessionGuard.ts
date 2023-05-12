@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { useSession } from 'next-auth/react'
 
-import type { ExtendedSession } from '@/helpers/nextauth/types'
+import type { ExtendedSession } from '@/types/nextauth'
 
 type SessionGuardOptions = {
   ignoreSession?: boolean

@@ -9,7 +9,7 @@ import { TENCENT_COS_BUCKET, TENCENT_COS_DEV_BUCKET, TENCENT_COS_TEMP_BUCKET } f
 
 import type { NextApiRequest, NextApiResponse } from 'next'
 import type { ResponseBase } from '@/types/response'
-import type { ExtendedSession } from '@/helpers/nextauth/types'
+import type { ExtendedSession } from '@/types/nextauth'
 
 const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<STS.CredentialData>>) => {
   const session: ExtendedSession | null = await getServerSession(req, res, authOptions)

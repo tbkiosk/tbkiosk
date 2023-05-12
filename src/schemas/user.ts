@@ -1,21 +1,11 @@
-import * as Joi from 'joi'
-
-import type { User } from 'next-auth'
+import { object, string, bool } from 'yup'
 
 export const USER_TABLE = 'user'
 
-const schema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().required(),
-  image: Joi.string(),
-  emailVerified: Joi.boolean().allow(null),
-  discordEmail: Joi.string().allow(undefined),
-  twitterEmail: Joi.string().allow(undefined),
+export const UserSchema = object({
+  _id: string(),
+  name: string().required(),
+  email: string().required(),
+  image: string(),
+  emailVerified: bool(),
 })
-
-export type ExtendedUser = User & {
-  discordEmail?: string
-  twitterEmail?: string
-}
-
-export default schema

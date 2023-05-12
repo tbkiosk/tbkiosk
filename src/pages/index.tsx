@@ -5,7 +5,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import cl from 'classnames'
 
-import { Button, Tooltip, Modal } from '@/components'
+import { Button, Modal } from '@/components'
 
 import useInViewport from '@/hooks/dom/useInViewport'
 
@@ -194,12 +194,9 @@ const Index = () => {
             >
               <i className="fa-brands fa-discord w-9 h-9 flex justify-center items-center text-lg text-white bg-black rounded-full" />
             </a>
-            <Tooltip
-              position="bottom"
-              tip="Coming soon"
-            >
-              <Button className="!h-9 px-6">Connect wallets</Button>
-            </Tooltip>
+            <Link href="/login">
+              <Button disabled className="!h-9 px-6">Get started</Button>
+            </Link>
           </div>
           <div className="flex md:hidden items-center active:opacity-50">
             {modalOpen ? (
@@ -243,12 +240,14 @@ const Index = () => {
                 '-translate-x-[calc(100%+6rem)] animate-[fly-in-from-left_1s_ease-in-out_450ms] animation-fill-forwards',
               ])}
             >
-              <Button
-                className="!h-12 !w-auto px-8 !rounded-[3.75rem]"
-                variant="outlined"
-              >
-                Coming soon
-              </Button>
+              <Link href="/login">
+                <Button
+                  className="!h-10 !w-auto px-8 !rounded-full"
+                  variant="outlined"
+                >
+                  Get started
+                </Button>
+              </Link>
             </div>
             <div
               className={cl([

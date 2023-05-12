@@ -9,10 +9,8 @@ import cl from 'classnames'
 import { Dropdown, Tooltip } from '@/components'
 
 import { useSuiWalletModal } from '@/context/sui_wallet_modal_context'
-import useRole from '@/hooks/useRole'
 
 import { ellipsisMiddle } from '@/utils/address'
-import { ROLES } from '@/constants/roles'
 
 type WalletDropdownProps = {
   onWalletSelectSuccess?: (address: string) => void
@@ -22,14 +20,11 @@ type WalletDropdownProps = {
 const WalletDropdown = ({ onWalletSelectSuccess, buttonClassName }: WalletDropdownProps) => {
   const { connected: suiConnected, address: suiAddress = '', disconnect: suiDisconnect } = useWallet()
   const { address: ethAddress, isConnected: ethIsConnected } = useAccount()
-  const { data: session } = useSession()
 
   const { open: ethOpen } = useWeb3Modal()
   const { setOpen: setSuiModalOpen } = useSuiWalletModal()
 
   const [isMounted, setIsMounted] = useState(false)
-
-  const [role, setRole] = useRole()
 
   const renderButton = () => {
     if (!isMounted) {
@@ -193,26 +188,6 @@ const WalletDropdown = ({ onWalletSelectSuccess, buttonClassName }: WalletDropdo
                   width={24}
                 />
                 Disconnect all
-              </div>
-            )}
-          </Dropdown.Item>
-          <Dropdown.Item>
-            {() => (
-              <div
-                className={cl([
-                  'w-full pl-16 pr-4 py-2 relative text-left text-sm text-white truncate cursor-pointer transition-colors hover:bg-[#2a2a2d]',
-                  !session && 'cursor-not-allowed',
-                ])}
-                onClick={() => setRole(role === ROLES.USER ? ROLES.CREATOR : ROLES.USER)}
-              >
-                <Image
-                  alt=""
-                  className="absolute inset-y-0 left-6 my-auto"
-                  height={24}
-                  src="/icons/switch.svg"
-                  width={24}
-                />
-                {`Switch to ${role === ROLES.USER ? 'creator' : 'user'}`}
               </div>
             )}
           </Dropdown.Item>

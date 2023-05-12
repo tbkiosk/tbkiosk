@@ -9,10 +9,6 @@ import { Button } from '@/components'
 import WalletDropdown from './components/wallet_dropdown'
 import ConnectStatus from './components/connect_status'
 
-import useRole from '@/hooks/useRole'
-
-import { ROLES } from '@/constants/roles'
-
 type LayoutProps = {
   showHeader?: boolean
   headerLeft?: React.ReactNode
@@ -24,16 +20,11 @@ const MENUS = [
     key: 'discover',
     iconClass: 'fa-compass',
   },
-  {
-    key: 'portfolio',
-    iconClass: 'fa-house',
-  },
 ]
 
 const Layout = ({ showHeader = true, headerLeft, children }: LayoutProps) => {
   const { route } = useRouter()
   const { collapsed, collapseSidebar } = useProSidebar()
-  const [role] = useRole()
 
   const [isMenuDefaultCollapsed, setIsMenuDefaultCollapsed] = useLocalStorage('morphis_menu_collapsed', false)
 
@@ -82,17 +73,6 @@ const Layout = ({ showHeader = true, headerLeft, children }: LayoutProps) => {
                 </Button>
               </Link>
             ))}
-            {role === ROLES.CREATOR && (
-              <Link href="/project">
-                <Button
-                  className={cl(['flex grow items-center', collapsed && 'justify-center'])}
-                  variant={route.startsWith('/project') ? 'outlined' : 'contained'}
-                >
-                  <i className={cl(['fa-solid fa-folder-closed text-lg', !collapsed && 'ml-4 mr-4'])} />
-                  {!collapsed && <span className="text-2xl capitalize">Project</span>}
-                </Button>
-              </Link>
-            )}
           </div>
           <i
             className={cl([
