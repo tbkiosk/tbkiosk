@@ -45,7 +45,7 @@ export const authOptions: NextAuthOptions = {
           grant_type: 'authorization_code',
           response_type: 'code',
           scope: 'identify email guilds',
-          redirect_uri: 'http://localhost:3000/api/auth/connect'
+          redirect_uri: `${process.env.NEXTAUTH_URL}/api/auth/connect`,
         },
       },
     }),

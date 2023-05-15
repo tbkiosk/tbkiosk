@@ -7,7 +7,7 @@ import { authOptions } from '@/pages/api/auth/[...nextauth]'
 import { ACCOUNTS_TABLE, type AccountData } from '@/schemas/accounts'
 
 import type { NextApiRequest, NextApiResponse } from 'next'
-import type { ExtendedSession } from '@/types/nextauth'
+import type { ExtendedSession, OAuthRes } from '@/types/nextauth'
 import request from '@/utils/request'
 
 const handler = async (req: NextApiRequest, res: NextApiResponse<string | null>) => {
@@ -34,28 +34,44 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<string | null>)
       return res.status(500).json('Internal server error, failed to get oauth code or state')
     }
 
-    console.log(7777, code, state)
-    const oauthRes = await request('https://discordapp.com/api/oauth2/token', {
+    const oauthRes = await request<OAuthRes>('https://discord.com/api/v10/oauth2/token', {
       method: 'POST',
-      body: JSON.stringify({
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        Accept: '*/*',
+      },
+      body: new URLSearchParams({
         client_id: process.env.DISCORD_CLIENT_ID as string,
         client_secret: process.env.DISCORD_CLIENT_SECRET as string,
         grant_type: 'authorization_code',
-        code,
-        state,
+        code: code as string,
+        state: state as string,
+        redirect_uri: `${process.env.NEXTAUTH_URL}/api/auth/connect`,
       }),
     })
-    console.log(7779, oauthRes)
-    // await collection.updateOne(
-    //   {
-    //     userId: new ObjectId(session.user.id),
-    //   },
-    //   {
-    //     $set: {
-    //       discord: {},
-    //     },
-    //   }
-    // )
+    if (!oauthRes?.data) {
+      return res.status(500).json(oauthRes.message || 'Internal server error, failed to get Discord access token')
+    }
+
+    try {
+      await collection.updateOne(
+        {
+          userId: new ObjectId(session.user.id),
+        },
+        {
+          $set: {
+            discord_access_token: oauthRes.data.access_token,
+            discord_refresh_token: oauthRes.data.refresh_token,
+            discord_expires_in: oauthRes.data.expires_in,
+            discord_scope: oauthRes.data.scope,
+            discord_token_type: oauthRes.data.token_type,
+          },
+        }
+      )
+    } catch (error) {
+      return res.status(500).json('Internal server error, failed to save access token')
+    }
+
     return res.redirect(307, '/login').json(null)
   }
 
