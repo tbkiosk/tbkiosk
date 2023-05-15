@@ -1,8 +1,11 @@
 import NextAuth, { type NextAuthOptions } from 'next-auth'
 import TwitterProvider from 'next-auth/providers/twitter'
+import DiscordProvider from 'next-auth/providers/discord'
 import { MongoDBAdapter } from '@next-auth/mongodb-adapter'
 
 import clientPromise from '@/lib/mongodb'
+
+import { generateCodeChallenge } from '@/utils/pkce'
 
 import type { SessionType, ExtendedSession } from '@/types/nextauth'
 
@@ -19,6 +22,27 @@ export const authOptions: NextAuthOptions = {
     TwitterProvider({
       clientId: process.env.TWITTER_CLIENT_ID,
       clientSecret: process.env.TWITTER_CLIENT_SECRET,
+      version: '2.0',
+      authorization: {
+        params: {
+          scope: 'users.read tweet.read follows.read like.read offline.access',
+          state: Array.from(Array(8), () => Math.floor(Math.random() * 36).toString(36)).join(''), // a random string to prevent CSRF attacks
+          code_challenge: generateCodeChallenge(),
+          code_challenge_method: 'S256',
+        },
+      },
+    }),
+    DiscordProvider({
+      clientId: process.env.DISCORD_CLIENT_ID as string,
+      clientSecret: process.env.DISCORD_CLIENT_SECRET as string,
+      authorization: {
+        params: {
+          prompt: 'consent',
+          grant_type: 'authorization_code',
+          response_type: 'code',
+          scope: 'identify email guilds',
+        },
+      },
     }),
   ],
   adapter: MongoDBAdapter(clientPromise),
@@ -28,22 +52,25 @@ export const authOptions: NextAuthOptions = {
     strategy: 'jwt',
   },
   callbacks: {
-    jwt: ({ token, account, user }) => {
-      /**
-       * if jwt callback has account and user, it means
-       * it is to create a new user account. for Twitter oauth 1.0A,
-       * there is oauth_token and oauth_token_secret. put them into
-       * session for further Twitter API calls
-       */
-      if (account && user) {
-        if (!account.oauth_token || !account.oauth_token_secret) {
-          throw new Error('missing oauth_token or oauth_token_secret')
-        }
+    jwt: ({ token, account, user, trigger }) => {
+      if (trigger === 'signUp') {
+        switch (account?.provider) {
+          case 'twitter': {
+            if (!account.access_token) {
+              throw new Error('missing Twitter access_token')
+            }
 
-        return {
-          oauth_token: account.oauth_token as string,
-          oauth_token_secret: account.oauth_token_secret as string,
-          user,
+            return {
+              twitter_access_token: account.access_token as string,
+              user,
+            }
+          }
+          case 'discord': {
+            break
+          }
+          default: {
+            break
+          }
         }
       }
 
@@ -52,8 +79,7 @@ export const authOptions: NextAuthOptions = {
     session: ({ session, token }: SessionType): ExtendedSession => ({
       ...session,
       user: token.user,
-      oauth_token: token.oauth_token,
-      oauth_token_secret: token.oauth_token_secret,
+      twitter_access_token: token.twitter_access_token,
     }),
   },
   pages: {

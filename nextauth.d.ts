@@ -5,15 +5,13 @@ import type { User } from 'next-auth'
 declare module 'next-auth' {
   interface Session {
     user: User
-    oauth_token: string
-    oauth_token_secret: string
+    twitter_access_token: string
   }
 }
 
 declare module 'next-auth/jwt' {
   interface JWT {
     user: User
-    oauth_token: string
-    oauth_token_secret: string
+    twitter_access_token: string
   }
 }

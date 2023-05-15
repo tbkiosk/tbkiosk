@@ -2,8 +2,7 @@ import type { Session, User } from 'next-auth'
 import type { JWT } from 'next-auth/jwt'
 
 export type AuthToken = JWT & {
-  oauth_token: string
-  oauth_token_secret: string
+  twitter_access_token: string
   user: User
 }
 
@@ -14,6 +13,5 @@ export type SessionType = {
 
 export type ExtendedSession = Session & {
   user: User
-  oauth_token: string
-  oauth_token_secret: string
+  twitter_access_token: string
 }

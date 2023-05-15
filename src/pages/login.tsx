@@ -6,7 +6,8 @@ import { signIn, useSession } from 'next-auth/react'
 
 import { Button } from '@/components'
 import WalletDropdown from '@/layouts/components/wallet_dropdown'
-import { ExtendedSession } from '@/types/nextauth'
+
+import type { ExtendedSession } from '@/types/nextauth'
 
 const Login = () => {
   const router = useRouter()
