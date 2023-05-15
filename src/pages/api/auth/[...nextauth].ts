@@ -13,6 +13,10 @@ if (!process.env.TWITTER_CLIENT_ID || !process.env.TWITTER_CLIENT_SECRET) {
   throw new Error('Invalid/Missing Twitter client ID or client secret')
 }
 
+if (!process.env.DISCORD_CLIENT_ID || !process.env.DISCORD_CLIENT_SECRET) {
+  throw new Error('Invalid/Missing Discord client ID or client secret')
+}
+
 if (!process.env.NEXTAUTH_SECRET) {
   throw new Error('Invalid/Missing next auth secret')
 }
@@ -33,14 +37,15 @@ export const authOptions: NextAuthOptions = {
       },
     }),
     DiscordProvider({
-      clientId: process.env.DISCORD_CLIENT_ID as string,
-      clientSecret: process.env.DISCORD_CLIENT_SECRET as string,
+      clientId: process.env.DISCORD_CLIENT_ID,
+      clientSecret: process.env.DISCORD_CLIENT_SECRET,
       authorization: {
         params: {
           prompt: 'consent',
           grant_type: 'authorization_code',
           response_type: 'code',
           scope: 'identify email guilds',
+          redirect_uri: 'http://localhost:3000/api/auth/connect'
         },
       },
     }),
@@ -54,36 +59,32 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     jwt: ({ token, account, user, trigger }) => {
       if (trigger === 'signUp') {
-        switch (account?.provider) {
-          case 'twitter': {
-            if (!account.access_token) {
-              throw new Error('missing Twitter access_token')
-            }
+        if (account?.provider === 'twitter') {
+          if (!account.access_token) {
+            throw new Error('missing Twitter access_token')
+          }
 
-            return {
-              twitter_access_token: account.access_token as string,
-              user,
-            }
-          }
-          case 'discord': {
-            break
-          }
-          default: {
-            break
+          return {
+            twitter_access_token: account.access_token,
+            user: {
+              ...user,
+              userId: account.userId,
+            },
           }
         }
+
+        throw new Error('unknown provider')
       }
 
       return token
     },
-    session: ({ session, token }: SessionType): ExtendedSession => ({
-      ...session,
-      user: token.user,
-      twitter_access_token: token.twitter_access_token,
-    }),
-  },
-  pages: {
-    signIn: '/',
+    session: async ({ session, token }: SessionType): Promise<ExtendedSession> => {
+      return {
+        ...session,
+        user: token.user,
+        twitter_access_token: token.twitter_access_token,
+      }
+    },
   },
 }
 

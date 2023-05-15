@@ -1,6 +1,6 @@
 import { object, string, bool } from 'yup'
 
-export const USER_TABLE = 'user'
+export const USERS_TABLE = 'users'
 
 export const UserSchema = object({
   _id: string(),
