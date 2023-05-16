@@ -5,6 +5,7 @@ export type ResponseError = {
 
 export type ResponseSuccess<T> = {
   data?: T
+  status?: number
 }
 
 export type ResponseBase<T> = ResponseSuccess<T> & ResponseError

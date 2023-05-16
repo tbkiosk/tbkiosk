@@ -1,18 +1,5 @@
-import type { ResponseError } from '@/types/response'
+import axios, { type AxiosRequestConfig, AxiosResponse } from 'axios'
 
-const fetcher = async <T>(resource: RequestInfo, options?: RequestInit): Promise<T> => {
-  const res = await fetch(resource, options)
-  const json = await res.json()
-
-  if (!res.ok) {
-    const error: ResponseError = new Error()
-    error.status = res.status
-    error.message = json?.message || res.statusText
-
-    throw error
-  }
-
-  return json as T
-}
+const fetcher = <T>(config: AxiosRequestConfig): Promise<AxiosResponse<T>> => axios<T>({ ...config }).then(res => res)
 
 export default fetcher
