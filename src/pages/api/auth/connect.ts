@@ -6,17 +6,18 @@ import { authOptions } from '@/pages/api/auth/[...nextauth]'
 
 import { ACCOUNTS_TABLE, type AccountData } from '@/schemas/accounts'
 
-import type { NextApiRequest, NextApiResponse } from 'next'
-import type { ExtendedSession, OAuthRes } from '@/types/nextauth'
 import request from '@/utils/request'
 
+import type { NextApiRequest, NextApiResponse } from 'next'
+import type { TokenSet } from 'next-auth'
+
 const handler = async (req: NextApiRequest, res: NextApiResponse<string | null>) => {
-  const session: ExtendedSession | null = await getServerSession(req, res, authOptions)
+  const session = await getServerSession(req, res, authOptions)
   if (!session) {
     return res.status(401).json('Not authenticated')
   }
 
-  if (!session.user?.id) {
+  if (!session?.userId) {
     return res.status(500).json('Internal server error, no userId')
   }
 
@@ -34,13 +35,14 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<string | null>)
       return res.status(500).json('Internal server error, failed to get oauth code or state')
     }
 
-    const oauthRes = await request<OAuthRes>('https://discord.com/api/v10/oauth2/token', {
+    const oauthRes = await request<TokenSet>({
+      url: 'https://discord.com/api/v10/oauth2/token',
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
         Accept: '*/*',
       },
-      body: new URLSearchParams({
+      data: new URLSearchParams({
         client_id: process.env.DISCORD_CLIENT_ID as string,
         client_secret: process.env.DISCORD_CLIENT_SECRET as string,
         grant_type: 'authorization_code',
@@ -56,7 +58,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<string | null>)
     try {
       await collection.updateOne(
         {
-          userId: new ObjectId(session.user.id),
+          userId: new ObjectId(session.userId),
         },
         {
           $set: {

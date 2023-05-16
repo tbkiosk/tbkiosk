@@ -7,13 +7,11 @@ import { signIn, useSession } from 'next-auth/react'
 import { Button } from '@/components'
 import WalletDropdown from '@/layouts/components/wallet_dropdown'
 
-import type { ExtendedSession } from '@/types/nextauth'
-
 const Login = () => {
   const router = useRouter()
   const { data: session } = useSession()
 
-  const isConnected = useMemo(() => session && !!(session as ExtendedSession)?.user?.name, [session])
+  const isConnected = useMemo(() => session && !!session?.user?.name, [session])
 
   return (
     <>

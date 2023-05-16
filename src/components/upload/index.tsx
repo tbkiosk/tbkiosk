@@ -15,7 +15,7 @@ import type { CredentialData } from 'qcloud-cos-sts'
 
 const cos = new COS({
   getAuthorization: async (options, callback) => {
-    const res = await request<ResponseBase<CredentialData>>(`/api/cos/credentials/${TENCENT_COS_TEMP_BUCKET}`)
+    const res = await request<ResponseBase<CredentialData>>({ url: `/api/cos/credentials/${TENCENT_COS_TEMP_BUCKET}` })
 
     const data = res?.data?.data
     if (!data) {

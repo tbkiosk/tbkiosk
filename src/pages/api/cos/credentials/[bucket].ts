@@ -9,17 +9,16 @@ import { TENCENT_COS_BUCKET, TENCENT_COS_DEV_BUCKET, TENCENT_COS_TEMP_BUCKET } f
 
 import type { NextApiRequest, NextApiResponse } from 'next'
 import type { ResponseBase } from '@/types/response'
-import type { ExtendedSession } from '@/types/nextauth'
 
 const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<STS.CredentialData>>) => {
-  const session: ExtendedSession | null = await getServerSession(req, res, authOptions)
+  const session = await getServerSession(req, res, authOptions)
   if (!session) {
     return res.status(401).json({
       message: '',
     })
   }
 
-  if (!session.user?.email) {
+  if (!session?.user?.email) {
     return res.status(500).json({
       message: 'Missing user email in session, try to sign out and login',
     })

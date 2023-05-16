@@ -4,6 +4,7 @@ type RefreshAccessTokenError = 'RefreshAccessTokenError'
 
 declare module 'next-auth' {
   interface Session {
+    userId?: string
     error?: RefreshAccessTokenError
   }
 }

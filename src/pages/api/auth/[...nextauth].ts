@@ -77,7 +77,7 @@ export const authOptions: NextAuthOptions = {
         }
 
         if (((_account.expires_at as number) || 0) * 1000 > Date.now()) {
-          return session
+          return { ...session, userId: user.id }
         }
 
         const res = await refreshTwitterAccessToken(_account.refresh_token as string)
@@ -106,7 +106,8 @@ export const authOptions: NextAuthOptions = {
           error: 'RefreshAccessTokenError',
         }
       }
-      return session
+
+      return { ...session, userId: user.id }
     },
   },
 }
