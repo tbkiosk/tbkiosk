@@ -13,25 +13,6 @@ import { TENCENT_COS_TEMP_BUCKET, TENCENT_COS_REGION, TENCENT_COS_CDN_DOMAIN } f
 import type { ResponseBase } from '@/types/response'
 import type { CredentialData } from 'qcloud-cos-sts'
 
-const cos = new COS({
-  getAuthorization: async (options, callback) => {
-    const res = await request<ResponseBase<CredentialData>>({ url: `/api/cos/credentials/${TENCENT_COS_TEMP_BUCKET}` })
-
-    const data = res?.data?.data
-    if (!data) {
-      throw new Error('No credentials received')
-    }
-
-    callback({
-      TmpSecretId: data.credentials.tmpSecretId,
-      TmpSecretKey: data.credentials.tmpSecretKey,
-      SecurityToken: data.credentials.sessionToken,
-      StartTime: data.startTime,
-      ExpiredTime: data.expiredTime,
-    })
-  },
-})
-
 type UploadProps = {
   className?: string
   id: string
@@ -72,6 +53,25 @@ export const Upload = forwardRef<HTMLInputElement, UploadProps>(
       }
 
       const filePath = `${fileName}-${+new Date()}.${extension}` // make upload file name exclusive
+
+      const cos = new COS({
+        getAuthorization: async (options, callback) => {
+          const res = await request<ResponseBase<CredentialData>>({ url: `/api/cos/credentials/${TENCENT_COS_TEMP_BUCKET}` })
+
+          const data = res?.data?.data
+          if (!data) {
+            throw new Error('No credentials received')
+          }
+
+          callback({
+            TmpSecretId: data.credentials.tmpSecretId,
+            TmpSecretKey: data.credentials.tmpSecretKey,
+            SecurityToken: data.credentials.sessionToken,
+            StartTime: data.startTime,
+            ExpiredTime: data.expiredTime,
+          })
+        },
+      })
 
       cos.uploadFile(
         {
