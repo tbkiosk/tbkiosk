@@ -25,10 +25,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<string | null>)
   const db = client.db(`${process.env.NODE_ENV}`)
   const collection = db.collection<AccountData>(ACCOUNTS_TABLE)
 
-  /**
-   * @method GET
-   * @returns created projects
-   */
   if (req.method === 'GET') {
     const { code, state } = req.query
     if (!code || !state) {
