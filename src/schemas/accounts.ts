@@ -5,5 +5,5 @@ export const ACCOUNTS_TABLE = 'accounts'
 
 export type AccountData = Omit<Account, 'userId'> & {
   userId: ObjectId
-  discord?: Omit<Account, 'userId'>
+  discord_access_token?: string
 }

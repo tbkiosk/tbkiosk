@@ -1,13 +1,18 @@
-import NextAuth, { type NextAuthOptions } from 'next-auth'
+import NextAuth from 'next-auth'
 import TwitterProvider from 'next-auth/providers/twitter'
 import DiscordProvider from 'next-auth/providers/discord'
+import { ObjectId } from 'mongodb'
 import { MongoDBAdapter } from '@next-auth/mongodb-adapter'
 
 import clientPromise from '@/lib/mongodb'
 
 import { generateCodeChallenge } from '@/utils/pkce'
+import request from '@/utils/request'
 
-import type { SessionType, ExtendedSession } from '@/types/nextauth'
+import { ACCOUNTS_TABLE } from '@/schemas/accounts'
+
+import type { NextAuthOptions, Session, TokenSet } from 'next-auth'
+import type { AccountData } from '@/schemas/accounts'
 
 if (!process.env.TWITTER_CLIENT_ID || !process.env.TWITTER_CLIENT_SECRET) {
   throw new Error('Invalid/Missing Twitter client ID or client secret')
@@ -23,6 +28,9 @@ if (!process.env.NEXTAUTH_SECRET) {
 
 export const authOptions: NextAuthOptions = {
   providers: [
+    /**
+     * Twitter OAuth2 expires_at is in seconds. remember to * 1000
+     */
     TwitterProvider({
       clientId: process.env.TWITTER_CLIENT_ID,
       clientSecret: process.env.TWITTER_CLIENT_SECRET,
@@ -53,39 +61,71 @@ export const authOptions: NextAuthOptions = {
   adapter: MongoDBAdapter(clientPromise),
   debug: process.env.NODE_ENV === 'development',
   secret: process.env.NEXTAUTH_SECRET,
-  session: {
-    strategy: 'jwt',
-  },
   callbacks: {
-    jwt: ({ token, account, user, trigger }) => {
-      if (trigger === 'signUp') {
-        if (account?.provider === 'twitter') {
-          if (!account.access_token) {
-            throw new Error('missing Twitter access_token')
-          }
+    session: async ({ session, user }): Promise<Session> => {
+      try {
+        const client = await clientPromise
+        const db = client.db(`${process.env.NODE_ENV}`)
+        const collection = db.collection<AccountData>(ACCOUNTS_TABLE)
 
-          return {
-            twitter_access_token: account.access_token,
-            user: {
-              ...user,
-              userId: account.userId,
-            },
-          }
+        const _account = await collection.findOne({
+          userId: new ObjectId(user.id),
+          provider: 'twitter',
+        })
+        if (!_account) {
+          throw new Error('Account not found')
         }
 
-        throw new Error('unknown provider')
-      }
+        if (((_account.expires_at as number) || 0) * 1000 > Date.now()) {
+          return session
+        }
 
-      return token
-    },
-    session: async ({ session, token }: SessionType): Promise<ExtendedSession> => {
-      return {
-        ...session,
-        user: token.user,
-        twitter_access_token: token.twitter_access_token,
+        const res = await refreshTwitterAccessToken(_account.refresh_token as string)
+        if (!res?.data?.access_token || !res?.data?.refresh_token || !res?.data?.expires_in) {
+          console.error(res?.message || 'Failed to refresh access token')
+          throw new Error('Failed to refresh access token')
+        }
+
+        await collection.updateOne(
+          {
+            userId: new ObjectId(user.id),
+            provider: 'twitter',
+          },
+          {
+            $set: {
+              access_token: res.data.access_token as string,
+              refresh_token: res.data.refresh_token as string,
+              expires_at: Math.floor(Date.now() / 1000) + (res.data.expires_in || 0), // expires_in and expires_at are in seconds, Date.now() is in milliseconds. Parses to seconds
+            },
+          }
+        )
+      } catch (error) {
+        console.error(error)
+        return {
+          ...session,
+          error: 'RefreshAccessTokenError',
+        }
       }
+      return session
     },
   },
 }
 
 export default NextAuth(authOptions)
+
+const refreshTwitterAccessToken = async (refreshToken: string) => {
+  const res = await request<Omit<TokenSet, 'expires_at'> & { expires_in?: number }>({
+    url: 'https://api.twitter.com/2/oauth2/token',
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      Authorization: `Basic ${btoa(`${process.env.TWITTER_CLIENT_ID as string}:${process.env.TWITTER_CLIENT_SECRET as string}`)}`,
+    },
+    data: new URLSearchParams({
+      refresh_token: refreshToken,
+      grant_type: 'refresh_token',
+    }),
+  })
+
+  return res
+}

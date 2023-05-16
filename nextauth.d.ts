@@ -1,17 +1,18 @@
 import 'next-auth'
 
-import type { User } from 'next-auth'
+type RefreshAccessTokenError = 'RefreshAccessTokenError'
 
 declare module 'next-auth' {
   interface Session {
-    user: User
-    twitter_access_token: string
+    error?: RefreshAccessTokenError
   }
 }
 
 declare module 'next-auth/jwt' {
   interface JWT {
-    user: User
-    twitter_access_token: string
+    access_token: string
+    expires_at: number
+    refresh_token: string
+    error?: RefreshAccessTokenError
   }
 }
