@@ -1,6 +1,6 @@
 ## prerequisites
 
-**node** >= 16.18.0
+**node** >= 16.12.0
 **pnpm** >= 8.0.0 (do not use npm or yarn, monorepo is a todo)
 
 ## architectural design
