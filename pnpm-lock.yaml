@@ -11,11 +11,11 @@ dependencies:
     specifier: ^2.0.0
     version: 2.0.0
   '@moralisweb3/common-evm-utils':
-    specifier: ^2.20.0
-    version: 2.20.0
+    specifier: ^2.21.0
+    version: 2.21.0
   '@moralisweb3/next':
-    specifier: ^2.20.0
-    version: 2.20.0(next-auth@4.22.1)(next@13.4.2)(react-dom@18.2.0)(react@18.2.0)
+    specifier: ^2.21.0
+    version: 2.21.0(next-auth@4.22.1)(next@13.4.2)(react-dom@18.2.0)(react@18.2.0)
   '@mysten/sui.js':
     specifier: ^0.34.0
     version: 0.34.0
@@ -30,7 +30,7 @@ dependencies:
     version: 0.2.11(@mysten/sui.js@0.34.0)(@types/react@18.2.6)(react-dom@18.2.0)(react@18.2.0)(typescript@5.0.4)
   '@web3modal/ethereum':
     specifier: ^2.4.1
-    version: 2.4.1(@wagmi/core@1.0.5)(viem@0.3.26)
+    version: 2.4.1(@wagmi/core@1.0.5)(viem@0.3.27)
   '@web3modal/react':
     specifier: ^2.4.1
     version: 2.4.1(react-dom@18.2.0)(react@18.2.0)
@@ -65,8 +65,8 @@ dependencies:
     specifier: ^5.5.0
     version: 5.5.0
   moralis:
-    specifier: ^2.20.0
-    version: 2.20.0
+    specifier: ^2.21.0
+    version: 2.21.0
   next:
     specifier: 13.4.2
     version: 13.4.2(@babel/core@7.21.8)(react-dom@18.2.0)(react@18.2.0)
@@ -113,11 +113,11 @@ dependencies:
     specifier: ^2.9.1
     version: 2.9.1(react-dom@18.2.0)(react@18.2.0)
   viem:
-    specifier: ^0.3.26
-    version: 0.3.26(typescript@5.0.4)
+    specifier: ^0.3.27
+    version: 0.3.27(typescript@5.0.4)
   wagmi:
     specifier: ^1.0.5
-    version: 1.0.5(react-dom@18.2.0)(react@18.2.0)(typescript@5.0.4)(viem@0.3.26)
+    version: 1.0.5(react-dom@18.2.0)(react@18.2.0)(typescript@5.0.4)(viem@0.3.27)
   yup:
     specifier: ^1.1.1
     version: 1.1.1
@@ -139,8 +139,8 @@ devDependencies:
     specifier: ^4.1.1
     version: 4.1.1
   '@types/node':
-    specifier: 20.1.5
-    version: 20.1.5
+    specifier: 20.1.7
+    version: 20.1.7
   '@types/randomstring':
     specifier: ^1.1.8
     version: 1.1.8
@@ -1491,7 +1491,7 @@ packages:
       eth-rpc-errors: 4.0.2
       json-rpc-engine: 6.1.0
       keccak: 3.0.3
-      preact: 10.14.0
+      preact: 10.14.1
       qs: 6.11.2
       rxjs: 6.6.7
       sha.js: 2.4.11
@@ -2303,84 +2303,84 @@ packages:
       - supports-color
     dev: false
 
-  /@moralisweb3/api-utils@2.20.0:
-    resolution: {integrity: sha512-FDbPc0VQa75N5Ek1KsRvATMdHCB3k/y4eDVmPvP0ZXj6j1AMLWxYeM44IQpOphVFQVvIskq6KuaG/A+V2atThw==}
+  /@moralisweb3/api-utils@2.21.0:
+    resolution: {integrity: sha512-C0LrVL27h1y9JNqXhldvPqkJutkPd4t15IeuouAFrjeJwTssiF4OgLI/EaHh8mwV80CX9rQVE5BPJHjBXZ61xA==}
     dependencies:
-      '@moralisweb3/common-core': 2.20.0
-      '@moralisweb3/common-evm-utils': 2.20.0
+      '@moralisweb3/common-core': 2.21.0
+      '@moralisweb3/common-evm-utils': 2.21.0
       axios: 1.4.0
     transitivePeerDependencies:
       - debug
     dev: false
 
-  /@moralisweb3/aptos-api@2.20.0:
-    resolution: {integrity: sha512-i9MVyy/vIxEyXo3UACbbsbl5J/F02wqzXyRB2QL7MHyHQG5lG3vUw6tvJSo2mjEV2YCPEb+ApBD1o50ZjVq6Jw==}
+  /@moralisweb3/aptos-api@2.21.0:
+    resolution: {integrity: sha512-yrEprByLeF4y7wyIejvPrjFfVxRXAr+scd/xC3iqD184cu8OjWKgqas8DvyhbKX9DZdSCtWZguHMiiRsCop4/A==}
     dependencies:
-      '@moralisweb3/api-utils': 2.20.0
-      '@moralisweb3/common-aptos-utils': 2.20.0
-      '@moralisweb3/common-core': 2.20.0
+      '@moralisweb3/api-utils': 2.21.0
+      '@moralisweb3/common-aptos-utils': 2.21.0
+      '@moralisweb3/common-core': 2.21.0
     transitivePeerDependencies:
       - debug
     dev: false
 
-  /@moralisweb3/auth@2.20.0:
-    resolution: {integrity: sha512-VNCHturyvFWU84wBZv7FrvXEZF2Rj6BKYYiNGiKqAElCfrwwjxTFxp89Mo3CpjNmge1LvIlI9k89m5vVXhMDXQ==}
+  /@moralisweb3/auth@2.21.0:
+    resolution: {integrity: sha512-xsv2oowUtvhC2cL6atORQi84eO/2ew5ddgnjBoWlAzMeSWArUMDVrdickmUPXIy8qBe7kjAhY6d3SHkrr/JxQw==}
     dependencies:
-      '@moralisweb3/api-utils': 2.20.0
-      '@moralisweb3/common-aptos-utils': 2.20.0
-      '@moralisweb3/common-auth-utils': 2.20.0
-      '@moralisweb3/common-core': 2.20.0
-      '@moralisweb3/common-evm-utils': 2.20.0
-      '@moralisweb3/common-sol-utils': 2.20.0
+      '@moralisweb3/api-utils': 2.21.0
+      '@moralisweb3/common-aptos-utils': 2.21.0
+      '@moralisweb3/common-auth-utils': 2.21.0
+      '@moralisweb3/common-core': 2.21.0
+      '@moralisweb3/common-evm-utils': 2.21.0
+      '@moralisweb3/common-sol-utils': 2.21.0
     transitivePeerDependencies:
       - debug
     dev: false
 
-  /@moralisweb3/common-aptos-utils@2.20.0:
-    resolution: {integrity: sha512-sCn60LBh6Nv3Wmrsf+76SamjbqFmgTX6LnARkL85B5zDghgFq7gLkiJIOYqilvYogvewdlxLIm5EphubYwKaEQ==}
+  /@moralisweb3/common-aptos-utils@2.21.0:
+    resolution: {integrity: sha512-ex/RFyJEw8jkgqa8bAJQ+UDb/AhxrxIrr79F0vLJLuhvXErbRGRga1TfZfDfhd1TQz4EgmBC2Z4WO/aNDxoCww==}
     dependencies:
-      '@moralisweb3/common-core': 2.20.0
+      '@moralisweb3/common-core': 2.21.0
       '@noble/hashes': 1.3.0
     transitivePeerDependencies:
       - debug
     dev: false
 
-  /@moralisweb3/common-auth-utils@2.20.0:
-    resolution: {integrity: sha512-D4EHlJ9CGL7XKckw4W7cEa/6oiviGEyHZilHoTo/jnVMOKkz/IYvnZ5v6b80xIW+kwXhr56VMIPxJO/eXvSXhA==}
+  /@moralisweb3/common-auth-utils@2.21.0:
+    resolution: {integrity: sha512-4dziGjPw9yBgG5zAtc5Sw2kAKsXTootjzRuHTpAbOdTpxVk9X6Le2mOfxpjoCqBsn5Dc5issSS+Owd8iGPii6g==}
     dependencies:
       '@ethersproject/abi': 5.7.0
-      '@moralisweb3/common-aptos-utils': 2.20.0
-      '@moralisweb3/common-core': 2.20.0
-      '@moralisweb3/common-evm-utils': 2.20.0
-      '@moralisweb3/common-sol-utils': 2.20.0
+      '@moralisweb3/common-aptos-utils': 2.21.0
+      '@moralisweb3/common-core': 2.21.0
+      '@moralisweb3/common-evm-utils': 2.21.0
+      '@moralisweb3/common-sol-utils': 2.21.0
       '@moralisweb3/streams-typings': 1.0.7
     transitivePeerDependencies:
       - debug
     dev: false
 
-  /@moralisweb3/common-core@2.20.0:
-    resolution: {integrity: sha512-2eSma19b3URqKMU7lw+yAMX8Z4Q+HA3V8HhehmGWJixpfYLTA6Fx4QTkLoYOCpLCeqL8ZNgoDZ3NxCcYrdQBYg==}
+  /@moralisweb3/common-core@2.21.0:
+    resolution: {integrity: sha512-iJTS7MqmAqKMBfSLATpmdW5jnNb7pkQNq7aWCsr0Xu+ky1THRkkcFt+MTpQQbrUfOw9kFr4ZPMtDPuedf+niWQ==}
     dependencies:
       axios: 1.4.0
     transitivePeerDependencies:
       - debug
     dev: false
 
-  /@moralisweb3/common-evm-utils@2.20.0:
-    resolution: {integrity: sha512-Hf7LXMnH44DLh+9Ul1MLVZfO+eUuec9U8BlM+ZRcKA7S2KPeZucsKTjkiUzBl7q1QLTi0nEQ16yFp4zfPf8p5Q==}
+  /@moralisweb3/common-evm-utils@2.21.0:
+    resolution: {integrity: sha512-sfMLo4XV6CcXWWt5V4hRFsq9hP6SkIXdJ8jtm1xiFLXjW7UnKbcHbjoISI+NE+Qd+HykCGEvIKlS5gL8hZFQ6w==}
     dependencies:
       '@ethersproject/address': 5.7.0
       '@ethersproject/bytes': 5.7.0
       '@ethersproject/transactions': 5.7.0
-      '@moralisweb3/common-core': 2.20.0
+      '@moralisweb3/common-core': 2.21.0
     transitivePeerDependencies:
       - debug
     dev: false
 
-  /@moralisweb3/common-sol-utils@2.20.0:
-    resolution: {integrity: sha512-n3xbqJuOaXtmsyCN8/eSlsgKzjKlJxWM0M0dHCPYrkUTKQa1YsjpKuDZBIVXR4gEX7jGVXZ7/qiDCNEqfKaUgQ==}
+  /@moralisweb3/common-sol-utils@2.21.0:
+    resolution: {integrity: sha512-Dv8im5YtoxmQ1miNjhL0Uvkh76Tbge9dpE6tyheYuUYu1hbdEmxDU075r0C3Dt8eK7t7qDpGh+IjWjNpMhaBgA==}
     dependencies:
-      '@moralisweb3/common-core': 2.20.0
+      '@moralisweb3/common-core': 2.21.0
       bn.js: 5.2.1
       bs58: 5.0.0
       buffer: 6.0.3
@@ -2388,44 +2388,44 @@ packages:
       - debug
     dev: false
 
-  /@moralisweb3/common-streams-utils@2.20.0:
-    resolution: {integrity: sha512-M6ueSPc7pKyx5I5uPtaQAlMzuJo6PEdFZjNdEHoFCfQU43TQnvbmpgqUmeh0KUgxLgD+7R2W4153Iy11OLEOXg==}
+  /@moralisweb3/common-streams-utils@2.21.0:
+    resolution: {integrity: sha512-/Bjre3JqaxzM6Ky2CPiM9zx+6EEr+7UYR7Een/QOs6KC0P3lsycsRgCIkBQyEyTV4PmOpZw9k/Mm+D4QIQ7wXg==}
     dependencies:
       '@ethersproject/abi': 5.7.0
-      '@moralisweb3/common-aptos-utils': 2.20.0
-      '@moralisweb3/common-core': 2.20.0
-      '@moralisweb3/common-evm-utils': 2.20.0
+      '@moralisweb3/common-aptos-utils': 2.21.0
+      '@moralisweb3/common-core': 2.21.0
+      '@moralisweb3/common-evm-utils': 2.21.0
       '@moralisweb3/streams-typings': 1.0.7
     transitivePeerDependencies:
       - debug
     dev: false
 
-  /@moralisweb3/evm-api@2.20.0:
-    resolution: {integrity: sha512-D34cufq0TLp3bFvpdcMsnGgu86KYnPh6PN7Q64NxLis2P6y0SGV+et5csvtdWGZzGW/SqawmsYP4/s1TUQnDlw==}
+  /@moralisweb3/evm-api@2.21.0:
+    resolution: {integrity: sha512-17GPDmkSlkZwRlAeGA2t7JpRWAblbBLHD9qebLhHfi1KF5x0I52mdGm4w0NeWLisI0ZQaewuVIeof8XmSK+s7Q==}
     dependencies:
-      '@moralisweb3/api-utils': 2.20.0
-      '@moralisweb3/common-core': 2.20.0
-      '@moralisweb3/common-evm-utils': 2.20.0
+      '@moralisweb3/api-utils': 2.21.0
+      '@moralisweb3/common-core': 2.21.0
+      '@moralisweb3/common-evm-utils': 2.21.0
     transitivePeerDependencies:
       - debug
     dev: false
 
-  /@moralisweb3/next@2.20.0(next-auth@4.22.1)(next@13.4.2)(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-8QndSv5bEx2l65k9D5F2xRqnJZVTLnk0i+nLVnlrDJh9mpu5u3jtmCQ2FHWLG6nQ7RrEHPvG+qlFL6DL0e5Agg==}
+  /@moralisweb3/next@2.21.0(next-auth@4.22.1)(next@13.4.2)(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-2ST67knoZ0z8Q4Ch7JcPAuwEMamGgawHetQ/XS3casKwhxuVJmaCFuRF5TawAHrA+fLY7jLizjftKbw4wM65nw==}
     peerDependencies:
       next: '>=12.2.5'
       next-auth: '>=4.20.1'
       react: '>=17.0.0'
       react-dom: '>=17.0.0'
     dependencies:
-      '@moralisweb3/api-utils': 2.20.0
-      '@moralisweb3/auth': 2.20.0
-      '@moralisweb3/common-auth-utils': 2.20.0
-      '@moralisweb3/common-core': 2.20.0
-      '@moralisweb3/evm-api': 2.20.0
-      '@moralisweb3/sol-api': 2.20.0
+      '@moralisweb3/api-utils': 2.21.0
+      '@moralisweb3/auth': 2.21.0
+      '@moralisweb3/common-auth-utils': 2.21.0
+      '@moralisweb3/common-core': 2.21.0
+      '@moralisweb3/evm-api': 2.21.0
+      '@moralisweb3/sol-api': 2.21.0
       axios: 1.4.0
-      moralis: 2.20.0
+      moralis: 2.21.0
       next: 13.4.2(@babel/core@7.21.8)(react-dom@18.2.0)(react@18.2.0)
       next-auth: 4.22.1(next@13.4.2)(react-dom@18.2.0)(react@18.2.0)
       react: 18.2.0
@@ -2435,12 +2435,12 @@ packages:
       - debug
     dev: false
 
-  /@moralisweb3/sol-api@2.20.0:
-    resolution: {integrity: sha512-vXMKug6cPIU7hm1tXIoVvi9TR01ckNe98AVHeeSKl9XRAVjc/8INz0ze7pU0xR61QfMGlTM0vbWpk2b9JKQirw==}
+  /@moralisweb3/sol-api@2.21.0:
+    resolution: {integrity: sha512-QEwuQmCaMZqCsxpU0xkDIsXWVxShZdkQDGWBgo3idvRjdTa2JE14wL37FRkusrgiiY8W+FX9F6P4q2k87CGhkw==}
     dependencies:
-      '@moralisweb3/api-utils': 2.20.0
-      '@moralisweb3/common-core': 2.20.0
-      '@moralisweb3/common-sol-utils': 2.20.0
+      '@moralisweb3/api-utils': 2.21.0
+      '@moralisweb3/common-core': 2.21.0
+      '@moralisweb3/common-sol-utils': 2.21.0
     transitivePeerDependencies:
       - debug
     dev: false
@@ -2449,17 +2449,17 @@ packages:
     resolution: {integrity: sha512-ShbVqil0KLOTyTjO6z9JewPcVVE3S6kzkQFnW2flGBRsGdKucpkUdOx1HijOLoaikz/9gH92n+lzTvRFIj0AoA==}
     dev: false
 
-  /@moralisweb3/streams@2.20.0:
-    resolution: {integrity: sha512-k6gdariuO+RYQKGmj4R3PRMD0jGP5Q3YFqncAWloMAClwqsxNep1pjQX2UNCJhXOxh3upveSzrSRUWXQ1c/lHA==}
+  /@moralisweb3/streams@2.21.0:
+    resolution: {integrity: sha512-nOGZnNeCaz0C/rZQNhlfGR/IY+ZylmnFFkqFUGQADswSaRdfl+NrsYH7rtrkB1QazVuBsBBo+tJZVo0cWdkRMA==}
     dependencies:
       '@ethersproject/abi': 5.7.0
       '@ethersproject/bignumber': 5.7.0
       '@ethersproject/sha2': 5.7.0
       '@ethersproject/strings': 5.7.0
-      '@moralisweb3/api-utils': 2.20.0
-      '@moralisweb3/common-core': 2.20.0
-      '@moralisweb3/common-evm-utils': 2.20.0
-      '@moralisweb3/common-streams-utils': 2.20.0
+      '@moralisweb3/api-utils': 2.21.0
+      '@moralisweb3/common-core': 2.21.0
+      '@moralisweb3/common-evm-utils': 2.21.0
+      '@moralisweb3/common-streams-utils': 2.21.0
       '@moralisweb3/streams-typings': 1.0.7
       ethereumjs-util: 7.1.5
       web3-eth-abi: 1.10.0
@@ -3447,7 +3447,7 @@ packages:
   /@types/bn.js@5.1.1:
     resolution: {integrity: sha512-qNrYbZqMx0uJAfKnKclPh+dTwK33KfLHYqtyODwd5HnXOjnkhc4qgn3BrK6RWyGZm5+sIFE7Q7Vz6QQtJB7w7g==}
     dependencies:
-      '@types/node': 20.1.5
+      '@types/node': 20.1.7
     dev: false
 
   /@types/chai-subset@1.3.3:
@@ -3463,7 +3463,7 @@ packages:
   /@types/connect@3.4.35:
     resolution: {integrity: sha512-cdeYyv4KWoEgpBISTxWvqYsVy444DOqehiF3fM3ne10AmJ62RSyNkUnxMJXHQWRQQX2eR94m5y1IZyDwBjV9FQ==}
     dependencies:
-      '@types/node': 20.1.5
+      '@types/node': 20.1.7
     dev: false
 
   /@types/crypto-js@4.1.1:
@@ -3496,8 +3496,8 @@ packages:
     resolution: {integrity: sha512-J8xLz7q2OFulZ2cyGTLE1TbbZcjpno7FaN6zdJNrgAdrJ+DZzh/uFR6YrTb4C+nXakvud8Q4+rbhoIWlYQbUFQ==}
     dev: false
 
-  /@types/node@20.1.5:
-    resolution: {integrity: sha512-IvGD1CD/nego63ySR7vrAKEX3AJTcmrAN2kn+/sDNLi1Ff5kBzDeEdqWDplK+0HAEoLYej137Sk0cUU8OLOlMg==}
+  /@types/node@20.1.7:
+    resolution: {integrity: sha512-WCuw/o4GSwDGMoonES8rcvwsig77dGCMbZDrZr2x4ZZiNW4P/gcoZXe/0twgtobcTkmg9TuKflxYL/DuwDyJzg==}
 
   /@types/parse-json@4.0.0:
     resolution: {integrity: sha512-//oorEZjL6sbPcKUaCdIGlIUeH26mgzimjBB77G6XRgnDl/L5wOnpyBGRe/Mmf5CVW3PwEBE1NjiMZ/ssFh4wA==}
@@ -3506,7 +3506,7 @@ packages:
   /@types/pbkdf2@3.1.0:
     resolution: {integrity: sha512-Cf63Rv7jCQ0LaL8tNXmEyqTHuIJxRdlS5vMh1mj5voN4+QFhVZnlZruezqpWYDiJ8UTzhP0VmeLXCmBk66YrMQ==}
     dependencies:
-      '@types/node': 20.1.5
+      '@types/node': 20.1.7
     dev: false
 
   /@types/prop-types@15.7.5:
@@ -3547,7 +3547,7 @@ packages:
   /@types/secp256k1@4.0.3:
     resolution: {integrity: sha512-Da66lEIFeIz9ltsdMZcpQvmrmmoqrfju8pm1BH8WbYjZSwUgCwXLb9C+9XYogwBITnbsSaMdVPb2ekf7TV+03w==}
     dependencies:
-      '@types/node': 20.1.5
+      '@types/node': 20.1.7
     dev: false
 
   /@types/semver@7.5.0:
@@ -3565,14 +3565,14 @@ packages:
   /@types/whatwg-url@8.2.2:
     resolution: {integrity: sha512-FtQu10RWgn3D9U4aazdwIE2yzphmTJREDqNdODHrbrZmmMqI0vMheC/6NE/J1Yveaj8H+ela+YwWTjq5PGmuhA==}
     dependencies:
-      '@types/node': 20.1.5
+      '@types/node': 20.1.7
       '@types/webidl-conversions': 7.0.0
     dev: false
 
   /@types/ws@7.4.7:
     resolution: {integrity: sha512-JQbbmxZTZehdc2iszGKs5oC3NFnjeay7mtAWrdt7qNtAVK0g19muApzAy4bm9byz79xa2ZnO/BOBC2R8RC5Lww==}
     dependencies:
-      '@types/node': 20.1.5
+      '@types/node': 20.1.7
     dev: false
 
   /@typescript-eslint/eslint-plugin@5.59.6(@typescript-eslint/parser@5.59.6)(eslint@8.40.0)(typescript@5.0.4):
@@ -3779,7 +3779,7 @@ packages:
       typescript: 5.0.4
     dev: false
 
-  /@wagmi/connectors@1.0.3(@wagmi/chains@0.2.23)(react@18.2.0)(typescript@5.0.4)(viem@0.3.26):
+  /@wagmi/connectors@1.0.3(@wagmi/chains@0.2.23)(react@18.2.0)(typescript@5.0.4)(viem@0.3.27):
     resolution: {integrity: sha512-5uB+dUDop8s9scdE+S4IhgcfP8oRwdULVvpJ2MusDp+C00+OgvS3SnwZM6+Pjc9tyj5pi143zqsYtDynxFrMEA==}
     peerDependencies:
       '@wagmi/chains': '>=0.2.23'
@@ -3802,7 +3802,7 @@ packages:
       abitype: 0.8.1(typescript@5.0.4)
       eventemitter3: 4.0.7
       typescript: 5.0.4
-      viem: 0.3.26(typescript@5.0.4)
+      viem: 0.3.27(typescript@5.0.4)
     transitivePeerDependencies:
       - '@react-native-async-storage/async-storage'
       - bufferutil
@@ -3815,7 +3815,7 @@ packages:
       - zod
     dev: false
 
-  /@wagmi/core@1.0.5(react@18.2.0)(typescript@5.0.4)(viem@0.3.26):
+  /@wagmi/core@1.0.5(react@18.2.0)(typescript@5.0.4)(viem@0.3.27):
     resolution: {integrity: sha512-n8Y84WJkofGjhd4a+vpZzPPEQiHnkIGMe0uHOXfkm4eKJZyaJqvVJFPMWE6xFJkk0hxZ+1zw5xn0ZhdroHwHvg==}
     peerDependencies:
       typescript: '>=4.9.4'
@@ -3825,11 +3825,11 @@ packages:
         optional: true
     dependencies:
       '@wagmi/chains': 0.2.23(typescript@5.0.4)
-      '@wagmi/connectors': 1.0.3(@wagmi/chains@0.2.23)(react@18.2.0)(typescript@5.0.4)(viem@0.3.26)
+      '@wagmi/connectors': 1.0.3(@wagmi/chains@0.2.23)(react@18.2.0)(typescript@5.0.4)(viem@0.3.27)
       abitype: 0.8.1(typescript@5.0.4)
       eventemitter3: 4.0.7
       typescript: 5.0.4
-      viem: 0.3.26(typescript@5.0.4)
+      viem: 0.3.27(typescript@5.0.4)
       zustand: 4.3.8(react@18.2.0)
     transitivePeerDependencies:
       - '@react-native-async-storage/async-storage'
@@ -4055,7 +4055,7 @@ packages:
       '@walletconnect/legacy-types': 2.0.0
       '@walletconnect/legacy-utils': 2.0.0
       copy-to-clipboard: 3.3.3
-      preact: 10.14.0
+      preact: 10.14.1
       qrcode: 1.5.3
     dev: false
 
@@ -4237,14 +4237,14 @@ packages:
       - react
     dev: false
 
-  /@web3modal/ethereum@2.4.1(@wagmi/core@1.0.5)(viem@0.3.26):
+  /@web3modal/ethereum@2.4.1(@wagmi/core@1.0.5)(viem@0.3.27):
     resolution: {integrity: sha512-sp6/viEpL1yQRyQXSP76martUqr+EZ1EFaS79Z1kvdOlHg6A5BEiOOXGI5KwNTlGlaAWK2GOggoytsub1gVa5A==}
     peerDependencies:
       '@wagmi/core': '>=1'
       viem: '>=0.3'
     dependencies:
-      '@wagmi/core': 1.0.5(react@18.2.0)(typescript@5.0.4)(viem@0.3.26)
-      viem: 0.3.26(typescript@5.0.4)
+      '@wagmi/core': 1.0.5(react@18.2.0)(typescript@5.0.4)(viem@0.3.27)
+      viem: 0.3.27(typescript@5.0.4)
     dev: false
 
   /@web3modal/react@2.4.1(react-dom@18.2.0)(react@18.2.0):
@@ -4788,7 +4788,7 @@ packages:
     hasBin: true
     dependencies:
       caniuse-lite: 1.0.30001487
-      electron-to-chromium: 1.4.396
+      electron-to-chromium: 1.4.397
       node-releases: 2.0.10
       update-browserslist-db: 1.0.11(browserslist@4.21.5)
 
@@ -5510,8 +5510,8 @@ packages:
       - utf-8-validate
     dev: false
 
-  /electron-to-chromium@1.4.396:
-    resolution: {integrity: sha512-pqKTdqp/c5vsrc0xUPYXTDBo9ixZuGY8es4ZOjjd6HD6bFYbu5QA09VoW3fkY4LF1T0zYk86lN6bZnNlBuOpdQ==}
+  /electron-to-chromium@1.4.397:
+    resolution: {integrity: sha512-jwnPxhh350Q/aMatQia31KAIQdhEsYS0fFZ0BQQlN9tfvOEwShu6ZNwI4kL/xBabjcB/nTy6lSt17kNIluJZ8Q==}
 
   /elliptic@6.5.4:
     resolution: {integrity: sha512-iLhC6ULemrljPZb+QutR5TQGB+pdW6KGD5RSegS+8sorOZT+rdQFbsQFJgvN3eRqNALqJer4oQ16YvJHlU8hzQ==}
@@ -5738,7 +5738,7 @@ packages:
     resolution: {integrity: sha512-gozW2blMLJCeFpBwugLTGyvVjNoeo1knonXAcatC6bjPBZitotxdWf7Gimr25N4c0AAOo4eOUfaG82IJPDpqCA==}
     dependencies:
       debug: 3.2.7
-      is-core-module: 2.12.0
+      is-core-module: 2.12.1
       resolve: 1.22.2
     transitivePeerDependencies:
       - supports-color
@@ -5758,7 +5758,7 @@ packages:
       eslint-plugin-import: 2.27.5(@typescript-eslint/parser@5.59.6)(eslint-import-resolver-typescript@3.5.5)(eslint@8.40.0)
       get-tsconfig: 4.5.0
       globby: 13.1.4
-      is-core-module: 2.12.0
+      is-core-module: 2.12.1
       is-glob: 4.0.3
       synckit: 0.8.5
     transitivePeerDependencies:
@@ -5818,7 +5818,7 @@ packages:
       eslint-import-resolver-node: 0.3.7
       eslint-module-utils: 2.8.0(@typescript-eslint/parser@5.59.6)(eslint-import-resolver-node@0.3.7)(eslint-import-resolver-typescript@3.5.5)(eslint@8.40.0)
       has: 1.0.3
-      is-core-module: 2.12.0
+      is-core-module: 2.12.1
       is-glob: 4.0.3
       minimatch: 3.1.2
       object.values: 1.1.6
@@ -6771,8 +6771,8 @@ packages:
     resolution: {integrity: sha512-1BC0BVFhS/p0qtw6enp8e+8OD0UrK0oFLztSjNzhcKA3WDuJxxAPXzPuPtKkjEY9UUoEWlX/8fgKeu2S8i9JTA==}
     engines: {node: '>= 0.4'}
 
-  /is-core-module@2.12.0:
-    resolution: {integrity: sha512-RECHCBCd/viahWmwj6enj19sKbHfJrddi/6cBDsNTKbNq0f7VeaUkBo60BqzvPqo/W54ChS62Z5qyun7cfOMqQ==}
+  /is-core-module@2.12.1:
+    resolution: {integrity: sha512-Q4ZuBAe2FUsKtyQJoQHlvP8OvBERxO3jEmy1I7hcRXcJBGGHFh/aJBswbXuS9sgrDH2QUO8ilkwNPHvHMd8clg==}
     dependencies:
       has: 1.0.3
 
@@ -7458,21 +7458,21 @@ packages:
       saslprep: 1.0.3
     dev: false
 
-  /moralis@2.20.0:
-    resolution: {integrity: sha512-5aCSFjFXvE1horTZ33nnF1vKCF8kK87Mj2Cz9Vh8cyRITWi3J1W5Mg1hFPVDMxuSeiCh9TXjpLGmuAl/NJzssw==}
+  /moralis@2.21.0:
+    resolution: {integrity: sha512-FFIAorOQeubmqHwyNFlraClUN5+X6yXcPeWAfKdl4bD6uE6V6GCVCjGmbaRXC/0nm/QG/9qdx2Ru+1OqrQYWew==}
     dependencies:
-      '@moralisweb3/api-utils': 2.20.0
-      '@moralisweb3/aptos-api': 2.20.0
-      '@moralisweb3/auth': 2.20.0
-      '@moralisweb3/common-aptos-utils': 2.20.0
-      '@moralisweb3/common-auth-utils': 2.20.0
-      '@moralisweb3/common-core': 2.20.0
-      '@moralisweb3/common-evm-utils': 2.20.0
-      '@moralisweb3/common-sol-utils': 2.20.0
-      '@moralisweb3/common-streams-utils': 2.20.0
-      '@moralisweb3/evm-api': 2.20.0
-      '@moralisweb3/sol-api': 2.20.0
-      '@moralisweb3/streams': 2.20.0
+      '@moralisweb3/api-utils': 2.21.0
+      '@moralisweb3/aptos-api': 2.21.0
+      '@moralisweb3/auth': 2.21.0
+      '@moralisweb3/common-aptos-utils': 2.21.0
+      '@moralisweb3/common-auth-utils': 2.21.0
+      '@moralisweb3/common-core': 2.21.0
+      '@moralisweb3/common-evm-utils': 2.21.0
+      '@moralisweb3/common-sol-utils': 2.21.0
+      '@moralisweb3/common-streams-utils': 2.21.0
+      '@moralisweb3/evm-api': 2.21.0
+      '@moralisweb3/sol-api': 2.21.0
+      '@moralisweb3/streams': 2.21.0
       '@moralisweb3/streams-typings': 1.0.7
     transitivePeerDependencies:
       - debug
@@ -7548,8 +7548,8 @@ packages:
       next: 13.4.2(@babel/core@7.21.8)(react-dom@18.2.0)(react@18.2.0)
       oauth: 0.9.15
       openid-client: 5.4.2
-      preact: 10.14.0
-      preact-render-to-string: 5.2.6(preact@10.14.0)
+      preact: 10.14.1
+      preact-render-to-string: 5.2.6(preact@10.14.1)
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
       uuid: 8.3.2
@@ -8087,17 +8087,17 @@ packages:
       source-map-js: 1.0.2
     dev: true
 
-  /preact-render-to-string@5.2.6(preact@10.14.0):
+  /preact-render-to-string@5.2.6(preact@10.14.1):
     resolution: {integrity: sha512-JyhErpYOvBV1hEPwIxc/fHWXPfnEGdRKxc8gFdAZ7XV4tlzyzG847XAyEZqoDnynP88akM4eaHcSOzNcLWFguw==}
     peerDependencies:
       preact: '>=10'
     dependencies:
-      preact: 10.14.0
+      preact: 10.14.1
       pretty-format: 3.8.0
     dev: false
 
-  /preact@10.14.0:
-    resolution: {integrity: sha512-4oh2sf208mKAdL5AQtzXxE387iSGNWMX/YjwMjH6m/XROILKAmx5Pbs2FsXrW7ixoVGGjpfYSBB833vOwYxNxw==}
+  /preact@10.14.1:
+    resolution: {integrity: sha512-4XDSnUisk3YFBb3p9WeKeH1mKoxdFUsaXcvxs9wlpYR1wax/TWJVqhwmIWbByX0h7jMEJH6Zc5J6jqc58FKaNQ==}
     dev: false
 
   /prebuild-install@7.1.1:
@@ -8591,7 +8591,7 @@ packages:
     resolution: {integrity: sha512-Sb+mjNHOULsBv818T40qSPeRiuWLyaGMa5ewydRLFimneixmVy2zdivRl+AF6jaYPC8ERxGDmFSiqui6SfPd+g==}
     hasBin: true
     dependencies:
-      is-core-module: 2.12.0
+      is-core-module: 2.12.1
       path-parse: 1.0.7
       supports-preserve-symlinks-flag: 1.0.0
 
@@ -8599,7 +8599,7 @@ packages:
     resolution: {integrity: sha512-iMDbmAWtfU+MHpxt/I5iWI7cY6YVEZUQ3MBgPQ++XD1PELuJHIl82xBmObyP2KyQmkNB2dsqF7seoQQiAn5yDQ==}
     hasBin: true
     dependencies:
-      is-core-module: 2.12.0
+      is-core-module: 2.12.1
       path-parse: 1.0.7
       supports-preserve-symlinks-flag: 1.0.0
     dev: true
@@ -8629,8 +8629,8 @@ packages:
       bn.js: 5.2.1
     dev: false
 
-  /rollup@3.21.8:
-    resolution: {integrity: sha512-SSFV2T2fWtQ/vvBip85u2Nr0GNKireabH9d7nXswBg+XSH+jbVDSYptRAEbCEsquhs503rpPA9POYAp0/Jhasw==}
+  /rollup@3.22.0:
+    resolution: {integrity: sha512-imsigcWor5Y/dC0rz2q0bBt9PabcL3TORry2hAa6O6BuMvY71bqHyfReAz5qyAqiQATD1m70qdntqBfBQjVWpQ==}
     engines: {node: '>=14.18.0', npm: '>=8.0.0'}
     hasBin: true
     optionalDependencies:
@@ -9575,8 +9575,8 @@ packages:
       extsprintf: 1.3.0
     dev: false
 
-  /viem@0.3.26(typescript@5.0.4):
-    resolution: {integrity: sha512-biT9oky9coUd4Ww+/gWRRIZl1OSVjLSGAqAuvYpfBJGSsX0Ya0kOncIiIu1ViapfGadTW0OclvIh3M1gNux24w==}
+  /viem@0.3.27(typescript@5.0.4):
+    resolution: {integrity: sha512-/prqIT9xT8t4HTycZ3pbGyTxpeDndSVHNTnC9wsxozfhUeQEBs9fy50hMPEh4WpbciTsp/EbSq3Rnfwh/VnocA==}
     dependencies:
       '@adraffy/ens-normalize': 1.9.0
       '@noble/curves': 1.0.0
@@ -9594,7 +9594,7 @@ packages:
       - zod
     dev: false
 
-  /vite-node@0.31.0(@types/node@20.1.5):
+  /vite-node@0.31.0(@types/node@20.1.7):
     resolution: {integrity: sha512-8x1x1LNuPvE2vIvkSB7c1mApX5oqlgsxzHQesYF7l5n1gKrEmrClIiZuOFbFDQcjLsmcWSwwmrWrcGWm9Fxc/g==}
     engines: {node: '>=v14.18.0'}
     hasBin: true
@@ -9604,7 +9604,7 @@ packages:
       mlly: 1.2.1
       pathe: 1.1.0
       picocolors: 1.0.0
-      vite: 4.3.6(@types/node@20.1.5)
+      vite: 4.3.7(@types/node@20.1.7)
     transitivePeerDependencies:
       - '@types/node'
       - less
@@ -9615,8 +9615,8 @@ packages:
       - terser
     dev: true
 
-  /vite@4.3.6(@types/node@20.1.5):
-    resolution: {integrity: sha512-cqIyLSbA6gornMS659AXTVKF7cvSHMdKmJJwQ9DXq3lwsT1uZSdktuBRlpHQ8VnOWx0QHtjDwxPpGtyo9Fh/Qg==}
+  /vite@4.3.7(@types/node@20.1.7):
+    resolution: {integrity: sha512-MTIFpbIm9v7Hh5b0wSBgkcWzSBz7SAa6K/cBTwS4kUiQJfQLFlZZRJRQgqunCVzhTPCk674tW+0Qaqh3Q00dBg==}
     engines: {node: ^14.18.0 || >=16.0.0}
     hasBin: true
     peerDependencies:
@@ -9640,10 +9640,10 @@ packages:
       terser:
         optional: true
     dependencies:
-      '@types/node': 20.1.5
+      '@types/node': 20.1.7
       esbuild: 0.17.19
       postcss: 8.4.23
-      rollup: 3.21.8
+      rollup: 3.22.0
     optionalDependencies:
       fsevents: 2.3.2
     dev: true
@@ -9681,7 +9681,7 @@ packages:
     dependencies:
       '@types/chai': 4.3.5
       '@types/chai-subset': 1.3.3
-      '@types/node': 20.1.5
+      '@types/node': 20.1.7
       '@vitest/expect': 0.31.0
       '@vitest/runner': 0.31.0
       '@vitest/snapshot': 0.31.0
@@ -9701,8 +9701,8 @@ packages:
       strip-literal: 1.0.1
       tinybench: 2.5.0
       tinypool: 0.5.0
-      vite: 4.3.6(@types/node@20.1.5)
-      vite-node: 0.31.0(@types/node@20.1.5)
+      vite: 4.3.7(@types/node@20.1.7)
+      vite-node: 0.31.0(@types/node@20.1.7)
       why-is-node-running: 2.2.2
     transitivePeerDependencies:
       - less
@@ -9713,7 +9713,7 @@ packages:
       - terser
     dev: true
 
-  /wagmi@1.0.5(react-dom@18.2.0)(react@18.2.0)(typescript@5.0.4)(viem@0.3.26):
+  /wagmi@1.0.5(react-dom@18.2.0)(react@18.2.0)(typescript@5.0.4)(viem@0.3.27):
     resolution: {integrity: sha512-XsLhNPTD7c+QXaA9elMwDihvcNHBw4Jcu0S/otkn3N4FgWIUVSQGiUYwm3AQrm/UhON0+Q8Y3ICzxB47PSr46g==}
     peerDependencies:
       react: '>=17.0.0'
@@ -9726,12 +9726,12 @@ packages:
       '@tanstack/query-sync-storage-persister': 4.29.7
       '@tanstack/react-query': 4.29.7(react-dom@18.2.0)(react@18.2.0)
       '@tanstack/react-query-persist-client': 4.29.7(@tanstack/react-query@4.29.7)
-      '@wagmi/core': 1.0.5(react@18.2.0)(typescript@5.0.4)(viem@0.3.26)
+      '@wagmi/core': 1.0.5(react@18.2.0)(typescript@5.0.4)(viem@0.3.27)
       abitype: 0.8.1(typescript@5.0.4)
       react: 18.2.0
       typescript: 5.0.4
       use-sync-external-store: 1.2.0(react@18.2.0)
-      viem: 0.3.26(typescript@5.0.4)
+      viem: 0.3.27(typescript@5.0.4)
     transitivePeerDependencies:
       - '@react-native-async-storage/async-storage'
       - bufferutil
