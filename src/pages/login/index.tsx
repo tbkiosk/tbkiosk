@@ -51,7 +51,7 @@ const Login = () => {
             {isConnected ? session?.user?.name : 'Connect Twitter'}
           </Button>
           <Button
-            onClick={() => router.push('/dashboard')}
+            onClick={() => router.push('/discover')}
             variant="outlined"
           >
             Launch App

@@ -24,7 +24,6 @@ const MENUS = [
 const Layout = ({ showHeader = true, headerLeft, children }: LayoutProps) => {
   const { route } = useRouter()
   const { collapsed, collapseSidebar } = useProSidebar()
-
   const [isMenuDefaultCollapsed, setIsMenuDefaultCollapsed] = useLocalStorage('morphis_menu_collapsed', false)
 
   const onTogglerMenuCollapsed = (nextCollapsed: boolean) => {
@@ -44,7 +43,7 @@ const Layout = ({ showHeader = true, headerLeft, children }: LayoutProps) => {
             position: 'relative',
           },
         }}
-        width="18rem"
+        width="16rem"
       >
         <div className="flex justify-center items-center py-8">
           <Image
@@ -87,9 +86,6 @@ const Layout = ({ showHeader = true, headerLeft, children }: LayoutProps) => {
           <div className="flex items-center justify-between px-12 py-9">
             <span className="font-bold text-3xl capitalize">{headerLeft || route.replace('/', '')}</span>
             <div className="flex flex-row items-center">
-              <span className="h-12 w-12 flex shrink-0 items-center justify-center bg-[#fdede5] rounded-full cursor-pointer">
-                <i className="fa-regular fa-bell fa-xl" />
-              </span>
               <WalletDropdown buttonClassName="!h-[3.375rem]" />
             </div>
           </div>
