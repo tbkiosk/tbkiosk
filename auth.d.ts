@@ -14,6 +14,9 @@ declare module 'next-auth/jwt' {
     access_token: string
     expires_at: number
     refresh_token: string
+    discord_access_token: string
+    discord_expires_at: number
+    discord_refresh_token: string
     error?: RefreshAccessTokenError
   }
 }
