@@ -1,6 +1,5 @@
 import NextAuth from 'next-auth'
 import TwitterProvider from 'next-auth/providers/twitter'
-import DiscordProvider from 'next-auth/providers/discord'
 import { Collection, ObjectId } from 'mongodb'
 import { MongoDBAdapter } from '@next-auth/mongodb-adapter'
 
@@ -27,25 +26,6 @@ export const authOptions: NextAuthOptions = {
           state: Array.from(Array(8), () => Math.floor(Math.random() * 36).toString(36)).join(''), // a random string to prevent CSRF attacks
           code_challenge: generateCodeChallenge(),
           code_challenge_method: 'S256',
-        },
-      },
-    }),
-    /**
-     * TODO: Remove DiscordProvider
-     * As we employ strategy of database, a session will be created after Discord OAuth authorization in session collection.
-     * This will consume the online database resources. Instead, we should custom the OAuth authorization by ourselves throught APIs.
-     * See documentation https://discord.com/developers/docs/topics/oauth2
-     */
-    DiscordProvider({
-      clientId: env.DISCORD_CLIENT_ID,
-      clientSecret: env.DISCORD_CLIENT_SECRET,
-      authorization: {
-        params: {
-          prompt: 'consent',
-          grant_type: 'authorization_code',
-          response_type: 'code',
-          scope: 'identify email guilds',
-          redirect_uri: `${env.NEXTAUTH_URL}/api/auth/connect`,
         },
       },
     }),
@@ -92,9 +72,7 @@ type RefreshAccessToken = {
 }
 
 const refreshTwitterAccessToken = async ({ account, collection, user }: RefreshAccessToken) => {
-  if (((account.expires_at as number) || 0) * 1000 > Date.now()) {
-    return
-  }
+  if (((account.expires_at as number) || 0) * 1000 > Date.now()) return
 
   const res = await request<Omit<TokenSet, 'expires_at'> & { expires_in?: number }>({
     url: 'https://api.twitter.com/2/oauth2/token',
