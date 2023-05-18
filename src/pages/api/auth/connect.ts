@@ -10,6 +10,7 @@ import request from '@/utils/request'
 
 import type { NextApiRequest, NextApiResponse } from 'next'
 import type { TokenSet } from 'next-auth'
+import { env } from '@/env.mjs'
 
 const handler = async (req: NextApiRequest, res: NextApiResponse<string | null>) => {
   const session = await getServerSession(req, res, authOptions)
@@ -39,12 +40,12 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<string | null>)
         Accept: '*/*',
       },
       data: new URLSearchParams({
-        client_id: process.env.DISCORD_CLIENT_ID as string,
-        client_secret: process.env.DISCORD_CLIENT_SECRET as string,
+        client_id: env.DISCORD_CLIENT_ID,
+        client_secret: env.DISCORD_CLIENT_SECRET,
         grant_type: 'authorization_code',
         code: code as string,
         state: state as string,
-        redirect_uri: `${process.env.NEXTAUTH_URL}/api/auth/connect`,
+        redirect_uri: `${env.NEXTAUTH_URL}/api/auth/connect`,
       }),
     })
     if (!oauthRes?.data) {

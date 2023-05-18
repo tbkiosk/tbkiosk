@@ -18,6 +18,7 @@ import '@suiet/wallet-kit/style.css'
 import 'react-toastify/dist/ReactToastify.css'
 import 'react-datepicker/dist/react-datepicker.css'
 import '../styles/globals.css'
+import { env } from '@/env.mjs'
 
 const App = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => (
   <SWRConfig
@@ -41,7 +42,7 @@ const App = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => (
               <SuiWalletConnectModal />
             </WagmiConfig>
             <Web3Modal
-              projectId={process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID as string}
+              projectId={env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID}
               ethereumClient={ethereumClient}
             />
           </SuiWalletConnectModalProvider>

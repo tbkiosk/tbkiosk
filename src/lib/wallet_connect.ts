@@ -1,9 +1,10 @@
 import { EthereumClient, w3mConnectors, w3mProvider } from '@web3modal/ethereum'
 import { configureChains, createConfig } from 'wagmi'
 import { evmos, mainnet, polygon } from 'wagmi/chains'
+import { env } from '@/env.mjs'
 
 const chains = [evmos, mainnet, polygon]
-const projectId = process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID as string
+const projectId = env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID
 
 const { publicClient } = configureChains(chains, [w3mProvider({ projectId })])
 

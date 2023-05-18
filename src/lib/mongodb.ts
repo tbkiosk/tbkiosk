@@ -1,15 +1,8 @@
 // This approach is taken from https://github.com/vercel/next.js/tree/canary/examples/with-mongodb
 import { MongoClient } from 'mongodb'
+import { env } from '@/env.mjs'
 
-if (!process.env.MONGO_USER || !process.env.MONGO_PASS) {
-  throw new Error('Invalid/Missing mongoDB variables')
-}
-
-if (!process.env.NODE_ENV) {
-  throw new Error('Invalid/Missing environment variables')
-}
-
-const uri = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@cluster0.ol5nrfu.mongodb.net/${process.env.NODE_ENV}`
+const uri = `mongodb+srv://${env.MONGO_USER}:${env.MONGO_PASS}@cluster0.ol5nrfu.mongodb.net/${process.env.NODE_ENV}`
 const options = {}
 
 let client
