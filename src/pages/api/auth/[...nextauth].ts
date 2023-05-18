@@ -9,10 +9,10 @@ import { generateCodeChallenge } from '@/utils/pkce'
 import request from '@/utils/request'
 
 import { ACCOUNTS_TABLE } from '@/schemas/accounts'
+import { env } from '@/env.mjs'
 
 import type { NextAuthOptions, Session, TokenSet, User } from 'next-auth'
 import type { AccountData } from '@/schemas/accounts'
-import { env } from '@/env.mjs'
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -122,7 +122,7 @@ const refreshDiscordAccessToken = async ({ account, collection, user }: RefreshA
     method: 'POST',
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
-      Authorization: `Basic ${btoa(`${process.env.DISCORD_CLIENT_ID as string}:${process.env.DISCORD_CLIENT_SECRET as string}`)}`,
+      Authorization: `Basic ${btoa(`${env.DISCORD_CLIENT_ID}:${env.DISCORD_CLIENT_SECRET}`)}`,
     },
     data: new URLSearchParams({
       refresh_token: account.discord_refresh_token as string,
