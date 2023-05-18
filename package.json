@@ -10,6 +10,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "build:analyze": "ANALYZE=true next build",
     "start": "next start",
     "lint": "next lint",
     "test": "vitest",
@@ -65,6 +66,7 @@
     "@morphis-labs/eslint-config": "^1.0.8",
     "@morphis-labs/prettier-config": "^0.0.2",
     "@morphis-labs/tsconfig": "^0.0.2",
+    "@next/bundle-analyzer": "^13.4.2",
     "@storybook/addon-essentials": "^7.0.12",
     "@storybook/addon-interactions": "^7.0.12",
     "@storybook/addon-links": "^7.0.12",
