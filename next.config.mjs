@@ -2,7 +2,7 @@ import './src/env.mjs'
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: true,
+  reactStrictMode: false, // useSession will called twice in strict mode, which will cause token refresh issues
   transpilePackages: ['@moralisweb3'],
   images: {
     remotePatterns: [
