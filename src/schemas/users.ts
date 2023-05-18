@@ -1,11 +1,11 @@
-import { object, string, bool } from 'yup'
+import { z } from 'zod'
 
 export const USERS_TABLE = 'users'
 
-export const UserSchema = object({
-  _id: string(),
-  name: string().required(),
-  email: string().required(),
-  image: string(),
-  emailVerified: bool(),
+export const UserSchema = z.object({
+  _id: z.string().optional(),
+  name: z.string(),
+  email: z.string(),
+  image: z.string().optional(),
+  emailVerified: z.boolean().optional(),
 })
