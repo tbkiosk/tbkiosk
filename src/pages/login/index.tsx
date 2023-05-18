@@ -2,14 +2,16 @@ import { useMemo } from 'react'
 import { useRouter } from 'next/router'
 import Head from 'next/head'
 import Image from 'next/image'
-import { signIn, useSession } from 'next-auth/react'
+import { signIn } from 'next-auth/react'
 
 import { Button } from '@/components'
 import WalletDropdown from '@/layouts/components/wallet_dropdown'
 
+import useSessionGuard from '@/hooks/useSessionGuard'
+
 const Login = () => {
   const router = useRouter()
-  const { data: session } = useSession()
+  const { session } = useSessionGuard()
 
   const isConnected = useMemo(() => session && !!session?.user?.name, [session])
 

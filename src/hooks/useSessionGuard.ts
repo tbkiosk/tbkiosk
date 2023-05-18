@@ -11,7 +11,7 @@ const useSessionGuard = (options?: SessionGuardOptions) => {
   const router = useRouter()
 
   useEffect(() => {
-    if (status !== 'loading' && !options?.ignoreSession) return
+    if (status === 'loading' && !options?.ignoreSession) return
 
     if (!session || session.error) {
       router.push('/login')
