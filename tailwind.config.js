@@ -24,6 +24,16 @@ module.exports = {
           '100%': { transform: 'rotate(360deg)' },
         },
       },
+      colors: {
+        'purple': {
+          '100': '#DADBFB',
+          '500': '#6266EB',
+        },
+        yellow: {
+          '100': '#F5FAD0',
+          '500': '#BBC860',
+        }
+      },
     },
   },
   plugins: [],
