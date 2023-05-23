@@ -1,3 +1,5 @@
+const colors = require('tailwindcss/colors')
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ['./src/components/**/*.{js,ts,jsx,tsx}', './src/pages/**/*.{js,ts,jsx,tsx}', './src/layouts/**/*.{js,ts,jsx,tsx}'],
@@ -25,6 +27,8 @@ module.exports = {
         },
       },
       colors: {
+        'black-30': '#EDEDEE',
+        'black-100': '#222325',
         'purple': {
           '100': '#DADBFB',
           '500': '#6266EB',
