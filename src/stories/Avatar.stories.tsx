@@ -1,11 +1,5 @@
-import {
-  Meta,
-  StoryObj
-} from "@storybook/react";
-import {
-  Avatar,
-  AvatarGroup
-} from "@/components";
+import { Meta, StoryObj } from '@storybook/react'
+import { Avatar, AvatarGroup } from '@/components'
 
 const meta: Meta<typeof Avatar> = {
   title: 'Components/Avatar',
@@ -23,7 +17,7 @@ export const Small: Story = {
     src: 'https://bit.ly/dan-abramov',
     alt: 'Dan Abramov',
   },
-};
+}
 
 export const Medium: Story = {
   args: {
@@ -31,7 +25,7 @@ export const Medium: Story = {
     src: 'https://bit.ly/ryan-florence',
     alt: 'Ryan Florence',
   },
-};
+}
 
 export const Large: Story = {
   args: {
@@ -39,16 +33,28 @@ export const Large: Story = {
     src: 'https://bit.ly/code-beast',
     alt: 'Code Beast',
   },
-};
+}
 
 export const Group: Story = {
   render: () => {
     return (
       <AvatarGroup>
-        <Avatar size="medium" src="https://bit.ly/dan-abramov" alt="Dan Abramov"/>
-        <Avatar size="medium" src="https://bit.ly/ryan-florence" alt="Ryan Florence"/>
-        <Avatar size="medium" src="https://bit.ly/code-beast" alt="Code Beast"/>
+        <Avatar
+          size="medium"
+          src="https://bit.ly/dan-abramov"
+          alt="Dan Abramov"
+        />
+        <Avatar
+          size="medium"
+          src="https://bit.ly/ryan-florence"
+          alt="Ryan Florence"
+        />
+        <Avatar
+          size="medium"
+          src="https://bit.ly/code-beast"
+          alt="Code Beast"
+        />
       </AvatarGroup>
     )
-  }
+  },
 }

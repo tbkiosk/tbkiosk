@@ -11,11 +11,7 @@ type UseInViewportOptions = {
   options?: IntersectionObserverInit
 }
 
-const useInViewport = ({
-  queryTarget,
-  callback,
-  options = defaultOptions,
-}: UseInViewportOptions) => {
+const useInViewport = ({ queryTarget, callback, options = defaultOptions }: UseInViewportOptions) => {
   useEffect(() => {
     const target = queryTarget()
     if (!target) return

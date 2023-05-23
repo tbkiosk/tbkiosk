@@ -1,5 +1,5 @@
-import { createEnv } from "@t3-oss/env-nextjs";
-import { z } from "zod";
+import { createEnv } from '@t3-oss/env-nextjs'
+import { z } from 'zod'
 
 export const env = createEnv({
   server: {
@@ -29,4 +29,4 @@ export const env = createEnv({
     TENCENT_COS_SECRET_ID: process.env.TENCENT_COS_SECRET_ID,
     TENCENT_COS_SECRET_KEY: process.env.TENCENT_COS_SECRET_KEY,
   },
-});
+})

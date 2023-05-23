@@ -34,11 +34,7 @@ describe('address', () => {
       endLength: -1,
     }
 
-    expect(ellipsisMiddle(address, wrongOptions1)).rejects.toThrow(
-      new Error('Wrong ellipsis middle options')
-    )
-    expect(ellipsisMiddle(address, wrongOptions2)).rejects.toThrow(
-      new Error('Wrong ellipsis middle options')
-    )
+    expect(ellipsisMiddle(address, wrongOptions1)).rejects.toThrow(new Error('Wrong ellipsis middle options'))
+    expect(ellipsisMiddle(address, wrongOptions2)).rejects.toThrow(new Error('Wrong ellipsis middle options'))
   })
 })

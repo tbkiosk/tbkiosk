@@ -7,16 +7,10 @@ type SuiWalletConnectModalProviderProps = {
   children: React.ReactNode | React.ReactNode[]
 }
 
-export const SuiWalletConnectModalProvider = ({
-  children,
-}: SuiWalletConnectModalProviderProps) => {
+export const SuiWalletConnectModalProvider = ({ children }: SuiWalletConnectModalProviderProps) => {
   const [open, setOpen] = useState(false)
 
-  return (
-    <SuiWalletModalContext.Provider value={{ open, setOpen }}>
-      {children}
-    </SuiWalletModalContext.Provider>
-  )
+  return <SuiWalletModalContext.Provider value={{ open, setOpen }}>{children}</SuiWalletModalContext.Provider>
 }
 
 export const SuiWalletConnectModal = () => {
@@ -25,7 +19,7 @@ export const SuiWalletConnectModal = () => {
   return (
     <ConnectModal
       onConnectSuccess={() => setOpen(false)}
-      onOpenChange={(open) => setOpen(open)}
+      onOpenChange={open => setOpen(open)}
       open={open}
     />
   )

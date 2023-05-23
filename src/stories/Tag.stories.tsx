@@ -1,10 +1,5 @@
-import {
-  Meta,
-  StoryObj
-} from "@storybook/react";
-import {
-  Tag
-} from "@/components";
+import { Meta, StoryObj } from '@storybook/react'
+import { Tag } from '@/components'
 
 const meta: Meta<typeof Tag> = {
   title: 'Components/Tag',
@@ -21,11 +16,11 @@ export const Purple: Story = {
     children: 'Event',
     color: 'purple',
   },
-};
+}
 
 export const Yellow: Story = {
   args: {
     children: 'Governance vote',
     color: 'yellow',
   },
-};
+}

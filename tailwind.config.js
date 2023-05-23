@@ -36,6 +36,14 @@ module.exports = {
         yellow: {
           '100': '#F5FAD0',
           '500': '#BBC860',
+        },
+        orange:{
+          '100': '#FFF4DF',
+          '500': '#FFC85F',
+        },
+        violet:{
+          '100': '#FEDFFF',
+          '500': '#FC7DFF',
         }
       },
     },

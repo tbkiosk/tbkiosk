@@ -25,7 +25,7 @@ export const Drawer = ({ children, onClose, open, usePortal }: DrawerProps) => {
     }
   )
 
-  const maskClasses = classNames('fixed inset-0 bg-black transition-opacity duration-200 ease-in-out', {
+  const maskClasses = classNames('fixed inset-0 bg-[rgb(22,22,22)] transition-opacity duration-200 ease-in-out z-10', {
     'opacity-50': open,
     'opacity-0 pointer-events-none': !open,
   })

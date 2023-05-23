@@ -1,8 +1,5 @@
-import {
-  Meta,
-  StoryObj
-} from "@storybook/react";
-import { ProgressBar } from "@/components";
+import { Meta, StoryObj } from '@storybook/react'
+import { ProgressBar } from '@/components'
 
 const meta: Meta<typeof ProgressBar> = {
   title: 'Components/ProgressBar',
@@ -21,9 +18,9 @@ export const Single: Story = {
         color: '#5AFE57',
         value: 85,
       },
-    ]
+    ],
   },
-};
+}
 
 export const Multi: Story = {
   args: {
@@ -35,7 +32,7 @@ export const Multi: Story = {
       {
         color: '#FE6157',
         value: 30,
-      }
-    ]
+      },
+    ],
   },
-};
+}
