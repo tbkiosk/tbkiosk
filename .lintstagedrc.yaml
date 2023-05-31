@@ -1,0 +1,3 @@
+'*.{js,jsx,ts,tsx}':
+  - eslint --cache --cache-location .next/cache/eslint/
+  - pnpm prettier
