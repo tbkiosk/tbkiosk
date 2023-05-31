@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import classNames from 'classnames'
 
 export type AvatarProps = {
@@ -18,7 +19,7 @@ export const Avatar = ({ src, alt, size, className }: AvatarProps) => {
   )
 
   return (
-    <img
+    <Image
       className={avatarClass}
       src={src}
       alt={alt}

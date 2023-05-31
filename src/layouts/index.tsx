@@ -1,5 +1,5 @@
 import { signOut } from 'next-auth/react'
-import { Sidebar, Menu, useProSidebar, sidebarClasses } from 'react-pro-sidebar'
+import { Sidebar, Menu, sidebarClasses } from 'react-pro-sidebar'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 import { useLocalStorage } from 'usehooks-ts'
@@ -7,6 +7,8 @@ import cl from 'classnames'
 
 import { Button } from '@/components'
 import WalletDropdown from './components/wallet_dropdown'
+
+import packageJson from 'package.json'
 
 type LayoutProps = {
   showHeader?: boolean
@@ -103,7 +105,7 @@ const SideBarFooter = () => (
       <span className="font-medium text-xl ml-4">Log out</span>
     </button>
     <p className="text-[var(--primary-text-color--disabled)] mt-6">
-      <span>V0.0.1</span>
+      <span>v{packageJson.version}</span>
       <span className="ml-5">Morphis Network</span>
     </p>
   </div>
@@ -111,19 +113,13 @@ const SideBarFooter = () => (
 
 const Layout = ({ showHeader = true, headerLeft, children }: LayoutProps) => {
   const { route } = useRouter()
-  const { collapsed, collapseSidebar } = useProSidebar()
-  const [isMenuDefaultCollapsed, setIsMenuDefaultCollapsed] = useLocalStorage('morphis_menu_collapsed', false)
-
-  const onTogglerMenuCollapsed = (nextCollapsed: boolean) => {
-    collapseSidebar()
-    setIsMenuDefaultCollapsed(nextCollapsed)
-  }
+  const [isMenuCollapsed] = useLocalStorage('morphis_menu_collapsed', false)
 
   return (
     <div className="h-full w-full flex grow">
       <Sidebar
+        collapsed={isMenuCollapsed}
         collapsedWidth="8rem"
-        defaultCollapsed={isMenuDefaultCollapsed}
         rootStyles={{
           [`.${sidebarClasses.container}`]: {
             backgroundColor: '#000000',
@@ -135,7 +131,7 @@ const Layout = ({ showHeader = true, headerLeft, children }: LayoutProps) => {
         }}
         width="18rem"
       >
-        <div className="flex justify-center items-center pt-9 pb-28">{collapsed ? <SmallLogo /> : <LargeLogo />}</div>
+        <div className="flex justify-center items-center pt-9 pb-28">{isMenuCollapsed ? <SmallLogo /> : <LargeLogo />}</div>
         <Menu className="px-[30px] flex-1">
           <div className="flex flex-col grow gap-4">
             {MENUS.map(({ key, iconClass }) => (
@@ -144,11 +140,11 @@ const Layout = ({ showHeader = true, headerLeft, children }: LayoutProps) => {
                 key={key}
               >
                 <Button
-                  className={cl(['flex grow items-center', collapsed && 'justify-center'])}
+                  className={cl(['flex grow items-center', isMenuCollapsed && 'justify-center'])}
                   variant={route.startsWith(`/${key}`) ? 'outlined' : 'contained'}
                 >
-                  <i className={cl(['fa-solid text-lg', iconClass, !collapsed && 'ml-4 mr-4'])} />
-                  {!collapsed && <span className="text-2xl capitalize">{key}</span>}
+                  <i className={cl(['fa-solid text-lg', iconClass, !isMenuCollapsed && 'ml-4 mr-4'])} />
+                  {!isMenuCollapsed && <span className="text-2xl capitalize">{key}</span>}
                 </Button>
               </Link>
             ))}
