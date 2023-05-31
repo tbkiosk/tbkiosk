@@ -17,7 +17,8 @@
     "test:coverage": "vitest run --coverage",
     "prettier": "prettier --write src",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@ethersproject/providers": "^5.7.2",
@@ -85,6 +86,7 @@
     "eslint": "8.41.0",
     "eslint-config-next": "13.4.4",
     "eslint-plugin-storybook": "^0.6.12",
+    "husky": "^8.0.3",
     "postcss": "^8.4.24",
     "prettier": "^2.8.8",
     "storybook": "^7.0.18",
