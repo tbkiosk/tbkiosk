@@ -17,7 +17,7 @@ const VARIANT_STYLES = {
 const VARIANT_DISABLED_STYLES = {
   contained: 'disabled:bg-[var(--primary-color--disabled)] disabled:text-[var(--primary-text-color--disabled)]',
   outlined:
-    'disabled:bg-[var(--secondary-color--disabled)] disabled:text-[var(--secondary-color--disabled)] disabled:border-[var(--secondary-border-color--disabled)]',
+    'disabled:bg-[var(--secondary-color--disabled)] disabled:text-[var(--secondary-text-color--disabled)] disabled:border-[var(--secondary-border-color--disabled)]',
   colored: 'disabled:grayscale-[50%] disabled:hover:animate-none',
 }
 

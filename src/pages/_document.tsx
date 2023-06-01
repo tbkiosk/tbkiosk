@@ -7,6 +7,7 @@ const Document = () => (
         name="description"
         content="morphis network"
       />
+      <meta charSet="UTF-8" />
       <link
         rel="icon"
         href="/favicon.ico?v=2"

@@ -1,19 +1,18 @@
-import { useMemo } from 'react'
 import { useRouter } from 'next/router'
 import Head from 'next/head'
 import Image from 'next/image'
-import { signIn } from 'next-auth/react'
+import { useAccount } from 'wagmi'
+import { useWallet } from '@suiet/wallet-kit'
+import cl from 'classnames'
 
 import { Button } from '@/components'
 import WalletDropdown from '@/layouts/components/wallet_dropdown'
 
-import useSessionGuard from '@/hooks/useSessionGuard'
-
 const Login = () => {
   const router = useRouter()
-  const { session } = useSessionGuard()
 
-  const isConnected = useMemo(() => session && !!session?.user?.name, [session])
+  const { address: suiAddress } = useWallet()
+  const { address: ethAddress } = useAccount()
 
   return (
     <>
@@ -37,22 +36,23 @@ const Login = () => {
           <p className="font-bold text-center text-3xl leading-10 mb-5">Get Started</p>
           <p className="text-base text-center leading-5 mb-6">Your gateway to the top NFT communities and collectors like you!</p>
           <div className="w-full mb-5">
-            <WalletDropdown buttonClassName="!h-[3.375rem]" />
+            <WalletDropdown buttonClassName="!h-12" />
           </div>
-          <Button
+          {/* <Button
             className="!w-full mb-5 border-[#d8dadc]"
-            onClick={() => signIn('twitter', { callbackUrl: '/login' })}
             startIcon={
               <>
-                {isConnected && <div className="h-3.5 w-3.5 ml-2 rounded-full bg-[#82ffac]" />}
+                {<div className="h-3.5 w-3.5 ml-2 rounded-full bg-[#82ffac]" />}
                 <i className="fa-brands fa-twitter fa-xl ml-2" />
               </>
             }
             variant={isConnected ? 'contained' : 'outlined'}
           >
             {isConnected ? session?.user?.name : 'Connect Twitter'}
-          </Button>
+          </Button> */}
           <Button
+            className="!h-12"
+            disabled={!ethAddress && !suiAddress}
             onClick={() => router.push('/discover')}
             variant="outlined"
           >

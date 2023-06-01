@@ -7,7 +7,6 @@ import { ResponseBase } from '@/types/response'
 import useSWR from 'swr'
 import request from '@/utils/request'
 import { PersonalizedProjectType } from '@/types/project'
-import useSessionGuard from '@/hooks/useSessionGuard'
 
 type TabItemProps = {
   title: string
@@ -205,7 +204,6 @@ const AllProjects = () => {
 }
 
 const Discover = () => {
-  useSessionGuard()
   const [currentTab, setCurrentTab] = useState(0)
 
   return (
