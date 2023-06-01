@@ -3,7 +3,6 @@ import Head from 'next/head'
 import Image from 'next/image'
 import { useAccount } from 'wagmi'
 import { useWallet } from '@suiet/wallet-kit'
-import cl from 'classnames'
 
 import { Button } from '@/components'
 import WalletDropdown from '@/layouts/components/wallet_dropdown'
@@ -38,7 +37,7 @@ const Login = () => {
           <div className="w-full mb-5">
             <WalletDropdown buttonClassName="!h-12" />
           </div>
-          {/* <Button
+          <Button
             className="!w-full mb-5 border-[#d8dadc]"
             startIcon={
               <>
@@ -46,10 +45,10 @@ const Login = () => {
                 <i className="fa-brands fa-twitter fa-xl ml-2" />
               </>
             }
-            variant={isConnected ? 'contained' : 'outlined'}
+            variant="outlined"
           >
-            {isConnected ? session?.user?.name : 'Connect Twitter'}
-          </Button> */}
+            Connect Twitter (optional)
+          </Button>
           <Button
             className="!h-12"
             disabled={!ethAddress && !suiAddress}
