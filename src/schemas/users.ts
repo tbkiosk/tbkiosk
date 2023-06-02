@@ -23,5 +23,5 @@ type Address = {
 }
 
 export type User = {
-  address: Address[]
+  addresses: Address[]
 }

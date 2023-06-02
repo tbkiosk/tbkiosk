@@ -1,17 +1,12 @@
 import { useRouter } from 'next/router'
 import Head from 'next/head'
 import Image from 'next/image'
-import { useAccount } from 'wagmi'
-import { useWallet } from '@suiet/wallet-kit'
 
 import { Button } from '@/components'
 import WalletDropdown from '@/layouts/components/wallet_dropdown'
 
 const Login = () => {
   const router = useRouter()
-
-  const { address: suiAddress } = useWallet()
-  const { address: ethAddress } = useAccount()
 
   return (
     <>
@@ -51,7 +46,6 @@ const Login = () => {
           </Button>
           <Button
             className="!h-12"
-            disabled={!ethAddress && !suiAddress}
             onClick={() => router.push('/discover')}
             variant="outlined"
           >
