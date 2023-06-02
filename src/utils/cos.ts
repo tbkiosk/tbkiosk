@@ -2,7 +2,6 @@ import STS from 'qcloud-cos-sts'
 import COS from 'cos-nodejs-sdk-v5'
 
 import { TENCENT_COS_REGION, TENCENT_COS_TEMP_BUCKET, TENCENT_COS_DEV_BUCKET, TENCENT_COS_BUCKET } from '@/constants/cos'
-import { env } from '@/env.mjs'
 
 const DEFAULT_TEMP_CREDENTIAL_DURATION = 600
 
@@ -19,8 +18,8 @@ export const getCredential = async ({ bucket }: GetCredential = {}): Promise<STS
 
     STS.getCredential(
       {
-        secretId: env.TENCENT_COS_SECRET_ID,
-        secretKey: env.TENCENT_COS_SECRET_KEY,
+        secretId: process.env.TENCENT_COS_SECRET_ID as string,
+        secretKey: process.env.TENCENT_COS_SECRET_KEY as string,
         durationSeconds: DEFAULT_TEMP_CREDENTIAL_DURATION,
         policy: {
           version: '2.0',
