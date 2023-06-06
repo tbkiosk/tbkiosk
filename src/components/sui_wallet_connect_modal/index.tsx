@@ -21,6 +21,7 @@ export const SuiWalletConnectModal = () => {
       onConnectSuccess={() => setOpen(false)}
       onOpenChange={open => setOpen(open)}
       open={open}
+      style={{ zIndex: 9999 }}
     />
   )
 }
