@@ -92,7 +92,7 @@ const Index = () => {
       </Head>
       <div className="overflow-x-auto overflow-y-auto">
         <Modal
-          isOpen={modalOpen}
+          open={modalOpen}
           setOpen={setModalOpen}
           classNames="!bg-black"
         >

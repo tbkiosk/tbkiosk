@@ -1,12 +1,9 @@
-import { useRouter } from 'next/router'
 import Head from 'next/head'
 
 import Layout from '@/layouts'
 import WalletConnectModal from '@/components/_shared/wallet_connect_modal'
 
 const Login = () => {
-  const router = useRouter()
-
   return (
     <>
       <Head>
