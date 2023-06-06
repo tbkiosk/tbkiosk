@@ -1,4 +1,3 @@
-import { ObjectId } from 'mongodb'
 import { z } from 'zod'
 
 import clientPromise from '@/lib/mongodb'
@@ -8,7 +7,7 @@ import { USERS_TABLE, type User, type Address } from '@/schemas/users'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import type { ResponseBase } from '@/types/response'
 
-const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<boolean>>) => {
+const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<User>>) => {
   try {
     const client = await clientPromise
     const db = client.db(`${process.env.NODE_ENV}`)
@@ -37,7 +36,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<bo
         })
       }
 
-      const now = new Date()
       const addresses = req.body.addresses as Address[]
 
       const target = await collection.findOne({
@@ -49,38 +47,13 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<bo
       })
 
       if (!target) {
-        // if target is not found, create a new one
-        await collection.insertOne({
-          primary_address: addresses[0],
-          addresses: addresses,
-          created_at: now,
-          updated_at: now,
-          twitter: null,
-          discord: null,
+        return res.status(200).json({
+          message: 'User not found',
         })
-      } else {
-        // if target is found, check addresses
-        // if request addresses have some addresses which are not in target addresses, update target addresses
-        const diff = addresses.filter(
-          _address => !target.addresses.find(_addr => _addr.address === _address.address && _addr.chain === _address.chain)
-        )
-
-        if (diff.length > 0) {
-          await collection.updateOne(
-            { _id: new ObjectId(target._id) },
-            {
-              $push: {
-                addresses: {
-                  $each: diff,
-                },
-              },
-            }
-          )
-        }
       }
 
       return res.status(200).json({
-        data: true,
+        data: target,
       })
     }
 
