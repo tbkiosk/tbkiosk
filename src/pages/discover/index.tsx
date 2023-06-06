@@ -209,10 +209,10 @@ const Discover = () => {
   return (
     <>
       <Head>
-        <title>Morphis Network - Discover</title>
+        <title>Airdawg - Discover</title>
         <meta
           name="description"
-          content="morphis network discover"
+          content="morphis network airdawg discover"
         />
       </Head>
       <Layout>
