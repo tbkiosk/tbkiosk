@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import { useWallet } from '@suiet/wallet-kit'
 import { useAccount } from 'wagmi'
@@ -10,10 +10,14 @@ type LayoutProps = {
 }
 
 const Layout = ({ children, className }: LayoutProps) => {
+  const [connectedWallets, setConnectedWallets] = useState(0)
+
   const { isConnected: ethIsConnected } = useAccount({ onConnect: () => null })
   const { connected: suiConnected } = useWallet()
 
-  const connectedWallets = useMemo(() => +ethIsConnected + +suiConnected, [ethIsConnected, suiConnected])
+  useEffect(() => {
+    setConnectedWallets(+ethIsConnected + +suiConnected)
+  }, [ethIsConnected, suiConnected])
 
   return (
     <div className={cl(['h-full w-full flex flex-col', className])}>

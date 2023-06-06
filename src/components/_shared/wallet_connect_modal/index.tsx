@@ -1,14 +1,18 @@
+import { useEffect } from 'react'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { useWallet } from '@suiet/wallet-kit'
 import { useWeb3Modal } from '@web3modal/react'
 import { useAccount } from 'wagmi'
+import { toast } from 'react-toastify'
 
 import { Modal, Button } from '@/components'
-
 import { useSuiWalletModal } from '@/context/sui_wallet_modal_context'
 
+import request from '@/utils/request'
 import { ellipsisMiddle } from '@/utils/address'
+
+import type { User } from '@/schemas/users'
 
 type WalletConnectModalProps = {
   open: boolean
@@ -18,10 +22,31 @@ type WalletConnectModalProps = {
 const WalletConnectModal = ({ open, setOpen }: WalletConnectModalProps) => {
   const router = useRouter()
 
-  const { address: ethAddress = '', isConnected: ethIsConnected } = useAccount({ onConnect: () => null })
+  const { address: ethAddress = '', isConnected: ethIsConnected } = useAccount()
   const { connected: suiConnected, address: suiAddress = '' } = useWallet()
   const { open: ethOpen } = useWeb3Modal()
   const { setOpen: setSuiModalOpen } = useSuiWalletModal()
+
+  const onConnect = async () => {
+    const res = await request<User>({
+      url: '/api/user',
+      method: 'POST',
+      data: {
+        addresses: [
+          ...(ethAddress ? [{ chain: 'ETH', address: ethAddress }] : []),
+          ...(suiAddress ? [{ chain: 'SUI', address: suiAddress }] : []),
+        ],
+      },
+    })
+
+    if (!res.data) {
+      toast.error(res.message || 'Failed to update user, please try to connect wallet again')
+    }
+  }
+
+  useEffect(() => {
+    onConnect()
+  }, [ethIsConnected, suiConnected])
 
   return (
     <Modal
