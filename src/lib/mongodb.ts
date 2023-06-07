@@ -2,7 +2,7 @@
 import { MongoClient } from 'mongodb'
 import { env } from '@/env.mjs'
 
-const uri = `mongodb+srv://${env.MONGO_USER}:${env.MONGO_PASS}@cluster0.ol5nrfu.mongodb.net/${process.env.NODE_ENV}`
+const uri = env.DATABASE_URL
 const options = {}
 
 let client

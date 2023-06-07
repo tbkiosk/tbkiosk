@@ -3,15 +3,19 @@ import { z } from 'zod'
 
 export const env = createEnv({
   server: {
-    MONGO_USER: z.string().min(1),
-    MONGO_PASS: z.string().min(1),
+    NEXTAUTH_SECRET: z.string().min(1),
+    DATABASE_URL: z.string().min(1),
+    TWITTER_CLIENT_ID: z.string().min(1),
+    TWITTER_CLIENT_SECRET: z.string().min(1),
     TENCENT_COS_SECRET_ID: z.string().min(1),
     TENCENT_COS_SECRET_KEY: z.string().min(1),
   },
   client: {},
   runtimeEnv: {
-    MONGO_USER: process.env.MONGO_USER,
-    MONGO_PASS: process.env.MONGO_PASS,
+    NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
+    DATABASE_URL: process.env.DATABASE_URL,
+    TWITTER_CLIENT_ID: process.env.TWITTER_CLIENT_ID,
+    TWITTER_CLIENT_SECRET: process.env.TWITTER_CLIENT_SECRET,
     TENCENT_COS_SECRET_ID: process.env.TENCENT_COS_SECRET_ID,
     TENCENT_COS_SECRET_KEY: process.env.TENCENT_COS_SECRET_KEY,
   },

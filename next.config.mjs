@@ -34,7 +34,7 @@ export default withSentryConfig(
     silent: true,
 
     org: 'morphis',
-    project: 'javascript-nextjs',
+    project: 'morphis_airdawg',
   },
   {
     // For all available options, see:
