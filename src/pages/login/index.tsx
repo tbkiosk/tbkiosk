@@ -7,10 +7,10 @@ const Login = () => {
   return (
     <>
       <Head>
-        <title>Airdawg - Login</title>
+        <title>Morphis Airdawg - Login</title>
         <meta
           name="description"
-          content="morphis network Airdawg"
+          content="Morphis Airdawg login"
         />
       </Head>
       <Layout className="blur-sm">

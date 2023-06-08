@@ -84,10 +84,10 @@ const Index = () => {
   return (
     <>
       <Head>
-        <title>Morphis Network - Welcome</title>
+        <title>Morphis Airdawg - Welcome</title>
         <meta
           name="description"
-          content="morphis network welcome"
+          content="Morphis Airdawg welcome"
         />
       </Head>
       <div className="overflow-x-auto overflow-y-auto">
