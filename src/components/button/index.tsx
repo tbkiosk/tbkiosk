@@ -1,4 +1,4 @@
-import cl from 'classnames'
+import cx from 'classix'
 
 export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   variant?: 'contained' | 'outlined' | 'colored'
@@ -23,13 +23,13 @@ const VARIANT_DISABLED_STYLES = {
 
 export const Button = ({ children, className, variant = 'contained', disabled, loading, startIcon, ...rest }: ButtonProps) => (
   <button
-    className={cl([
+    className={cx(
       'w-full h-14 rounded-[1.75rem] px-4 relative font-medium text-sm truncate transition duration-100 ease-linear disabled:cursor-not-allowed',
       VARIANT_STYLES[variant],
       disabled && VARIANT_DISABLED_STYLES[variant],
-      startIcon && 'relative',
-      className,
-    ])}
+      !!startIcon && 'relative',
+      className
+    )}
     disabled={disabled || loading}
     {...rest}
   >

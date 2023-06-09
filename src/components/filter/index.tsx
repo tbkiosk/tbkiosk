@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import classNames from 'classnames'
+import cx from 'classix'
+
 import { CheckBox } from '@/components'
 
 type Filter = {
@@ -30,9 +31,7 @@ export const Filter = ({ title, isExpanded = true, filters, onChange }: FilterPr
           viewBox="0 0 24 24"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
-          className={classNames('transition-transform', {
-            'rotate-180': isFilterExpanded,
-          })}
+          className={cx('transition-transform', isFilterExpanded && 'rotate-180')}
         >
           <path
             d="M16 13L12 9L8 13"

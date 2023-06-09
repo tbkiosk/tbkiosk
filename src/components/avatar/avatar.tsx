@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import classNames from 'classnames'
+import cx from 'classix'
 
 export type AvatarProps = {
   src: string
@@ -9,13 +9,12 @@ export type AvatarProps = {
 }
 
 export const Avatar = ({ src, alt, size, className }: AvatarProps) => {
-  const avatarClass = classNames(
-    {
-      'w-10 h-10': size === 'small',
-      'w-12 h-12': size === 'medium',
-      'w-16 h-16': size === 'large',
-    },
-    `rounded-full object-cover ${className ?? ''}`
+  const avatarClass = cx(
+    size === 'small' && 'w-10 h-10',
+    size === 'medium' && 'w-12 h-12',
+    size === 'large' && 'w-16 h-16',
+    'rounded-full object-cover',
+    className
   )
 
   return (

@@ -41,9 +41,9 @@ dependencies:
   base64url:
     specifier: ^3.0.1
     version: 3.0.1
-  classnames:
-    specifier: ^2.3.2
-    version: 2.3.2
+  classix:
+    specifier: ^2.1.32
+    version: 2.1.32
   cos-js-sdk-v5:
     specifier: ^1.4.18
     version: 1.4.18
@@ -8123,8 +8123,8 @@ packages:
       safe-buffer: 5.2.1
     dev: true
 
-  /classnames@2.3.2:
-    resolution: {integrity: sha512-CSbhY4cFEJRe6/GQzIk5qXZ4Jeg5pcsP7b5peFSDpffpe1cqjASH/n9UTjBwOp6XpMSTwQ8Za2K5V02ueA7Tmw==}
+  /classix@2.1.32:
+    resolution: {integrity: sha512-E08TD9XlszvcuOzEQJnjQEibqQp6qJH5idbjh8l5pWDV2poJwk0Gexcra0ZdMITUuqAveHju4A9B/HKk1pk7sA==}
     dev: false
 
   /clean-css@5.3.2:

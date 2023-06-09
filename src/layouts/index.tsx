@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import cl from 'classnames'
+import cx from 'classix'
 
 type LayoutProps = {
   children?: React.ReactNode | React.ReactNode[]
@@ -9,7 +9,7 @@ type LayoutProps = {
 
 const Layout = ({ children, className }: LayoutProps) => {
   return (
-    <div className={cl(['h-full w-full flex flex-col', className])}>
+    <div className={cx('h-full w-full flex flex-col', className)}>
       <header className="flex justify-between px-[160px] py-[40px]">
         <Link href="/discover">
           <Image

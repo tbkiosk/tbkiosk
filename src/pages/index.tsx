@@ -3,7 +3,7 @@ import Marquee from 'react-fast-marquee'
 import Head from 'next/head'
 import Link from 'next/link'
 import Image from 'next/image'
-import cl from 'classnames'
+import cx from 'classix'
 
 import { Button, Modal } from '@/components'
 
@@ -144,10 +144,10 @@ const Index = () => {
           </div>
         </Modal>
         <header
-          className={cl([
+          className={cx(
             'flex justify-between fixed inset-x-0 top-0 h-24 max-h-24 2xl:px-14 lg:px-10 px-6 md:py-6 py-2 bg-white z-[1201]',
-            modalOpen && 'invert',
-          ])}
+            modalOpen && 'invert'
+          )}
         >
           <div className="flex items-center gap-2 cursor-pointer">
             <Image
@@ -215,30 +215,30 @@ const Index = () => {
         <main className="pt-24 md:px-0 px-4 overflow-hidden">
           <section className="md:h-[32.5rem] h-[42rem] w-full relative">
             <div
-              className={cl([
+              className={cx(
                 'md:w-[40%] w-full md:max-w-[42rem] max-w-full',
                 'absolute 2xl:top-[5.5rem] lg:top-28 md:top-36 top-10 2xl:left-24 lg:left-20 md:left-16 left-0',
                 'font-bold 2xl:text-7xl lg:text-5xl text-4xl 2xl:leading-[6rem] lg:leading-[4rem] leading-10',
-                '-translate-x-[calc(100%+6rem)] animate-[fly-in-from-left_1s_ease-in-out_150ms] animation-fill-forwards',
-              ])}
+                '-translate-x-[calc(100%+6rem)] animate-[fly-in-from-left_1s_ease-in-out_150ms] animation-fill-forwards'
+              )}
             >
               Connecting the NFT communities
             </div>
             <div
-              className={cl([
+              className={cx(
                 'md:w-[40%] w-full max-w-[36.25rem] max-w-full',
                 'absolute 2xl:top-[19.25rem] lg:top-[17rem] md:top-[16rem] top-[9rem] 2xl:left-24 lg:left-20 md:left-16 left-0',
                 'font-medium 2xl:text-2xl 2xl:leading-8 lg:text-xl lg:leading-7 text-lg leading-6',
-                '-translate-x-[calc(100%+6rem)] animate-[fly-in-from-left_1s_ease-in-out_300ms] animation-fill-forwards',
-              ])}
+                '-translate-x-[calc(100%+6rem)] animate-[fly-in-from-left_1s_ease-in-out_300ms] animation-fill-forwards'
+              )}
             >
               Morphis Network is a social platform that allows token-gated communities built around NFT ownership
             </div>
             <div
-              className={cl([
+              className={cx(
                 'absolute 2xl:top-[27.25rem] lg:top-96 md:top-[22rem] top-[16rem] 2xl:left-24 lg:left-20 md:left-16 left-0',
-                '-translate-x-[calc(100%+6rem)] animate-[fly-in-from-left_1s_ease-in-out_450ms] animation-fill-forwards',
-              ])}
+                '-translate-x-[calc(100%+6rem)] animate-[fly-in-from-left_1s_ease-in-out_450ms] animation-fill-forwards'
+              )}
             >
               <Link href="/login">
                 <Button
@@ -250,11 +250,11 @@ const Index = () => {
               </Link>
             </div>
             <div
-              className={cl([
+              className={cx(
                 'absolute object-fit md:w-[40%] w-[120%] h-[50%] md:max-w-[55rem] max-w-[32rem] max-h-[32.5rem]',
                 'lg:top-36 md:top-32 top-[22rem] md:right-0 -right-4',
-                'transition-transform translate-x-full animate-[fly-in-from-right_1s_ease-in-out_450ms] animation-fill-forwards',
-              ])}
+                'transition-transform translate-x-full animate-[fly-in-from-right_1s_ease-in-out_450ms] animation-fill-forwards'
+              )}
               id="peeps-container"
             >
               <Image
@@ -270,10 +270,10 @@ const Index = () => {
 
           <section className="flex md:flex-row flex-col items-center 2xl:mt-24 lg:mt-12 mt-0">
             <div
-              className={cl([
+              className={cx(
                 'md:w-2/6 w-[70%] flex flex-col justify-center items-center gap-12 py-8',
-                'md:border-r md:border-r-black border-r-0 md:border-b-0 border-b-black border-b',
-              ])}
+                'md:border-r md:border-r-black border-r-0 md:border-b-0 border-b-black border-b'
+              )}
             >
               <Image
                 alt="token"
@@ -287,10 +287,10 @@ const Index = () => {
               </span>
             </div>
             <div
-              className={cl([
+              className={cx(
                 'md:w-2/6 w-[70%] flex flex-col justify-center items-center gap-12 py-8',
-                'md:border-r md:border-r-black border-r-0 md:border-b-0 border-b-black border-b',
-              ])}
+                'md:border-r md:border-r-black border-r-0 md:border-b-0 border-b-black border-b'
+              )}
             >
               <Image
                 alt="dao"
@@ -330,22 +330,22 @@ const Index = () => {
             >
               <p className="font-bold 2xl:text-4xl lg:text-3xl text-2xl mb-5">Morphis Connect</p>
               <p
-                className={cl([
+                className={cx(
                   '2xl:text-2xl lg:text-xl text-lg font-medium',
                   '2xl:pr-16 lg:pr-12 md:pr-8 pr-0 mb-8',
-                  'translate-x-full animate-[fly-in-from-right_1s_ease-in-out] animation-fill-forwards !animate-none',
-                ])}
+                  'translate-x-full animate-[fly-in-from-right_1s_ease-in-out] animation-fill-forwards !animate-none'
+                )}
                 style={{ animationDelay: '0.5s' }}
               >
                 A completely new way for communities to form and interact with each other. Centred around NFTs.
               </p>
               <p
-                className={cl([
+                className={cx(
                   'flex items-center gap-3',
                   '2xl:text-2xl lg:text-xl text-lg font-bold',
                   '2xl:mb-9 lg:mb-7 mb-6 2xl:pr-16 lg:pr-12 md:pr-8 pr-0',
-                  'translate-x-full animate-[fly-in-from-right_1s_ease-in-out] animation-fill-forwards !animate-none',
-                ])}
+                  'translate-x-full animate-[fly-in-from-right_1s_ease-in-out] animation-fill-forwards !animate-none'
+                )}
                 style={{ animationDelay: '0.75s' }}
               >
                 <Image
@@ -357,12 +357,12 @@ const Index = () => {
                 Token gated communities around NFTs
               </p>
               <p
-                className={cl([
+                className={cx(
                   'flex items-center gap-3',
                   '2xl:text-2xl lg:text-xl text-lg font-bold',
                   '2xl:mb-9 lg:mb-7 mb-6 2xl:pr-16 lg:pr-12 md:pr-8 pr-0',
-                  'translate-x-full animate-[fly-in-from-right_1s_ease-in-out] animation-fill-forwards !animate-none',
-                ])}
+                  'translate-x-full animate-[fly-in-from-right_1s_ease-in-out] animation-fill-forwards !animate-none'
+                )}
                 style={{ animationDelay: '1s' }}
               >
                 <Image
@@ -374,12 +374,12 @@ const Index = () => {
                 Useful tooling for community management
               </p>
               <p
-                className={cl([
+                className={cx(
                   'flex items-center gap-3',
                   '2xl:text-2xl lg:text-xl text-lg font-bold',
                   '2xl:mb-9 lg:mb-7 mb-6 2xl:pr-16 lg:pr-12 md:pr-8 pr-0',
-                  'translate-x-full animate-[fly-in-from-right_1s_ease-in-out] animation-fill-forwards !animate-none',
-                ])}
+                  'translate-x-full animate-[fly-in-from-right_1s_ease-in-out] animation-fill-forwards !animate-none'
+                )}
                 style={{ animationDelay: '1.25s' }}
               >
                 <Image
@@ -441,21 +441,21 @@ const Index = () => {
             >
               <p className="font-bold 2xl:text-4xl lg:text-3xl text-2xl 2xl:pl-24 lg:pl-16 md:pl-8 pl-0 mb-5">Wallet Extension</p>
               <p
-                className={cl([
+                className={cx(
                   '2xl:text-2xl lg:text-xl text-lg font-medium',
                   '2xl:pl-24 lg:pl-16 md:pl-8 pl-0 mb-8',
-                  '-translate-x-full animate-[fly-in-from-left_1s_ease-in-out] animation-fill-forwards !animate-none',
-                ])}
+                  '-translate-x-full animate-[fly-in-from-left_1s_ease-in-out] animation-fill-forwards !animate-none'
+                )}
                 style={{ animationDelay: '0.5s' }}
               >
                 Social enabled wallet extension to get started with your web3 journey.
               </p>
               <p
-                className={cl([
+                className={cx(
                   'flex items-center gap-3 font-bold',
                   '2xl:mb-9 lg:mb-7 mb-6 2xl:text-2xl lg:text-xl text-lg 2xl:pl-24 lg:pl-16 md:pl-8 pl-0',
-                  '-translate-x-full animate-[fly-in-from-left_1s_ease-in-out] animation-fill-forwards !animate-none',
-                ])}
+                  '-translate-x-full animate-[fly-in-from-left_1s_ease-in-out] animation-fill-forwards !animate-none'
+                )}
                 style={{ animationDelay: '0.75s' }}
               >
                 <Image
@@ -467,11 +467,11 @@ const Index = () => {
                 Unified web2 and web3 profile
               </p>
               <p
-                className={cl([
+                className={cx(
                   'flex items-center gap-3 font-bold',
                   '2xl:mb-9 lg:mb-7 mb-6 2xl:text-2xl lg:text-xl text-lg 2xl:pl-24 lg:pl-16 md:pl-8 pl-0',
-                  '-translate-x-full animate-[fly-in-from-left_1s_ease-in-out] animation-fill-forwards !animate-none',
-                ])}
+                  '-translate-x-full animate-[fly-in-from-left_1s_ease-in-out] animation-fill-forwards !animate-none'
+                )}
                 style={{ animationDelay: '1s' }}
               >
                 <Image
@@ -483,11 +483,11 @@ const Index = () => {
                 Manage NFT portfolio with ease
               </p>
               <p
-                className={cl([
+                className={cx(
                   'flex items-center gap-3 font-bold',
                   '2xl:mb-9 lg:mb-7 mb-6 2xl:text-2xl lg:text-xl text-lg 2xl:pl-24 lg:pl-16 md:pl-8 pl-0',
-                  '-translate-x-full animate-[fly-in-from-left_1s_ease-in-out] animation-fill-forwards !animate-none',
-                ])}
+                  '-translate-x-full animate-[fly-in-from-left_1s_ease-in-out] animation-fill-forwards !animate-none'
+                )}
                 style={{ animationDelay: '1.25s' }}
               >
                 <Image
@@ -523,7 +523,7 @@ const Index = () => {
             </p>
             <div className="h-[4.5rem] relative overflow-hidden">
               <Marquee speed={60}>
-                <div className={cl(['flex flex-row items-center gap-20 h-full mx-10'])}>
+                <div className={cx('flex flex-row items-center gap-20 h-full mx-10')}>
                   <Image
                     alt="clutchy"
                     height={44}
@@ -579,30 +579,30 @@ const Index = () => {
             id="slogan"
           >
             <div
-              className={cl([
+              className={cx(
                 'flex items-center gap-12 w-[22.5rem] -mb-3 text-5xl font-bold z-[1010] opacity-0 overflow-hidden',
-                'animate-[fade-in-from-bottom_1.5s_linear] animation-fill-forwards !animate-none',
-              ])}
+                'animate-[fade-in-from-bottom_1.5s_linear] animation-fill-forwards !animate-none'
+              )}
               style={{ animationDelay: '1s' }}
             >
               <div className="h-16 w-16 rounded-full bg-[#fce2f9] md:ml-0 ml-4" />
               <span>Discover.</span>
             </div>
             <div
-              className={cl([
+              className={cx(
                 'flex items-center gap-12 w-[22.5rem] -mb-3 text-5xl font-bold z-[1010] opacity-0 overflow-hidden',
-                'animate-[fade-in-from-bottom_1.5s_linear] animation-fill-forwards !animate-none',
-              ])}
+                'animate-[fade-in-from-bottom_1.5s_linear] animation-fill-forwards !animate-none'
+              )}
               style={{ animationDelay: '2s' }}
             >
               <div className="h-16 w-16 rounded-full bg-[#c481c1] md:ml-0 ml-4" />
               <span>Connect.</span>
             </div>
             <div
-              className={cl([
+              className={cx(
                 'flex items-center gap-12 w-[22.5rem] -mb-3 text-5xl font-bold z-[1010] opacity-0 overflow-hidden',
-                'animate-[fade-in-from-bottom_1.5s_linear] animation-fill-forwards !animate-none',
-              ])}
+                'animate-[fade-in-from-bottom_1.5s_linear] animation-fill-forwards !animate-none'
+              )}
               style={{ animationDelay: '3s' }}
             >
               <div className="h-16 w-16 rounded-full bg-white md:ml-0 ml-4" />

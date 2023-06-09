@@ -2,7 +2,7 @@ import { forwardRef, useState } from 'react'
 import Image from 'next/image'
 import { toast } from 'react-toastify'
 import COS from 'cos-js-sdk-v5'
-import cl from 'classnames'
+import cx from 'classix'
 
 import { Loading } from '../loading'
 
@@ -97,13 +97,13 @@ export const Upload = forwardRef<HTMLInputElement, UploadProps>(
     return (
       <div className="flex shrink-0 justify-center items-center">
         <label
-          className={cl([
+          className={cx(
             'flex flex-col w-[7.5rem] max-w-[7.5rem] min-h-[2.625rem] font-bold border border-black cursor-pointer overflow-hidden',
             'transition-colors hover:bg-[#e3e3e4]',
             value && !uploading ? 'h-[7.5rem] p-2 bg-[#e3e3e4] rounded-lg' : 'px-8 py-2 rounded-3xl',
             isError && 'border border-red-600 outline-red-600 ring-red-600 text-red-600',
-            className,
-          ])}
+            className
+          )}
           htmlFor={id}
         >
           <Loading isLoading={uploading}>

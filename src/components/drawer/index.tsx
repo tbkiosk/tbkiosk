@@ -1,6 +1,6 @@
-import { createPortal } from 'react-dom'
-import classNames from 'classnames'
 import { useEffect, useState } from 'react'
+import { createPortal } from 'react-dom'
+import cx from 'classix'
 
 export type DrawerProps = {
   children: React.ReactNode
@@ -17,18 +17,15 @@ export const Drawer = ({ children, onClose, open, usePortal }: DrawerProps) => {
     setIsBrowser(true)
   }, [])
 
-  const drawerClasses = classNames(
+  const drawerClasses = cx(
     'fixed inset-y-0 right-0 w-full md:max-w-lg lg:max-w-2xl transform transition-transform duration-200 ease-in-out z-50',
-    {
-      'translate-x-0': open,
-      'translate-x-full': !open,
-    }
+    open ? 'translate-x-0' : 'translate-x-full'
   )
 
-  const maskClasses = classNames('fixed inset-0 bg-[rgb(22,22,22)] transition-opacity duration-200 ease-in-out z-10', {
-    'opacity-50': open,
-    'opacity-0 pointer-events-none': !open,
-  })
+  const maskClasses = cx(
+    'fixed inset-0 bg-[rgb(22,22,22)] transition-opacity duration-200 ease-in-out z-10',
+    open ? 'opacity-50' : 'opacity-0 pointer-events-none'
+  )
 
   const drawerContent = (
     <div>

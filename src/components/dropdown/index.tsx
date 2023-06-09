@@ -1,6 +1,6 @@
 import { Fragment } from 'react'
 import { Menu, Transition } from '@headlessui/react'
-import cl from 'classnames'
+import cx from 'classix'
 
 export type DropdownProps = {
   renderButton?: () => React.ReactNode | React.ReactNode[]
@@ -18,19 +18,19 @@ export const Dropdown = ({ renderButton, startIcon, buttonClassName, children, d
     {({ open }) => (
       <>
         <Menu.Button
-          className={cl([
+          className={cx(
             'w-full h-9 inline-flex justify-center items-center relative',
             'rounded-[1.75rem] bg-black text-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm',
             'transition-all hover:bg-[#2a2a2d]',
             'focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100',
             open && 'rounded-b-none',
             disabled && 'cursor-not-allowed pointer-events-none',
-            buttonClassName,
-          ])}
+            buttonClassName
+          )}
         >
           {startIcon}
           {renderButton?.() || null}
-          <i className={cl(['fa-solid fa-chevron-down absolute right-6 transition-transform', open && 'rotate-180'])} />
+          <i className={cx('fa-solid fa-chevron-down absolute right-6 transition-transform', open && 'rotate-180')} />
         </Menu.Button>
         <Transition
           as={Fragment}
