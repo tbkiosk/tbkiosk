@@ -15,12 +15,14 @@ model User {
   address         String?
   name            String?
   email           String?     @unique
-  emailVerified   DateTime?
+  emailVerified   Boolean?
   image           String?
   createdAt       DateTime    @default(now())
   updatedAt       DateTime    @updatedAt
 
   accounts        Account[]
+
+  @@map("user")
 }
 
 model Account {
@@ -40,4 +42,6 @@ model Account {
   user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
+
+  @@map("account")
 }
