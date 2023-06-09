@@ -74,20 +74,24 @@ export const authOptions: AuthOptions = {
             }
           }
 
-          const user = await prismaClient.user.create({
-            data: {
-              address,
-              name: address,
-              image: null,
-            },
-          })
-          await prismaClient.account.create({
-            data: {
-              userId: user.id,
-              type: 'credentials',
-              provider: 'Ethereum',
-              providerAccountId: address,
-            },
+          const user = await prismaClient.$transaction(async () => {
+            const user = await prismaClient.user.create({
+              data: {
+                address,
+                name: address,
+                image: null,
+              },
+            })
+            await prismaClient.account.create({
+              data: {
+                userId: user.id,
+                type: 'credentials',
+                provider: 'Ethereum',
+                providerAccountId: address,
+              },
+            })
+
+            return user
           })
 
           return {
