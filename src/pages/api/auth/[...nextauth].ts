@@ -119,6 +119,9 @@ export const authOptions: AuthOptions = {
   session: {
     strategy: 'jwt',
   },
+  callbacks: {
+    session: ({ session }) => session,
+  },
 }
 
 export default NextAuth(authOptions)

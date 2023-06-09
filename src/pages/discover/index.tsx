@@ -1,8 +1,11 @@
 import Head from 'next/head'
+import { useSession } from 'next-auth/react'
 
 import Layout from '@/layouts'
 
 const Discover = () => {
+  const session = useSession()
+
   return (
     <>
       <Head>

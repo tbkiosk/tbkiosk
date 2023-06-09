@@ -7,14 +7,14 @@ import { WagmiConfig } from 'wagmi'
 import { mainnet, polygon } from 'wagmi/chains'
 import { SWRConfig } from 'swr'
 
-import { wagmiConfig } from '@/lib/wagmi'
+import ErrorBoundary from './error_boundary'
 
+import { wagmiConfig } from '@/lib/wagmi'
 import fetcher from '@/utils/fetcher'
 
 import type { AppProps } from 'next/app'
 
 import 'react-toastify/dist/ReactToastify.css'
-import 'react-datepicker/dist/react-datepicker.css'
 import '@rainbow-me/rainbowkit/styles.css'
 import '../styles/globals.css'
 
@@ -34,7 +34,9 @@ const App = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => (
                 content="width=device-width, initial-scale=1"
               />
             </Head>
-            <Component {...pageProps} />
+            <ErrorBoundary>
+              <Component {...pageProps} />
+            </ErrorBoundary>
             <ToastContainer />
           </SWRConfig>
         </RainbowKitProvider>
