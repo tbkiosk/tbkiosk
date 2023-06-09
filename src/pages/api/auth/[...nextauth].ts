@@ -33,11 +33,12 @@ export const authOptions: AuthOptions = {
         try {
           const siwe = new SiweMessage(JSON.parse(credentials?.message || '{}'))
           const nextAuthUrl = new URL(env.NEXTAUTH_URL)
+          const csrfToken = await getCsrfToken({ req: { headers: req?.headers } })
 
           const result = await siwe.verify({
             signature: credentials?.signature || '',
             domain: nextAuthUrl.host,
-            nonce: await getCsrfToken({ req }),
+            nonce: csrfToken,
           })
 
           if (!result?.success) {
