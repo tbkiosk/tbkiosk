@@ -81,7 +81,6 @@ const WalletConnectModal = ({ open, setOpen }: WalletConnectModalProps) => {
           </Button>
           <Button
             className="!w-[304px] flex justify-center items-center gap-2 mb-2 !border-[#e0e0e9]"
-            onClick={() => signIn('twitter')}
             variant="outlined"
           >
             Solana Wallet

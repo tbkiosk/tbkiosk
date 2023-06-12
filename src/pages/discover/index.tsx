@@ -1,10 +1,11 @@
 import Head from 'next/head'
-import { useSession } from 'next-auth/react'
 
 import Layout from '@/layouts'
 
+import { useSessionGuard } from '@/hooks/auth/useSessionGuard'
+
 const Discover = () => {
-  const session = useSession()
+  useSessionGuard()
 
   return (
     <>
