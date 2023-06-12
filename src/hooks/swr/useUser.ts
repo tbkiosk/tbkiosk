@@ -1,10 +1,18 @@
+import { useEffect } from 'react'
+import { toast } from 'react-toastify'
 import useSWRImmutable from 'swr/immutable'
 
-import type { User } from 'next-auth'
 import type { ResponseBase } from '@/types/response'
+import type { UserResponse } from '@/pages/api/user'
 
-const useUser = () => {
-  const { data, error, isLoading, mutate } = useSWRImmutable<ResponseBase<User>>('/api/user')
+export const useUser = () => {
+  const { data, error, isLoading, mutate } = useSWRImmutable<ResponseBase<UserResponse>>({ url: '/api/user' })
+
+  useEffect(() => {
+    if (error) {
+      toast.error(error?.message || 'Failed to load user information')
+    }
+  }, [error])
 
   return {
     data: data?.data,
@@ -13,5 +21,3 @@ const useUser = () => {
     mutate,
   }
 }
-
-export default useUser
