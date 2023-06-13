@@ -15,9 +15,7 @@ export type UserResponse = User & {
 const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<UserResponse | null>>) => {
   const session = await getServerSession(req, res, authOptions)
   if (!session) {
-    return res.status(401).json({
-      message: '',
-    })
+    return res.status(401).end()
   }
 
   /**
@@ -32,7 +30,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<Us
     })
     if (!user) {
       return res.status(500).json({
-        message: 'User was not found. Please contact us',
+        error: 'User was not found. Please contact us',
       })
     }
 
@@ -43,7 +41,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<Us
     })
     if (!accounts?.length) {
       return res.status(500).json({
-        message: 'Accounts were not found. Please contact us',
+        error: 'Accounts were not found. Please contact us',
       })
     }
 

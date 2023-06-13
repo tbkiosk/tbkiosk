@@ -2,16 +2,17 @@ import { useQuery, type UseQueryOptions } from '@tanstack/react-query'
 
 import { request } from '@/utils/request'
 
-export const useUser = (config?: Partial<UseQueryOptions>) => {
+export const useUser = <T>(config?: Partial<UseQueryOptions>) => {
   const query = useQuery({
     queryKey: ['user'],
     queryFn: async () => {
-      const { data, message, status } = await request({
+      const { data, error } = await request<T>({
         url: '/api/user',
+        method: 'PUT',
       })
 
-      if (!status || status >= 400) {
-        throw new Error(message)
+      if (error) {
+        throw new Error(error)
       }
 
       return data
