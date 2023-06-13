@@ -5,12 +5,10 @@ import { RainbowKitProvider } from '@rainbow-me/rainbowkit'
 import { RainbowKitSiweNextAuthProvider, GetSiweMessageOptions } from '@rainbow-me/rainbowkit-siwe-next-auth'
 import { WagmiConfig } from 'wagmi'
 import { mainnet, polygon } from 'wagmi/chains'
-import { SWRConfig } from 'swr'
 
 import ErrorBoundary from './error_boundary'
 
 import { wagmiConfig } from '@/lib/wagmi'
-import fetcher from '@/utils/fetcher'
 
 import type { AppProps } from 'next/app'
 
@@ -27,18 +25,16 @@ const App = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => (
     <SessionProvider session={session}>
       <RainbowKitSiweNextAuthProvider getSiweMessageOptions={getSiweMessageOptions}>
         <RainbowKitProvider chains={[mainnet, polygon]}>
-          <SWRConfig value={{ fetcher }}>
-            <Head>
-              <meta
-                name="viewport"
-                content="width=device-width, initial-scale=1"
-              />
-            </Head>
-            <ErrorBoundary>
-              <Component {...pageProps} />
-            </ErrorBoundary>
-            <ToastContainer />
-          </SWRConfig>
+          <Head>
+            <meta
+              name="viewport"
+              content="width=device-width, initial-scale=1"
+            />
+          </Head>
+          <ErrorBoundary>
+            <Component {...pageProps} />
+          </ErrorBoundary>
+          <ToastContainer />
         </RainbowKitProvider>
       </RainbowKitSiweNextAuthProvider>
     </SessionProvider>
