@@ -6,7 +6,7 @@ import cx from 'classix'
 
 import { Loading } from '../loading'
 
-import request from '@/utils/request'
+import { request } from '@/utils/request'
 
 import { TENCENT_COS_TEMP_BUCKET, TENCENT_COS_REGION, TENCENT_COS_CDN_DOMAIN } from '@/constants/cos'
 
