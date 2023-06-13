@@ -74,6 +74,7 @@ export const authOptions: AuthOptions = {
             }
           }
 
+          // if no existing user found, create a new one
           const user = await prismaClient.$transaction(async () => {
             const user = await prismaClient.user.create({
               data: {
@@ -88,6 +89,7 @@ export const authOptions: AuthOptions = {
                 type: 'credentials',
                 provider: 'Ethereum',
                 providerAccountId: address,
+                isPrimary: true,
               },
             })
 

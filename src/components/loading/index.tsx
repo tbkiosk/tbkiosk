@@ -1,6 +1,6 @@
 type LoadingProps = {
   isLoading: boolean
-  children: JSX.Element | null
+  children: JSX.Element | null | undefined
 }
 
 export const Loading = ({ isLoading, children }: LoadingProps): JSX.Element | null => {
@@ -12,5 +12,5 @@ export const Loading = ({ isLoading, children }: LoadingProps): JSX.Element | nu
     )
   }
 
-  return children
+  return children || null
 }

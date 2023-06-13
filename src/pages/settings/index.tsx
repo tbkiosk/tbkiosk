@@ -1,21 +1,15 @@
-import Head from 'next/head'
-import { getCsrfToken } from 'next-auth/react'
-import { SiweMessage } from 'siwe'
-import { useAccount, useNetwork, useSignMessage } from 'wagmi'
+import { useEffect } from 'react'
 import { toast } from 'react-toastify'
+import Head from 'next/head'
 
 import Layout from '@/layouts'
 import { Loading } from '@/components'
 
 import { useSessionGuard } from '@/hooks/auth/useSessionGuard'
 import { useUser } from '@/hooks/api/useUser'
-import { useEffect } from 'react'
 
 const Settings = () => {
   const { status } = useSessionGuard()
-  const { address } = useAccount()
-  const { chain } = useNetwork()
-  const { signMessageAsync } = useSignMessage()
   const { data, isLoading, error, isError } = useUser({ enabled: status === 'authenticated' })
 
   useEffect(() => {
@@ -32,25 +26,6 @@ const Settings = () => {
     }
   }, [isError])
 
-  const onSign = async () => {
-    try {
-      const message = new SiweMessage({
-        domain: window.location.host,
-        address,
-        statement: 'Sign in with Ethereum to Morphis Airdawg',
-        uri: window.location.origin,
-        version: '1',
-        chainId: chain?.id,
-        nonce: await getCsrfToken(),
-      })
-      const signature = await signMessageAsync({
-        message: message.prepareMessage(),
-      })
-    } catch (err) {
-      toast.error((err as Error)?.message || 'Failed to sign message')
-    }
-  }
-
   return (
     <>
       <Head>
@@ -63,7 +38,15 @@ const Settings = () => {
       <Layout>
         <div className="min-h-[540px] flex flex-col">
           <Loading isLoading={isLoading}>
-            <p onClick={onSign}>123</p>
+            <>
+              {data?.accounts.map(_account => (
+                <div key={_account.id}>
+                  {_account.isPrimary && <div>Primary</div>}
+                  <div className="">{_account.provider}</div>
+                  <div className="">{_account.providerAccountId}</div>
+                </div>
+              ))}
+            </>
           </Loading>
         </div>
       </Layout>

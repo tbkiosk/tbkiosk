@@ -1,25 +1,25 @@
-import { useQuery, type UseQueryOptions } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 
 import { request } from '@/utils/request'
 
-export const useUser = <T>(config?: Partial<UseQueryOptions>) => {
-  const query = useQuery({
+import type { UseQueryOptions } from '@tanstack/react-query'
+import type { ResponseBase } from '@/types/response'
+import type { UserResponse } from '@/pages/api/user'
+
+export const useUser = (options?: Partial<UseQueryOptions<UserResponse | undefined, Error>>) =>
+  useQuery<UserResponse | undefined, Error>({
     queryKey: ['user'],
     queryFn: async () => {
-      const { data, error } = await request<T>({
+      const { data, error } = await request<ResponseBase<UserResponse>>({
         url: '/api/user',
-        method: 'PUT',
       })
 
       if (error) {
         throw new Error(error)
       }
 
-      return data
+      return data?.data
     },
     retry: false,
-    ...config,
+    ...options,
   })
-
-  return query
-}

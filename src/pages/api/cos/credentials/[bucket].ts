@@ -19,7 +19,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<ST
 
     if ([TENCENT_COS_BUCKET, TENCENT_COS_DEV_BUCKET, TENCENT_COS_TEMP_BUCKET].indexOf(bucket as string) < 0) {
       return res.status(400).json({
-        message: 'Unknown bucket',
+        error: 'Unknown bucket',
       })
     }
 
@@ -32,9 +32,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<ST
     })
   }
 
-  return res.status(405).json({
-    message: 'Method not allowed',
-  })
+  return res.status(405).end()
 }
 
 export default handler
