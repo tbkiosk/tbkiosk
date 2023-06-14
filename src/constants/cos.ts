@@ -1,5 +1,1 @@
-export const TENCENT_COS_DEV_BUCKET = 'morphis-img-dev-1256253626'
-export const TENCENT_COS_BUCKET = 'morphis-img-prod-1256253626'
-export const TENCENT_COS_TEMP_BUCKET = 'morphis-img-temp-1256253626'
-export const TENCENT_COS_REGION = 'ap-singapore'
-export const TENCENT_COS_CDN_DOMAIN = 'cos.accelerate.myqcloud.com'
+export const AWS_S3_REGION = 'ap-southeast-1'

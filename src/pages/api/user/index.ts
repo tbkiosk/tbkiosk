@@ -20,7 +20,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<Us
 
   /**
    * @method GET
-   * @returns user with discord or twitter email by provider in users collection
+   * @returns user and related accounts
    */
   if (req.method === 'GET') {
     const user = await prismaClient.user.findFirst({
