@@ -7,7 +7,6 @@ import { SiweMessage } from 'siwe'
 
 import { prismaClient } from '@/lib/prisma'
 import { env } from '@/env.mjs'
-import { generateCodeChallenge } from '@/utils/pkce'
 
 import type { AuthOptions } from 'next-auth'
 import type { Adapter } from 'next-auth/adapters'
@@ -114,8 +113,7 @@ export const authOptions: AuthOptions = {
         params: {
           scope: 'users.read tweet.read follows.read like.read offline.access',
           state: Array.from(Array(8), () => Math.floor(Math.random() * 36).toString(36)).join(''), // a random string to prevent CSRF attacks
-          code_challenge: generateCodeChallenge(),
-          code_challenge_method: 'S256',
+          code_challenge_method: 's256',
         },
       },
     }),
@@ -125,6 +123,7 @@ export const authOptions: AuthOptions = {
   session: {
     strategy: 'jwt',
   },
+  events: {},
   callbacks: {
     jwt: async ({ token, user }) => {
       if (user) {
