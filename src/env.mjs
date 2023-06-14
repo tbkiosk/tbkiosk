@@ -9,8 +9,8 @@ export const env = createEnv({
     NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID: z.string().min(1),
     TWITTER_CLIENT_ID: z.string().min(1),
     TWITTER_CLIENT_SECRET: z.string().min(1),
-    TENCENT_COS_SECRET_ID: z.string().min(1),
-    TENCENT_COS_SECRET_KEY: z.string().min(1),
+    AWS_S3_SECRET_ID: z.string().min(1),
+    AWS_S3_SECRET_KEY: z.string().min(1),
   },
   client: {},
   runtimeEnv: {
@@ -20,7 +20,7 @@ export const env = createEnv({
     NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID: process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID,
     TWITTER_CLIENT_ID: process.env.TWITTER_CLIENT_ID,
     TWITTER_CLIENT_SECRET: process.env.TWITTER_CLIENT_SECRET,
-    TENCENT_COS_SECRET_ID: process.env.TENCENT_COS_SECRET_ID,
-    TENCENT_COS_SECRET_KEY: process.env.TENCENT_COS_SECRET_KEY,
+    AWS_S3_SECRET_ID: process.env.AWS_S3_SECRET_ID,
+    AWS_S3_SECRET_KEY: process.env.AWS_S3_SECRET_KEY,
   },
 })
