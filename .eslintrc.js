@@ -5,4 +5,7 @@ module.exports = {
     'plugin:storybook/recommended',
     'plugin:@tanstack/eslint-plugin-query/recommended',
   ],
+  rules: {
+    '@tanstack/query/exhaustive-deps': 'off',
+  },
 }
