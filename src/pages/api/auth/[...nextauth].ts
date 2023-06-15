@@ -2,6 +2,7 @@ import NextAuth from 'next-auth'
 import { getCsrfToken } from 'next-auth/react'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import TwitterProvider from 'next-auth/providers/twitter'
+import DiscordProvider from 'next-auth/providers/discord'
 import { PrismaAdapter } from '@auth/prisma-adapter'
 import { SiweMessage } from 'siwe'
 
@@ -117,13 +118,41 @@ export const authOptions: AuthOptions = {
         },
       },
     }),
+    DiscordProvider({
+      clientId: env.DISCORD_CLIENT_ID,
+      clientSecret: env.DISCORD_CLIENT_SECRET,
+      authorization: {
+        params: {
+          prompt: 'consent',
+          grant_type: 'authorization_code',
+          response_type: 'code',
+          scope: 'identify email guilds',
+        },
+      },
+    }),
   ],
   debug: process.env.NODE_ENV === 'development',
   secret: env.NEXTAUTH_SECRET,
   session: {
     strategy: 'jwt',
   },
-  events: {},
+  events: {
+    signIn: async ({ account, profile }) => {
+      if (account && (account.provider === 'twitter' || account.provider === 'discord')) {
+        await prismaClient.account.update({
+          where: {
+            provider_providerAccountId: {
+              provider: account.provider,
+              providerAccountId: account.providerAccountId,
+            },
+          },
+          data: {
+            providerAccountName: profile?.name,
+          },
+        })
+      }
+    },
+  },
   callbacks: {
     jwt: async ({ token, user }) => {
       if (user) {
