@@ -9,7 +9,7 @@
   "packageManager": "pnpm@8.0.0+",
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "pnpm prisma && next build",
     "build:analyze": "ANALYZE=true next build",
     "start": "next start",
     "prisma": "npx prisma generate",
