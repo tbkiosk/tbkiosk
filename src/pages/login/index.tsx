@@ -1,7 +1,7 @@
 import Head from 'next/head'
 
 import Layout from '@/layouts'
-import WalletConnectModal from '@/components/_shared/wallet_connect_modal'
+import WalletConnectModal from '@/components/__shared__/wallet_connect_modal'
 
 const Login = () => {
   return (

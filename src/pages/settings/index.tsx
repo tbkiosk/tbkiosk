@@ -1,10 +1,10 @@
 import { useEffect, useMemo } from 'react'
 import { toast } from 'react-toastify'
 import Head from 'next/head'
-import { signIn } from 'next-auth/react'
 
 import Layout from '@/layouts'
-import { Loading, Button } from '@/components'
+import { Loading } from '@/components'
+import { TwitterButton } from '@/components/__settings__/twitter_button'
 
 import { useSessionGuard } from '@/hooks/auth/useSessionGuard'
 import { useUser } from '@/hooks/api/useUser'
@@ -13,7 +13,7 @@ const Settings = () => {
   const { status } = useSessionGuard()
   const { data, isLoading, error, isError } = useUser({ enabled: status === 'authenticated' })
 
-  const twitterAccount = useMemo(() => data?.accounts.find(_account => _account.provider === 'twitter'), [data?.accounts])
+  const twitterAccount = useMemo(() => data?.accounts?.find(_account => _account.provider === 'twitter'), [data?.accounts])
 
   useEffect(() => {
     if (isError) {
@@ -45,8 +45,8 @@ const Settings = () => {
               <div>
                 <p className="font-bold">Ethereum accounts</p>
                 {data?.accounts
-                  .filter(_account => _account.provider === 'Ethereum')
-                  .map(_account => (
+                  ?.filter(_account => _account.provider === 'Ethereum')
+                  ?.map(_account => (
                     <div key={_account.id}>
                       {_account.isPrimary && <div>Primary</div>}
                       <div className="">{_account.provider}</div>
@@ -56,16 +56,7 @@ const Settings = () => {
               </div>
               <div>
                 <p className="font-bold">Twitter</p>
-                {!twitterAccount && (
-                  <Button
-                    className="!h-8 !w-auto"
-                    onClick={() => signIn('twitter', { callbackUrl: '/settings' })}
-                    variant="outlined"
-                  >
-                    Link Twitter
-                  </Button>
-                )}
-                {twitterAccount && <p>{twitterAccount.providerAccountId}</p>}
+                <TwitterButton twitterAccount={twitterAccount} />
               </div>
             </>
           </Loading>

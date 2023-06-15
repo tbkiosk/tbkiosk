@@ -10,7 +10,7 @@ import { mainnet, polygon } from 'wagmi/chains'
 import ErrorBoundary from './error_boundary'
 
 import { wagmiConfig } from '@/lib/wagmi'
-import { queryClient } from '@/lib/query_client'
+import { queryClient } from '@/lib/query'
 
 import type { AppProps } from 'next/app'
 
