@@ -5,14 +5,13 @@ import { prismaClient } from '@/lib/prisma'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
 
 import type { NextApiRequest, NextApiResponse } from 'next'
-import type { ResponseBase } from '@/types/response'
 import type { User, Account } from '@prisma/client'
 
 export type UserResponse = User & {
   accounts: Account[]
 }
 
-const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<UserResponse | null>>) => {
+const handler = async (req: NextApiRequest, res: NextApiResponse<UserResponse>) => {
   const session = await getServerSession(req, res, authOptions)
   if (!session) {
     return res.status(401).end()
@@ -29,9 +28,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<Us
       },
     })
     if (!user) {
-      return res.status(500).json({
-        error: 'User was not found. Please contact us',
-      })
+      return res.status(500).end('User was not found. Please contact us')
     }
 
     const accounts = await prismaClient.account.findMany({
@@ -40,16 +37,12 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseBase<Us
       },
     })
     if (!accounts?.length) {
-      return res.status(500).json({
-        error: 'Accounts were not found. Please contact us',
-      })
+      return res.status(500).end('Accounts were not found. Please contact us')
     }
 
     return res.status(200).json({
-      data: {
-        ...user,
-        accounts,
-      },
+      ...user,
+      accounts,
     })
   }
 

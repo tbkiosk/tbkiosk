@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 import type { AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios'
-import type { ResponseBase, ResponseError } from '@/types/response'
+import type { ResponseBase } from '@/types/response'
 
 const fetcher = <T>(config: AxiosRequestConfig): Promise<AxiosResponse<T>> => axios<T>({ ...config })
 
@@ -13,14 +13,20 @@ if (process.env.NODE_ENV !== 'production') {
   })
 }
 
-export const request = async <T>(config: AxiosRequestConfig): Promise<ResponseBase<T | undefined>> => {
+export const request = async <T, R = unknown>(config: AxiosRequestConfig): Promise<ResponseBase<T, R | string>> => {
   try {
-    const { data } = await fetcher<ResponseBase<T>>({ ...config })
+    const { data } = await fetcher<T>({ ...config })
 
-    return data
+    return { data }
   } catch (e) {
-    return {
-      error: (e as AxiosError<ResponseError>)?.response?.data?.error || (e as AxiosError<ResponseError>)?.response?.statusText,
+    if (axios.isAxiosError(e)) {
+      return {
+        error: (e as AxiosError<R>)?.response?.data || (e as AxiosError<R>)?.response?.statusText,
+      }
+    } else {
+      return {
+        error: (e as Error)?.message,
+      }
     }
   }
 }
