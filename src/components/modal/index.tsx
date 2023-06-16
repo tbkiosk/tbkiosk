@@ -34,7 +34,7 @@ export const Modal = ({ open, setOpen, children, classNames }: ModalProps) => {
         appear
         as="div"
         show={open}
-        className={cx('fixed inset-0 bg-black/50 z-[1200]', classNames)}
+        className={cx('fixed inset-0 bg-black/20 z-[1200]', classNames)}
         enter="transition-opacity duration-200"
         enterFrom="opacity-0"
         enterTo="opacity-100"

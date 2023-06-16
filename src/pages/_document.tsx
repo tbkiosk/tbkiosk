@@ -1,11 +1,11 @@
 import { Html, Head, Main, NextScript } from 'next/document'
 
-const Document = () => (
+const AppDocument = () => (
   <Html lang="en">
     <Head>
       <meta
         name="description"
-        content="morphis network"
+        content="morphis airdawg"
       />
       <meta charSet="UTF-8" />
       <link
@@ -26,4 +26,4 @@ const Document = () => (
   </Html>
 )
 
-export default Document
+export default AppDocument

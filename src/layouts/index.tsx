@@ -19,7 +19,7 @@ const Layout = ({ children, className }: LayoutProps) => {
       <header className="flex justify-between px-[160px] py-[40px]">
         <Link href="/discover">
           <Image
-            alt="artwork_4"
+            alt="logo"
             height="40"
             priority
             src="/icons/logo_with_text.svg"
