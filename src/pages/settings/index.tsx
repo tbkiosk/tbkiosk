@@ -5,6 +5,7 @@ import { signIn } from 'next-auth/react'
 
 import Layout from '@/layouts'
 import { Loading, Button } from '@/components'
+import NewETHButton from '@/components/__settings__/new_eth_button'
 
 import { useSessionGuard } from '@/hooks/auth/useSessionGuard'
 import { useUser } from '@/hooks/api/useUser'
@@ -13,6 +14,7 @@ const Settings = () => {
   const { status } = useSessionGuard()
   const { data, isLoading, error, isError } = useUser({ enabled: status === 'authenticated' })
 
+  const ethAccounts = useMemo(() => data?.accounts?.filter(_account => _account.provider === 'Ethereum'), [data?.accounts])
   const twitterAccount = useMemo(() => data?.accounts?.find(_account => _account.provider === 'twitter'), [data?.accounts])
   const discordAccount = useMemo(() => data?.accounts?.find(_account => _account.provider === 'discord'), [data?.accounts])
 
@@ -45,15 +47,14 @@ const Settings = () => {
             <>
               <div>
                 <p className="font-bold">Ethereum accounts</p>
-                {data?.accounts
-                  ?.filter(_account => _account.provider === 'Ethereum')
-                  ?.map(_account => (
-                    <div key={_account.id}>
-                      {_account.isPrimary && <div>Primary</div>}
-                      <div className="">{_account.provider}</div>
-                      <div className="">{_account.providerAccountId}</div>
-                    </div>
-                  ))}
+                {ethAccounts?.map(_account => (
+                  <div key={_account.id}>
+                    {_account.isPrimary && <div>Primary</div>}
+                    <div className="">{_account.provider}</div>
+                    <div className="">{_account.providerAccountId}</div>
+                  </div>
+                ))}
+                <NewETHButton />
               </div>
               <div>
                 <p className="font-bold">Twitter</p>
@@ -66,7 +67,15 @@ const Settings = () => {
                     Link Twitter
                   </Button>
                 )}
-                {twitterAccount && <p>@{twitterAccount?.providerAccountName}</p>}
+                {twitterAccount && (
+                  <a
+                    href="https://twitter.com"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    @{twitterAccount?.providerAccountName}
+                  </a>
+                )}
               </div>
               <div>
                 <p className="font-bold">Discord</p>
@@ -79,7 +88,15 @@ const Settings = () => {
                     Link Discord
                   </Button>
                 )}
-                {discordAccount && <p>@{discordAccount?.providerAccountName}</p>}
+                {discordAccount && (
+                  <a
+                    href="https://discord.com/app"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    @{discordAccount?.providerAccountName}
+                  </a>
+                )}
               </div>
             </>
           </Loading>

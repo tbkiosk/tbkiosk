@@ -4,13 +4,12 @@ import { request } from '@/utils/request'
 
 import type { UseQueryOptions } from '@tanstack/react-query'
 import type { UserResponse } from '@/pages/api/user'
-import type { ResponseBase } from '@/types/response'
 
 export const useUser = (options?: Partial<UseQueryOptions<UserResponse | undefined, Error>>) =>
   useQuery<UserResponse | undefined, Error>({
     queryKey: ['user'],
     queryFn: async () => {
-      const { data, error } = await request<ResponseBase<UserResponse>, string | undefined>({
+      const { data, error } = await request<UserResponse, string | undefined>({
         url: '/api/user',
       })
 
@@ -18,7 +17,7 @@ export const useUser = (options?: Partial<UseQueryOptions<UserResponse | undefin
         throw new Error(error)
       }
 
-      return data?.data
+      return data
     },
     retry: false,
     ...options,

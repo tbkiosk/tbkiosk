@@ -50,7 +50,7 @@ export const authOptions: AuthOptions = {
             throw new Error('Address not found')
           }
 
-          const target = await prismaClient.account.findFirst({
+          const _account = await prismaClient.account.findFirst({
             where: {
               providerAccountId: address,
             },
@@ -66,11 +66,11 @@ export const authOptions: AuthOptions = {
             },
           })
 
-          if (target) {
+          if (_account) {
             return {
-              id: target.userId,
-              name: target.user.name,
-              image: target.user.image,
+              id: _account.userId,
+              name: _account.user.name,
+              image: _account.user.image,
             }
           }
 
