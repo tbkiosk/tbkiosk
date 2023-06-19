@@ -8,6 +8,12 @@ import { authOptions } from '@/pages/api/auth/[...nextauth]'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import type { Account } from '@prisma/client'
 
+export type AccountUpdateReq = {
+  chain: string
+  address: string
+  signature: string
+}
+
 const handler = async (req: NextApiRequest, res: NextApiResponse<Account>) => {
   const session = await getServerSession(req, res, authOptions)
   if (!session) {
@@ -21,21 +27,34 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Account>) => {
    */
   if (req.method === 'POST') {
     const schema = z.object({
-      type: z.enum(['credentials']),
       chain: z.enum(['Ethereum']),
       address: z.string().min(1),
+      signature: z.string().min(1),
     })
 
     const result = schema.safeParse(req.body)
     if (!result.success) {
-      return res.status(400).end(result.error)
+      return res
+        .status(400)
+        .end(Object.entries(result.error.flatten().fieldErrors).reduce((acc, cur) => `${cur[0]}:${cur[1].toString()}.`, ''))
     }
 
     try {
+      const target = await prismaClient.account.findFirst({
+        where: {
+          provider: req.body.chain,
+          providerAccountId: req.body.address,
+        },
+      })
+
+      if (target) {
+        return res.status(400).end(`Address ${req.body.address} has already been connected`)
+      }
+
       const _account = await prismaClient.account.create({
         data: {
           userId: session.user.id,
-          type: req.body.type,
+          type: 'credentials',
           provider: req.body.chain,
           providerAccountId: req.body.address,
           isPrimary: false,

@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react'
+import { useMemo } from 'react'
 import { toast } from 'react-toastify'
 import Head from 'next/head'
 import { signIn } from 'next-auth/react'
@@ -12,14 +12,9 @@ import { useUser } from '@/hooks/api/useUser'
 
 const Settings = () => {
   const { status } = useSessionGuard()
-  const { data, isLoading, error, isError } = useUser({ enabled: status === 'authenticated' })
-
-  const ethAccounts = useMemo(() => data?.accounts?.filter(_account => _account.provider === 'Ethereum'), [data?.accounts])
-  const twitterAccount = useMemo(() => data?.accounts?.find(_account => _account.provider === 'twitter'), [data?.accounts])
-  const discordAccount = useMemo(() => data?.accounts?.find(_account => _account.provider === 'discord'), [data?.accounts])
-
-  useEffect(() => {
-    if (isError) {
+  const { data, isLoading, refetch } = useUser({
+    enabled: status === 'authenticated',
+    onError: error => {
       if (error instanceof Error) {
         toast.error(error.message)
         return
@@ -29,8 +24,12 @@ const Settings = () => {
         toast.error(error)
         return
       }
-    }
-  }, [isError])
+    },
+  })
+
+  const ethAccounts = useMemo(() => data?.accounts?.filter(_account => _account.provider === 'Ethereum'), [data?.accounts])
+  const twitterAccount = useMemo(() => data?.accounts?.find(_account => _account.provider === 'twitter'), [data?.accounts])
+  const discordAccount = useMemo(() => data?.accounts?.find(_account => _account.provider === 'discord'), [data?.accounts])
 
   return (
     <>
@@ -54,7 +53,7 @@ const Settings = () => {
                     <div className="">{_account.providerAccountId}</div>
                   </div>
                 ))}
-                <NewETHButton />
+                <NewETHButton onRefresh={() => refetch()} />
               </div>
               <div>
                 <p className="font-bold">Twitter</p>

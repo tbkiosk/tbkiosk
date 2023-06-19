@@ -8,14 +8,14 @@ import cx from 'classix'
 import WalletConnectModal from '@/components/__login__/wallet_connect_modal'
 
 const Login = () => {
-  // const { data: session } = useSession()
-  // const router = useRouter()
+  const { data: session } = useSession()
+  const router = useRouter()
 
-  // useEffect(() => {
-  //   if (session) {
-  //     router.push('/discover')
-  //   }
-  // }, [session, router])
+  useEffect(() => {
+    if (session) {
+      router.push('/discover')
+    }
+  }, [session, router])
 
   return (
     <>
