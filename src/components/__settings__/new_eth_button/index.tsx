@@ -86,12 +86,12 @@ const NewETHButton = ({ onRefresh }: NewETHButtonProps) => {
 
   return (
     <Button
-      className="!h-8 !w-auto"
+      className="!h-[74px] !w-full !rounded-3xl"
       loading={isLoading}
       onClick={() => handleConnectEth()}
-      variant="outlined"
+      variant="colored"
     >
-      Connect another ETH address
+      + Connect new wallet
     </Button>
   )
 }

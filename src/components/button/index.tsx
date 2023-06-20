@@ -11,7 +11,7 @@ const VARIANT_STYLES = {
     'bg-[var(--primary-color)] text-[var(--primary-text-color)] hover:bg-[var(--primary-color--hover)] active:bg-[var(--primary-color--active)]',
   outlined:
     'bg-[var(--secondary-color)] text-[var(--secondary-text-color)] border border-[var(--secondary-border-color)] hover:bg-[var(--secondary-color--hover)] active:bg-[var(--secondary-color--active)]',
-  colored: 'text-white button--colored',
+  colored: 'text-white button__colored',
 }
 
 const VARIANT_DISABLED_STYLES = {

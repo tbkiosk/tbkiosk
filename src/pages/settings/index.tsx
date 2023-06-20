@@ -2,6 +2,7 @@ import { useMemo } from 'react'
 import { toast } from 'react-toastify'
 import Head from 'next/head'
 import { signIn } from 'next-auth/react'
+import { cx } from 'classix'
 
 import Layout from '@/layouts'
 import { Loading, Button } from '@/components'
@@ -9,6 +10,8 @@ import NewETHButton from '@/components/__settings__/new_eth_button'
 
 import { useSessionGuard } from '@/hooks/auth/useSessionGuard'
 import { useUser } from '@/hooks/api/useUser'
+
+import { ellipsisMiddle } from '@/utils/address'
 
 const Settings = () => {
   const { status } = useSessionGuard()
@@ -41,63 +44,94 @@ const Settings = () => {
         />
       </Head>
       <Layout>
-        <div className="min-h-[540px] flex flex-col">
+        <div className="min-h-[540px] flex flex-col py-10">
           <Loading isLoading={isLoading}>
-            <>
-              <div>
-                <p className="font-bold">Ethereum accounts</p>
+            <div className="relative">
+              <p className="font-medium text-2xl">Manage your socials and wallets,</p>
+              <p className="mb-10 font-semibold text-[44px]">Settings ⚙️</p>
+              <div className="max-w-[600px] p-10 mb-10 border border-[#E2E2EA] rounded-3xl">
+                <p className="mb-10 font-medium text-2xl text-[#040607}">Socials</p>
+                <div className="flex items-center p-6 mb-10 border border-[#E2E2EA] rounded-3xl">
+                  <i className="fa-brands fa-discord mr-4 text-[21px] text-[#687EC9]" />
+                  {discordAccount?.providerAccountName ? (
+                    <>
+                      <a
+                        className="grow mr-4 text-[#07070B]"
+                        href="https://discord.com/app"
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        @{discordAccount.providerAccountName}
+                      </a>
+                      <button className="text-[#0062FF]">Disconnect</button>
+                    </>
+                  ) : (
+                    <>
+                      <span className="grow mr-4 text-[#B5B5BE]">Add Discord</span>
+                      <button
+                        className="text-[#0062FF]"
+                        onClick={() => signIn('discord', { callbackUrl: '/settings' })}
+                      >
+                        Add
+                      </button>
+                    </>
+                  )}
+                </div>
+                <div className="flex items-center p-6 mb-10 border border-[#E2E2EA] rounded-3xl">
+                  <i className="fa-brands fa-twitter mr-4 text-[21px] text-[#687EC9]" />
+                  {twitterAccount?.providerAccountName ? (
+                    <>
+                      <a
+                        className="grow mr-4 text-[#07070B]"
+                        href="https://twitter.com"
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        @{twitterAccount.providerAccountName}
+                      </a>
+                      <button className="text-[#0062FF]">Disconnect</button>
+                    </>
+                  ) : (
+                    <>
+                      <span className="grow mr-4 text-[#B5B5BE]">Add Twitter</span>
+                      <button
+                        className="text-[#0062FF]"
+                        onClick={() => signIn('twitter', { callbackUrl: '/settings' })}
+                      >
+                        Add
+                      </button>
+                    </>
+                  )}
+                </div>
+              </div>
+              <div className="max-w-[600px] p-10 border border-[#E2E2EA] rounded-3xl">
+                <p className="mb-10 font-medium text-2xl text-[#040607}">Connected wallets</p>
                 {ethAccounts?.map(_account => (
-                  <div key={_account.id}>
-                    {_account.isPrimary && <div>Primary</div>}
-                    <div className="">{_account.provider}</div>
-                    <div className="">{_account.providerAccountId}</div>
+                  <div
+                    className="flex items-center p-6 mb-10 border border-[#E2E2EA] rounded-3xl"
+                    key={_account.providerAccountId}
+                  >
+                    <i className="fa-brands fa-ethereum mr-4 text-[21px]" />
+                    <span className="grow">{ellipsisMiddle(_account.providerAccountId, { startLength: 6, endLength: 5 })}</span>
+                    <button className={cx('text-[#0062FF]', _account.isPrimary && 'text-[#B5B5BE]')}>Disconnect</button>
                   </div>
                 ))}
                 <NewETHButton onRefresh={() => refetch()} />
               </div>
-              <div>
-                <p className="font-bold">Twitter</p>
-                {!twitterAccount && (
-                  <Button
-                    className="!h-8 !w-auto"
-                    onClick={() => signIn('twitter', { callbackUrl: '/settings' })}
-                    variant="outlined"
-                  >
-                    Link Twitter
-                  </Button>
-                )}
-                {twitterAccount && (
-                  <a
-                    href="https://twitter.com"
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    @{twitterAccount?.providerAccountName}
-                  </a>
-                )}
+              <div className="absolute right-0 top-[136px] max-w-[600px] p-10 mb-10 border border-[#E2E2EA] rounded-3xl">
+                <p className="mb-10 font-medium text-2xl text-[#040607}">Help centre 🚨</p>
+                <p className="text-[#808191]">Having trouble in Airdawg? Please contact us for more question.</p>
+                <a className="text-[#0062FF] cursor-pointer">hello@airdawg.io</a>
+                <p className="text-[64px]">💌</p>
+                <Button
+                  className="w-full"
+                  loading={isLoading}
+                  variant="colored"
+                >
+                  Contact us
+                </Button>
               </div>
-              <div>
-                <p className="font-bold">Discord</p>
-                {!discordAccount && (
-                  <Button
-                    className="!h-8 !w-auto"
-                    onClick={() => signIn('discord', { callbackUrl: '/settings' })}
-                    variant="outlined"
-                  >
-                    Link Discord
-                  </Button>
-                )}
-                {discordAccount && (
-                  <a
-                    href="https://discord.com/app"
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    @{discordAccount?.providerAccountName}
-                  </a>
-                )}
-              </div>
-            </>
+            </div>
           </Loading>
         </div>
       </Layout>
