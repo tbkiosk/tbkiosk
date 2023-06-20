@@ -10,7 +10,7 @@ import { Button } from '@/components'
 import { request } from '@/utils/request'
 
 import type { Account } from '@prisma/client'
-import type { AccountUpdateReq } from '@/pages/api/user/account'
+import type { AccountCreateReq } from '@/pages/api/user/account'
 
 type NewETHButtonProps = {
   onRefresh: () => void
@@ -23,7 +23,7 @@ const NewETHButton = ({ onRefresh }: NewETHButtonProps) => {
   const { openConnectModal } = useConnectModal()
   const { openChainModal } = useChainModal()
   const { isLoading, mutate } = useMutation({
-    mutationFn: async (args: AccountUpdateReq) => {
+    mutationFn: async (args: AccountCreateReq) => {
       const { error } = await request<Account>({
         url: '/api/user/account',
         method: 'POST',

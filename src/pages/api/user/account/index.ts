@@ -8,10 +8,14 @@ import { authOptions } from '@/pages/api/auth/[...nextauth]'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import type { Account } from '@prisma/client'
 
-export type AccountUpdateReq = {
+export type AccountCreateReq = {
   chain: string
   address: string
   signature: string
+}
+
+export type AccountDeleteReq = {
+  id: string
 }
 
 const handler = async (req: NextApiRequest, res: NextApiResponse<Account>) => {
@@ -74,26 +78,24 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Account>) => {
    */
   if (req.method === 'DELETE') {
     const schema = z.object({
-      chain: z.enum(['Ethereum']),
-      address: z.string().min(1),
+      id: z.string().min(1),
     })
 
-    const result = schema.safeParse(req.body)
+    const result = schema.safeParse(req.query)
     if (!result.success) {
-      return res.status(400).end(result.error)
+      return res
+        .status(400)
+        .end(Object.entries(result.error.flatten().fieldErrors).reduce((acc, cur) => `${cur[0]}:${cur[1].toString()}.`, ''))
     }
 
     try {
-      await prismaClient.account.delete({
+      const _account = await prismaClient.account.delete({
         where: {
-          provider_providerAccountId: {
-            provider: req.body.chain,
-            providerAccountId: req.body.address,
-          },
+          id: req.query.id as string,
         },
       })
 
-      return res.status(200).end()
+      return res.status(200).json(_account)
     } catch (err) {
       return res.status(500).end((err as Error)?.message)
     }

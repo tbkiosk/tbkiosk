@@ -2,11 +2,11 @@ import { useMemo } from 'react'
 import { toast } from 'react-toastify'
 import Head from 'next/head'
 import { signIn } from 'next-auth/react'
-import { cx } from 'classix'
 
 import Layout from '@/layouts'
 import { Loading, Button } from '@/components'
 import NewETHButton from '@/components/__settings__/new_eth_button'
+import DisconnectButton from '@/components/__settings__/disconnect_button'
 
 import { useSessionGuard } from '@/hooks/auth/useSessionGuard'
 import { useUser } from '@/hooks/api/useUser'
@@ -113,7 +113,10 @@ const Settings = () => {
                   >
                     <i className="fa-brands fa-ethereum mr-4 text-[21px]" />
                     <span className="grow">{ellipsisMiddle(_account.providerAccountId, { startLength: 6, endLength: 5 })}</span>
-                    <button className={cx('text-[#0062FF]', _account.isPrimary && 'text-[#B5B5BE]')}>Disconnect</button>
+                    <DisconnectButton
+                      account={_account}
+                      onRefresh={() => refetch()}
+                    />
                   </div>
                 ))}
                 <NewETHButton onRefresh={() => refetch()} />
@@ -125,7 +128,6 @@ const Settings = () => {
                 <p className="text-[64px]">💌</p>
                 <Button
                   className="w-full"
-                  loading={isLoading}
                   variant="colored"
                 >
                   Contact us
