@@ -42,8 +42,8 @@ const DisconnectButton = ({ account, onRefresh }: DisconnectButtonProps) => {
 
   return (
     <Button
-      className={cx('text-[#0062FF] !w-auto !h-6 !border-0 !bg-white', account.isPrimary && 'text-[#B5B5BE]')}
-      disabled={!!account.isPrimary}
+      className={cx('!text-[#0062FF] !w-auto !h-6 !border-0 !bg-white', account.isPrimary && '!text-[#B5B5BE]')}
+      disabled={!['twitter', 'discord'].includes(account.provider) && !!account.isPrimary}
       loading={isLoading}
       onClick={() => !account.isPrimary && mutate({ id: account.id })}
       variant="outlined"

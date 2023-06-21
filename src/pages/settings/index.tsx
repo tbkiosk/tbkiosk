@@ -44,7 +44,7 @@ const Settings = () => {
         />
       </Head>
       <Layout>
-        <div className="min-h-[540px] flex flex-col py-10">
+        <div className="min-h-[540px] min-w-[1180px] flex flex-col py-10 overflow-x-auto">
           <Loading isLoading={isLoading}>
             <div className="relative">
               <p className="font-medium text-2xl">Manage your socials and wallets,</p>
@@ -63,22 +63,25 @@ const Settings = () => {
                       >
                         @{discordAccount.providerAccountName}
                       </a>
-                      <button className="text-[#0062FF]">Disconnect</button>
+                      <DisconnectButton
+                        account={discordAccount}
+                        onRefresh={() => refetch()}
+                      />
                     </>
                   ) : (
                     <>
                       <span className="grow mr-4 text-[#B5B5BE]">Add Discord</span>
-                      <button
-                        className="text-[#0062FF]"
+                      <Button
+                        className="!text-[#0062FF] !w-auto !h-6 !border-0 !bg-white"
                         onClick={() => signIn('discord', { callbackUrl: '/settings' })}
                       >
                         Add
-                      </button>
+                      </Button>
                     </>
                   )}
                 </div>
                 <div className="flex items-center p-6 mb-10 border border-[#E2E2EA] rounded-3xl">
-                  <i className="fa-brands fa-twitter mr-4 text-[21px] text-[#687EC9]" />
+                  <i className="fa-brands fa-twitter mr-4 text-[21px] text-[#47ACDF]" />
                   {twitterAccount?.providerAccountName ? (
                     <>
                       <a
@@ -89,17 +92,20 @@ const Settings = () => {
                       >
                         @{twitterAccount.providerAccountName}
                       </a>
-                      <button className="text-[#0062FF]">Disconnect</button>
+                      <DisconnectButton
+                        account={twitterAccount}
+                        onRefresh={() => refetch()}
+                      />
                     </>
                   ) : (
                     <>
                       <span className="grow mr-4 text-[#B5B5BE]">Add Twitter</span>
-                      <button
-                        className="text-[#0062FF]"
+                      <Button
+                        className="!text-[#0062FF] !w-auto !h-6 !border-0 !bg-white"
                         onClick={() => signIn('twitter', { callbackUrl: '/settings' })}
                       >
                         Add
-                      </button>
+                      </Button>
                     </>
                   )}
                 </div>
