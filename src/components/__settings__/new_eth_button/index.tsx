@@ -80,7 +80,7 @@ const NewETHButton = ({ onRefresh }: NewETHButtonProps) => {
         signature,
       })
     } catch (error) {
-      toast((error as Error)?.message || 'Failed to sign in')
+      toast.error((error as Error)?.message || 'Failed to sign in')
     }
   }
 

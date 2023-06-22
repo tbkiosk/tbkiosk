@@ -22,7 +22,7 @@ const EthButton = () => {
     try {
       const message = new SiweMessage({
         domain: window.location.host,
-        address: address,
+        address,
         statement: 'Sign in with Ethereum to Morphis Airdawg',
         uri: window.location.origin,
         version: '1',
@@ -32,14 +32,14 @@ const EthButton = () => {
       const signature = await signMessageAsync({
         message: message.prepareMessage(),
       })
-      signIn('credentials', {
+      signIn('Ethereum', {
         message: JSON.stringify(message),
         redirect: true,
         signature,
         callbackUrl: '/discover',
       })
     } catch (error) {
-      toast((error as Error)?.message || 'Failed to sign in')
+      toast.error((error as Error)?.message || 'Failed to sign in')
     }
   }
 
