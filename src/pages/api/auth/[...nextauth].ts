@@ -5,17 +5,21 @@ import TwitterProvider from 'next-auth/providers/twitter'
 import DiscordProvider from 'next-auth/providers/discord'
 import { PrismaAdapter } from '@auth/prisma-adapter'
 import { SiweMessage } from 'siwe'
+import { verifySignedMessage } from '@suiet/wallet-kit'
+import { fromB64, IntentScope, messageWithIntent } from '@mysten/sui.js'
 
 import { prismaClient } from '@/lib/prisma'
 import { env } from '@/env.mjs'
 
 import type { AuthOptions } from 'next-auth'
 import type { Adapter } from 'next-auth/adapters'
+import type { AuthMessage } from '@/types/auth'
 
 export const authOptions: AuthOptions = {
   adapter: PrismaAdapter(prismaClient) as Adapter,
   providers: [
     CredentialsProvider({
+      id: 'Ethereum',
       name: 'Ethereum',
       credentials: {
         message: {
@@ -29,7 +33,7 @@ export const authOptions: AuthOptions = {
           placeholder: '0x0',
         },
       },
-      async authorize(credentials, req) {
+      authorize: async (credentials, req) => {
         try {
           const siwe = new SiweMessage(JSON.parse(credentials?.message || '{}'))
           const nextAuthUrl = new URL(env.NEXTAUTH_URL)
@@ -53,6 +57,7 @@ export const authOptions: AuthOptions = {
           const _account = await prismaClient.account.findFirst({
             where: {
               providerAccountId: address,
+              provider: 'Ethereum',
             },
             select: {
               userId: true,
@@ -100,8 +105,98 @@ export const authOptions: AuthOptions = {
             id: user.id,
             name: user.address,
           }
-        } catch (e) {
-          console.error(e)
+        } catch (error) {
+          console.error(error)
+          return null
+        }
+      },
+    }),
+    CredentialsProvider({
+      id: 'Sui',
+      name: 'Sui',
+      credentials: {
+        message: {
+          label: 'Message',
+          type: 'text',
+          placeholder: '0x0',
+        },
+        signature: {
+          label: 'Signature',
+          type: 'text',
+          placeholder: '0x0',
+        },
+      },
+      authorize: async credentials => {
+        try {
+          const signature = JSON.parse(credentials?.message || '{}')
+          const result = verifySignedMessage(JSON.parse(credentials?.signature as string))
+
+          if (!result) {
+            throw new Error('Failed to verify signature')
+          }
+
+          const decodedMessage = messageWithIntent(IntentScope.PersonalMessage, fromB64(signature.messageBytes))
+          // eslint-disable-next-line no-control-regex
+          const message = JSON.parse(new TextDecoder().decode(decodedMessage).replace(/[\x00-\x1F\x7F-\xA0]+/g, '')) as AuthMessage
+          const address = message?.address
+
+          if (address) {
+            throw new Error('Address not found')
+          }
+
+          const _account = await prismaClient.account.findFirst({
+            where: {
+              providerAccountId: address,
+              provider: 'Sui',
+            },
+            select: {
+              userId: true,
+              providerAccountId: true,
+              user: {
+                select: {
+                  image: true,
+                  name: true,
+                },
+              },
+            },
+          })
+
+          if (_account) {
+            return {
+              id: _account.userId,
+              name: _account.user.name,
+              image: _account.user.image,
+            }
+          }
+
+          // if no existing user found, create a new one
+          const user = await prismaClient.$transaction(async () => {
+            const user = await prismaClient.user.create({
+              data: {
+                address,
+                name: address,
+                image: null,
+              },
+            })
+            await prismaClient.account.create({
+              data: {
+                userId: user.id,
+                type: 'credentials',
+                provider: 'Sui',
+                providerAccountId: address,
+                isPrimary: true,
+              },
+            })
+
+            return user
+          })
+
+          return {
+            id: user.id,
+            name: user.address,
+          }
+        } catch (error) {
+          console.error(error)
           return null
         }
       },
