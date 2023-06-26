@@ -128,8 +128,8 @@ export const authOptions: AuthOptions = {
       },
       authorize: async credentials => {
         try {
-          const signature = JSON.parse(credentials?.message || '{}')
-          const result = verifySignedMessage(JSON.parse(credentials?.signature as string))
+          const signature = JSON.parse(credentials?.signature as string)
+          const result = verifySignedMessage(signature)
 
           if (!result) {
             throw new Error('Failed to verify signature')
@@ -140,7 +140,7 @@ export const authOptions: AuthOptions = {
           const message = JSON.parse(new TextDecoder().decode(decodedMessage).replace(/[\x00-\x1F\x7F-\xA0]+/g, '')) as AuthMessage
           const address = message?.address
 
-          if (address) {
+          if (!address) {
             throw new Error('Address not found')
           }
 

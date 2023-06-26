@@ -1,6 +1,6 @@
 {
-  "name": "morphis-network",
-  "version": "0.2.0",
+  "name": "@morphis/airdawg",
+  "version": "0.3.0",
   "private": true,
   "engines": {
     "node": ">=16.18.0",

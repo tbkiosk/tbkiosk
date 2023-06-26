@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 import { toast } from 'react-toastify'
 import Head from 'next/head'
+import Image from 'next/image'
 import { signIn } from 'next-auth/react'
 
 import Layout from '@/layouts'
@@ -12,6 +13,11 @@ import { useSessionGuard } from '@/hooks/auth/useSessionGuard'
 import { useUser } from '@/hooks/api/useUser'
 
 import { ellipsisMiddle } from '@/utils/address'
+
+const COIN_ICON_MAP = new Map([
+  ['Ethereum', '/icons/chains/eth.svg'],
+  ['Sui', '/icons/chains/sui.svg'],
+])
 
 const Settings = () => {
   const { status } = useSessionGuard()
@@ -30,7 +36,10 @@ const Settings = () => {
     },
   })
 
-  const ethAccounts = useMemo(() => data?.accounts?.filter(_account => _account.provider === 'Ethereum'), [data?.accounts])
+  const walletAccounts = useMemo(
+    () => data?.accounts?.filter(_account => ['Ethereum', 'Sui'].includes(_account.provider)),
+    [data?.accounts]
+  )
   const twitterAccount = useMemo(() => data?.accounts?.find(_account => _account.provider === 'twitter'), [data?.accounts])
   const discordAccount = useMemo(() => data?.accounts?.find(_account => _account.provider === 'discord'), [data?.accounts])
 
@@ -112,12 +121,18 @@ const Settings = () => {
               </div>
               <div className="max-w-[600px] p-10 border border-[#E2E2EA] rounded-3xl">
                 <p className="mb-10 font-medium text-2xl text-[#040607}">Connected wallets</p>
-                {ethAccounts?.map(_account => (
+                {walletAccounts?.map(_account => (
                   <div
                     className="flex items-center p-6 mb-10 border border-[#E2E2EA] rounded-3xl"
                     key={_account.providerAccountId}
                   >
-                    <i className="fa-brands fa-ethereum mr-4 text-[21px]" />
+                    <Image
+                      alt={_account.provider}
+                      className="mr-4"
+                      height={21}
+                      src={COIN_ICON_MAP.get(_account.provider) || ''}
+                      width={21}
+                    />
                     <span className="grow">{ellipsisMiddle(_account.providerAccountId, { startLength: 6, endLength: 5 })}</span>
                     <DisconnectButton
                       account={_account}
