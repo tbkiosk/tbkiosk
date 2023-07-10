@@ -14,7 +14,9 @@ export const env = createEnv({
     AWS_S3_SECRET_ID: z.string().min(1),
     AWS_S3_SECRET_KEY: z.string().min(1),
   },
-  client: {},
+  client: {
+    NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID: z.string().min(1),
+  },
   runtimeEnv: {
     NEXTAUTH_URL: process.env.NEXTAUTH_URL,
     NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
