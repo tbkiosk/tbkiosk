@@ -7,6 +7,7 @@ import { RainbowKitSiweNextAuthProvider, GetSiweMessageOptions } from '@rainbow-
 import { WagmiConfig } from 'wagmi'
 import { mainnet, polygon } from 'wagmi/chains'
 import { WalletProvider } from '@suiet/wallet-kit'
+import { ColorSchemeProvider } from '@/providers/ColorSchemeProvider'
 
 import ErrorBoundary from './error_boundary'
 
@@ -37,9 +38,11 @@ const App = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => (
                   content="width=device-width, initial-scale=1"
                 />
               </Head>
-              <ErrorBoundary>
-                <Component {...pageProps} />
-              </ErrorBoundary>
+              <ColorSchemeProvider>
+                <ErrorBoundary>
+                  <Component {...pageProps} />
+                </ErrorBoundary>
+              </ColorSchemeProvider>
               <ToastContainer />
             </QueryClientProvider>
           </WalletProvider>
