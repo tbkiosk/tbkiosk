@@ -29,24 +29,27 @@ module.exports = {
       colors: {
         'black-30': '#EDEDEE',
         'black-100': '#222325',
-        'purple': {
-          '100': '#DADBFB',
-          '500': '#6266EB',
+        purple: {
+          100: '#DADBFB',
+          500: '#6266EB',
         },
         yellow: {
-          '100': '#F5FAD0',
-          '500': '#BBC860',
+          100: '#F5FAD0',
+          500: '#BBC860',
         },
-        orange:{
-          '100': '#FFF4DF',
-          '500': '#FFC85F',
+        orange: {
+          100: '#FFF4DF',
+          500: '#FFC85F',
         },
-        violet:{
-          '100': '#FEDFFF',
-          '500': '#FC7DFF',
-        }
+        violet: {
+          100: '#FEDFFF',
+          500: '#FC7DFF',
+        },
       },
     },
+  },
+  corePlugins: {
+    preflight: false,
   },
   plugins: [],
 }

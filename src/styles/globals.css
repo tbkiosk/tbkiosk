@@ -2,9 +2,6 @@
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
 
-@import url('./scrollbar.css');
-@import url('./variables.css');
-
 @font-face {
   font-family: satoshi;
   font-weight: 300;
@@ -88,6 +85,11 @@ body,
 a {
   color: inherit;
   text-decoration: none;
+}
+
+img {
+  height: auto;
+  max-width: 100%;
 }
 
 select::-ms-expand {
