@@ -1,13 +1,13 @@
 import Head from 'next/head'
 import { SessionProvider } from 'next-auth/react'
-import { ToastContainer } from 'react-toastify'
 import { QueryClientProvider } from '@tanstack/react-query'
 import { RainbowKitProvider } from '@rainbow-me/rainbowkit'
 import { RainbowKitSiweNextAuthProvider, GetSiweMessageOptions } from '@rainbow-me/rainbowkit-siwe-next-auth'
 import { WagmiConfig } from 'wagmi'
 import { mainnet, polygon } from 'wagmi/chains'
 import { WalletProvider } from '@suiet/wallet-kit'
-import { ColorSchemeProvider } from '@/providers/ColorSchemeProvider'
+
+import { AggregatedMantineProvider } from '@/providers/aggregated_mantine_provider'
 
 import ErrorBoundary from './error_boundary'
 
@@ -16,7 +16,6 @@ import { queryClient } from '@/lib/query'
 
 import type { AppProps } from 'next/app'
 
-import 'react-toastify/dist/ReactToastify.css'
 import '@rainbow-me/rainbowkit/styles.css'
 import '@suiet/wallet-kit/style.css'
 import '../styles/globals.css'
@@ -38,12 +37,11 @@ const App = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => (
                   content="width=device-width, initial-scale=1"
                 />
               </Head>
-              <ColorSchemeProvider>
+              <AggregatedMantineProvider>
                 <ErrorBoundary>
                   <Component {...pageProps} />
                 </ErrorBoundary>
-              </ColorSchemeProvider>
-              <ToastContainer />
+              </AggregatedMantineProvider>
             </QueryClientProvider>
           </WalletProvider>
         </RainbowKitProvider>
