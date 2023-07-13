@@ -4,7 +4,7 @@ import { useLocalStorage, useHotkeys } from '@mantine/hooks'
 
 import type { SingleNode } from '@/types/react_node'
 
-export const AggregatedMantineProvider = ({ children }: SingleNode) => {
+export const MantineUIProvider = ({ children }: SingleNode) => {
   const [colorScheme, setColorScheme] = useLocalStorage<ColorScheme>({
     key: 'mantine-color-scheme',
     defaultValue: 'light',

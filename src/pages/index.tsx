@@ -4,20 +4,7 @@ import Head from 'next/head'
 import Link from 'next/link'
 import Image from 'next/image'
 import cx from 'classix'
-import {
-  Header,
-  Footer,
-  Modal,
-  Burger,
-  Button,
-  Flex,
-  Center,
-  Anchor,
-  Text,
-  rem,
-  useMantineColorScheme,
-  useMantineTheme,
-} from '@mantine/core'
+import { Header, Footer, Modal, Burger, Button, Flex, Center, Anchor, Text, rem, useMantineColorScheme } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 
 import Logo from '@/assets/icons/logo'
@@ -76,7 +63,6 @@ const useScrollTranslate = ({ target, translateRange, maxTop }: ScrollTranslateO
 
 const Index = () => {
   const { colorScheme } = useMantineColorScheme()
-  const theme = useMantineTheme()
 
   const [opened, { toggle, close }] = useDisclosure(false)
 

@@ -7,7 +7,7 @@ import { WagmiConfig } from 'wagmi'
 import { mainnet, polygon } from 'wagmi/chains'
 import { WalletProvider } from '@suiet/wallet-kit'
 
-import { AggregatedMantineProvider } from '@/providers/aggregated_mantine_provider'
+import { MantineUIProvider } from '@/providers/mantine'
 
 import ErrorBoundary from './error_boundary'
 
@@ -37,11 +37,11 @@ const App = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => (
                   content="width=device-width, initial-scale=1"
                 />
               </Head>
-              <AggregatedMantineProvider>
+              <MantineUIProvider>
                 <ErrorBoundary>
                   <Component {...pageProps} />
                 </ErrorBoundary>
-              </AggregatedMantineProvider>
+              </MantineUIProvider>
             </QueryClientProvider>
           </WalletProvider>
         </RainbowKitProvider>
