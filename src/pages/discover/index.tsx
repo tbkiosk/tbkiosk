@@ -1,7 +1,5 @@
 import Head from 'next/head'
 
-import Layout from '@/layouts'
-
 import { useSessionGuard } from '@/hooks/auth/useSessionGuard'
 
 const Discover = () => {
@@ -16,9 +14,7 @@ const Discover = () => {
           content="Morphis Airdawg discover"
         />
       </Head>
-      <Layout>
-        <h1>discover</h1>
-      </Layout>
+      <h1>discover</h1>
     </>
   )
 }
