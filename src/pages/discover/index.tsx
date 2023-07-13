@@ -1,10 +1,29 @@
 import Head from 'next/head'
+import { AppShell, Container, Title, rem } from '@mantine/core'
 
-import { useSessionGuard } from '@/hooks/auth/useSessionGuard'
+import { UserProvider } from '@/providers/user'
+
+import { Header } from '@/components'
 
 const Discover = () => {
-  useSessionGuard()
+  return (
+    <AppShell
+      header={<Header />}
+      padding="md"
+    >
+      <Container
+        maw={rem(1440)}
+        pt={rem(48)}
+        px={rem(64)}
+      >
+        <Title order={4}>Hi</Title>
+        <Title order={1}>Discover 📌</Title>
+      </Container>
+    </AppShell>
+  )
+}
 
+const DiscoverWrapper = () => {
   return (
     <>
       <Head>
@@ -14,9 +33,11 @@ const Discover = () => {
           content="Morphis Airdawg discover"
         />
       </Head>
-      <h1>discover</h1>
+      <UserProvider>
+        <Discover />
+      </UserProvider>
     </>
   )
 }
 
-export default Discover
+export default DiscoverWrapper

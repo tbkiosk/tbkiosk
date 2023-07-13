@@ -19,8 +19,10 @@ import {
 } from '@mantine/core'
 import { notifications } from '@mantine/notifications'
 import { useMutation } from '@tanstack/react-query'
+import { cx } from 'classix'
 
 import { UserProvider, UserContext } from '@/providers/user'
+
 import { Header } from '@/components'
 
 import { request } from '@/utils/request'
@@ -97,6 +99,7 @@ const Settings = () => {
       <Container
         maw={rem(1440)}
         pt={rem(48)}
+        px={rem(64)}
       >
         <Title order={4}>Manage your socials and wallets,</Title>
         <Title order={1}>Settings ⚙️</Title>
@@ -231,7 +234,7 @@ const Settings = () => {
                     >
                       <span>
                         <Button
-                          className="!bg-transparent"
+                          className={cx('!bg-transparent', !!_account.isPrimary && colorScheme === 'dark' && '!text-gray-500')}
                           disabled={!!_account.isPrimary}
                           onClick={() => onAddOrDisconnectTwitter()}
                           p={0}
@@ -245,7 +248,7 @@ const Settings = () => {
                 </Card>
               ))}
               <Button
-                color={colorScheme === 'dark' ? 'dark.4' : 'gray.3'}
+                color={colorScheme === 'dark' ? 'pink.7' : 'pink.3'}
                 fullWidth
                 h={rem(48)}
                 radius="md"

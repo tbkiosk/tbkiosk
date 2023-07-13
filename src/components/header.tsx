@@ -1,6 +1,6 @@
 import { useContext } from 'react'
 import Link from 'next/link'
-import { Header as MantineHeader, Container, Flex, Avatar, ActionIcon, Indicator, Box, Text, rem } from '@mantine/core'
+import { Header as MantineHeader, Container, Flex, Avatar, ActionIcon, Indicator, Text, rem } from '@mantine/core'
 
 import { UserContext } from '@/providers/user'
 
@@ -14,7 +14,10 @@ const Header = () => {
       height="72"
       p="md"
     >
-      <Container maw={rem(1440)}>
+      <Container
+        maw={rem(1440)}
+        px={rem(64)}
+      >
         <Flex justify="space-between">
           <Flex
             align="center"
@@ -26,14 +29,44 @@ const Header = () => {
             align="center"
             gap={rem(24)}
           >
-            <Box>
+            <Flex gap="lg">
               <Link
                 className="transition:opcaity hover:opacity-70"
                 href="/discover"
               >
-                <Text fw={700}>Discover</Text>
+                <Text
+                  className={
+                    /\/rewards/.test(location.href)
+                      ? `before:content-[''] before:absolute before:inset-x-0 before:mx-auto before:bottom-0 before:rounded-full before:h-[3px] before:w-[50%] before:bg-gradient-to-r before:from-[#FD7E14] before:to-[#E64980]`
+                      : ''
+                  }
+                  fw={700}
+                  gradient={/\/rewards/.test(location.href) ? { from: 'orange', to: 'pink', deg: 45 } : undefined}
+                  pos="relative"
+                  variant={/\/rewards/.test(location.href) ? 'gradient' : 'text'}
+                >
+                  Rewards
+                </Text>
               </Link>
-            </Box>
+              <Link
+                className="transition:opcaity hover:opacity-70"
+                href="/discover"
+              >
+                <Text
+                  className={
+                    /\/discover/.test(location.href)
+                      ? `before:content-[''] before:absolute before:inset-x-0 before:mx-auto before:bottom-0 before:rounded-full before:h-[3px] before:w-[50%] before:bg-gradient-to-r before:from-[#FD7E14] before:to-[#E64980]`
+                      : ''
+                  }
+                  fw={700}
+                  gradient={/\/discover/.test(location.href) ? { from: 'orange', to: 'pink', deg: 45 } : undefined}
+                  pos="relative"
+                  variant={/\/discover/.test(location.href) ? 'gradient' : 'text'}
+                >
+                  Discover
+                </Text>
+              </Link>
+            </Flex>
             <Indicator
               color="red"
               offset={4}
