@@ -1,48 +1,297 @@
-import { useMemo } from 'react'
-import { toast } from 'react-toastify'
+import { useContext, useMemo } from 'react'
 import Head from 'next/head'
-import Image from 'next/image'
 import { signIn } from 'next-auth/react'
+import {
+  AppShell,
+  Container,
+  Title,
+  Grid,
+  Flex,
+  Card,
+  Button,
+  Text,
+  Anchor,
+  LoadingOverlay,
+  Tooltip,
+  Image,
+  rem,
+  useMantineColorScheme,
+} from '@mantine/core'
+import { notifications } from '@mantine/notifications'
+import { useMutation } from '@tanstack/react-query'
 
-import Layout from '@/layouts'
-import { Loading, Button } from '@/components'
-import NewETHButton from '@/components/__settings__/new_eth_button'
-import DisconnectButton from '@/components/__settings__/disconnect_button'
+import { UserProvider, UserContext } from '@/providers/user'
+import { Header } from '@/components'
 
-import { useSessionGuard } from '@/hooks/auth/useSessionGuard'
-import { useUser } from '@/hooks/api/useUser'
-
+import { request } from '@/utils/request'
 import { ellipsisMiddle } from '@/utils/address'
 
-const COIN_ICON_MAP = new Map([
-  ['Ethereum', '/icons/chains/eth.svg'],
-  ['Sui', '/icons/chains/sui.svg'],
-])
+import type { Account } from '@prisma/client'
+import type { AccountDeleteReq } from '@/pages/api/user/account'
 
 const Settings = () => {
-  const { status } = useSessionGuard()
-  const { data, isLoading, refetch } = useUser({
-    enabled: status === 'authenticated',
-    onError: error => {
-      if (error instanceof Error) {
-        toast.error(error.message)
-        return
+  const { colorScheme } = useMantineColorScheme()
+
+  const { accounts, refetch } = useContext(UserContext)
+
+  const { isLoading: isDisconnecting, mutate: disconnect } = useMutation({
+    mutationFn: async (args: AccountDeleteReq) => {
+      const { error, data } = await request<Account>({
+        url: '/api/user/account',
+        method: 'DELETE',
+        params: {
+          id: args.id,
+        },
+      })
+
+      if (error) {
+        throw new Error(error as string)
       }
 
-      if (typeof error === 'string') {
-        toast.error(error)
-        return
-      }
+      return data
+    },
+    onSuccess: account => {
+      notifications.show({
+        color: 'green',
+        title: 'Success',
+        message: `Successfully disconnected ${account?.providerAccountId}`,
+      })
+      refetch()
+    },
+    onError: error => {
+      notifications.show({
+        color: 'red',
+        title: 'Error',
+        message: (error as Error)?.message || 'Failed to connect new Ethereum address',
+      })
     },
   })
 
-  const walletAccounts = useMemo(
-    () => data?.accounts?.filter(_account => ['Ethereum', 'Sui'].includes(_account.provider)),
-    [data?.accounts]
-  )
-  const twitterAccount = useMemo(() => data?.accounts?.find(_account => _account.provider === 'twitter'), [data?.accounts])
-  const discordAccount = useMemo(() => data?.accounts?.find(_account => _account.provider === 'discord'), [data?.accounts])
+  const walletAccounts = useMemo(() => accounts?.filter(_account => ['Ethereum', 'Sui'].includes(_account.provider)), [accounts])
+  const twitterAccount = useMemo(() => accounts?.find(_account => _account.provider === 'twitter'), [accounts])
+  const discordAccount = useMemo(() => accounts?.find(_account => _account.provider === 'discord'), [accounts])
 
+  const onAddOrDisconnectDiscord = () => {
+    if (discordAccount) {
+      disconnect(discordAccount)
+      return
+    }
+
+    signIn('discord', { callbackUrl: '/settings' })
+  }
+
+  const onAddOrDisconnectTwitter = () => {
+    if (twitterAccount) {
+      disconnect(twitterAccount)
+      return
+    }
+
+    signIn('twitter', { callbackUrl: '/settings' })
+  }
+
+  return (
+    <AppShell
+      header={<Header />}
+      padding="md"
+    >
+      <Container
+        maw={rem(1440)}
+        pt={rem(48)}
+      >
+        <Title order={4}>Manage your socials and wallets,</Title>
+        <Title order={1}>Settings ⚙️</Title>
+        <Grid
+          gutter={rem(48)}
+          mt={rem(48)}
+        >
+          <Grid.Col span={6}>
+            <Card
+              h="306px"
+              mb={rem(48)}
+              padding="xl"
+              pos="relative"
+              radius="lg"
+              withBorder
+            >
+              <LoadingOverlay visible={isDisconnecting} />
+              <Title
+                mb={rem(40)}
+                order={3}
+              >
+                Socials
+              </Title>
+              <Card
+                mb={rem(32)}
+                radius="lg"
+                withBorder
+              >
+                <Flex align="center">
+                  <i className="fa-brands fa-discord mr-4 text-xl text-[#7289da]" />
+                  {discordAccount ? (
+                    <Anchor
+                      href="https://discord.com/app"
+                      target="_blank"
+                      truncate
+                      w="100%"
+                    >
+                      @{discordAccount?.providerAccountName}
+                    </Anchor>
+                  ) : (
+                    <Text
+                      c="gray"
+                      truncate
+                      w="100%"
+                    >
+                      Add Discord
+                    </Text>
+                  )}
+                  <Button
+                    className="!bg-transparent"
+                    onClick={() => onAddOrDisconnectDiscord()}
+                    p={0}
+                    variant="subtle"
+                  >
+                    {discordAccount ? 'Disconnect' : 'Add'}
+                  </Button>
+                </Flex>
+              </Card>
+              <Card
+                radius="lg"
+                withBorder
+              >
+                <Flex align="center">
+                  <i className="fa-brands fa-twitter mr-4 text-xl text-[#1D9BF0]" />
+                  {twitterAccount ? (
+                    <Text
+                      truncate
+                      w="100%"
+                    >
+                      {twitterAccount?.providerAccountName}
+                    </Text>
+                  ) : (
+                    <Text
+                      c="gray"
+                      truncate
+                      w="100%"
+                    >
+                      Add Twitter
+                    </Text>
+                  )}
+                  <Button
+                    className="!bg-transparent"
+                    onClick={() => onAddOrDisconnectTwitter()}
+                    p={0}
+                    variant="subtle"
+                  >
+                    {twitterAccount ? 'Disconnect' : 'Add'}
+                  </Button>
+                </Flex>
+              </Card>
+            </Card>
+            <Card
+              padding="xl"
+              radius="lg"
+              withBorder
+            >
+              <Title
+                mb={rem(40)}
+                order={3}
+              >
+                Connected wallets
+              </Title>
+              {walletAccounts?.map(_account => (
+                <Card
+                  key={_account.id}
+                  mb={rem(32)}
+                  radius="lg"
+                  withBorder
+                >
+                  <Flex align="center">
+                    <Image
+                      alt={_account.provider}
+                      className="shrink-0"
+                      height={rem(24)}
+                      mr={rem(16)}
+                      radius="xl"
+                      src={`/icons/chains/${_account.provider.toLocaleLowerCase()}.svg`}
+                      width={rem(24)}
+                    />
+                    <Text
+                      truncate
+                      w="100%"
+                    >
+                      {ellipsisMiddle(_account.providerAccountId)}
+                    </Text>
+                    <Tooltip
+                      disabled={!_account.isPrimary}
+                      label="Primary wallet address cannot be disconnected"
+                      position="top"
+                      withArrow
+                      withinPortal
+                    >
+                      <span>
+                        <Button
+                          className="!bg-transparent"
+                          disabled={!!_account.isPrimary}
+                          onClick={() => onAddOrDisconnectTwitter()}
+                          p={0}
+                          variant="subtle"
+                        >
+                          Disconnect
+                        </Button>
+                      </span>
+                    </Tooltip>
+                  </Flex>
+                </Card>
+              ))}
+              <Button
+                color={colorScheme === 'dark' ? 'dark.4' : 'gray.3'}
+                fullWidth
+                h={rem(48)}
+                radius="md"
+                variant="outline"
+              >
+                <Text
+                  gradient={{ from: 'orange', to: 'pink', deg: 45 }}
+                  variant="gradient"
+                >
+                  + Connect new wallet
+                </Text>
+              </Button>
+            </Card>
+          </Grid.Col>
+          <Grid.Col span={6}>
+            <Card
+              h="306px"
+              padding="xl"
+              radius="lg"
+              withBorder
+            >
+              <Title
+                mb={rem(40)}
+                order={3}
+              >
+                Help centre 🚨
+              </Title>
+              <Text>Having trouble in Airdawg? Please contact us for more question.</Text>
+              <Anchor href="">hello@airdawg.io</Anchor>
+              <Text size={rem(64)}>💌</Text>
+              <Button
+                h={rem(48)}
+                radius="md"
+                fullWidth
+              >
+                Contact us
+              </Button>
+            </Card>
+          </Grid.Col>
+        </Grid>
+      </Container>
+    </AppShell>
+  )
+}
+
+const SettingsWrapper = () => {
   return (
     <>
       <Head>
@@ -52,114 +301,11 @@ const Settings = () => {
           content="Morphis Airdawg settings"
         />
       </Head>
-      <Layout>
-        <div className="min-h-[540px] min-w-[1180px] flex flex-col py-10 overflow-x-auto">
-          <Loading isLoading={isLoading}>
-            <div className="relative">
-              <p className="font-medium text-2xl">Manage your socials and wallets,</p>
-              <p className="mb-10 font-semibold text-[44px]">Settings ⚙️</p>
-              <div className="max-w-[600px] p-10 mb-10 border border-[#E2E2EA] rounded-3xl">
-                <p className="mb-10 font-medium text-2xl text-[#040607}">Socials</p>
-                <div className="flex items-center p-6 mb-10 border border-[#E2E2EA] rounded-3xl">
-                  <i className="fa-brands fa-discord mr-4 text-[21px] text-[#687EC9]" />
-                  {discordAccount?.providerAccountName ? (
-                    <>
-                      <a
-                        className="grow mr-4 text-[#07070B]"
-                        href="https://discord.com/app"
-                        target="_blank"
-                        rel="noreferrer"
-                      >
-                        @{discordAccount.providerAccountName}
-                      </a>
-                      <DisconnectButton
-                        account={discordAccount}
-                        onRefresh={() => refetch()}
-                      />
-                    </>
-                  ) : (
-                    <>
-                      <span className="grow mr-4 text-[#B5B5BE]">Add Discord</span>
-                      <Button
-                        className="!text-[#0062FF] !w-auto !h-6 !border-0 !bg-white"
-                        onClick={() => signIn('discord', { callbackUrl: '/settings' })}
-                      >
-                        Add
-                      </Button>
-                    </>
-                  )}
-                </div>
-                <div className="flex items-center p-6 mb-10 border border-[#E2E2EA] rounded-3xl">
-                  <i className="fa-brands fa-twitter mr-4 text-[21px] text-[#47ACDF]" />
-                  {twitterAccount?.providerAccountName ? (
-                    <>
-                      <a
-                        className="grow mr-4 text-[#07070B]"
-                        href="https://twitter.com"
-                        target="_blank"
-                        rel="noreferrer"
-                      >
-                        @{twitterAccount.providerAccountName}
-                      </a>
-                      <DisconnectButton
-                        account={twitterAccount}
-                        onRefresh={() => refetch()}
-                      />
-                    </>
-                  ) : (
-                    <>
-                      <span className="grow mr-4 text-[#B5B5BE]">Add Twitter</span>
-                      <Button
-                        className="!text-[#0062FF] !w-auto !h-6 !border-0 !bg-white"
-                        onClick={() => signIn('twitter', { callbackUrl: '/settings' })}
-                      >
-                        Add
-                      </Button>
-                    </>
-                  )}
-                </div>
-              </div>
-              <div className="max-w-[600px] p-10 border border-[#E2E2EA] rounded-3xl">
-                <p className="mb-10 font-medium text-2xl text-[#040607}">Connected wallets</p>
-                {walletAccounts?.map(_account => (
-                  <div
-                    className="flex items-center p-6 mb-10 border border-[#E2E2EA] rounded-3xl"
-                    key={_account.providerAccountId}
-                  >
-                    <Image
-                      alt={_account.provider}
-                      className="mr-4"
-                      height={21}
-                      src={COIN_ICON_MAP.get(_account.provider) || ''}
-                      width={21}
-                    />
-                    <span className="grow">{ellipsisMiddle(_account.providerAccountId, { startLength: 6, endLength: 5 })}</span>
-                    <DisconnectButton
-                      account={_account}
-                      onRefresh={() => refetch()}
-                    />
-                  </div>
-                ))}
-                <NewETHButton onRefresh={() => refetch()} />
-              </div>
-              <div className="absolute right-0 top-[136px] max-w-[600px] p-10 mb-10 border border-[#E2E2EA] rounded-3xl">
-                <p className="mb-10 font-medium text-2xl text-[#040607}">Help centre 🚨</p>
-                <p className="text-[#808191]">Having trouble in Airdawg? Please contact us for more question.</p>
-                <a className="text-[#0062FF] cursor-pointer">hello@airdawg.io</a>
-                <p className="text-[64px]">💌</p>
-                <Button
-                  className="w-full"
-                  variant="colored"
-                >
-                  Contact us
-                </Button>
-              </div>
-            </div>
-          </Loading>
-        </div>
-      </Layout>
+      <UserProvider>
+        <Settings />
+      </UserProvider>
     </>
   )
 }
 
-export default Settings
+export default SettingsWrapper
