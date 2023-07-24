@@ -36,24 +36,6 @@ const Header = () => {
               >
                 <Text
                   className={
-                    /\/rewards/.test(location.href)
-                      ? `before:content-[''] before:absolute before:inset-x-0 before:mx-auto before:bottom-0 before:rounded-full before:h-[3px] before:w-[50%] before:bg-gradient-to-r before:from-[#FD7E14] before:to-[#E64980]`
-                      : ''
-                  }
-                  fw={700}
-                  gradient={/\/rewards/.test(location.href) ? { from: 'orange', to: 'pink', deg: 45 } : undefined}
-                  pos="relative"
-                  variant={/\/rewards/.test(location.href) ? 'gradient' : 'text'}
-                >
-                  Rewards
-                </Text>
-              </Link>
-              <Link
-                className="transition:opcaity hover:opacity-70"
-                href="/discover"
-              >
-                <Text
-                  className={
                     /\/discover/.test(location.href)
                       ? `before:content-[''] before:absolute before:inset-x-0 before:mx-auto before:bottom-0 before:rounded-full before:h-[3px] before:w-[50%] before:bg-gradient-to-r before:from-[#FD7E14] before:to-[#E64980]`
                       : ''

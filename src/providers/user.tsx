@@ -32,6 +32,7 @@ export const UserProvider = ({ children }: SingleNode) => {
         return
       }
     },
+    refetchOnWindowFocus: false,
   })
 
   return (
