@@ -15,8 +15,10 @@ import {
   Grid,
   Card,
   ScrollArea,
+  ActionIcon,
   rem,
 } from '@mantine/core'
+import { useToggle } from '@mantine/hooks'
 
 import { UserProvider } from '@/providers/user'
 
@@ -87,102 +89,135 @@ const featuredProjects: Project[] = [
   },
 ]
 
-const ProjectCard = ({ id, icon, name, verified, desc, categories, isHottest }: Project & { isHottest: boolean }) => (
-  <Link href={`/discover/${id}`}>
-    <Card
-      h={isHottest ? 420 : 260}
-      padding="lg"
-      pb="sm"
-      pos="relative"
-      radius="lg"
-      withBorder
-    >
-      <Flex
-        direction="column"
-        h="100%"
+const ProjectCard = ({ id, icon, name, verified, desc, categories, isHottest }: Project & { isHottest: boolean }) => {
+  const [liked, toggle] = useToggle()
+
+  return (
+    <Link href={`/discover/${id}`}>
+      <Card
+        h={isHottest ? 420 : 260}
+        padding="lg"
+        pb="sm"
+        pos="relative"
+        radius="lg"
+        withBorder
       >
-        {isHottest ? (
-          <>
-            <Image
-              alt="logo"
-              height={100}
-              mb="lg"
-              radius={50}
-              src={`https://picsum.photos/seed/${icon}/100`}
-              width={100}
-            />
+        <Box
+          pos="absolute"
+          right={24}
+          top={24}
+        >
+          <ActionIcon
+            color="gray.2"
+            onClick={e => {
+              e.preventDefault()
+              e.stopPropagation()
+              toggle()
+            }}
+            size="lg"
+            radius="xl"
+            variant="outline"
+          >
+            {liked ? (
+              <i
+                className="fa-solid fa-heart"
+                style={{ color: '#f03e3e' }}
+              />
+            ) : (
+              <i
+                className="fa-regular fa-heart"
+                style={{ color: '#44444f' }}
+              />
+            )}
+          </ActionIcon>
+        </Box>
+        <Flex
+          direction="column"
+          h="100%"
+        >
+          {isHottest ? (
+            <>
+              <Image
+                alt="logo"
+                height={100}
+                mb="lg"
+                radius={50}
+                src={`https://picsum.photos/seed/${icon}/100`}
+                width={100}
+              />
+              <Group
+                mb="lg"
+                spacing="xs"
+              >
+                <Title
+                  order={3}
+                  truncate
+                >
+                  {name}
+                </Title>
+                {verified && <Verified />}
+              </Group>
+            </>
+          ) : (
             <Group
               mb="lg"
+              pr={64}
               spacing="xs"
             >
+              <Image
+                alt="logo"
+                height={40}
+                radius={20}
+                src={`https://picsum.photos/seed/${icon}/40`}
+                width={40}
+              />
               <Title
-                order={3}
+                order={4}
                 truncate
               >
                 {name}
               </Title>
               {verified && <Verified />}
             </Group>
-          </>
-        ) : (
-          <Group
+          )}
+          <Text
+            c="gray"
+            lh={1.25}
+            lineClamp={isHottest ? 5 : 4}
             mb="lg"
-            pr={64}
-            spacing="xs"
           >
-            <Image
-              alt="logo"
-              height={40}
-              radius={20}
-              src={`https://picsum.photos/seed/${icon}/40`}
-              width={40}
-            />
-            <Title
-              order={4}
-              truncate
+            {desc}
+          </Text>
+          <Flex style={{ flex: 1, flexDirection: 'column-reverse' }}>
+            <ScrollArea
+              pb={8}
+              offsetScrollbars
+              type="hover"
+              w="100%"
             >
-              {name}
-            </Title>
-            {verified && <Verified />}
-          </Group>
-        )}
-        <Text
-          c="gray"
-          lh={1.25}
-          lineClamp={isHottest ? 5 : 4}
-          mb="lg"
-        >
-          {desc}
-        </Text>
-        <Flex style={{ flex: 1, flexDirection: 'column-reverse' }}>
-          <ScrollArea
-            pb={8}
-            offsetScrollbars
-            type="hover"
-            w="100%"
-          >
-            <Group
-              noWrap
-              spacing="xs"
-            >
-              {categories.map(_c => (
-                <Button
-                  color="gray"
-                  key={_c}
-                  radius="xl"
-                  size="sm"
-                  variant="outline"
-                >
-                  {_c}
-                </Button>
-              ))}
-            </Group>
-          </ScrollArea>
+              <Group
+                noWrap
+                spacing="xs"
+              >
+                {categories.map(_c => (
+                  <Button
+                    color="gray"
+                    key={_c}
+                    radius="xl"
+                    size="sm"
+                    variant="outline"
+                  >
+                    {_c}
+                  </Button>
+                ))}
+              </Group>
+            </ScrollArea>
+          </Flex>
         </Flex>
-      </Flex>
-    </Card>
-  </Link>
-)
+      </Card>
+    </Link>
+  )
+}
 
 const Discover = () => {
   return (
@@ -209,84 +244,87 @@ const Discover = () => {
         >
           Today&apos;s project by Portal 👋
         </Title>
-        <Box
-          h={800}
-          mb={rem(48)}
-          pos="relative"
-          w="100%"
-        >
-          <Image
-            alt="bg"
-            height={800}
-            radius="md"
-            src="https://picsum.photos/1400/800"
-            w="100%"
-            withPlaceholder
-          />
+        <Link href="/discover/top">
           <Box
-            bottom={rem(32)}
-            left={rem(32)}
-            maw={500}
-            pos="absolute"
+            h={600}
+            mb={rem(48)}
+            pos="relative"
+            w="100%"
           >
-            <Flex
-              align="center"
-              mb="md"
+            <Image
+              alt="bg"
+              fit="cover"
+              height={600}
+              radius="md"
+              src="https://picsum.photos/1400/600"
+              w="100%"
+              withPlaceholder
+            />
+            <Box
+              bottom={rem(32)}
+              left={rem(32)}
+              maw={500}
+              pos="absolute"
+            >
+              <Flex
+                align="center"
+                mb="md"
+              >
+                <Image
+                  alt="logo"
+                  height={60}
+                  mr={rem(16)}
+                  radius="xl"
+                  src="https://picsum.photos/120"
+                  width={60}
+                />
+                <Text
+                  c="gray.1"
+                  fw={500}
+                  fz={rem(32)}
+                >
+                  The Explorer
+                </Text>
+              </Flex>
+              <Text
+                c="gray.1"
+                lh={1.25}
+              >
+                Among the universe of the Cute Planet collection, there are numerous undiscovered worlds nobody has ever set foot in. Let us
+                say hi to him before he leaves quickly to embark on another adventure.
+              </Text>
+            </Box>
+            <Group
+              bottom={rem(32)}
+              maw={400}
+              pos="absolute"
+              right={rem(32)}
+              spacing="md"
             >
               <Image
                 alt="logo"
-                height={60}
-                mr={rem(16)}
-                radius="xl"
-                src="https://picsum.photos/120"
-                width={60}
+                height={100}
+                radius="sm"
+                src="https://picsum.photos/seed/1/120/100"
+                width={120}
               />
-              <Text
-                c="gray.1"
-                fw={500}
-                fz={rem(32)}
-              >
-                The Explorer
-              </Text>
-            </Flex>
-            <Text
-              c="gray.1"
-              lh={1.25}
-            >
-              Among the universe of the Cute Planet collection, there are numerous undiscovered worlds nobody has ever set foot in. Let us
-              say hi to him before he leaves quickly to embark on another adventure.
-            </Text>
+              <Image
+                alt="logo"
+                height={100}
+                radius="sm"
+                src="https://picsum.photos/seed/2/120/100"
+                width={120}
+              />
+              <Image
+                alt="logo"
+                height={100}
+                radius="sm"
+                src="https://picsum.photos/seed/3/120/100"
+                width={120}
+              />
+            </Group>
           </Box>
-          <Group
-            bottom={rem(32)}
-            maw={400}
-            pos="absolute"
-            right={rem(32)}
-            spacing="md"
-          >
-            <Image
-              alt="logo"
-              height={100}
-              radius="sm"
-              src="https://picsum.photos/seed/1/120/100"
-              width={120}
-            />
-            <Image
-              alt="logo"
-              height={100}
-              radius="sm"
-              src="https://picsum.photos/seed/2/120/100"
-              width={120}
-            />
-            <Image
-              alt="logo"
-              height={100}
-              radius="sm"
-              src="https://picsum.photos/seed/3/120/100"
-              width={120}
-            />
-          </Group>
-        </Box>
+        </Link>
         <Flex
           align="centere"
           mb={rem(48)}

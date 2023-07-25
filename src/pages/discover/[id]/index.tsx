@@ -1,6 +1,7 @@
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import { AppShell, Container, Title, Image, Box, ActionIcon, Flex, Text, Group, Button, rem } from '@mantine/core'
+import { AppShell, Container, Title, Image, Box, ActionIcon, Flex, Text, Group, Button, Menu, rem } from '@mantine/core'
+import { useToggle } from '@mantine/hooks'
 import { Carousel } from '@mantine/carousel'
 
 import { UserProvider } from '@/providers/user'
@@ -11,6 +12,8 @@ import Verified from '@/assets/icons/verified'
 
 const DiscoverDetail = () => {
   const router = useRouter()
+
+  const [liked, toggle] = useToggle()
 
   return (
     <AppShell
@@ -45,21 +48,10 @@ const DiscoverDetail = () => {
             top={48}
             variant="filled"
           >
-            <svg
-              width="24"
-              height="25"
-              viewBox="0 0 24 25"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M15 18.2793L9 12.2793L15 6.2793"
-                stroke="black"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
+            <i
+              className="fa-solid fa-chevron-left"
+              style={{ color: '#000' }}
+            />
           </ActionIcon>
           <Image
             alt="bg"
@@ -95,6 +87,75 @@ const DiscoverDetail = () => {
               Parallel
             </Title>
             <Verified />
+          </Group>
+          <Group
+            mb="lg"
+            spacing="xs"
+          >
+            <ActionIcon
+              color="gray.2"
+              onClick={e => {
+                e.preventDefault()
+                e.stopPropagation()
+                toggle()
+              }}
+              size="lg"
+              radius="xl"
+              variant="outline"
+            >
+              {liked ? (
+                <i
+                  className="fa-solid fa-heart"
+                  style={{ color: '#f03e3e' }}
+                />
+              ) : (
+                <i
+                  className="fa-regular fa-heart"
+                  style={{ color: '#44444f' }}
+                />
+              )}
+            </ActionIcon>
+            <ActionIcon
+              color="gray.2"
+              size="lg"
+              radius="xl"
+              variant="outline"
+            >
+              <i
+                className="fa-solid fa-arrow-right-from-bracket -rotate-90"
+                style={{ color: '#44444f' }}
+              />
+            </ActionIcon>
+            <Menu
+              shadow="md"
+              width={200}
+            >
+              <Menu.Target>
+                <ActionIcon
+                  color="gray.2"
+                  size="lg"
+                  radius="xl"
+                  variant="outline"
+                >
+                  <i
+                    className="fa-solid fa-ellipsis"
+                    style={{ color: '#44444f' }}
+                  />
+                </ActionIcon>
+              </Menu.Target>
+              <Menu.Dropdown>
+                <Menu.Item icon={<i className="fa-solid fa-copy" />}>Copy link</Menu.Item>
+                <Menu.Item icon={<i className="fa-solid fa-paperclip" />}>Documentation</Menu.Item>
+                <Menu.Item icon={<i className="fa-solid fa-circle-question" />}>Contact support</Menu.Item>
+                <Menu.Divider />
+                <Menu.Item
+                  color="red"
+                  icon={<i className="fa-solid fa-triangle-exclamation" />}
+                >
+                  Report
+                </Menu.Item>
+              </Menu.Dropdown>
+            </Menu>
           </Group>
         </Flex>
         <Group
