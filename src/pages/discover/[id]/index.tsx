@@ -22,7 +22,7 @@ const DiscoverDetail = () => {
     >
       <Container
         maw={rem(1440)}
-        pt={rem(48)}
+        pt={rem(24)}
         px={rem(64)}
       >
         <Box
@@ -93,12 +93,8 @@ const DiscoverDetail = () => {
             spacing="xs"
           >
             <ActionIcon
-              color="gray.2"
-              onClick={e => {
-                e.preventDefault()
-                e.stopPropagation()
-                toggle()
-              }}
+              color="gray.7"
+              onClick={() => toggle()}
               size="lg"
               radius="xl"
               variant="outline"
@@ -116,7 +112,7 @@ const DiscoverDetail = () => {
               )}
             </ActionIcon>
             <ActionIcon
-              color="gray.2"
+              color="gray.7"
               size="lg"
               radius="xl"
               variant="outline"
@@ -132,7 +128,7 @@ const DiscoverDetail = () => {
             >
               <Menu.Target>
                 <ActionIcon
-                  color="gray.2"
+                  color="gray.7"
                   size="lg"
                   radius="xl"
                   variant="outline"
@@ -235,7 +231,7 @@ const DiscoverDetail = () => {
         >
           {['Mainnet', 'Ethereum', 'Gaming'].map(_c => (
             <Button
-              color="gray"
+              color="gray.7"
               key={_c}
               radius="xl"
               size="sm"
@@ -253,7 +249,7 @@ const DiscoverDetail = () => {
           About
         </Title>
         <Text
-          c="gray"
+          c="gray.7"
           dangerouslySetInnerHTML={{ __html: desc.replaceAll('/\n', '<br /><br />') }}
           lh={1.25}
           mb="lg"

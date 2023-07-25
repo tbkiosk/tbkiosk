@@ -1,73 +1,24 @@
 import Head from 'next/head'
 import Link from 'next/link'
-import {
-  AppShell,
-  Container,
-  Title,
-  Image,
-  Box,
-  Flex,
-  Text,
-  Group,
-  Input,
-  Divider,
-  Button,
-  Grid,
-  Card,
-  ScrollArea,
-  ActionIcon,
-  rem,
-} from '@mantine/core'
-import { useToggle } from '@mantine/hooks'
+import { AppShell, Container, Title, Image, Box, Flex, Grid, Card, AspectRatio, Group, Text, Badge, ActionIcon, rem } from '@mantine/core'
 
 import { UserProvider } from '@/providers/user'
 
 import { Header } from '@/components'
 
-import Verified from '@/assets/icons/verified'
-
 type Project = {
   id: string
   icon: string
   name: string
-  verified: boolean
   desc: string
   categories: string[]
 }
-
-const hottestProjects: Project[] = [
-  {
-    id: 'Parallel',
-    icon: 'Parallel',
-    name: 'Parallel',
-    verified: true,
-    desc: 'In the expanding Parallel Universe, Avatars serve as the gateway to new experiences. Your Avatar will represent you not only in Parallel TCG, but in other upcoming online activations and explorations.',
-    categories: ['Mainnet', 'Gaming', 'Ethereum'],
-  },
-  {
-    id: 'Angry Dynomites Lab',
-    icon: 'Angry Dynomites Lab',
-    name: 'Angry Dynomites Lab',
-    verified: false,
-    desc: '🔥 The Genesis Fire Dyno collection is the first of four collections, followed by 💧Water Dynos, 🌱 Earth, and 💨 Air',
-    categories: ['Mainnet', 'zkSync'],
-  },
-  {
-    id: 'Dawn of East',
-    icon: 'Dawn of East',
-    name: 'Dawn of East',
-    verified: true,
-    desc: 'In the expanding Parallel Universe, Avatars serve as the gateway to new experiences. Your Avatar will represent you not only in Parallel TCG, but in other upcoming online activations and explorations.',
-    categories: ['In development', 'Polygon', 'NFT'],
-  },
-]
 
 const featuredProjects: Project[] = [
   {
     id: 'OKPC',
     icon: 'OKPC',
     name: 'OKPC',
-    verified: false,
     desc: "OKPC is an onchain toy that let's you create, collect and share artwork.",
     categories: ['Mainnet', 'Gaming', 'Ethereum'],
   },
@@ -75,7 +26,6 @@ const featuredProjects: Project[] = [
     id: 'Gandalf',
     icon: 'Gandalf',
     name: 'Gandalf',
-    verified: true,
     desc: "Tokengate any web2 content so it's exclusive only to members of your web3 community.",
     categories: ['Mainnet', 'Gaming', 'Ethereum'],
   },
@@ -83,135 +33,123 @@ const featuredProjects: Project[] = [
     id: 'SWING',
     icon: 'SWING',
     name: 'SWING',
-    verified: true,
     desc: 'Your Avatar will represent you not only in Parallel TCG, but in other upcoming online activations and explorations.',
     categories: ['Mainnet', 'Gaming', 'Ethereum'],
   },
 ]
 
-const ProjectCard = ({ id, icon, name, verified, desc, categories, isHottest }: Project & { isHottest: boolean }) => {
-  const [liked, toggle] = useToggle()
-
+const ProjectCard = ({ id, name, desc, categories }: Project) => {
   return (
     <Link href={`/discover/${id}`}>
       <Card
-        h={isHottest ? 420 : 260}
-        padding="lg"
-        pb="sm"
-        pos="relative"
-        radius="lg"
+        display="flex"
+        padding="sm"
+        radius="md"
+        sx={{
+          flexDirection: 'column',
+          height: '560px',
+
+          '@media (max-width: 62rem)': {
+            height: '520px',
+          },
+
+          '@media (max-width: 48rem)': {
+            height: '500px',
+          },
+        }}
         withBorder
       >
-        <Box
-          pos="absolute"
-          right={24}
-          top={24}
-        >
-          <ActionIcon
-            color="gray.2"
-            onClick={e => {
-              e.preventDefault()
-              e.stopPropagation()
-              toggle()
-            }}
-            size="lg"
-            radius="xl"
-            variant="outline"
+        <Card.Section>
+          <AspectRatio
+            ratio={1}
+            mx="auto"
           >
-            {liked ? (
-              <i
-                className="fa-solid fa-heart"
-                style={{ color: '#f03e3e' }}
-              />
-            ) : (
-              <i
-                className="fa-regular fa-heart"
-                style={{ color: '#44444f' }}
-              />
-            )}
-          </ActionIcon>
-        </Box>
+            <Image
+              alt="bg"
+              fit="cover"
+              height="100%"
+              src={`https://picsum.photos/seed/${id}/400`}
+              width="100%"
+              withPlaceholder
+            />
+          </AspectRatio>
+        </Card.Section>
         <Flex
           direction="column"
-          h="100%"
+          gap="xs"
+          mt="lg"
+          style={{ flex: 1 }}
         >
-          {isHottest ? (
-            <>
-              <Image
-                alt="logo"
-                height={100}
-                mb="lg"
-                radius={50}
-                src={`https://picsum.photos/seed/${icon}/100`}
-                width={100}
-              />
-              <Group
-                mb="lg"
-                spacing="xs"
-              >
-                <Title
-                  order={3}
-                  truncate
-                >
-                  {name}
-                </Title>
-                {verified && <Verified />}
-              </Group>
-            </>
-          ) : (
-            <Group
-              mb="lg"
-              pr={64}
-              spacing="xs"
+          <Group
+            noWrap
+            spacing="md"
+          >
+            <Image
+              alt="bg"
+              fit="cover"
+              height={rem(40)}
+              radius={rem(14)}
+              src={`https://picsum.photos/seed/${desc}/40`}
+              width={rem(40)}
+              withPlaceholder
+            />
+            <Title
+              order={4}
+              truncate
             >
-              <Image
-                alt="logo"
-                height={40}
-                radius={20}
-                src={`https://picsum.photos/seed/${icon}/40`}
-                width={40}
-              />
-              <Title
-                order={4}
-                truncate
-              >
-                {name}
-              </Title>
-              {verified && <Verified />}
-            </Group>
-          )}
+              {name}
+            </Title>
+          </Group>
           <Text
-            c="gray"
-            lh={1.25}
-            lineClamp={isHottest ? 5 : 4}
-            mb="lg"
+            lh={1.5}
+            lineClamp={4}
+            size="sm"
           >
             {desc}
           </Text>
-          <Flex style={{ flex: 1, flexDirection: 'column-reverse' }}>
-            <ScrollArea
-              pb={8}
-              offsetScrollbars
-              type="hover"
-              w="100%"
-            >
-              <Group
-                noWrap
-                spacing="xs"
+          <Group spacing="xs">
+            {categories.map(_category => (
+              <Badge
+                color="gray"
+                key={_category}
+                size="xs"
+                radius="sm"
+                variant="filled"
               >
-                {categories.map(_c => (
-                  <Button
-                    color="gray"
-                    key={_c}
-                    radius="xl"
-                    size="sm"
-                    variant="outline"
-                  >
-                    {_c}
-                  </Button>
-                ))}
-              </Group>
-            </ScrollArea>
+                {_category}
+              </Badge>
+            ))}
+          </Group>
+          <Flex
+            align="flex-end"
+            justify="flex-end"
+            style={{ flex: 1 }}
+          >
+            <Group>
+              <a
+                href="/"
+                onClick={e => e.stopPropagation()}
+                target="_blank"
+              >
+                <i className="fa-solid fa-globe" />
+              </a>
+              <a
+                href="https://twitter.com"
+                onClick={e => e.stopPropagation()}
+                rel="noreferrer"
+                target="_blank"
+              >
+                <i className="fa-brands fa-twitter" />
+              </a>
+              <a
+                href="https://discord.com"
+                onClick={e => e.stopPropagation()}
+                rel="noreferrer"
+                target="_blank"
+              >
+                <i className="fa-brands fa-discord" />
+              </a>
+            </Group>
           </Flex>
         </Flex>
       </Card>
@@ -224,265 +162,118 @@ const Discover = () => {
     <AppShell
       header={<Header />}
       padding="md"
+      styles={{
+        main: {
+          overflowX: 'hidden',
+        },
+      }}
     >
       <Container
         maw={rem(1440)}
-        pt={rem(48)}
         px={rem(64)}
       >
-        <Title
-          c="gray.5"
-          fw={400}
-          order={4}
-        >
-          Discover,
-        </Title>
-        <Title
-          fw={400}
-          mb="lg"
-          order={1}
-        >
-          Today&apos;s project by Portal 👋
-        </Title>
-        <Link href="/discover/top">
-          <Box
-            h={600}
-            mb={rem(48)}
-            pos="relative"
-            w="100%"
-          >
+        <Box h={600}>
+          <Link href="/discover/top">
             <Image
               alt="bg"
               fit="cover"
-              height={600}
-              radius="md"
-              src="https://picsum.photos/1400/600"
-              w="100%"
+              height="600"
+              left={0}
+              pos="absolute"
+              right={0}
+              src="/bg.jpg"
+              top={72 + 16}
               withPlaceholder
             />
-            <Box
-              bottom={rem(32)}
-              left={rem(32)}
-              maw={500}
-              pos="absolute"
-            >
-              <Flex
-                align="center"
-                mb="md"
-              >
-                <Image
-                  alt="logo"
-                  height={60}
-                  mr={rem(16)}
-                  radius="xl"
-                  src="https://picsum.photos/120"
-                  width={60}
-                />
-                <Text
-                  c="gray.1"
-                  fw={500}
-                  fz={rem(32)}
-                >
-                  The Explorer
-                </Text>
-              </Flex>
-              <Text
-                c="gray.1"
-                lh={1.25}
-              >
-                Among the universe of the Cute Planet collection, there are numerous undiscovered worlds nobody has ever set foot in. Let us
-                say hi to him before he leaves quickly to embark on another adventure.
-              </Text>
-            </Box>
-            <Group
-              bottom={rem(32)}
-              maw={400}
-              pos="absolute"
-              right={rem(32)}
-              spacing="md"
-            >
-              <Image
-                alt="logo"
-                height={100}
-                radius="sm"
-                src="https://picsum.photos/seed/1/120/100"
-                width={120}
-              />
-              <Image
-                alt="logo"
-                height={100}
-                radius="sm"
-                src="https://picsum.photos/seed/2/120/100"
-                width={120}
-              />
-              <Image
-                alt="logo"
-                height={100}
-                radius="sm"
-                src="https://picsum.photos/seed/3/120/100"
-                width={120}
-              />
-            </Group>
-          </Box>
-        </Link>
-        <Flex
-          align="centere"
-          mb={rem(48)}
-        >
-          <Box w="50%">
-            <Input
-              icon={
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  strokeWidth="2"
-                  stroke="currentColor"
-                  fill="none"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path
-                    stroke="none"
-                    d="M0 0h24v24H0z"
-                    fill="none"
-                  ></path>
-                  <path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0"></path>
-                  <path d="M21 21l-6 -6"></path>
-                </svg>
-              }
-              placeholder="Search projects..."
-              radius="lg"
-              size="lg"
-            />
-          </Box>
-          <Divider
-            mx="lg"
-            orientation="vertical"
-          />
-          <Group
-            spacing="sm"
-            w="50%"
-          >
-            <Button
-              color="gray"
-              radius="xl"
-              size="md"
-              variant="outline"
-            >
-              NFT
-            </Button>
-            <Button
-              color="gray"
-              radius="xl"
-              size="md"
-              variant="outline"
-            >
-              Gaming
-            </Button>
-            <Button
-              color="gray"
-              radius="xl"
-              size="md"
-              variant="outline"
-            >
-              Metaverse
-            </Button>
-            <Button
-              color="gray"
-              radius="xl"
-              size="md"
-              variant="outline"
-            >
-              Music
-            </Button>
-            <Button
-              color="gray"
-              radius="xl"
-              size="md"
-              variant="outline"
-            >
-              Art
-            </Button>
-            <Button
-              color="gray"
-              radius="xl"
-              size="md"
-              variant="outline"
-            >
-              DAO
-            </Button>
-          </Group>
-        </Flex>
-        <Flex
-          align="center"
-          justify="space-between"
-          mb={rem(24)}
-        >
-          <Title
-            fw={500}
-            order={2}
-          >
-            Hottest 🔥
-          </Title>
-          <Link
-            style={{ color: '#0062ff' }}
-            href="/discover"
-          >
-            View all
           </Link>
-        </Flex>
-        <Grid
-          gutter="lg"
-          mb={rem(48)}
+        </Box>
+        <Title
+          my={rem(32)}
+          order={4}
         >
-          {hottestProjects.map(_item => (
-            <Grid.Col
-              key={_item.name}
-              span={4}
-            >
-              <ProjectCard
-                isHottest
-                {..._item}
-              />
-            </Grid.Col>
-          ))}
-        </Grid>
-        <Flex
-          align="center"
-          justify="space-between"
-          mb={rem(24)}
-        >
-          <Title
-            fw={500}
-            order={2}
-          >
-            Featured ✨
-          </Title>
-          <Link
-            style={{ color: '#0062ff' }}
-            href="/discover"
-          >
-            View all
-          </Link>
-        </Flex>
+          Upcoming Projects
+        </Title>
         <Grid
-          gutter="lg"
+          gutter="xl"
           mb={rem(48)}
         >
           {featuredProjects.map(_item => (
             <Grid.Col
               key={_item.name}
-              span={4}
+              md={3}
+              sm={4}
+              xs={6}
             >
-              <ProjectCard
-                isHottest={false}
-                {..._item}
-              />
+              <ProjectCard {..._item} />
             </Grid.Col>
           ))}
         </Grid>
+        <Box>
+          <Title
+            order={4}
+            mb={rem(8)}
+            ta="center"
+          >
+            Join the community
+          </Title>
+          <Group
+            noWrap
+            position="center"
+          >
+            <ActionIcon
+              radius="md"
+              size="lg"
+              variant="light"
+            >
+              <a
+                href="https://twitter.com"
+                rel="noreferrer"
+                target="_blank"
+              >
+                <i className="fa-brands fa-twitter" />
+              </a>
+            </ActionIcon>
+            <ActionIcon
+              radius="md"
+              size="lg"
+              variant="light"
+            >
+              <a
+                href="https://discord.com"
+                rel="noreferrer"
+                target="_blank"
+              >
+                <i className="fa-brands fa-discord" />
+              </a>
+            </ActionIcon>
+            <ActionIcon
+              radius="md"
+              size="lg"
+              variant="light"
+            >
+              <a
+                href="https://youtube.com"
+                rel="noreferrer"
+                target="_blank"
+              >
+                <i className="fa-brands fa-youtube" />
+              </a>
+            </ActionIcon>
+            <ActionIcon
+              radius="md"
+              size="lg"
+              variant="light"
+            >
+              <a
+                href="https://tiktok.com"
+                rel="noreferrer"
+                target="_blank"
+              >
+                <i className="fa-brands fa-tiktok" />
+              </a>
+            </ActionIcon>
+          </Group>
+        </Box>
       </Container>
     </AppShell>
   )

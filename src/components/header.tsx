@@ -1,6 +1,6 @@
 import { useContext } from 'react'
 import Link from 'next/link'
-import { Header as MantineHeader, Container, Flex, Avatar, ActionIcon, Indicator, Text, rem } from '@mantine/core'
+import { Header as MantineHeader, Container, Flex, Group, Box, Center, Avatar, Button, TextInput, Menu, rem } from '@mantine/core'
 
 import { UserContext } from '@/providers/user'
 
@@ -18,58 +18,58 @@ const Header = () => {
         maw={rem(1440)}
         px={rem(64)}
       >
-        <Flex justify="space-between">
-          <Flex
-            align="center"
-            className="cursor-pointer"
+        <Flex
+          align="center"
+          justify="space-between"
+        >
+          <Link href="/">
+            <Center>
+              <Logo />
+            </Center>
+          </Link>
+          <Box
+            maw={400}
+            miw={120}
+            mx={rem(24)}
+            style={{ flex: 1 }}
           >
-            <Logo />
-          </Flex>
-          <Flex
-            align="center"
-            gap={rem(24)}
+            <TextInput
+              placeholder="Search for collections, NFTs or users"
+              radius={rem(12)}
+              rightSection={<i className="fa-solid fa-magnifying-glass text-[#aaa]" />}
+            />
+          </Box>
+          <Group
+            noWrap
+            spacing={rem(24)}
           >
-            <Flex gap="lg">
-              <Link
-                className="transition:opcaity hover:opacity-70"
-                href="/discover"
-              >
-                <Text
-                  className={
-                    /\/discover/.test(location.href)
-                      ? `before:content-[''] before:absolute before:inset-x-0 before:mx-auto before:bottom-0 before:rounded-full before:h-[3px] before:w-[50%] before:bg-gradient-to-r before:from-[#FD7E14] before:to-[#E64980]`
-                      : ''
-                  }
-                  fw={700}
-                  gradient={/\/discover/.test(location.href) ? { from: 'orange', to: 'pink', deg: 45 } : undefined}
-                  pos="relative"
-                  variant={/\/discover/.test(location.href) ? 'gradient' : 'text'}
+            <Button
+              radius={rem(12)}
+              style={{ backgroundColor: '#C8FD7C', color: '#3d4043', letterSpacing: '2px' }}
+            >
+              ADD PROJECT
+            </Button>
+            <Menu
+              shadow="md"
+              width={200}
+            >
+              <Menu.Target>
+                <Avatar
+                  alt=""
+                  className="cursor-pointer"
+                  radius="xl"
+                  src={image}
                 >
-                  Discover
-                </Text>
-              </Link>
-            </Flex>
-            <Indicator
-              color="red"
-              offset={4}
-            >
-              <ActionIcon
-                radius="xl"
-                size="lg"
-                variant="light"
-              >
-                <i className="fa-regular fa-bell text-lg"></i>
-              </ActionIcon>
-            </Indicator>
-            <Avatar
-              alt=""
-              className="cursor-pointer"
-              radius="xl"
-              src={image}
-            >
-              {!image && (name || '')?.slice(0, 2)}
-            </Avatar>
-          </Flex>
+                  {!image && (name || '')?.slice(0, 2)}
+                </Avatar>
+              </Menu.Target>
+              <Menu.Dropdown>
+                <Link href="/settings">
+                  <Menu.Item icon={<i className="fa-solid fa-gear" />}>Settings</Menu.Item>
+                </Link>
+              </Menu.Dropdown>
+            </Menu>
+          </Group>
         </Flex>
       </Container>
     </MantineHeader>
