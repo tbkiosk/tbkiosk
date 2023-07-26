@@ -1,5 +1,6 @@
 import { useContext } from 'react'
 import Link from 'next/link'
+import { signOut } from 'next-auth/react'
 import { Header as MantineHeader, Container, Flex, Group, Box, Center, Avatar, Button, TextInput, Menu, rem } from '@mantine/core'
 
 import { UserContext } from '@/providers/user'
@@ -67,6 +68,12 @@ const Header = () => {
                 <Link href="/settings">
                   <Menu.Item icon={<i className="fa-solid fa-gear" />}>Settings</Menu.Item>
                 </Link>
+                <Menu.Item
+                  icon={<i className="fa-solid fa-arrow-right-from-bracket" />}
+                  onClick={() => signOut()}
+                >
+                  Logout
+                </Menu.Item>
               </Menu.Dropdown>
             </Menu>
           </Group>
