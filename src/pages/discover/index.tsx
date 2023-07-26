@@ -1,5 +1,6 @@
 import Head from 'next/head'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 import { AppShell, Container, Title, Image, Box, Flex, Grid, Card, AspectRatio, Group, Text, Badge, ActionIcon, rem } from '@mantine/core'
 
 import { UserProvider } from '@/providers/user'
@@ -39,121 +40,122 @@ const featuredProjects: Project[] = [
 ]
 
 const ProjectCard = ({ id, name, desc, categories }: Project) => {
+  const router = useRouter()
+
   return (
-    <Link href={`/discover/${id}`}>
-      <Card
-        display="flex"
-        padding="sm"
-        radius="md"
-        sx={{
-          flexDirection: 'column',
-          height: '560px',
+    <Card
+      display="flex"
+      onClick={() => router.push(`/discover/${id}`)}
+      padding="sm"
+      radius="md"
+      sx={{
+        flexDirection: 'column',
+        height: '560px',
 
-          '@media (max-width: 62rem)': {
-            height: '520px',
-          },
+        '@media (max-width: 62rem)': {
+          height: '520px',
+        },
 
-          '@media (max-width: 48rem)': {
-            height: '500px',
-          },
-        }}
-        withBorder
+        '@media (max-width: 48rem)': {
+          height: '500px',
+        },
+      }}
+      withBorder
+    >
+      <Card.Section>
+        <AspectRatio
+          ratio={1}
+          mx="auto"
+        >
+          <Image
+            alt="bg"
+            fit="cover"
+            height="100%"
+            src={`https://picsum.photos/seed/${id}/400`}
+            width="100%"
+            withPlaceholder
+          />
+        </AspectRatio>
+      </Card.Section>
+      <Flex
+        direction="column"
+        gap="xs"
+        mt="lg"
+        style={{ flex: 1 }}
       >
-        <Card.Section>
-          <AspectRatio
-            ratio={1}
-            mx="auto"
+        <Group
+          noWrap
+          spacing="md"
+        >
+          <Image
+            alt="bg"
+            fit="cover"
+            height={rem(40)}
+            radius={rem(14)}
+            src={`https://picsum.photos/seed/${desc}/40`}
+            width={rem(40)}
+            withPlaceholder
+          />
+          <Title
+            order={4}
+            truncate
           >
-            <Image
-              alt="bg"
-              fit="cover"
-              height="100%"
-              src={`https://picsum.photos/seed/${id}/400`}
-              width="100%"
-              withPlaceholder
-            />
-          </AspectRatio>
-        </Card.Section>
+            {name}
+          </Title>
+        </Group>
+        <Text
+          lh={1.5}
+          lineClamp={4}
+          size="sm"
+        >
+          {desc}
+        </Text>
+        <Group spacing="xs">
+          {categories.map(_category => (
+            <Badge
+              color="gray"
+              key={_category}
+              size="xs"
+              radius="sm"
+              variant="filled"
+            >
+              {_category}
+            </Badge>
+          ))}
+        </Group>
         <Flex
-          direction="column"
-          gap="xs"
-          mt="lg"
+          align="flex-end"
+          justify="flex-end"
           style={{ flex: 1 }}
         >
-          <Group
-            noWrap
-            spacing="md"
-          >
-            <Image
-              alt="bg"
-              fit="cover"
-              height={rem(40)}
-              radius={rem(14)}
-              src={`https://picsum.photos/seed/${desc}/40`}
-              width={rem(40)}
-              withPlaceholder
-            />
-            <Title
-              order={4}
-              truncate
+          <Group>
+            <a
+              href="/"
+              onClick={e => e.stopPropagation()}
+              target="_blank"
             >
-              {name}
-            </Title>
+              <i className="fa-solid fa-globe" />
+            </a>
+            <a
+              href="https://twitter.com"
+              onClick={e => e.stopPropagation()}
+              rel="noreferrer"
+              target="_blank"
+            >
+              <i className="fa-brands fa-twitter" />
+            </a>
+            <a
+              href="https://discord.com"
+              onClick={e => e.stopPropagation()}
+              rel="noreferrer"
+              target="_blank"
+            >
+              <i className="fa-brands fa-discord" />
+            </a>
           </Group>
-          <Text
-            lh={1.5}
-            lineClamp={4}
-            size="sm"
-          >
-            {desc}
-          </Text>
-          <Group spacing="xs">
-            {categories.map(_category => (
-              <Badge
-                color="gray"
-                key={_category}
-                size="xs"
-                radius="sm"
-                variant="filled"
-              >
-                {_category}
-              </Badge>
-            ))}
-          </Group>
-          <Flex
-            align="flex-end"
-            justify="flex-end"
-            style={{ flex: 1 }}
-          >
-            <Group>
-              <a
-                href="/"
-                onClick={e => e.stopPropagation()}
-                target="_blank"
-              >
-                <i className="fa-solid fa-globe" />
-              </a>
-              <a
-                href="https://twitter.com"
-                onClick={e => e.stopPropagation()}
-                rel="noreferrer"
-                target="_blank"
-              >
-                <i className="fa-brands fa-twitter" />
-              </a>
-              <a
-                href="https://discord.com"
-                onClick={e => e.stopPropagation()}
-                rel="noreferrer"
-                target="_blank"
-              >
-                <i className="fa-brands fa-discord" />
-              </a>
-            </Group>
-          </Flex>
         </Flex>
-      </Card>
-    </Link>
+      </Flex>
+    </Card>
   )
 }
 
