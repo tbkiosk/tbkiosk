@@ -23,6 +23,7 @@ export type Project = WithId<{
   reportedAsSpam: boolean
   createdAt: Date
   updatedAt: Date
+  isFeatured?: boolean
   userId: string
 }>
 

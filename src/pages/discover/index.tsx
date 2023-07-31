@@ -30,6 +30,7 @@ import { useSessionGuard } from '@/hooks/auth/useSessionGuard'
 import { request } from '@/utils/request'
 
 import type { Project } from '@/pages/api/discover'
+import { useMemo } from 'react'
 
 const ProjectCard = ({ _id, name, logoUrl, bannerImage, description, categories }: Project) => {
   const router = useRouter()
@@ -184,6 +185,8 @@ const Discover = () => {
     refetchOnWindowFocus: false,
   })
 
+  const featuredProject = useMemo(() => data?.find(_project => _project.isFeatured), [data])
+
   return (
     <AppShell
       header={<Header />}
@@ -198,21 +201,24 @@ const Discover = () => {
         maw={rem(1440)}
         px={rem(64)}
       >
-        <Box h={600}>
-          <Link href="/discover/top">
-            <Image
-              alt="bg"
-              fit="cover"
-              height="600"
-              left={0}
-              pos="absolute"
-              right={0}
-              src="/bg.jpg"
-              top={72 + 16}
-              withPlaceholder
-            />
-          </Link>
-        </Box>
+        {featuredProject && (
+          <Box h={600}>
+            <Link href={`/discover/${featuredProject._id.toString()}`}>
+              <Image
+                alt="bg"
+                fit="cover"
+                height="600"
+                left={0}
+                pos="absolute"
+                right={0}
+                src={featuredProject.bannerImage}
+                top={72 + 16}
+                withPlaceholder
+              />
+            </Link>
+          </Box>
+        )}
+
         <Title
           my={rem(32)}
           order={4}
@@ -232,7 +238,9 @@ const Discover = () => {
               sm={4}
               xs={6}
             >
-              <ProjectCard {..._project} />
+              <Link href={`/discover/${_project._id.toString()}`}>
+                <ProjectCard {..._project} />
+              </Link>
             </Grid.Col>
           ))}
         </Grid>
