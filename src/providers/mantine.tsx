@@ -7,7 +7,7 @@ import type { SingleNode } from '@/types/react_node'
 export const MantineUIProvider = ({ children }: SingleNode) => {
   const [colorScheme, setColorScheme] = useLocalStorage<ColorScheme>({
     key: 'mantine-color-scheme',
-    defaultValue: 'light',
+    defaultValue: 'dark',
     getInitialValueInEffect: true,
   })
 
