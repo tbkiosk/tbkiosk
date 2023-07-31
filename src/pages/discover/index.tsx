@@ -1,51 +1,43 @@
 import Head from 'next/head'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { AppShell, Container, Title, Image, Box, Flex, Grid, Card, AspectRatio, Group, Text, Badge, ActionIcon, rem } from '@mantine/core'
+import {
+  AppShell,
+  Container,
+  Title,
+  Image,
+  Box,
+  Flex,
+  Grid,
+  Card,
+  AspectRatio,
+  Group,
+  Text,
+  Badge,
+  ActionIcon,
+  LoadingOverlay,
+  rem,
+} from '@mantine/core'
+import { notifications } from '@mantine/notifications'
+import { useQuery } from '@tanstack/react-query'
 
 import { UserProvider } from '@/providers/user'
 
 import { Header } from '@/components'
 
-type Project = {
-  id: string
-  icon: string
-  name: string
-  desc: string
-  categories: string[]
-}
+import { useSessionGuard } from '@/hooks/auth/useSessionGuard'
 
-const featuredProjects: Project[] = [
-  {
-    id: 'OKPC',
-    icon: 'OKPC',
-    name: 'OKPC',
-    desc: "OKPC is an onchain toy that let's you create, collect and share artwork.",
-    categories: ['Mainnet', 'Gaming', 'Ethereum'],
-  },
-  {
-    id: 'Gandalf',
-    icon: 'Gandalf',
-    name: 'Gandalf',
-    desc: "Tokengate any web2 content so it's exclusive only to members of your web3 community.",
-    categories: ['Mainnet', 'Gaming', 'Ethereum'],
-  },
-  {
-    id: 'SWING',
-    icon: 'SWING',
-    name: 'SWING',
-    desc: 'Your Avatar will represent you not only in Parallel TCG, but in other upcoming online activations and explorations.',
-    categories: ['Mainnet', 'Gaming', 'Ethereum'],
-  },
-]
+import { request } from '@/utils/request'
 
-const ProjectCard = ({ id, name, desc, categories }: Project) => {
+import type { Project } from '@/pages/api/discover'
+
+const ProjectCard = ({ _id, name, logoUrl, bannerImage, description, categories }: Project) => {
   const router = useRouter()
 
   return (
     <Card
       display="flex"
-      onClick={() => router.push(`/discover/${id}`)}
+      onClick={() => router.push(`/discover/${_id}`)}
       padding="sm"
       radius="md"
       sx={{
@@ -63,15 +55,19 @@ const ProjectCard = ({ id, name, desc, categories }: Project) => {
       withBorder
     >
       <Card.Section>
-        <AspectRatio
-          ratio={1}
-          mx="auto"
-        >
+        <AspectRatio ratio={1}>
           <Image
             alt="bg"
-            fit="cover"
             height="100%"
-            src={`https://picsum.photos/seed/${id}/400`}
+            src={bannerImage}
+            styles={{
+              figure: {
+                height: '100%',
+              },
+              imageWrapper: {
+                height: '100%',
+              },
+            }}
             width="100%"
             withPlaceholder
           />
@@ -92,7 +88,7 @@ const ProjectCard = ({ id, name, desc, categories }: Project) => {
             fit="cover"
             height={rem(40)}
             radius={rem(14)}
-            src={`https://picsum.photos/seed/${desc}/40`}
+            src={logoUrl}
             width={rem(40)}
             withPlaceholder
           />
@@ -108,7 +104,7 @@ const ProjectCard = ({ id, name, desc, categories }: Project) => {
           lineClamp={4}
           size="sm"
         >
-          {desc}
+          {description}
         </Text>
         <Group spacing="xs">
           {categories.map(_category => (
@@ -160,6 +156,34 @@ const ProjectCard = ({ id, name, desc, categories }: Project) => {
 }
 
 const Discover = () => {
+  const { status } = useSessionGuard()
+
+  const { data, isLoading } = useQuery<Project[], Error>({
+    queryKey: ['discover'],
+    queryFn: async () => {
+      const { data, error } = await request<Project[], string>({
+        url: '/api/discover',
+      })
+
+      if (error) {
+        throw new Error(error)
+      }
+
+      return data || []
+    },
+    enabled: status === 'authenticated',
+    onError: (error: Error) => {
+      notifications.show({
+        color: 'red',
+        message: error.message,
+        title: 'Error',
+        withCloseButton: true,
+      })
+    },
+    retry: false,
+    refetchOnWindowFocus: false,
+  })
+
   return (
     <AppShell
       header={<Header />}
@@ -198,15 +222,17 @@ const Discover = () => {
         <Grid
           gutter="xl"
           mb={rem(48)}
+          pos="relative"
         >
-          {featuredProjects.map(_item => (
+          <LoadingOverlay visible={isLoading} />
+          {data?.map(_project => (
             <Grid.Col
-              key={_item.name}
+              key={_project._id.toString()}
               md={3}
               sm={4}
               xs={6}
             >
-              <ProjectCard {..._item} />
+              <ProjectCard {..._project} />
             </Grid.Col>
           ))}
         </Grid>
