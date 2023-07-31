@@ -1,259 +1,379 @@
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import { AppShell, Container, Title, Image, Box, ActionIcon, Flex, Text, Group, Button, Menu, rem } from '@mantine/core'
-import { useToggle } from '@mantine/hooks'
-import { Carousel } from '@mantine/carousel'
+import {
+  AppShell,
+  Container,
+  Title,
+  Image,
+  Box,
+  ActionIcon,
+  Flex,
+  Text,
+  Group,
+  Menu,
+  LoadingOverlay,
+  Badge,
+  Tabs,
+  Divider,
+  rem,
+  useMantineTheme,
+} from '@mantine/core'
+import { notifications } from '@mantine/notifications'
+import { useQuery } from '@tanstack/react-query'
 
 import { UserProvider } from '@/providers/user'
 
 import { Header } from '@/components'
 
+import { useSessionGuard } from '@/hooks/auth/useSessionGuard'
+
+import { request } from '@/utils/request'
+
 import Verified from '@/assets/icons/verified'
+
+import type { Project } from '@/types/project'
 
 const DiscoverDetail = () => {
   const router = useRouter()
 
-  const [liked, toggle] = useToggle()
+  const theme = useMantineTheme()
+
+  const { status } = useSessionGuard()
+
+  const { data, isLoading } = useQuery<Project | undefined, Error>({
+    queryKey: ['discover_details', router.query.id],
+    queryFn: async () => {
+      const { data, error } = await request<Project | undefined, string>({
+        url: `/api/discover/${router.query.id}`,
+      })
+
+      if (error) {
+        throw new Error(error)
+      }
+
+      return data
+    },
+    enabled: status === 'authenticated',
+    onError: (error: Error) => {
+      notifications.show({
+        color: 'red',
+        message: error.message,
+        title: 'Error',
+        withCloseButton: true,
+      })
+    },
+    retry: false,
+    refetchOnWindowFocus: false,
+  })
+
+  const isDarkTheme = theme.colorScheme === 'dark'
 
   return (
     <AppShell
       header={<Header />}
-      padding="md"
+      padding={0}
     >
       <Container
         maw={rem(1440)}
-        pt={rem(24)}
-        px={rem(64)}
+        mih={480}
+        px={rem(72)}
       >
-        <Box
-          h={400}
-          mb={50 + 24}
-          pos="relative"
-        >
-          <Image
-            alt="bg"
-            height={400}
-            src="https://picsum.photos/1400/400"
-            w="100%"
-            withPlaceholder
-          />
-          <ActionIcon
-            color="dark.0"
-            left={48}
-            onClick={() => router.push('/discover')}
-            opacity={0.7}
-            pos="absolute"
-            radius="xl"
-            size="xl"
-            top={48}
-            variant="filled"
-          >
-            <i
-              className="fa-solid fa-chevron-left"
-              style={{ color: '#000' }}
-            />
-          </ActionIcon>
-          <Image
-            alt="bg"
-            bottom={-50}
-            height={100}
-            left={48}
-            pos="absolute"
-            radius={50}
-            src="https://picsum.photos/100"
-            styles={{
-              image: {
-                border: '2px solid #fff',
-                borderTopLeftRadius: 50,
-                borderTopRightRadius: 50,
-              },
-            }}
-            width={100}
-            withPlaceholder
-          />
-        </Box>
-        <Flex
-          align="center"
-          justify="space-between"
-        >
-          <Group
-            mb="lg"
-            spacing="xs"
-          >
-            <Title
-              order={3}
-              truncate
+        <LoadingOverlay visible={isLoading} />
+        {data && (
+          <>
+            <Box
+              h={480}
+              mb={rem(128)}
             >
-              Parallel
-            </Title>
-            <Verified />
-          </Group>
-          <Group
-            mb="lg"
-            spacing="xs"
-          >
-            <ActionIcon
-              color="gray.7"
-              onClick={() => toggle()}
-              size="lg"
-              radius="xl"
-              variant="outline"
-            >
-              {liked ? (
-                <i
-                  className="fa-solid fa-heart"
-                  style={{ color: '#f03e3e' }}
-                />
-              ) : (
-                <i
-                  className="fa-regular fa-heart"
-                  style={{ color: '#44444f' }}
-                />
-              )}
-            </ActionIcon>
-            <ActionIcon
-              color="gray.7"
-              size="lg"
-              radius="xl"
-              variant="outline"
-            >
-              <i
-                className="fa-solid fa-arrow-right-from-bracket -rotate-90"
-                style={{ color: '#44444f' }}
+              <Image
+                alt="bg"
+                height={480}
+                left={0}
+                pos="absolute"
+                right={0}
+                src={data.bannerImage}
+                top={72}
+                w="100%"
+                withPlaceholder
               />
-            </ActionIcon>
-            <Menu
-              shadow="md"
-              width={200}
-            >
-              <Menu.Target>
+              <Box
+                h="100%"
+                pos="relative"
+              >
                 <ActionIcon
-                  color="gray.7"
-                  size="lg"
+                  color="dark.0"
+                  left={0}
+                  onClick={() => router.push('/discover')}
+                  opacity={0.7}
+                  pos="absolute"
                   radius="xl"
-                  variant="outline"
+                  size="xl"
+                  top={48}
+                  variant="filled"
                 >
                   <i
-                    className="fa-solid fa-ellipsis"
-                    style={{ color: '#44444f' }}
+                    className="fa-solid fa-chevron-left"
+                    style={{ color: '#000' }}
                   />
                 </ActionIcon>
-              </Menu.Target>
-              <Menu.Dropdown>
-                <Menu.Item icon={<i className="fa-solid fa-copy" />}>Copy link</Menu.Item>
-                <Menu.Item icon={<i className="fa-solid fa-paperclip" />}>Documentation</Menu.Item>
-                <Menu.Item icon={<i className="fa-solid fa-circle-question" />}>Contact support</Menu.Item>
-                <Menu.Divider />
-                <Menu.Item
-                  color="red"
-                  icon={<i className="fa-solid fa-triangle-exclamation" />}
-                >
-                  Report
-                </Menu.Item>
-              </Menu.Dropdown>
-            </Menu>
-          </Group>
-        </Flex>
-        <Group
-          mb={32}
-          noWrap
-          spacing={32}
-        >
-          <Box>
-            <Title order={3}>0.0768 ETH</Title>
-            <Text c="gray.5">🎁 Floor price</Text>
-          </Box>
-          <Box>
-            <Title order={3}>Jun 2023</Title>
-            <Text c="gray.5">🔮 Created</Text>
-          </Box>
-          <Box>
-            <Title order={3}>11.5 K</Title>
-            <Text c="gray.5">🤖 Items</Text>
-          </Box>
-        </Group>
-        <Carousel
-          align="start"
-          draggable
-          height={480}
-          loop
-          mb={32}
-          slideGap="md"
-          slideSize="50%"
-          withControls={false}
-          withIndicators
-        >
-          <Carousel.Slide>
-            <Image
-              alt=""
-              fit="cover"
-              height={480}
-              radius="md"
-              src="https://picsum.photos/seed/carousel1/640/480"
-              width="100%"
-              withPlaceholder
-            />
-          </Carousel.Slide>
-          <Carousel.Slide>
-            <Image
-              alt=""
-              fit="cover"
-              height={480}
-              radius="md"
-              src="https://picsum.photos/seed/carousel2/640/480"
-              width="100%"
-              withPlaceholder
-            />
-          </Carousel.Slide>
-          <Carousel.Slide>
-            <Image
-              alt=""
-              fit="cover"
-              height={480}
-              radius="md"
-              src="https://picsum.photos/seed/carousel3/640/480"
-              width="100%"
-              withPlaceholder
-            />
-          </Carousel.Slide>
-        </Carousel>
-        <Title
-          fw={500}
-          mb="lg"
-          order={3}
-        >
-          Categories
-        </Title>
-        <Group
-          mb={64}
-          noWrap
-          spacing="xs"
-        >
-          {['Mainnet', 'Ethereum', 'Gaming'].map(_c => (
-            <Button
-              color="gray.7"
-              key={_c}
-              radius="xl"
-              size="sm"
-              variant="outline"
+                <Image
+                  alt="bg"
+                  bottom={-84}
+                  height={168}
+                  pos="absolute"
+                  radius={56}
+                  src={data.logoUrl}
+                  styles={{
+                    image: {
+                      border: '9px solid',
+                      borderColor: isDarkTheme ? theme.colors.dark[7] : '#fff',
+                    },
+                  }}
+                  width={168}
+                  withPlaceholder
+                />
+              </Box>
+            </Box>
+            <Flex
+              align="center"
+              justify="space-between"
+              mb="xs"
             >
-              {_c}
-            </Button>
-          ))}
-        </Group>
-        <Title
-          fw={500}
-          mb="lg"
-          order={3}
-        >
-          About
-        </Title>
-        <Text
-          c="gray.7"
-          dangerouslySetInnerHTML={{ __html: desc.replaceAll('/\n', '<br /><br />') }}
-          lh={1.25}
-          mb="lg"
-        />
+              <Group spacing="xs">
+                <Title
+                  color={isDarkTheme ? theme.colors.gray[2] : theme.colors.dark[7]}
+                  order={3}
+                  truncate
+                >
+                  {data.name}
+                </Title>
+                <Verified />
+              </Group>
+              <Group spacing="lg">
+                <ActionIcon
+                  size="lg"
+                  radius="xl"
+                  variant="transparent"
+                >
+                  <i
+                    className="fa-regular fa-star"
+                    style={{ color: isDarkTheme ? theme.colors.gray[2] : theme.colors.dark[7] }}
+                  />
+                </ActionIcon>
+                <ActionIcon
+                  size="lg"
+                  radius="xl"
+                  variant="transparent"
+                >
+                  <i
+                    className="fa-solid fa-share-nodes"
+                    style={{ color: isDarkTheme ? theme.colors.gray[2] : theme.colors.dark[7] }}
+                  />
+                </ActionIcon>
+                <Menu
+                  shadow="md"
+                  width={200}
+                >
+                  <Menu.Target>
+                    <ActionIcon
+                      size="lg"
+                      radius="xl"
+                      variant="transparent"
+                    >
+                      <i
+                        className="fa-solid fa-ellipsis"
+                        style={{ color: isDarkTheme ? theme.colors.gray[2] : theme.colors.dark[7] }}
+                      />
+                    </ActionIcon>
+                  </Menu.Target>
+                  <Menu.Dropdown>
+                    <Menu.Item icon={<i className="fa-solid fa-copy" />}>Copy link</Menu.Item>
+                    <Menu.Item icon={<i className="fa-solid fa-paperclip" />}>Documentation</Menu.Item>
+                    <Menu.Item icon={<i className="fa-solid fa-circle-question" />}>Contact support</Menu.Item>
+                    <Menu.Divider />
+                    <Menu.Item
+                      color="red"
+                      icon={<i className="fa-solid fa-triangle-exclamation" />}
+                    >
+                      Report
+                    </Menu.Item>
+                  </Menu.Dropdown>
+                </Menu>
+              </Group>
+            </Flex>
+            <Group
+              mb="xs"
+              noWrap
+              spacing="lg"
+            >
+              <Box>
+                <Text
+                  component="span"
+                  mr={4}
+                >
+                  By
+                </Text>
+                <Text
+                  color={isDarkTheme ? theme.colors.gray[2] : theme.colors.dark[7]}
+                  component="span"
+                  fw={700}
+                >
+                  -
+                </Text>
+              </Box>
+              <Box>
+                <Text
+                  component="span"
+                  mr={4}
+                >
+                  Created
+                </Text>
+                <Text
+                  color={isDarkTheme ? theme.colors.gray[2] : theme.colors.dark[7]}
+                  component="span"
+                  fw={700}
+                >
+                  {new Date(data.createdAt).toDateString()}
+                </Text>
+              </Box>
+            </Group>
+            <Group
+              mb="xs"
+              noWrap
+              spacing="lg"
+            >
+              <Box>
+                <Text
+                  component="span"
+                  mr={4}
+                >
+                  Categories:
+                </Text>
+                <Badge
+                  color="gray"
+                  mr="xs"
+                  radius="xs"
+                >
+                  {data.blockchain}
+                </Badge>
+              </Box>
+              <Box>
+                <Text
+                  component="span"
+                  mr={4}
+                >
+                  Categories:
+                </Text>
+                {data?.categories?.map(_category => (
+                  <Badge
+                    color="gray"
+                    key={_category}
+                    mr="xs"
+                    radius="xs"
+                  >
+                    {_category}
+                  </Badge>
+                ))}
+              </Box>
+            </Group>
+            <Group
+              mb={rem(48)}
+              noWrap
+              spacing="lg"
+            >
+              {data?.website && (
+                <a
+                  href={data.website}
+                  onClick={e => e.stopPropagation()}
+                  rel="noreferrer"
+                  target="_blank"
+                >
+                  <i
+                    className="fa-solid fa-globe"
+                    style={{ color: isDarkTheme ? theme.colors.gray[2] : theme.colors.dark[7] }}
+                  />
+                </a>
+              )}
+              {data?.twitter && (
+                <a
+                  href={data.twitter}
+                  onClick={e => e.stopPropagation()}
+                  rel="noreferrer"
+                  target="_blank"
+                >
+                  <i
+                    className="fa-brands fa-twitter"
+                    style={{ color: isDarkTheme ? theme.colors.gray[2] : theme.colors.dark[7] }}
+                  />
+                </a>
+              )}
+              {data?.discord && (
+                <a
+                  href={data.discord}
+                  onClick={e => e.stopPropagation()}
+                  rel="noreferrer"
+                  target="_blank"
+                >
+                  <i
+                    className="fa-brands fa-discord"
+                    style={{ color: isDarkTheme ? theme.colors.gray[2] : theme.colors.dark[7] }}
+                  />
+                </a>
+              )}
+            </Group>
+            <Tabs
+              color={isDarkTheme ? 'gray.2' : 'dark.7'}
+              defaultValue="project-details"
+              mb={rem(48)}
+            >
+              <Tabs.List>
+                <Tabs.Tab value="project-details">Project Details</Tabs.Tab>
+                <Tabs.Tab value="resources">Resources</Tabs.Tab>
+                <Tabs.Tab value="latest-discussions">Latest Discussions</Tabs.Tab>
+                <Tabs.Tab value="team-members">Team Members</Tabs.Tab>
+              </Tabs.List>
+              <Tabs.Panel
+                value="project-details"
+                pt={rem(24)}
+              >
+                <Title
+                  color={theme.colorScheme === 'dark' ? theme.colors.gray[2] : theme.colors.dark[7]}
+                  mb="xs"
+                  order={3}
+                >
+                  About Project
+                </Title>
+                <Text>{data?.description}</Text>
+              </Tabs.Panel>
+              <Tabs.Panel
+                value="resources"
+                pt={rem(24)}
+              >
+                -
+              </Tabs.Panel>
+              <Tabs.Panel
+                value="latest-discussions"
+                pt={rem(24)}
+              >
+                -
+              </Tabs.Panel>
+              <Tabs.Panel
+                value="team-members"
+                pt={rem(24)}
+              >
+                -
+              </Tabs.Panel>
+            </Tabs>
+            <Divider my={rem(64)} />
+            <Title
+              color={theme.colorScheme === 'dark' ? theme.colors.gray[2] : theme.colors.dark[7]}
+              mb="xs"
+              order={3}
+            >
+              You may also like this
+            </Title>
+          </>
+        )}
       </Container>
     </AppShell>
   )
@@ -277,13 +397,3 @@ const DiscoverDetailWrapper = () => {
 }
 
 export default DiscoverDetailWrapper
-
-const desc = `Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium. totam rem aperiam, eaque ipsa
-quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas
-sit aspernatur. /\n Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore
-magna aliqua. Ut enim ad mini veniam. /\n 📖 Utilities of Rekt Dogs NFT /\n 🔥 Lorem ipsum dolor sit amet, consectetur adipiscing elit /\n 🔥
-Ut enim ad mini veniam /\n 🔥 Doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo /\n 🔥 Voluptatem accusantium 💬 Odit aut
-fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt, as below: /\n 👉 Gui dolorem ipsum quia dolor
-sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore /\n 👉 Zmagnam aliquam
-quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem. /\n 👉 APR Rewards Pass 💳 - eprehenderit qui in ea
-voluptate velit esse quam.`

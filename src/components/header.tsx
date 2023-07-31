@@ -1,7 +1,7 @@
 import { useContext } from 'react'
 import Link from 'next/link'
 import { signOut } from 'next-auth/react'
-import { Header as MantineHeader, Container, Flex, Group, Box, Center, Avatar, Button, TextInput, Menu, rem } from '@mantine/core'
+import { Header as MantineHeader, Container, Flex, Group, Box, Center, Avatar, TextInput, Menu, rem } from '@mantine/core'
 
 import { UserContext } from '@/providers/user'
 
@@ -44,12 +44,6 @@ const Header = () => {
             noWrap
             spacing={rem(24)}
           >
-            <Button
-              radius={rem(12)}
-              style={{ backgroundColor: '#C8FD7C', color: '#3d4043', letterSpacing: '2px' }}
-            >
-              ADD PROJECT
-            </Button>
             <Menu
               shadow="md"
               width={200}

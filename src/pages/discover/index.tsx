@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import Head from 'next/head'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -29,10 +30,9 @@ import { useSessionGuard } from '@/hooks/auth/useSessionGuard'
 
 import { request } from '@/utils/request'
 
-import type { Project } from '@/pages/api/discover'
-import { useMemo } from 'react'
+import type { Project } from '@/types/project'
 
-const ProjectCard = ({ _id, name, logoUrl, bannerImage, description, categories }: Project) => {
+const ProjectCard = ({ _id, name, logoUrl, bannerImage, description, categories, website, twitter, discord }: Project) => {
   const router = useRouter()
 
   return (
@@ -126,29 +126,36 @@ const ProjectCard = ({ _id, name, logoUrl, bannerImage, description, categories 
           style={{ flex: 1 }}
         >
           <Group>
-            <a
-              href="/"
-              onClick={e => e.stopPropagation()}
-              target="_blank"
-            >
-              <i className="fa-solid fa-globe" />
-            </a>
-            <a
-              href="https://twitter.com"
-              onClick={e => e.stopPropagation()}
-              rel="noreferrer"
-              target="_blank"
-            >
-              <i className="fa-brands fa-twitter" />
-            </a>
-            <a
-              href="https://discord.com"
-              onClick={e => e.stopPropagation()}
-              rel="noreferrer"
-              target="_blank"
-            >
-              <i className="fa-brands fa-discord" />
-            </a>
+            {website && (
+              <a
+                href={website}
+                onClick={e => e.stopPropagation()}
+                rel="noreferrer"
+                target="_blank"
+              >
+                <i className="fa-solid fa-globe" />
+              </a>
+            )}
+            {twitter && (
+              <a
+                href={twitter}
+                onClick={e => e.stopPropagation()}
+                rel="noreferrer"
+                target="_blank"
+              >
+                <i className="fa-brands fa-twitter" />
+              </a>
+            )}
+            {discord && (
+              <a
+                href={discord}
+                onClick={e => e.stopPropagation()}
+                rel="noreferrer"
+                target="_blank"
+              >
+                <i className="fa-brands fa-discord" />
+              </a>
+            )}
           </Group>
         </Flex>
       </Flex>
