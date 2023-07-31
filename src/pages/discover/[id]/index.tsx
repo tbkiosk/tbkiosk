@@ -24,14 +24,13 @@ import { useQuery } from '@tanstack/react-query'
 import { UserProvider } from '@/providers/user'
 
 import { Header } from '@/components'
+import Verified from '@/assets/icons/verified'
 
 import { useSessionGuard } from '@/hooks/auth/useSessionGuard'
 
 import { request } from '@/utils/request'
 
-import Verified from '@/assets/icons/verified'
-
-import type { Project } from '@/types/project'
+import type { Project } from '@prisma/client'
 
 const DiscoverDetail = () => {
   const router = useRouter()

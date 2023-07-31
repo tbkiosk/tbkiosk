@@ -47,3 +47,131 @@ model Account {
 
   @@map("account")
 }
+
+// ----------------------------------------------------------------
+
+model CreatorAccount {
+  id                String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId            String   @db.ObjectId
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? // @db.Text
+  access_token      String? // @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? // @db.Text
+  session_state     String?
+  user              CreatorUser     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@unique([provider, providerAccountId])
+  @@map("creator_accounts")
+}
+
+model CreatorSession {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  sessionToken String   @unique
+  userId       String   @db.ObjectId
+  expires      DateTime
+  user         CreatorUser     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("creator_sessions")
+}
+
+model CreatorUser {
+  id            String          @id @default(auto()) @map("_id") @db.ObjectId
+  name          String?
+  email         String?         @unique
+  emailVerified DateTime?
+  image         String?
+  accounts      CreatorAccount[]
+  sessions      CreatorSession[]
+  address       String?         @unique
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  projects      Project[]
+  twitter       TwitterProfile?
+  discord       DiscordProfile?
+
+  @@map("creator_users")
+}
+
+type TwitterProfile {
+  id       String
+  name     String?
+  username String?
+  image    String?
+}
+
+type DiscordProfile {
+  id       String
+  name     String?
+  username String?
+  image    String?
+}
+
+model VerificationToken {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("creator_verification_tokens")
+}
+
+model Project {
+  id             String            @id @default(auto()) @map("_id") @db.ObjectId
+  blockchain     ProjectBlockchain
+  name           String
+  logoUrl        String
+  description    String
+  website        String?
+  twitter        String?
+  discord        String?
+  bannerImage    String
+  categories     Category[]
+  previewImages  String[]
+  projectStage   ProjectStage
+  status         ProjectStatus
+  reportedAsSpam Boolean           @default(false)
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+  userId         String            @db.ObjectId
+  user           CreatorUser              @relation(fields: [userId], references: [id])
+
+  @@map("creator_projects")
+}
+
+enum ProjectStatus {
+  Draft
+  InReview
+  Published
+}
+
+enum ProjectStage {
+  Mainnet
+  InDevelopment
+}
+
+enum Category {
+  NFT
+  Game
+  DeFi
+  Tooling
+  Dao
+  Infrastructure
+  Social
+  Others
+}
+
+enum ProjectBlockchain {
+  Ethereum
+  Polygon
+  Solana
+  Sui
+  BSC
+}

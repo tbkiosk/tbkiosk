@@ -1,11 +1,11 @@
 import { getServerSession } from 'next-auth/next'
 
-import { mongodbClient } from '@/lib/mongodb'
+import { prismaClient } from '@/lib/prisma'
 
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
 
 import type { NextApiRequest, NextApiResponse } from 'next'
-import type { Project } from '@/types/project'
+import type { Project } from '@prisma/client'
 
 const handler = async (req: NextApiRequest, res: NextApiResponse<Project[]>) => {
   const session = await getServerSession(req, res, authOptions)
@@ -19,10 +19,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Project[]>) => 
    */
   if (req.method === 'GET') {
     try {
-      const client = await mongodbClient
-      const db = client.db(process.env.NODE_ENV)
-
-      const projects = await db.collection<Project>('creator_projects').find({}).toArray()
+      const projects = await prismaClient.project.findMany({})
 
       return res.status(200).json(projects)
     } catch (err) {

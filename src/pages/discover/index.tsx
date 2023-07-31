@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+// import { useMemo } from 'react'
 import Head from 'next/head'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -30,15 +30,15 @@ import { useSessionGuard } from '@/hooks/auth/useSessionGuard'
 
 import { request } from '@/utils/request'
 
-import type { Project } from '@/types/project'
+import type { Project } from '@prisma/client'
 
-const ProjectCard = ({ _id, name, logoUrl, bannerImage, description, categories, website, twitter, discord }: Project) => {
+const ProjectCard = ({ id, name, logoUrl, bannerImage, description, categories, website, twitter, discord }: Project) => {
   const router = useRouter()
 
   return (
     <Card
       display="flex"
-      onClick={() => router.push(`/discover/${_id}`)}
+      onClick={() => router.push(`/discover/${id}`)}
       padding="sm"
       radius="md"
       sx={{
@@ -192,7 +192,7 @@ const Discover = () => {
     refetchOnWindowFocus: false,
   })
 
-  const featuredProject = useMemo(() => data?.find(_project => _project.isFeatured), [data])
+  // const featuredProject = useMemo(() => data?.find(_project => _project.isFeatured), [data])
 
   return (
     <AppShell
@@ -208,7 +208,7 @@ const Discover = () => {
         maw={rem(1440)}
         px={rem(64)}
       >
-        {featuredProject && (
+        {/* {featuredProject && (
           <Box h={600}>
             <Link href={`/discover/${featuredProject._id.toString()}`}>
               <Image
@@ -224,8 +224,7 @@ const Discover = () => {
               />
             </Link>
           </Box>
-        )}
-
+        )} */}
         <Title
           my={rem(32)}
           order={4}
@@ -240,12 +239,12 @@ const Discover = () => {
           <LoadingOverlay visible={isLoading} />
           {data?.map(_project => (
             <Grid.Col
-              key={_project._id.toString()}
+              key={_project.id}
               md={3}
               sm={4}
               xs={6}
             >
-              <Link href={`/discover/${_project._id.toString()}`}>
+              <Link href={`/discover/${_project.id}`}>
                 <ProjectCard {..._project} />
               </Link>
             </Grid.Col>
