@@ -5,7 +5,7 @@ import { Header as MantineHeader, Container, Flex, Group, Box, Center, Avatar, B
 
 import { UserContext } from '@/providers/user'
 
-import Logo from '@/assets/icons/logo'
+import Logo from '@/assets/icons/logo_with_text.svg'
 
 const Header = () => {
   const { image, name } = useContext(UserContext)
