@@ -244,7 +244,10 @@ const Discover = () => {
               sm={4}
               xs={6}
             >
-              <Link href={`/discover/${_project.id}`}>
+              <Link
+                href={`/discover/${_project.id}`}
+                passHref
+              >
                 <ProjectCard {..._project} />
               </Link>
             </Grid.Col>

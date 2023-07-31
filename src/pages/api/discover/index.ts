@@ -19,7 +19,16 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Project[]>) => 
    */
   if (req.method === 'GET') {
     try {
-      const projects = await prismaClient.project.findMany({})
+      const search = req.query.search
+      if (Array.isArray(search)) {
+        throw new Error('Multiple search parameters is not supported')
+      }
+
+      const projects = await prismaClient.project.findMany({
+        where: {
+          OR: [{ name: { contains: search || '' } }],
+        },
+      })
 
       return res.status(200).json(projects)
     } catch (err) {

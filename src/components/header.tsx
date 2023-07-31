@@ -1,14 +1,74 @@
-import { useContext } from 'react'
+import { useContext, forwardRef, useState } from 'react'
 import Link from 'next/link'
 import { signOut } from 'next-auth/react'
-import { Header as MantineHeader, Container, Flex, Group, Box, Center, Avatar, TextInput, Menu, rem } from '@mantine/core'
-
+import { Header as MantineHeader, Container, Flex, Group, Box, Center, Avatar, Menu, Select, Text, rem } from '@mantine/core'
+import { notifications } from '@mantine/notifications'
+import { useMutation } from '@tanstack/react-query'
 import { UserContext } from '@/providers/user'
 
 import Logo from '@/assets/icons/logo_with_text.svg'
 
+import { request } from '@/utils/request'
+
+import { useDebouncedEffect } from '@/hooks/dom/useDebouncedEffect'
+
+import type { Project } from '@prisma/client'
+import type { SelectItemProps } from '@mantine/core'
+
+type ItemProps = Project & SelectItemProps
+
+const AutoCompleteItem = forwardRef<HTMLAnchorElement, ItemProps>(({ logoUrl, name, id }: ItemProps, ref) => (
+  <Link
+    href={`/discover/${id}`}
+    ref={ref}
+  >
+    <Group
+      mx={4}
+      my={4}
+      noWrap
+    >
+      <Avatar src={logoUrl} />
+      <Text>{name}</Text>
+    </Group>
+  </Link>
+))
+
+AutoCompleteItem.displayName = 'AutoCompleteItem'
+
 const Header = () => {
   const { image, name } = useContext(UserContext)
+
+  const [search, setSearch] = useState('')
+
+  const { data, mutate } = useMutation({
+    mutationFn: async ({ search }: { search: string }) => {
+      const { error, data } = await request<Project[]>({
+        url: '/api/discover',
+        params: {
+          search,
+        },
+      })
+
+      if (error) {
+        throw new Error(error as string)
+      }
+
+      return data || []
+    },
+    onError: error => {
+      notifications.show({
+        color: 'red',
+        title: 'Error',
+        message: (error as Error)?.message,
+      })
+    },
+  })
+
+  useDebouncedEffect(() => {
+    if (search) {
+      mutate({ search })
+    }
+  }, [search])
 
   return (
     <MantineHeader
@@ -34,10 +94,16 @@ const Header = () => {
             mx={rem(24)}
             style={{ flex: 1 }}
           >
-            <TextInput
+            <Select
+              data={!search ? [] : data?.map(_project => ({ ..._project, value: _project.id, label: _project.name })) || []}
+              filter={() => true}
+              itemComponent={AutoCompleteItem}
+              onSearchChange={value => setSearch(value)}
               placeholder="Search for collections, NFTs or users"
               radius={rem(12)}
               rightSection={<i className="fa-solid fa-magnifying-glass text-[#aaa]" />}
+              searchable
+              searchValue={search}
             />
           </Box>
           <Group
