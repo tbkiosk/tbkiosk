@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import {
@@ -64,6 +65,13 @@ const DiscoverDetail = () => {
     retry: false,
     refetchOnWindowFocus: false,
   })
+
+  useEffect(() => {
+    request({
+      url: `/api/discover/${router.query.id}/view`,
+      method: 'PUT',
+    })
+  }, [])
 
   const isDarkTheme = theme.colorScheme === 'dark'
 
