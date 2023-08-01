@@ -2,29 +2,13 @@
 import Head from 'next/head'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import {
-  AppShell,
-  Container,
-  Title,
-  Image,
-  Box,
-  Flex,
-  Grid,
-  Card,
-  AspectRatio,
-  Group,
-  Text,
-  Badge,
-  ActionIcon,
-  LoadingOverlay,
-  rem,
-} from '@mantine/core'
+import { AppShell, Container, Title, Image, Flex, Grid, Card, AspectRatio, Group, Text, Badge, LoadingOverlay, rem } from '@mantine/core'
 import { notifications } from '@mantine/notifications'
 import { useQuery } from '@tanstack/react-query'
 
 import { UserProvider } from '@/providers/user'
 
-import { Header } from '@/components'
+import { Header, Footer } from '@/components'
 
 import { useSessionGuard } from '@/hooks/auth/useSessionGuard'
 
@@ -208,23 +192,16 @@ const Discover = () => {
         maw={rem(1440)}
         px={rem(64)}
       >
-        {/* {featuredProject && (
-          <Box h={600}>
-            <Link href={`/discover/${featuredProject._id.toString()}`}>
-              <Image
-                alt="bg"
-                fit="cover"
-                height="600"
-                left={0}
-                pos="absolute"
-                right={0}
-                src={featuredProject.bannerImage}
-                top={72 + 16}
-                withPlaceholder
-              />
-            </Link>
-          </Box>
-        )} */}
+        <Image
+          alt="banner"
+          fit="cover"
+          height={280}
+          mx="auto"
+          my={rem(64)}
+          src="/images/discover/banner.png"
+          width={440}
+          withPlaceholder
+        />
         <Title
           my={rem(32)}
           order={4}
@@ -253,72 +230,7 @@ const Discover = () => {
             </Grid.Col>
           ))}
         </Grid>
-        <Box>
-          <Title
-            order={4}
-            mb={rem(8)}
-            ta="center"
-          >
-            Join the community
-          </Title>
-          <Group
-            noWrap
-            position="center"
-          >
-            <ActionIcon
-              radius="md"
-              size="lg"
-              variant="light"
-            >
-              <a
-                href="https://twitter.com"
-                rel="noreferrer"
-                target="_blank"
-              >
-                <i className="fa-brands fa-twitter" />
-              </a>
-            </ActionIcon>
-            <ActionIcon
-              radius="md"
-              size="lg"
-              variant="light"
-            >
-              <a
-                href="https://discord.com"
-                rel="noreferrer"
-                target="_blank"
-              >
-                <i className="fa-brands fa-discord" />
-              </a>
-            </ActionIcon>
-            <ActionIcon
-              radius="md"
-              size="lg"
-              variant="light"
-            >
-              <a
-                href="https://youtube.com"
-                rel="noreferrer"
-                target="_blank"
-              >
-                <i className="fa-brands fa-youtube" />
-              </a>
-            </ActionIcon>
-            <ActionIcon
-              radius="md"
-              size="lg"
-              variant="light"
-            >
-              <a
-                href="https://tiktok.com"
-                rel="noreferrer"
-                target="_blank"
-              >
-                <i className="fa-brands fa-tiktok" />
-              </a>
-            </ActionIcon>
-          </Group>
-        </Box>
+        <Footer />
       </Container>
     </AppShell>
   )
