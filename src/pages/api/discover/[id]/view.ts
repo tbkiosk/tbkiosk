@@ -1,16 +1,16 @@
-import { getServerSession } from 'next-auth/next'
+// import { getServerSession } from 'next-auth/next'
 
 import { prismaClient } from '@/lib/prisma'
 
-import { authOptions } from '@/pages/api/auth/[...nextauth]'
+// import { authOptions } from '@/pages/api/auth/[...nextauth]'
 
 import type { NextApiRequest, NextApiResponse } from 'next'
 
 const handler = async (req: NextApiRequest, res: NextApiResponse<null>) => {
-  const session = await getServerSession(req, res, authOptions)
-  if (!session) {
-    return res.status(401).end()
-  }
+  // const session = await getServerSession(req, res, authOptions)
+  // if (!session) {
+  //   return res.status(401).end()
+  // }
 
   /**
    * @method PUT

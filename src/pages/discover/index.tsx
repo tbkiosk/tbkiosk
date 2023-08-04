@@ -10,8 +10,6 @@ import { UserProvider } from '@/providers/user'
 
 import { Header, Footer } from '@/components'
 
-import { useSessionGuard } from '@/hooks/auth/useSessionGuard'
-
 import { request } from '@/utils/request'
 
 import type { Project } from '@prisma/client'
@@ -148,8 +146,6 @@ const ProjectCard = ({ id, name, logoUrl, bannerImage, description, categories, 
 }
 
 const Discover = () => {
-  const { status } = useSessionGuard()
-
   const { data, isLoading } = useQuery<Project[], Error>({
     queryKey: ['discover'],
     queryFn: async () => {
@@ -163,7 +159,6 @@ const Discover = () => {
 
       return data || []
     },
-    enabled: status === 'authenticated',
     onError: (error: Error) => {
       notifications.show({
         color: 'red',
@@ -198,7 +193,7 @@ const Discover = () => {
           height={280}
           mx="auto"
           my={rem(64)}
-          src="/images/discover/banner.png"
+          src="/images/banner.png"
           width={440}
           withPlaceholder
         />

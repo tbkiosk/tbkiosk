@@ -1,12 +1,10 @@
 import { useContext, forwardRef, useState } from 'react'
 import Link from 'next/link'
 import { signOut } from 'next-auth/react'
-import { Header as MantineHeader, Container, Flex, Group, Box, Center, Avatar, Menu, Select, Text, rem } from '@mantine/core'
+import { Header as MantineHeader, Container, Flex, Group, Box, Center, Avatar, Menu, Select, Text, Image, rem } from '@mantine/core'
 import { notifications } from '@mantine/notifications'
 import { useMutation } from '@tanstack/react-query'
 import { UserContext } from '@/providers/user'
-
-import Logo from '@/assets/icons/logo_with_text.svg'
 
 import { request } from '@/utils/request'
 
@@ -84,8 +82,14 @@ const Header = () => {
           justify="space-between"
         >
           <Link href="/">
-            <Center>
-              <Logo />
+            <Center
+              maw={162}
+              w={162}
+            >
+              <Image
+                alt="logo"
+                src="/logo_with_text.svg"
+              />
             </Center>
           </Link>
           <Box
@@ -107,8 +111,11 @@ const Header = () => {
             />
           </Box>
           <Group
+            position="right"
+            maw={162}
             noWrap
             spacing={rem(24)}
+            w={162}
           >
             <Menu
               shadow="md"

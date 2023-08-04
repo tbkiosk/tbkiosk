@@ -25,9 +25,6 @@ import { useQuery } from '@tanstack/react-query'
 import { UserProvider } from '@/providers/user'
 
 import { Header, FavoriteButton } from '@/components'
-import Verified from '@/assets/icons/verified'
-
-import { useSessionGuard } from '@/hooks/auth/useSessionGuard'
 
 import { request } from '@/utils/request'
 
@@ -37,8 +34,6 @@ const DiscoverDetail = () => {
   const router = useRouter()
 
   const theme = useMantineTheme()
-
-  const { status } = useSessionGuard()
 
   const { data, isLoading } = useQuery<Project | undefined, Error>({
     queryKey: ['discover_details', router.query.id],
@@ -53,7 +48,6 @@ const DiscoverDetail = () => {
 
       return data
     },
-    enabled: status === 'authenticated',
     onError: (error: Error) => {
       notifications.show({
         color: 'red',
@@ -154,7 +148,6 @@ const DiscoverDetail = () => {
                 >
                   {data.name}
                 </Title>
-                <Verified />
               </Group>
               <Group spacing="lg">
                 <FavoriteButton
