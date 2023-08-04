@@ -9,7 +9,7 @@ const AppDocument = () => {
       <Head>
         <meta
           name="description"
-          content="morphis airdawg"
+          content="kiosk"
         />
         <meta charSet="UTF-8" />
         <link

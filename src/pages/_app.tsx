@@ -21,7 +21,7 @@ import '@suiet/wallet-kit/style.css'
 import '../styles/globals.css'
 
 const getSiweMessageOptions: GetSiweMessageOptions = () => ({
-  statement: 'Sign in to Morphis Airdawg',
+  statement: 'Sign in to Kiosk',
 })
 
 const App = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => (

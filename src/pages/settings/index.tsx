@@ -276,8 +276,8 @@ const Settings = () => {
               >
                 Help centre 🚨
               </Title>
-              <Text>Having trouble in Airdawg? Please contact us for more question.</Text>
-              <Anchor href="">hello@airdawg.io</Anchor>
+              <Text>Having trouble in Kiosk? Please contact us for more question.</Text>
+              <Anchor href="">helpcenter@kiosk.xyz</Anchor>
               <Text size={rem(64)}>💌</Text>
               <Button
                 h={rem(48)}
@@ -298,10 +298,10 @@ const SettingsWrapper = () => {
   return (
     <>
       <Head>
-        <title>Morphis Airdawg - Settings</title>
+        <title>Kiosk - Settings</title>
         <meta
           name="description"
-          content="Morphis Airdawg settings"
+          content="Kiosk settings"
         />
       </Head>
       <UserProvider>

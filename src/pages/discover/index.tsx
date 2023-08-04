@@ -240,10 +240,10 @@ const DiscoverWrapper = () => {
   return (
     <>
       <Head>
-        <title>Morphis Airdawg - Discover</title>
+        <title>Kiosk - Discover</title>
         <meta
           name="description"
-          content="Morphis Airdawg discover"
+          content="Kiosk discover"
         />
       </Head>
       <UserProvider>

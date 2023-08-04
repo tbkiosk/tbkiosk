@@ -24,7 +24,7 @@ import { useQuery } from '@tanstack/react-query'
 
 import { UserProvider } from '@/providers/user'
 
-import { Header } from '@/components'
+import { Header, FavoriteButton } from '@/components'
 import Verified from '@/assets/icons/verified'
 
 import { useSessionGuard } from '@/hooks/auth/useSessionGuard'
@@ -157,16 +157,11 @@ const DiscoverDetail = () => {
                 <Verified />
               </Group>
               <Group spacing="lg">
-                <ActionIcon
-                  size="lg"
-                  radius="xl"
-                  variant="transparent"
-                >
-                  <i
-                    className="fa-regular fa-star"
-                    style={{ color: isDarkTheme ? theme.colors.gray[2] : theme.colors.dark[7] }}
-                  />
-                </ActionIcon>
+                <FavoriteButton
+                  defaultFavorited={false}
+                  onFavorite={() => void 0}
+                  onUnfavorite={() => void 0}
+                />
                 <ActionIcon
                   size="lg"
                   radius="xl"
@@ -390,10 +385,10 @@ const DiscoverDetailWrapper = () => {
   return (
     <>
       <Head>
-        <title>Morphis Airdawg - Discover</title>
+        <title>Kiosk - Discover</title>
         <meta
           name="description"
-          content="Morphis Airdawg discover"
+          content="Kiosk discover"
         />
       </Head>
       <UserProvider>

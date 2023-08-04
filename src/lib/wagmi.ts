@@ -7,7 +7,7 @@ import { env } from '@/env.mjs'
 
 const { chains, publicClient } = configureChains([mainnet, polygon], [publicProvider()])
 const { connectors } = getDefaultWallets({
-  appName: 'Morphis Airdawg',
+  appName: 'Kiosk',
   projectId: env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID,
   chains,
 })

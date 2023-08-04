@@ -4,6 +4,7 @@ import { useSession } from 'next-auth/react'
 
 type SessionGuardOptions = {
   ignoreSession?: boolean
+  authorizedRedirectPath?: string
 }
 
 export const useSessionGuard = (options?: SessionGuardOptions) => {
@@ -13,6 +14,12 @@ export const useSessionGuard = (options?: SessionGuardOptions) => {
   useEffect(() => {
     if (!session && status !== 'loading' && !options?.ignoreSession) {
       router.push('/login')
+      return
+    }
+
+    if (session?.user && options?.authorizedRedirectPath) {
+      router.push(options.authorizedRedirectPath)
+      return
     }
   }, [session, router, status, options?.ignoreSession])
 
