@@ -1,75 +1,17 @@
-@import 'tailwindcss/base';
-@import 'tailwindcss/components';
-@import 'tailwindcss/utilities';
-
 @font-face {
-  font-family: satoshi;
-  font-weight: 300;
-  src: url('/fonts/Satoshi-Light.otf');
+  font-family: cera-variable;
+  src: url('/fonts/Cera-Variable-Demo.ttf');
 }
 
 @font-face {
-  font-family: satoshi;
+  font-family: cera-variable;
   font-style: italic;
-  font-weight: 300;
-  src: url('/fonts/Satoshi-LightItalic.otf');
-}
-
-@font-face {
-  font-family: satoshi;
-  font-weight: 400;
-  src: url('/fonts/Satoshi-Regular.otf');
-}
-
-@font-face {
-  font-family: satoshi;
-  font-style: italic;
-  font-weight: 400;
-  src: url('/fonts/Satoshi-Italic.otf');
-}
-
-@font-face {
-  font-family: satoshi;
-  font-weight: 500;
-  src: url('/fonts/Satoshi-Medium.otf');
-}
-
-@font-face {
-  font-family: satoshi;
-  font-style: italic;
-  font-weight: 500;
-  src: url('/fonts/Satoshi-MediumItalic.otf');
-}
-
-@font-face {
-  font-family: satoshi;
-  font-weight: 700;
-  src: url('/fonts/Satoshi-Bold.otf');
-}
-
-@font-face {
-  font-family: satoshi;
-  font-style: italic;
-  font-weight: 700;
-  src: url('/fonts/Satoshi-BoldItalic.otf');
-}
-
-@font-face {
-  font-family: satoshi;
-  font-weight: 900;
-  src: url('/fonts/Satoshi-Black.otf');
-}
-
-@font-face {
-  font-family: satoshi;
-  font-style: italic;
-  font-weight: 900;
-  src: url('/fonts/Satoshi-BlackItalic.otf');
+  src: url('/fonts/Cera-Variable-Italic-Demo.ttf');
 }
 
 * {
   box-sizing: border-box;
-  font-family: satoshi, Arial, Helvetica, sans-serif;
+  font-family: cera-variable, Arial, Helvetica, sans-serif;
   margin: 0;
   padding: 0;
 }
@@ -85,56 +27,4 @@ body,
 a {
   color: inherit;
   text-decoration: none;
-}
-
-img {
-  height: auto;
-  max-width: 100%;
-}
-
-select::-ms-expand {
-  display: none;
-}
-
-select {
-  -moz-appearance: none;
-  -webkit-appearance: none;
-  appearance: none;
-  text-overflow: '';
-  text-indent: 1px;
-}
-
-.animation-fill-forwards {
-  animation-fill-mode: forwards;
-}
-
-.button__colored {
-  animation-duration: 2s;
-  animation-iteration-count: infinite;
-  animation-name: linear-gradient-kfms;
-  animation-play-state: paused;
-  animation-timing-function: linear;
-  background: linear-gradient(90deg, #fb7185, #d946ef, #6366f1, #d946ef, #fb7185),
-    linear-gradient(90deg, #fb7185, #d946ef, #6366f1, #d946ef, #fb7185);
-  background-size: 200% 100%;
-}
-
-/* tailwindcss defined classes of button type=submit, increase specifility to override */
-.button__colored.button__submit {
-  background: linear-gradient(90deg, #fb7185, #d946ef, #6366f1, #d946ef, #fb7185),
-    linear-gradient(90deg, #fb7185, #d946ef, #6366f1, #d946ef, #fb7185);
-  background-size: 200% 100%;
-}
-
-.button__colored:hover {
-  animation-play-state: running;
-}
-
-@keyframes linear-gradient-kfms {
-  0% {
-    background-position: 0 0;
-  }
-  100% {
-    background-position: 200% 0;
-  }
 }

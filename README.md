@@ -16,7 +16,6 @@ pnpm dev
 
 ## coding convention
 - typescript only
-- tailwindcss style, no arbitrary values if possible
 - properties in alphabetical order
 
 
