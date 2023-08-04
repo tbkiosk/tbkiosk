@@ -1,10 +1,9 @@
-import { useContext, forwardRef, useState } from 'react'
+import { forwardRef, useState } from 'react'
 import Link from 'next/link'
-import { signOut } from 'next-auth/react'
-import { Header as MantineHeader, Container, Flex, Group, Box, Center, Avatar, Menu, Select, Text, Image, rem } from '@mantine/core'
+import { Header as MantineHeader, Container, Flex, Group, Box, Center, Avatar, Button, Select, Text, Image, rem } from '@mantine/core'
 import { notifications } from '@mantine/notifications'
 import { useMutation } from '@tanstack/react-query'
-import { UserContext } from '@/providers/user'
+// import { UserContext } from '@/providers/user'
 
 import { request } from '@/utils/request'
 
@@ -34,7 +33,7 @@ const AutoCompleteItem = forwardRef<HTMLAnchorElement, ItemProps>(({ logoUrl, na
 AutoCompleteItem.displayName = 'AutoCompleteItem'
 
 const Header = () => {
-  const { image, name } = useContext(UserContext)
+  // const { image, name } = useContext(UserContext)
 
   const [search, setSearch] = useState('')
 
@@ -117,32 +116,19 @@ const Header = () => {
             spacing={rem(24)}
             w={162}
           >
-            <Menu
-              shadow="md"
-              width={200}
+            <a
+              href="https://creator.tbkiosk.xyz"
+              rel="noreferrer"
+              target="_blank"
             >
-              <Menu.Target>
-                <Avatar
-                  alt=""
-                  className="cursor-pointer"
-                  radius="xl"
-                  src={image}
-                >
-                  {!image && (name || '')?.slice(0, 2)}
-                </Avatar>
-              </Menu.Target>
-              <Menu.Dropdown>
-                <Link href="/settings">
-                  <Menu.Item icon={<i className="fa-solid fa-gear" />}>Settings</Menu.Item>
-                </Link>
-                <Menu.Item
-                  icon={<i className="fa-solid fa-arrow-right-from-bracket" />}
-                  onClick={() => signOut()}
-                >
-                  Logout
-                </Menu.Item>
-              </Menu.Dropdown>
-            </Menu>
+              <Button
+                color="gray"
+                radius="lg"
+                style={{ border: '1px solid #454545' }}
+              >
+                List a Project
+              </Button>
+            </a>
           </Group>
         </Flex>
       </Container>
