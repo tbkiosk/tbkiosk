@@ -270,7 +270,7 @@ const Discover = () => {
                 style={{ marginBottom: rem(72), maxWidth: '720px' }}
               >
                 <source
-                  src="/preview1.mp4"
+                  src="/preview2.mp4"
                   type="video/mp4"
                 />
               </video>
