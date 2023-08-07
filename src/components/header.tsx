@@ -25,6 +25,13 @@ const AutoCompleteItem = forwardRef<HTMLAnchorElement, ItemProps>(({ logoUrl, na
       mx={4}
       my={4}
       noWrap
+      p="xs"
+      sx={theme => ({
+        borderRadius: '2px',
+        '&:hover': {
+          backgroundColor: theme.colors.dark[4],
+        },
+      })}
     >
       <Avatar src={logoUrl} />
       <Text>{name}</Text>
@@ -71,8 +78,10 @@ const Header = () => {
 
   return (
     <MantineHeader
-      height="72"
+      bg="#000"
+      height={rem(72)}
       p="md"
+      withBorder={false}
     >
       <Container
         maw={rem(1440)}
@@ -84,8 +93,8 @@ const Header = () => {
         >
           <Link href="/">
             <Center
+              c="#fff"
               maw={162}
-              sx={theme => ({ color: theme.colorScheme === 'dark' ? '#fff' : '#000' })}
               w={162}
             >
               <Logo />
@@ -106,14 +115,29 @@ const Header = () => {
               radius="md"
               rightSection={
                 <Text
+                  c="dark.4"
                   component="span"
-                  sx={theme => ({ color: theme.colorScheme === 'dark' ? theme.colors.dark[4] : theme.colors.gray[4] })}
                 >
                   <i className="fa-solid fa-magnifying-glass" />
                 </Text>
               }
               searchable
               searchValue={search}
+              styles={theme => ({
+                dropdown: {
+                  backgroundColor: theme.colors.dark[5],
+                  border: 'none',
+                  color: theme.colors.dark[0],
+                },
+                input: {
+                  backgroundColor: theme.colors.dark[5],
+                  border: 'none',
+                  color: theme.colors.dark[0],
+                  '::placeholder': {
+                    color: theme.colors.dark[3],
+                  },
+                },
+              })}
             />
           </Box>
           <Group

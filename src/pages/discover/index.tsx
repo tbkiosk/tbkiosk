@@ -18,11 +18,13 @@ import {
   Text,
   Badge,
   LoadingOverlay,
+  ActionIcon,
   rem,
   createStyles,
   keyframes,
 } from '@mantine/core'
 import { notifications } from '@mantine/notifications'
+import { useScrollIntoView } from '@mantine/hooks'
 import { useQuery } from '@tanstack/react-query'
 
 import { UserProvider } from '@/providers/user'
@@ -34,14 +36,26 @@ import { request } from '@/utils/request'
 
 import type { Project } from '@prisma/client'
 
-const typing = keyframes({
-  from: { width: 0 },
-  to: { width: '100%' },
+const typing = (maxWidth = '100%') =>
+  keyframes({
+    from: { width: 0 },
+    to: { width: maxWidth },
+  })
+
+const show = keyframes({
+  '0%': { visibility: 'hidden' },
+  '99%': { visibility: 'hidden' },
+  '100%': { visibility: 'visible' },
 })
 
 const blinkCaret = keyframes({
   'from, to': { borderColor: 'transparent' },
   '50%': { borderColor: '#fd222a' },
+})
+
+const hideBlinkCaret = keyframes({
+  '99%': { borderRightStyle: 'solid' },
+  '100%': { borderRightStyle: 'none' },
 })
 
 const bounce = keyframes({
@@ -53,10 +67,17 @@ const bounce = keyframes({
 })
 
 const useStyles = createStyles(() => ({
-  typewriter: {
-    animation: `${typing} 3.5s steps(40, end), ${blinkCaret} .75s step-end infinite`,
+  title: {
+    animation: `${typing('592px')} 4s steps(20, end), ${blinkCaret} .75s step-end infinite, ${hideBlinkCaret} 4.1s forwards`,
     borderRight: '2px solid #fd222a',
     overflow: 'hidden',
+    whiteSpace: 'nowrap',
+  },
+  subTitle: {
+    animation: `${show} 4.1s forwards, ${typing('1016px')} 6s steps(40, end) 4s, ${blinkCaret} .75s step-end infinite`,
+    borderRight: '2px solid #fd222a',
+    overflow: 'hidden',
+    visibility: 'hidden',
     whiteSpace: 'nowrap',
   },
   bounceArrow: {
@@ -76,11 +97,13 @@ const ProjectCard = ({ id, name, logoUrl, bannerImage, description, categories, 
       sx={{
         flexDirection: 'column',
         height: '560px',
-
+        transition: 'box-shadow 0.4s ease',
+        '&:hover': {
+          boxShadow: '0px 4px 20px 0px rgba(141, 141, 141, 0.31)',
+        },
         '@media (max-width: 62rem)': {
           height: '520px',
         },
-
         '@media (max-width: 48rem)': {
           height: '500px',
         },
@@ -142,7 +165,7 @@ const ProjectCard = ({ id, name, logoUrl, bannerImage, description, categories, 
         <Group spacing="xs">
           {categories.map(_category => (
             <Badge
-              color="gray"
+              color="dark"
               key={_category}
               size="xs"
               radius="sm"
@@ -155,7 +178,7 @@ const ProjectCard = ({ id, name, logoUrl, bannerImage, description, categories, 
         <Flex
           align="flex-end"
           justify="flex-end"
-          style={{ color: '#fd222a', flex: 1 }}
+          style={{ flex: 1 }}
         >
           <Group>
             {website && (
@@ -165,7 +188,21 @@ const ProjectCard = ({ id, name, logoUrl, bannerImage, description, categories, 
                 rel="noreferrer"
                 target="_blank"
               >
-                <i className="fa-solid fa-globe" />
+                <ActionIcon
+                  size="sm"
+                  sx={{
+                    transition: 'transform 0.2s ease',
+                    '&:hover': {
+                      transform: 'scale(1.1)',
+                    },
+                  }}
+                  variant="transparent"
+                >
+                  <i
+                    className="fa-solid fa-globe"
+                    style={{ color: '#fd222a' }}
+                  />
+                </ActionIcon>
               </a>
             )}
             {twitter && (
@@ -175,7 +212,21 @@ const ProjectCard = ({ id, name, logoUrl, bannerImage, description, categories, 
                 rel="noreferrer"
                 target="_blank"
               >
-                <i className="fa-brands fa-x-twitter" />
+                <ActionIcon
+                  size="sm"
+                  sx={{
+                    transition: 'transform 0.2s ease',
+                    '&:hover': {
+                      transform: 'scale(1.1)',
+                    },
+                  }}
+                  variant="transparent"
+                >
+                  <i
+                    className="fa-brands fa-x-twitter"
+                    style={{ color: '#fd222a' }}
+                  />
+                </ActionIcon>
               </a>
             )}
             {discord && (
@@ -185,7 +236,21 @@ const ProjectCard = ({ id, name, logoUrl, bannerImage, description, categories, 
                 rel="noreferrer"
                 target="_blank"
               >
-                <i className="fa-brands fa-discord" />
+                <ActionIcon
+                  size="sm"
+                  sx={{
+                    transition: 'transform 0.2s ease',
+                    '&:hover': {
+                      transform: 'scale(1.1)',
+                    },
+                  }}
+                  variant="transparent"
+                >
+                  <i
+                    className="fa-brands fa-discord"
+                    style={{ color: '#fd222a' }}
+                  />
+                </ActionIcon>
               </a>
             )}
           </Group>
@@ -197,6 +262,10 @@ const ProjectCard = ({ id, name, logoUrl, bannerImage, description, categories, 
 
 const Discover = () => {
   const { classes } = useStyles()
+  const { scrollIntoView, targetRef } = useScrollIntoView<HTMLHeadingElement>({
+    duration: 400,
+    offset: 48,
+  })
 
   const { data, isLoading } = useQuery<Project[], Error>({
     queryKey: ['discover'],
@@ -251,7 +320,6 @@ const Discover = () => {
           mx={rem(-16)}
           pos="fixed"
           right={0}
-          style={{ zIndex: -1 }}
         >
           <Center
             h="100%"
@@ -267,7 +335,7 @@ const Discover = () => {
                 autoPlay
                 loop
                 muted
-                style={{ marginBottom: rem(72), maxWidth: '720px' }}
+                style={{ height: '360px', marginBottom: rem(72), objectFit: 'cover', width: '360px' }}
               >
                 <source
                   src="/preview2.mp4"
@@ -275,8 +343,10 @@ const Discover = () => {
                 />
               </video>
               <Text
+                className={classes.title}
+                ff="pixeloid-mono"
                 fz={rem(56)}
-                style={{ fontFamily: 'pixeloid-mono' }}
+                pr={rem(8)}
               >
                 Discover
                 <Text
@@ -289,10 +359,10 @@ const Discover = () => {
                 </Text>
               </Text>
               <Text
-                className={classes.typewriter}
+                className={classes.subTitle}
+                ff="pixeloid-mono"
                 fz={rem(24)}
                 pr={rem(8)}
-                style={{ fontFamily: 'pixeloid-mono' }}
               >
                 Finding and exploring the latest and greatest ERC-6551 projects
               </Text>
@@ -303,7 +373,12 @@ const Discover = () => {
               mx="auto"
               pos="absolute"
             >
-              <ScrollDown />
+              <ActionIcon
+                onClick={() => scrollIntoView()}
+                variant="transparent"
+              >
+                <ScrollDown />
+              </ActionIcon>
             </Box>
           </Center>
         </Box>
@@ -313,13 +388,16 @@ const Discover = () => {
         />
         <Container
           maw={rem(1440)}
+          pos="relative"
           px={rem(64)}
           py="lg"
+          style={{ zIndex: 1200 }}
           sx={theme => ({ backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[4] : '#fff' })}
         >
           <Title
             my={rem(32)}
             order={4}
+            ref={targetRef}
           >
             LATEST PROJECTS
           </Title>
