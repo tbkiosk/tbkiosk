@@ -24,9 +24,15 @@ const Footer = () => (
     >
       <TextInput
         placeholder="Your email address"
+        radius="md"
         w={480}
       />
-      <Button color="gray">Sign up</Button>
+      <Button
+        color="dark"
+        radius="md"
+      >
+        Sign up
+      </Button>
     </Group>
     <Title
       order={4}

@@ -1,23 +1,11 @@
 import { forwardRef, useState } from 'react'
 import Link from 'next/link'
-import {
-  Header as MantineHeader,
-  Container,
-  Flex,
-  Group,
-  Box,
-  Center,
-  Avatar,
-  Button,
-  Select,
-  Text,
-  Image,
-  rem,
-  ActionIcon,
-} from '@mantine/core'
+import { Header as MantineHeader, Container, Flex, Group, Box, Center, Avatar, Button, Select, Text, rem, ActionIcon } from '@mantine/core'
 import { notifications } from '@mantine/notifications'
 import { useMutation } from '@tanstack/react-query'
 // import { UserContext } from '@/providers/user'
+
+import Logo from 'public/logo_with_text.svg'
 
 import { request } from '@/utils/request'
 
@@ -97,12 +85,10 @@ const Header = () => {
           <Link href="/">
             <Center
               maw={162}
+              sx={theme => ({ color: theme.colorScheme === 'dark' ? '#fff' : '#000' })}
               w={162}
             >
-              <Image
-                alt="logo"
-                src="/logo_with_text.svg"
-              />
+              <Logo />
             </Center>
           </Link>
           <Box
@@ -117,8 +103,15 @@ const Header = () => {
               itemComponent={AutoCompleteItem}
               onSearchChange={value => setSearch(value)}
               placeholder="Search for collections, NFTs or users"
-              radius={rem(12)}
-              rightSection={<i className="fa-solid fa-magnifying-glass text-[#aaa]" />}
+              radius="md"
+              rightSection={
+                <Text
+                  component="span"
+                  sx={theme => ({ color: theme.colorScheme === 'dark' ? theme.colors.dark[4] : theme.colors.gray[4] })}
+                >
+                  <i className="fa-solid fa-magnifying-glass" />
+                </Text>
+              }
               searchable
               searchValue={search}
             />
