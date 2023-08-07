@@ -1,19 +1,19 @@
 import { MantineProvider, ColorSchemeProvider as MantineColorSchemeProvider, ColorScheme } from '@mantine/core'
 import { Notifications } from '@mantine/notifications'
-import { useLocalStorage } from '@mantine/hooks'
+import { useLocalStorage, useHotkeys } from '@mantine/hooks'
 
 import type { SingleNode } from '@/types/react_node'
 
 export const MantineUIProvider = ({ children }: SingleNode) => {
-  const [colorScheme] = useLocalStorage<ColorScheme>({
-    key: 'mantine-color-scheme',
-    defaultValue: 'dark',
+  const [colorScheme, setColorScheme] = useLocalStorage<ColorScheme>({
+    key: 'color-scheme',
+    defaultValue: 'light',
     getInitialValueInEffect: true,
   })
 
-  // const toggleColorScheme = (value?: ColorScheme) => setColorScheme(value || (colorScheme === 'dark' ? 'light' : 'dark'))
+  const toggleColorScheme = (value?: ColorScheme) => setColorScheme(value || (colorScheme === 'dark' ? 'light' : 'dark'))
 
-  // useHotkeys([['mod+J', () => toggleColorScheme()]])
+  useHotkeys([['mod+J', () => toggleColorScheme()]])
 
   return (
     <MantineColorSchemeProvider

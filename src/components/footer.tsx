@@ -49,7 +49,7 @@ const Footer = () => (
           rel="noreferrer"
           target="_blank"
         >
-          <i className="fa-brands fa-twitter" />
+          <i className="fa-brands fa-x-twitter" />
         </a>
       </ActionIcon>
       <ActionIcon

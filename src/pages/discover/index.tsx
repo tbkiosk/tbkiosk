@@ -125,7 +125,7 @@ const ProjectCard = ({ id, name, logoUrl, bannerImage, description, categories, 
                 rel="noreferrer"
                 target="_blank"
               >
-                <i className="fa-brands fa-twitter" />
+                <i className="fa-brands fa-x-twitter" />
               </a>
             )}
             {discord && (

@@ -1,6 +1,20 @@
 import { forwardRef, useState } from 'react'
 import Link from 'next/link'
-import { Header as MantineHeader, Container, Flex, Group, Box, Center, Avatar, Button, Select, Text, Image, rem } from '@mantine/core'
+import {
+  Header as MantineHeader,
+  Container,
+  Flex,
+  Group,
+  Box,
+  Center,
+  Avatar,
+  Button,
+  Select,
+  Text,
+  Image,
+  rem,
+  ActionIcon,
+} from '@mantine/core'
 import { notifications } from '@mantine/notifications'
 import { useMutation } from '@tanstack/react-query'
 // import { UserContext } from '@/providers/user'
@@ -113,7 +127,7 @@ const Header = () => {
             position="right"
             maw={162}
             noWrap
-            spacing={rem(24)}
+            spacing="md"
             w={162}
           >
             <a
@@ -122,12 +136,32 @@ const Header = () => {
               target="_blank"
             >
               <Button
-                color="gray"
-                radius="lg"
-                style={{ border: '1px solid #454545' }}
+                color="dark"
+                radius="md"
+                variant="filled"
               >
                 List a Project
               </Button>
+            </a>
+            <a
+              href="https://twitter.com"
+              rel="noreferrer"
+              target="_blank"
+            >
+              <ActionIcon
+                radius="md"
+                size="lg"
+                sx={{
+                  backgroundColor: '#fd222a',
+                  '&:hover': {
+                    backgroundColor: '#fd222a',
+                    opacity: 0.8,
+                  },
+                }}
+                variant="filled"
+              >
+                <i className="fa-brands fa-x-twitter" />
+              </ActionIcon>
             </a>
           </Group>
         </Flex>

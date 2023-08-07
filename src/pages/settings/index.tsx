@@ -163,7 +163,7 @@ const Settings = () => {
                 withBorder
               >
                 <Flex align="center">
-                  <i className="fa-brands fa-twitter mr-4 text-xl text-[#1D9BF0]" />
+                  <i className="fa-brands fa-x-twitter mr-4 text-xl text-[#1D9BF0]" />
                   {twitterAccount ? (
                     <Text
                       truncate

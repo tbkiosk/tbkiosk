@@ -297,7 +297,7 @@ const DiscoverDetail = () => {
                   target="_blank"
                 >
                   <i
-                    className="fa-brands fa-twitter"
+                    className="fa-brands fa-x-twitter"
                     style={{ color: isDarkTheme ? theme.colors.gray[2] : theme.colors.dark[7] }}
                   />
                 </a>
