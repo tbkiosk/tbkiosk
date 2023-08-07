@@ -96,16 +96,9 @@ const ProjectCard = ({ id, name, logoUrl, bannerImage, description, categories, 
       radius="md"
       sx={{
         flexDirection: 'column',
-        height: '560px',
         transition: 'box-shadow 0.4s ease',
         '&:hover': {
           boxShadow: '0px 4px 20px 0px rgba(141, 141, 141, 0.31)',
-        },
-        '@media (max-width: 62rem)': {
-          height: '520px',
-        },
-        '@media (max-width: 48rem)': {
-          height: '500px',
         },
       }}
       withBorder
@@ -156,8 +149,10 @@ const ProjectCard = ({ id, name, logoUrl, bannerImage, description, categories, 
           </Title>
         </Group>
         <Text
+          h={84}
           lh={1.5}
           lineClamp={4}
+          mah={84}
           size="sm"
         >
           {description}
@@ -264,7 +259,7 @@ const Discover = () => {
   const { classes } = useStyles()
   const { scrollIntoView, targetRef } = useScrollIntoView<HTMLHeadingElement>({
     duration: 400,
-    offset: 48,
+    offset: 120,
   })
 
   const { data, isLoading } = useQuery<Project[], Error>({
@@ -387,43 +382,49 @@ const Discover = () => {
           h="100vh"
         />
         <Container
-          maw={rem(1440)}
+          fluid
           pos="relative"
           px={rem(64)}
           py="lg"
           style={{ zIndex: 1200 }}
           sx={theme => ({ backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[4] : '#fff' })}
         >
-          <Title
-            my={rem(32)}
-            order={4}
-            ref={targetRef}
+          <Container
+            maw={1440}
+            px={0}
           >
-            LATEST PROJECTS
-          </Title>
-          <Grid
-            gutter="xl"
-            mb={rem(48)}
-            pos="relative"
-          >
-            <LoadingOverlay visible={isLoading} />
-            {data?.map(_project => (
-              <Grid.Col
-                key={_project.id}
-                md={3}
-                sm={4}
-                xs={6}
-              >
-                <Link
-                  href={`/discover/${_project.id}`}
-                  passHref
+            <Title
+              my={rem(32)}
+              order={4}
+              ref={targetRef}
+            >
+              LATEST PROJECTS
+            </Title>
+            <Grid
+              gutter="xl"
+              maw={rem(1440)}
+              mb={rem(48)}
+              pos="relative"
+            >
+              <LoadingOverlay visible={isLoading} />
+              {data?.map(_project => (
+                <Grid.Col
+                  key={_project.id}
+                  md={3}
+                  sm={4}
+                  xs={6}
                 >
-                  <ProjectCard {..._project} />
-                </Link>
-              </Grid.Col>
-            ))}
-          </Grid>
-          <Footer />
+                  <Link
+                    href={`/discover/${_project.id}`}
+                    passHref
+                  >
+                    <ProjectCard {..._project} />
+                  </Link>
+                </Grid.Col>
+              ))}
+            </Grid>
+            <Footer />
+          </Container>
         </Container>
       </Container>
     </AppShell>

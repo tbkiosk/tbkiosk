@@ -81,6 +81,7 @@ const Header = () => {
       bg="#000"
       height={rem(72)}
       p="md"
+      style={{ zIndex: 1900 }}
       withBorder={false}
     >
       <Container
