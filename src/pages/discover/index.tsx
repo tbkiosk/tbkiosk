@@ -1,22 +1,15 @@
 // import { useMemo } from 'react'
 import Head from 'next/head'
 import Link from 'next/link'
-import { useRouter } from 'next/router'
 import {
   AppShell,
   Container,
   Center,
   Stack,
-  Flex,
   Grid,
   Title,
-  Image,
-  Card,
-  AspectRatio,
-  Group,
   Box,
   Text,
-  Badge,
   LoadingOverlay,
   ActionIcon,
   rem,
@@ -29,7 +22,7 @@ import { useQuery } from '@tanstack/react-query'
 
 import { UserProvider } from '@/providers/user'
 
-import { Header, Footer } from '@/components'
+import { Header, Footer, ProjectCard } from '@/components'
 import ScrollDown from 'public/icons/scrolldown.svg'
 
 import { request } from '@/utils/request'
@@ -84,176 +77,6 @@ const useStyles = createStyles(() => ({
     animation: `${bounce} 2s ease infinite`,
   },
 }))
-
-const ProjectCard = ({ id, name, logoUrl, bannerImage, description, categories, website, twitter, discord }: Project) => {
-  const router = useRouter()
-
-  return (
-    <Card
-      display="flex"
-      onClick={() => router.push(`/discover/${id}`)}
-      padding="sm"
-      radius="md"
-      sx={{
-        flexDirection: 'column',
-        transition: 'box-shadow 0.4s ease',
-        '&:hover': {
-          boxShadow: '0px 4px 20px 0px rgba(141, 141, 141, 0.31)',
-        },
-      }}
-      withBorder
-    >
-      <Card.Section>
-        <AspectRatio ratio={1}>
-          <Image
-            alt="bg"
-            height="100%"
-            src={bannerImage}
-            styles={{
-              figure: {
-                height: '100%',
-              },
-              imageWrapper: {
-                height: '100%',
-              },
-            }}
-            width="100%"
-            withPlaceholder
-          />
-        </AspectRatio>
-      </Card.Section>
-      <Flex
-        direction="column"
-        gap="xs"
-        mt="lg"
-        style={{ flex: 1 }}
-      >
-        <Group
-          noWrap
-          spacing="md"
-        >
-          <Image
-            alt="bg"
-            fit="cover"
-            height={rem(40)}
-            radius={rem(14)}
-            src={logoUrl}
-            width={rem(40)}
-            withPlaceholder
-          />
-          <Title
-            order={4}
-            truncate
-          >
-            {name}
-          </Title>
-        </Group>
-        <Text
-          h={84}
-          lh={1.5}
-          lineClamp={4}
-          mah={84}
-          size="sm"
-        >
-          {description}
-        </Text>
-        <Group spacing="xs">
-          {categories.map(_category => (
-            <Badge
-              color="dark"
-              key={_category}
-              size="xs"
-              radius="sm"
-              variant="filled"
-            >
-              {_category}
-            </Badge>
-          ))}
-        </Group>
-        <Flex
-          align="flex-end"
-          justify="flex-end"
-          style={{ flex: 1 }}
-        >
-          <Group>
-            {website && (
-              <a
-                href={website}
-                onClick={e => e.stopPropagation()}
-                rel="noreferrer"
-                target="_blank"
-              >
-                <ActionIcon
-                  size="sm"
-                  sx={{
-                    transition: 'transform 0.2s ease',
-                    '&:hover': {
-                      transform: 'scale(1.1)',
-                    },
-                  }}
-                  variant="transparent"
-                >
-                  <i
-                    className="fa-solid fa-globe"
-                    style={{ color: '#fd222a' }}
-                  />
-                </ActionIcon>
-              </a>
-            )}
-            {twitter && (
-              <a
-                href={twitter}
-                onClick={e => e.stopPropagation()}
-                rel="noreferrer"
-                target="_blank"
-              >
-                <ActionIcon
-                  size="sm"
-                  sx={{
-                    transition: 'transform 0.2s ease',
-                    '&:hover': {
-                      transform: 'scale(1.1)',
-                    },
-                  }}
-                  variant="transparent"
-                >
-                  <i
-                    className="fa-brands fa-x-twitter"
-                    style={{ color: '#fd222a' }}
-                  />
-                </ActionIcon>
-              </a>
-            )}
-            {discord && (
-              <a
-                href={discord}
-                onClick={e => e.stopPropagation()}
-                rel="noreferrer"
-                target="_blank"
-              >
-                <ActionIcon
-                  size="sm"
-                  sx={{
-                    transition: 'transform 0.2s ease',
-                    '&:hover': {
-                      transform: 'scale(1.1)',
-                    },
-                  }}
-                  variant="transparent"
-                >
-                  <i
-                    className="fa-brands fa-discord"
-                    style={{ color: '#fd222a' }}
-                  />
-                </ActionIcon>
-              </a>
-            )}
-          </Group>
-        </Flex>
-      </Flex>
-    </Card>
-  )
-}
 
 const Discover = () => {
   const { classes } = useStyles()
