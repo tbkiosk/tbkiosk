@@ -263,13 +263,17 @@ const Discover = () => {
               align="center"
               spacing={0}
             >
-              <Image
-                alt="banner"
-                mah={120}
-                maw={240}
-                mb={rem(96)}
-                src="/images/banner.png"
-              />
+              <video
+                autoPlay
+                loop
+                muted
+                style={{ marginBottom: rem(72), maxWidth: '720px' }}
+              >
+                <source
+                  src="/preview1.mp4"
+                  type="video/mp4"
+                />
+              </video>
               <Text
                 fz={rem(56)}
                 style={{ fontFamily: 'pixeloid-mono' }}
