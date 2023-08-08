@@ -6,7 +6,7 @@ import Typewriter from 'typewriter-effect'
 import { UserProvider } from '@/providers/user'
 
 import { Header, Footer, ProjectsGrid } from '@/components'
-import ScrollDown from '../../../public/icons/scrolldown.svg'
+import ScrollDown from '/public/icons/scrolldown.svg'
 
 const bounce = keyframes({
   '0%, 20%, 50%, 80%, 100%': {
@@ -42,7 +42,6 @@ const Discover = () => {
       px={0}
       styles={{
         main: {
-          overflowX: 'hidden',
           paddingBottom: 0,
           paddingLeft: 0,
           paddingRight: 0,

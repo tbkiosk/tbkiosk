@@ -1,4 +1,5 @@
-import { Box, Title, Group, ActionIcon, Text, TextInput, Button, Divider, Stack, rem } from '@mantine/core'
+import Link from 'next/link'
+import { Box, Group, Text, Divider, Stack, Image, rem } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
 
 const Footer = () => {
@@ -7,169 +8,85 @@ const Footer = () => {
   return (
     <Box>
       <Divider my={rem(24)} />
-      <Title
-        order={4}
-        mb={rem(12)}
-        ta="center"
-      >
-        Stay in the loop
-      </Title>
-      <Text
-        mb={rem(12)}
-        ta="center"
-      >
-        Join our mailing list to stay in the loop with our newest feature releases, NFT drops and tips.
-      </Text>
-      <Group
-        mb={rem(24)}
-        noWrap
-        position="center"
-        w="100%"
-      >
-        <TextInput
-          placeholder="Your email address"
-          radius="md"
-          w={480}
-        />
-        <Button
-          color="dark"
-          radius="md"
-        >
-          Sign up
-        </Button>
-      </Group>
-      <Title
-        order={4}
-        mb={rem(12)}
-        ta="center"
-      >
-        Join the community
-      </Title>
-      <Group
-        noWrap
-        position="center"
-      >
-        <ActionIcon
-          radius="md"
-          size="lg"
-          variant="light"
-        >
-          <a
-            href="https://twitter.com"
-            rel="noreferrer"
-            target="_blank"
-          >
-            <i className="fa-brands fa-x-twitter" />
-          </a>
-        </ActionIcon>
-        <ActionIcon
-          radius="md"
-          size="lg"
-          variant="light"
-        >
-          <a
-            href="https://discord.com"
-            rel="noreferrer"
-            target="_blank"
-          >
-            <i className="fa-brands fa-discord" />
-          </a>
-        </ActionIcon>
-        <ActionIcon
-          radius="md"
-          size="lg"
-          variant="light"
-        >
-          <a
-            href="https://youtube.com"
-            rel="noreferrer"
-            target="_blank"
-          >
-            <i className="fa-brands fa-youtube" />
-          </a>
-        </ActionIcon>
-        <ActionIcon
-          radius="md"
-          size="lg"
-          variant="light"
-        >
-          <a
-            href="https://tiktok.com"
-            rel="noreferrer"
-            target="_blank"
-          >
-            <i className="fa-brands fa-tiktok" />
-          </a>
-        </ActionIcon>
-        <ActionIcon
-          radius="md"
-          size="lg"
-          variant="light"
-        >
-          <a
-            href=""
-            rel="noreferrer"
-            target="_blank"
-          >
-            <i className="fa-brands fa-reddit-alien" />
-          </a>
-        </ActionIcon>
-        <ActionIcon
-          radius="md"
-          size="lg"
-          variant="light"
-        >
-          <a
-            href=""
-            rel="noreferrer"
-            target="_blank"
-          >
-            <i className="fa-brands fa-instagram" />
-          </a>
-        </ActionIcon>
-        <ActionIcon
-          radius="md"
-          size="lg"
-          variant="light"
-        >
-          <a
-            href=""
-            rel="noreferrer"
-            target="_blank"
-          >
-            <i className="fa-regular fa-envelope" />
-          </a>
-        </ActionIcon>
-      </Group>
-      <Divider my={rem(24)} />
       {largeScreen ? (
         <Group
           align="center"
           position="apart"
         >
-          <Text fz="sm">©️ 2023 Kiosk</Text>
+          <Link href="/">
+            <Image
+              alt="logo"
+              maw={136}
+              src="/logo_with_text_black.svg"
+            />
+          </Link>
           <Group>
-            <a>
-              <Text fz="sm">Privacy Policy</Text>
+            <a
+              href="https://twitter.com/tbkiosk"
+              rel="noreferrer"
+              target="_blank"
+            >
+              <Text fz="sm">TWITTER</Text>
             </a>
             <a>
-              <Text fz="sm">Terms of Service</Text>
+              <Text fz="sm">SUPPORT</Text>
+            </a>
+            <a
+              href="https://creator.tbkiosk.xyz"
+              rel="noreferrer"
+              target="_blank"
+            >
+              <Text fz="sm">MANAGE PROJECT</Text>
             </a>
           </Group>
+          <Text
+            fz="sm"
+            ta="right"
+            w={150}
+          >
+            ©️ 2023 Kiosk
+          </Text>
         </Group>
       ) : (
         <Stack
           align="center"
-          spacing={rem(4)}
+          spacing={rem(8)}
         >
-          <Text fz="sm">©️ 2023 Kiosk</Text>
-          <Group>
-            <a>
-              <Text fz="sm">Privacy Policy</Text>
+          <Group
+            position="center"
+            w="100%"
+          >
+            <a
+              href="https://twitter.com/tbkiosk"
+              rel="noreferrer"
+              target="_blank"
+            >
+              <Text fz="sm">TWITTER</Text>
             </a>
             <a>
-              <Text fz="sm">Terms of Service</Text>
+              <Text fz="sm">SUPPORT</Text>
             </a>
+            <a
+              href="https://creator.tbkiosk.xyz"
+              rel="noreferrer"
+              target="_blank"
+            >
+              <Text fz="sm">MANAGE PROJECT</Text>
+            </a>
+          </Group>
+          <Group
+            align="center"
+            position="apart"
+            w="100%"
+          >
+            <Link href="/">
+              <Image
+                alt="logo"
+                maw={136}
+                src="/logo_with_text_black.svg"
+              />
+            </Link>
+            <Text fz="sm">©️ 2023 Kiosk</Text>
           </Group>
         </Stack>
       )}

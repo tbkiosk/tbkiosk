@@ -98,7 +98,7 @@ const Header = () => {
               <Link href="/">
                 <Image
                   alt="logo"
-                  mah={40}
+                  maw={136}
                   src="/logo_with_text.svg"
                 />
               </Link>
@@ -190,7 +190,7 @@ const Header = () => {
               <Link href="/">
                 <Image
                   alt="logo"
-                  mah={40}
+                  maw={136}
                   src="/logo_with_text.svg"
                 />
               </Link>
