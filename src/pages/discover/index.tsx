@@ -88,27 +88,31 @@ const Discover = () => {
                 />
               </video>
               <Text ta="center">
-                <Typewriter
-                  onInit={typewriter => {
-                    typewriter
-                      .typeString(`<span style="font-family: pixeloid-mono; font-size: ${largeScreen ? '56px' : '24px'}">Discover  </span>`)
-                      .typeString(`<span style="color: #fd222a; font-size: ${largeScreen ? '56px' : '24px'}">ERC-6551</span>`)
-                      .typeString('<br></br>')
-                      .changeDelay(80)
-                      .typeString(
-                        `<span style="font-family: pixeloid-mono; font-size: ${
-                          largeScreen ? '24px' : '16px'
-                        }">Finding and exploring the latest and greatest ERC-6551 projects</span>`
-                      )
-                      .start()
-                  }}
-                  options={{
-                    autoStart: true,
-                    cursorClassName: cx(classes.cursor, 'Typewriter__cursor'),
-                    // devMode: true,
-                    delay: 120,
-                  }}
-                />
+                {typeof largeScreen === 'boolean' && (
+                  <Typewriter
+                    onInit={typewriter => {
+                      typewriter
+                        .typeString(
+                          `<span style="font-family: pixeloid-mono; font-size: ${largeScreen ? '56px' : '24px'}">Discover  </span>`
+                        )
+                        .typeString(`<span style="color: #fd222a; font-size: ${largeScreen ? '56px' : '24px'}">ERC-6551</span>`)
+                        .typeString('<br></br>')
+                        .changeDelay(80)
+                        .typeString(
+                          `<span style="font-family: pixeloid-mono; font-size: ${
+                            largeScreen ? '24px' : '16px'
+                          }">Finding and exploring the latest and greatest ERC-6551 projects</span>`
+                        )
+                        .start()
+                    }}
+                    options={{
+                      autoStart: true,
+                      cursorClassName: cx(classes.cursor, 'Typewriter__cursor'),
+                      // devMode: true,
+                      delay: 120,
+                    }}
+                  />
+                )}
               </Text>
             </Stack>
             <Box
