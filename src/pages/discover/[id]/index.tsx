@@ -48,6 +48,7 @@ const DiscoverDetail = () => {
 
       return data
     },
+    enabled: !!router.query.id,
     onError: (error: Error) => {
       notifications.show({
         color: 'red',
@@ -61,11 +62,13 @@ const DiscoverDetail = () => {
   })
 
   useEffect(() => {
+    if (!router.query.id) return
+
     request({
       url: `/api/discover/${router.query.id}/view`,
       method: 'PUT',
     })
-  }, [])
+  }, [router.query.id])
 
   const isDarkTheme = theme.colorScheme === 'dark'
 

@@ -1,22 +1,5 @@
-@font-face {
-  font-family: cera-variable;
-  src: url('/fonts/Cera-Variable-Demo.ttf');
-}
-
-@font-face {
-  font-family: cera-variable;
-  font-style: italic;
-  src: url('/fonts/Cera-Variable-Italic-Demo.ttf');
-}
-
-@font-face {
-  font-family: pixeloid-mono;
-  src: url('/fonts/PixeloidMono.ttf');
-}
-
 * {
   box-sizing: border-box;
-  font-family: cera-variable, Arial, Helvetica, sans-serif;
   margin: 0;
   padding: 0;
 }
