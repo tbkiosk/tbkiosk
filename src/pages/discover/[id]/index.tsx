@@ -7,6 +7,7 @@ import {
   Title,
   Image,
   Box,
+  Stack,
   ActionIcon,
   Flex,
   Text,
@@ -14,17 +15,17 @@ import {
   Menu,
   LoadingOverlay,
   Badge,
-  Tabs,
   Divider,
   rem,
   useMantineTheme,
 } from '@mantine/core'
 import { notifications } from '@mantine/notifications'
+import { Carousel } from '@mantine/carousel'
 import { useQuery } from '@tanstack/react-query'
 
 import { UserProvider } from '@/providers/user'
 
-import { Header, FavoriteButton } from '@/components'
+import { Header, Footer, FavoriteButton, ProjectsGrid } from '@/components'
 
 import { request } from '@/utils/request'
 
@@ -35,7 +36,7 @@ const DiscoverDetail = () => {
 
   const theme = useMantineTheme()
 
-  const { data, isLoading } = useQuery<Project | undefined, Error>({
+  const { data: projectData, isLoading: projectDetailLoading } = useQuery<Project | undefined, Error>({
     queryKey: ['discover_details', router.query.id],
     queryFn: async () => {
       const { data, error } = await request<Project | undefined, string>({
@@ -81,9 +82,10 @@ const DiscoverDetail = () => {
         maw={rem(1440)}
         mih={480}
         px={rem(72)}
+        pb="lg"
       >
-        <LoadingOverlay visible={isLoading} />
-        {data && (
+        <LoadingOverlay visible={projectDetailLoading} />
+        {projectData && (
           <>
             <Box
               h={480}
@@ -95,7 +97,7 @@ const DiscoverDetail = () => {
                 left={0}
                 pos="absolute"
                 right={0}
-                src={data.bannerImage}
+                src={projectData.bannerImage}
                 top={72}
                 w="100%"
                 withPlaceholder
@@ -126,7 +128,7 @@ const DiscoverDetail = () => {
                   height={168}
                   pos="absolute"
                   radius={56}
-                  src={data.logoUrl}
+                  src={projectData.logoUrl}
                   styles={{
                     image: {
                       border: '9px solid',
@@ -138,238 +140,265 @@ const DiscoverDetail = () => {
                 />
               </Box>
             </Box>
-            <Flex
-              align="center"
-              justify="space-between"
-              mb="xs"
-            >
-              <Group spacing="xs">
-                <Title
-                  color={isDarkTheme ? theme.colors.gray[2] : theme.colors.dark[7]}
-                  order={3}
-                  truncate
-                >
-                  {data.name}
-                </Title>
-              </Group>
-              <Group spacing="lg">
-                <FavoriteButton
-                  defaultFavorited={false}
-                  onFavorite={() => void 0}
-                  onUnfavorite={() => void 0}
-                />
-                <ActionIcon
-                  size="lg"
-                  radius="xl"
-                  variant="transparent"
-                >
-                  <i
-                    className="fa-solid fa-share-nodes"
-                    style={{ color: isDarkTheme ? theme.colors.gray[2] : theme.colors.dark[7] }}
+            <Stack mb={rem(48)}>
+              <Flex
+                align="center"
+                justify="space-between"
+              >
+                <Group spacing="xs">
+                  <Title
+                    color={isDarkTheme ? theme.colors.gray[2] : theme.colors.dark[7]}
+                    order={3}
+                    truncate
+                  >
+                    {projectData.name}
+                  </Title>
+                  <Badge
+                    c="#000"
+                    color="yellow.3"
+                    mr="xs"
+                    radius="sm"
+                    variant="filled"
+                  >
+                    {projectData.projectStage}
+                  </Badge>
+                </Group>
+                <Group spacing="lg">
+                  <FavoriteButton
+                    defaultFavorited={false}
+                    onFavorite={() => void 0}
+                    onUnfavorite={() => void 0}
                   />
-                </ActionIcon>
-                <Menu
-                  shadow="md"
-                  width={200}
-                >
-                  <Menu.Target>
+                  <ActionIcon
+                    size="lg"
+                    radius="xl"
+                    variant="transparent"
+                  >
+                    <i
+                      className="fa-solid fa-share-nodes"
+                      style={{ color: isDarkTheme ? theme.colors.gray[2] : theme.colors.dark[7] }}
+                    />
+                  </ActionIcon>
+                  <Menu
+                    shadow="md"
+                    width={200}
+                  >
+                    <Menu.Target>
+                      <ActionIcon
+                        size="lg"
+                        radius="xl"
+                        variant="transparent"
+                      >
+                        <i
+                          className="fa-solid fa-ellipsis"
+                          style={{ color: isDarkTheme ? theme.colors.gray[2] : theme.colors.dark[7] }}
+                        />
+                      </ActionIcon>
+                    </Menu.Target>
+                    <Menu.Dropdown>
+                      <Menu.Item icon={<i className="fa-solid fa-copy" />}>Copy link</Menu.Item>
+                      <Menu.Item icon={<i className="fa-solid fa-paperclip" />}>Documentation</Menu.Item>
+                      <Menu.Item icon={<i className="fa-solid fa-circle-question" />}>Contact support</Menu.Item>
+                      <Menu.Divider />
+                      <Menu.Item
+                        color="red"
+                        icon={<i className="fa-solid fa-triangle-exclamation" />}
+                      >
+                        Report
+                      </Menu.Item>
+                    </Menu.Dropdown>
+                  </Menu>
+                </Group>
+              </Flex>
+              <Group
+                noWrap
+                spacing="lg"
+              >
+                <Box>
+                  <Text
+                    component="span"
+                    mr={4}
+                  >
+                    By
+                  </Text>
+                  <Text
+                    color={isDarkTheme ? theme.colors.gray[2] : theme.colors.dark[7]}
+                    component="span"
+                    fw={700}
+                  >
+                    -
+                  </Text>
+                </Box>
+                <Box>
+                  <Text
+                    component="span"
+                    mr={4}
+                  >
+                    Created
+                  </Text>
+                  <Text
+                    color={isDarkTheme ? theme.colors.gray[2] : theme.colors.dark[7]}
+                    component="span"
+                    fw={700}
+                  >
+                    {new Date(projectData.createdAt).toDateString()}
+                  </Text>
+                </Box>
+              </Group>
+              <Group
+                noWrap
+                spacing="lg"
+              >
+                <Box>
+                  <Text
+                    component="span"
+                    mr={4}
+                  >
+                    Categories:
+                  </Text>
+                  <Badge
+                    color="dark"
+                    mr="xs"
+                    radius="sm"
+                    variant="filled"
+                  >
+                    {projectData.blockchain}
+                  </Badge>
+                </Box>
+                <Box>
+                  <Text
+                    component="span"
+                    mr={4}
+                  >
+                    Categories:
+                  </Text>
+                  {projectData?.categories?.map(_category => (
+                    <Badge
+                      color="dark"
+                      key={_category}
+                      mr="xs"
+                      radius="sm"
+                      variant="filled"
+                    >
+                      {_category}
+                    </Badge>
+                  ))}
+                </Box>
+              </Group>
+              <Group
+                noWrap
+                spacing="xl"
+              >
+                {projectData?.website && (
+                  <a
+                    href={projectData.website}
+                    rel="noreferrer"
+                    target="_blank"
+                  >
                     <ActionIcon
-                      size="lg"
-                      radius="xl"
+                      color="dark"
+                      size="sm"
+                      sx={{
+                        transition: 'transform 0.2s ease',
+                        '&:hover': {
+                          transform: 'scale(1.1)',
+                        },
+                      }}
                       variant="transparent"
                     >
-                      <i
-                        className="fa-solid fa-ellipsis"
-                        style={{ color: isDarkTheme ? theme.colors.gray[2] : theme.colors.dark[7] }}
-                      />
+                      <i className="fa-solid fa-globe" />
                     </ActionIcon>
-                  </Menu.Target>
-                  <Menu.Dropdown>
-                    <Menu.Item icon={<i className="fa-solid fa-copy" />}>Copy link</Menu.Item>
-                    <Menu.Item icon={<i className="fa-solid fa-paperclip" />}>Documentation</Menu.Item>
-                    <Menu.Item icon={<i className="fa-solid fa-circle-question" />}>Contact support</Menu.Item>
-                    <Menu.Divider />
-                    <Menu.Item
-                      color="red"
-                      icon={<i className="fa-solid fa-triangle-exclamation" />}
-                    >
-                      Report
-                    </Menu.Item>
-                  </Menu.Dropdown>
-                </Menu>
-              </Group>
-            </Flex>
-            <Group
-              mb="xs"
-              noWrap
-              spacing="lg"
-            >
-              <Box>
-                <Text
-                  component="span"
-                  mr={4}
-                >
-                  By
-                </Text>
-                <Text
-                  color={isDarkTheme ? theme.colors.gray[2] : theme.colors.dark[7]}
-                  component="span"
-                  fw={700}
-                >
-                  -
-                </Text>
-              </Box>
-              <Box>
-                <Text
-                  component="span"
-                  mr={4}
-                >
-                  Created
-                </Text>
-                <Text
-                  color={isDarkTheme ? theme.colors.gray[2] : theme.colors.dark[7]}
-                  component="span"
-                  fw={700}
-                >
-                  {new Date(data.createdAt).toDateString()}
-                </Text>
-              </Box>
-            </Group>
-            <Group
-              mb="xs"
-              noWrap
-              spacing="lg"
-            >
-              <Box>
-                <Text
-                  component="span"
-                  mr={4}
-                >
-                  Categories:
-                </Text>
-                <Badge
-                  color="gray"
-                  mr="xs"
-                  radius="xs"
-                >
-                  {data.blockchain}
-                </Badge>
-              </Box>
-              <Box>
-                <Text
-                  component="span"
-                  mr={4}
-                >
-                  Categories:
-                </Text>
-                {data?.categories?.map(_category => (
-                  <Badge
-                    color="gray"
-                    key={_category}
-                    mr="xs"
-                    radius="xs"
+                  </a>
+                )}
+                {projectData?.twitter && (
+                  <a
+                    href={projectData.twitter}
+                    rel="noreferrer"
+                    target="_blank"
                   >
-                    {_category}
-                  </Badge>
+                    <ActionIcon
+                      color="dark"
+                      size="sm"
+                      sx={{
+                        transition: 'transform 0.2s ease',
+                        '&:hover': {
+                          transform: 'scale(1.1)',
+                        },
+                      }}
+                      variant="transparent"
+                    >
+                      <i className="fa-brands fa-x-twitter" />
+                    </ActionIcon>
+                  </a>
+                )}
+                {projectData?.discord && (
+                  <a
+                    href={projectData.discord}
+                    rel="noreferrer"
+                    target="_blank"
+                  >
+                    <ActionIcon
+                      color="dark"
+                      size="sm"
+                      sx={{
+                        transition: 'transform 0.2s ease',
+                        '&:hover': {
+                          transform: 'scale(1.1)',
+                        },
+                      }}
+                      variant="transparent"
+                    >
+                      <i className="fa-brands fa-discord" />
+                    </ActionIcon>
+                  </a>
+                )}
+              </Group>
+            </Stack>
+            {!!projectData?.previewImages.length && (
+              <Carousel
+                align="start"
+                draggable
+                height={480}
+                loop
+                mb={rem(32)}
+                slideGap="md"
+                slideSize="50%"
+                withControls={false}
+                withIndicators
+              >
+                {projectData.previewImages.map(_pi => (
+                  <Carousel.Slide key={_pi}>
+                    <Image
+                      alt=""
+                      fit="cover"
+                      height={480}
+                      radius="md"
+                      src={_pi}
+                      width="100%"
+                      withPlaceholder
+                    />
+                  </Carousel.Slide>
                 ))}
-              </Box>
-            </Group>
-            <Group
-              mb={rem(48)}
-              noWrap
-              spacing="lg"
-            >
-              {data?.website && (
-                <a
-                  href={data.website}
-                  onClick={e => e.stopPropagation()}
-                  rel="noreferrer"
-                  target="_blank"
-                >
-                  <i
-                    className="fa-solid fa-globe"
-                    style={{ color: isDarkTheme ? theme.colors.gray[2] : theme.colors.dark[7] }}
-                  />
-                </a>
-              )}
-              {data?.twitter && (
-                <a
-                  href={data.twitter}
-                  onClick={e => e.stopPropagation()}
-                  rel="noreferrer"
-                  target="_blank"
-                >
-                  <i
-                    className="fa-brands fa-x-twitter"
-                    style={{ color: isDarkTheme ? theme.colors.gray[2] : theme.colors.dark[7] }}
-                  />
-                </a>
-              )}
-              {data?.discord && (
-                <a
-                  href={data.discord}
-                  onClick={e => e.stopPropagation()}
-                  rel="noreferrer"
-                  target="_blank"
-                >
-                  <i
-                    className="fa-brands fa-discord"
-                    style={{ color: isDarkTheme ? theme.colors.gray[2] : theme.colors.dark[7] }}
-                  />
-                </a>
-              )}
-            </Group>
-            <Tabs
-              color={isDarkTheme ? 'gray.2' : 'dark.7'}
-              defaultValue="project-details"
-              mb={rem(48)}
-            >
-              <Tabs.List>
-                <Tabs.Tab value="project-details">Project Details</Tabs.Tab>
-                <Tabs.Tab value="resources">Resources</Tabs.Tab>
-                <Tabs.Tab value="latest-discussions">Latest Discussions</Tabs.Tab>
-                <Tabs.Tab value="team-members">Team Members</Tabs.Tab>
-              </Tabs.List>
-              <Tabs.Panel
-                value="project-details"
-                pt={rem(24)}
-              >
-                <Title
-                  color={theme.colorScheme === 'dark' ? theme.colors.gray[2] : theme.colors.dark[7]}
-                  mb="xs"
-                  order={3}
-                >
-                  About Project
-                </Title>
-                <Text>{data?.description}</Text>
-              </Tabs.Panel>
-              <Tabs.Panel
-                value="resources"
-                pt={rem(24)}
-              >
-                -
-              </Tabs.Panel>
-              <Tabs.Panel
-                value="latest-discussions"
-                pt={rem(24)}
-              >
-                -
-              </Tabs.Panel>
-              <Tabs.Panel
-                value="team-members"
-                pt={rem(24)}
-              >
-                -
-              </Tabs.Panel>
-            </Tabs>
-            <Divider my={rem(64)} />
+              </Carousel>
+            )}
+            <Title order={5}>Project Details</Title>
+            <Divider />
             <Title
-              color={theme.colorScheme === 'dark' ? theme.colors.gray[2] : theme.colors.dark[7]}
-              mb="xs"
+              my={rem(32)}
+              order={3}
+            >
+              About Project
+            </Title>
+            <Text>{projectData.description}</Text>
+            <Divider my={rem(32)} />
+            <Title
+              mb={rem(32)}
               order={3}
             >
               You may also like this
             </Title>
+            <ProjectsGrid limit={6} />
+            <Footer />
           </>
         )}
       </Container>

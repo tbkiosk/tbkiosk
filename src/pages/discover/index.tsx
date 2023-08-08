@@ -1,33 +1,11 @@
-// import { useMemo } from 'react'
 import Head from 'next/head'
-import Link from 'next/link'
-import {
-  AppShell,
-  Container,
-  Center,
-  Stack,
-  Grid,
-  Title,
-  Box,
-  Text,
-  LoadingOverlay,
-  ActionIcon,
-  rem,
-  createStyles,
-  keyframes,
-} from '@mantine/core'
-import { notifications } from '@mantine/notifications'
+import { AppShell, Container, Center, Stack, Title, Box, Text, ActionIcon, rem, createStyles, keyframes } from '@mantine/core'
 import { useScrollIntoView } from '@mantine/hooks'
-import { useQuery } from '@tanstack/react-query'
 
 import { UserProvider } from '@/providers/user'
 
-import { Header, Footer, ProjectCard } from '@/components'
+import { Header, Footer, ProjectsGrid } from '@/components'
 import ScrollDown from 'public/icons/scrolldown.svg'
-
-import { request } from '@/utils/request'
-
-import type { Project } from '@prisma/client'
 
 const typing = (maxWidth = '100%') =>
   keyframes({
@@ -84,33 +62,6 @@ const Discover = () => {
     duration: 400,
     offset: 120,
   })
-
-  const { data, isLoading } = useQuery<Project[], Error>({
-    queryKey: ['discover'],
-    queryFn: async () => {
-      const { data, error } = await request<Project[], string>({
-        url: '/api/discover',
-      })
-
-      if (error) {
-        throw new Error(error)
-      }
-
-      return data || []
-    },
-    onError: (error: Error) => {
-      notifications.show({
-        color: 'red',
-        message: error.message,
-        title: 'Error',
-        withCloseButton: true,
-      })
-    },
-    retry: false,
-    refetchOnWindowFocus: false,
-  })
-
-  // const featuredProject = useMemo(() => data?.find(_project => _project.isFeatured), [data])
 
   return (
     <AppShell
@@ -223,29 +174,7 @@ const Discover = () => {
             >
               LATEST PROJECTS
             </Title>
-            <Grid
-              gutter="xl"
-              maw={rem(1440)}
-              mb={rem(48)}
-              pos="relative"
-            >
-              <LoadingOverlay visible={isLoading} />
-              {data?.map(_project => (
-                <Grid.Col
-                  key={_project.id}
-                  md={3}
-                  sm={4}
-                  xs={6}
-                >
-                  <Link
-                    href={`/discover/${_project.id}`}
-                    passHref
-                  >
-                    <ProjectCard {..._project} />
-                  </Link>
-                </Grid.Col>
-              ))}
-            </Grid>
+            <ProjectsGrid />
             <Footer />
           </Container>
         </Container>

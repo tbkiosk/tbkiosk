@@ -19,8 +19,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Project[]>) => 
    */
   if (req.method === 'GET') {
     try {
-      const search = req.query.search
-      if (Array.isArray(search)) {
+      const { search, limit } = req.query
+      if (Array.isArray(search) || Array.isArray(limit)) {
         throw new Error('Multiple search parameters is not supported')
       }
 
@@ -28,6 +28,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Project[]>) => 
         where: {
           OR: [{ name: { contains: search || '' } }],
         },
+        take: limit ? +limit : undefined,
       })
 
       return res.status(200).json(projects)
