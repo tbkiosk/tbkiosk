@@ -111,7 +111,7 @@ const DiscoverDetail = () => {
                 <ActionIcon
                   color="dark.0"
                   left={0}
-                  onClick={() => router.push('/discover')}
+                  onClick={() => router.back()}
                   opacity={0.7}
                   pos="absolute"
                   radius="xl"
@@ -477,7 +477,10 @@ const DiscoverDetail = () => {
             >
               You may also like this
             </Title>
-            <ProjectsGrid limit={6} />
+            <ProjectsGrid
+              limit={6}
+              replace
+            />
             <Footer />
           </>
         )}

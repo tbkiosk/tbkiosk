@@ -13,9 +13,10 @@ type ProjectsGridProps = {
   limit?: number
   pageSize?: number
   pageNumber?: number
+  replace?: boolean
 }
 
-const ProjectsGrid = ({ limit, pageNumber, pageSize }: ProjectsGridProps) => {
+const ProjectsGrid = ({ limit, pageNumber, pageSize, replace = false }: ProjectsGridProps) => {
   const { data, isLoading } = useQuery<Project[], Error>({
     queryKey: ['discover'],
     queryFn: async () => {
@@ -64,6 +65,7 @@ const ProjectsGrid = ({ limit, pageNumber, pageSize }: ProjectsGridProps) => {
           <Link
             href={`/discover/${_project.id}`}
             passHref
+            replace={replace}
           >
             <ProjectCard {..._project} />
           </Link>
