@@ -1,33 +1,12 @@
 import Head from 'next/head'
 import { AppShell, Container, Center, Stack, Title, Box, Text, ActionIcon, rem, createStyles, keyframes } from '@mantine/core'
 import { useScrollIntoView } from '@mantine/hooks'
+import Typewriter from 'typewriter-effect'
 
 import { UserProvider } from '@/providers/user'
 
 import { Header, Footer, ProjectsGrid } from '@/components'
 import ScrollDown from 'public/icons/scrolldown.svg'
-
-const typing = (maxWidth = '100%') =>
-  keyframes({
-    from: { width: 0 },
-    to: { width: maxWidth },
-  })
-
-const show = keyframes({
-  '0%': { visibility: 'hidden' },
-  '99%': { visibility: 'hidden' },
-  '100%': { visibility: 'visible' },
-})
-
-const blinkCaret = keyframes({
-  'from, to': { borderColor: 'transparent' },
-  '50%': { borderColor: '#fd222a' },
-})
-
-const hideBlinkCaret = keyframes({
-  '99%': { borderRightStyle: 'solid' },
-  '100%': { borderRightStyle: 'none' },
-})
 
 const bounce = keyframes({
   '0%, 20%, 50%, 80%, 100%': {
@@ -38,18 +17,8 @@ const bounce = keyframes({
 })
 
 const useStyles = createStyles(() => ({
-  title: {
-    animation: `${typing('592px')} 4s steps(20, end), ${blinkCaret} .75s step-end infinite, ${hideBlinkCaret} 4.1s forwards`,
-    borderRight: '2px solid #fd222a',
-    overflow: 'hidden',
-    whiteSpace: 'nowrap',
-  },
-  subTitle: {
-    animation: `${show} 4.1s forwards, ${typing('1016px')} 6s steps(40, end) 4s, ${blinkCaret} .75s step-end infinite`,
-    borderRight: '2px solid #fd222a',
-    overflow: 'hidden',
-    visibility: 'hidden',
-    whiteSpace: 'nowrap',
+  cursor: {
+    fontSize: rem(32),
   },
   bounceArrow: {
     animation: `${bounce} 2s ease infinite`,
@@ -57,7 +26,7 @@ const useStyles = createStyles(() => ({
 }))
 
 const Discover = () => {
-  const { classes } = useStyles()
+  const { classes, cx } = useStyles()
   const { scrollIntoView, targetRef } = useScrollIntoView<HTMLHeadingElement>({
     duration: 400,
     offset: 120,
@@ -111,7 +80,7 @@ const Discover = () => {
                   type="video/mp4"
                 />
               </video>
-              <Text
+              {/* <Text
                 className={classes.title}
                 ff="pixeloid-mono"
                 fz={rem(56)}
@@ -134,6 +103,31 @@ const Discover = () => {
                 pr={rem(8)}
               >
                 Finding and exploring the latest and greatest ERC-6551 projects
+              </Text> */}
+              <Text
+                h={202}
+                lh={1}
+                ta="center"
+              >
+                <Typewriter
+                  onInit={typewriter => {
+                    typewriter
+                      .typeString('<span style="font-family: pixeloid-mono; font-size: 56px">Discover  </span>')
+                      .typeString('<span style="color: #fd222a; font-size: 56px">ERC-6551</span>')
+                      .typeString('<br></br>')
+                      .changeDelay(80)
+                      .typeString(
+                        '<span style="font-family: pixeloid-mono; font-size: 24px">Finding and exploring the latest and greatest ERC-6551 projects</span>'
+                      )
+                      .start()
+                  }}
+                  options={{
+                    autoStart: true,
+                    cursorClassName: cx(classes.cursor, 'Typewriter__cursor'),
+                    // devMode: true,
+                    delay: 120,
+                  }}
+                />
               </Text>
             </Stack>
             <Box
