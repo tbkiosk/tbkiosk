@@ -72,21 +72,23 @@ const Discover = () => {
               align="center"
               spacing={0}
             >
-              <video
-                autoPlay
-                loop
-                muted
-                style={
-                  largeScreen
-                    ? { height: '360px', marginBottom: rem(72), objectFit: 'cover', width: '360px' }
-                    : { height: '180px', marginBottom: rem(32), objectFit: 'cover', width: '180px' }
-                }
-              >
-                <source
-                  src="/preview2.mp4"
-                  type="video/mp4"
-                />
-              </video>
+              {typeof largeScreen === 'boolean' && (
+                <video
+                  autoPlay
+                  loop
+                  muted
+                  style={
+                    largeScreen
+                      ? { height: '360px', marginBottom: rem(72), objectFit: 'cover', width: '360px' }
+                      : { height: '180px', marginBottom: rem(32), objectFit: 'cover', width: '180px' }
+                  }
+                >
+                  <source
+                    src="/preview2.mp4"
+                    type="video/mp4"
+                  />
+                </video>
+              )}
               <Text ta="center">
                 {typeof largeScreen === 'boolean' && (
                   <Typewriter
