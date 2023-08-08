@@ -1,12 +1,12 @@
 import Head from 'next/head'
 import { AppShell, Container, Center, Stack, Title, Box, Text, ActionIcon, rem, createStyles, keyframes } from '@mantine/core'
-import { useScrollIntoView } from '@mantine/hooks'
+import { useScrollIntoView, useMediaQuery } from '@mantine/hooks'
 import Typewriter from 'typewriter-effect'
 
 import { UserProvider } from '@/providers/user'
 
 import { Header, Footer, ProjectsGrid } from '@/components'
-import ScrollDown from 'public/icons/scrolldown.svg'
+import ScrollDown from '../../../public/icons/scrolldown.svg'
 
 const bounce = keyframes({
   '0%, 20%, 50%, 80%, 100%': {
@@ -16,9 +16,12 @@ const bounce = keyframes({
   '60%': { transform: 'translateY(-5px)' },
 })
 
-const useStyles = createStyles(() => ({
+const useStyles = createStyles(theme => ({
   cursor: {
     fontSize: rem(32),
+    [theme.fn.smallerThan('sm')]: {
+      fontSize: rem(20),
+    },
   },
   bounceArrow: {
     animation: `${bounce} 2s ease infinite`,
@@ -31,6 +34,7 @@ const Discover = () => {
     duration: 400,
     offset: 120,
   })
+  const largeScreen = useMediaQuery('(min-width: 48em)')
 
   return (
     <AppShell
@@ -73,51 +77,29 @@ const Discover = () => {
                 autoPlay
                 loop
                 muted
-                style={{ height: '360px', marginBottom: rem(72), objectFit: 'cover', width: '360px' }}
+                style={
+                  largeScreen
+                    ? { height: '360px', marginBottom: rem(72), objectFit: 'cover', width: '360px' }
+                    : { height: '180px', marginBottom: rem(32), objectFit: 'cover', width: '180px' }
+                }
               >
                 <source
                   src="/preview2.mp4"
                   type="video/mp4"
                 />
               </video>
-              {/* <Text
-                className={classes.title}
-                ff="pixeloid-mono"
-                fz={rem(56)}
-                pr={rem(8)}
-              >
-                Discover
-                <Text
-                  component="span"
-                  fw={700}
-                  ml={rem(16)}
-                  style={{ color: '#fd222a' }}
-                >
-                  ERC-6551
-                </Text>
-              </Text>
-              <Text
-                className={classes.subTitle}
-                ff="pixeloid-mono"
-                fz={rem(24)}
-                pr={rem(8)}
-              >
-                Finding and exploring the latest and greatest ERC-6551 projects
-              </Text> */}
-              <Text
-                h={202}
-                lh={1}
-                ta="center"
-              >
+              <Text ta="center">
                 <Typewriter
                   onInit={typewriter => {
                     typewriter
-                      .typeString('<span style="font-family: pixeloid-mono; font-size: 56px">Discover  </span>')
-                      .typeString('<span style="color: #fd222a; font-size: 56px">ERC-6551</span>')
+                      .typeString(`<span style="font-family: pixeloid-mono; font-size: ${largeScreen ? '56px' : '24px'}">Discover  </span>`)
+                      .typeString(`<span style="color: #fd222a; font-size: ${largeScreen ? '56px' : '24px'}">ERC-6551</span>`)
                       .typeString('<br></br>')
                       .changeDelay(80)
                       .typeString(
-                        '<span style="font-family: pixeloid-mono; font-size: 24px">Finding and exploring the latest and greatest ERC-6551 projects</span>'
+                        `<span style="font-family: pixeloid-mono; font-size: ${
+                          largeScreen ? '24px' : '16px'
+                        }">Finding and exploring the latest and greatest ERC-6551 projects</span>`
                       )
                       .start()
                   }}
@@ -147,12 +129,12 @@ const Discover = () => {
         </Box>
         <Box
           bg="transparent"
-          h="100vh"
+          h="calc(100vh - 72px)"
         />
         <Container
           fluid
           pos="relative"
-          px={rem(64)}
+          px={largeScreen ? rem(64) : 'lg'}
           py="lg"
           style={{ zIndex: 1200 }}
           sx={theme => ({ backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[4] : '#fff' })}

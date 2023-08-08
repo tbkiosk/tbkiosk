@@ -1,11 +1,9 @@
 import { forwardRef, useState } from 'react'
 import Link from 'next/link'
-import { Header as MantineHeader, Container, Flex, Group, Box, Center, Avatar, Button, Select, Text, rem, ActionIcon } from '@mantine/core'
+import { MediaQuery, Header as MantineHeader, Container, Flex, Group, Box, Avatar, Button, Select, Text, Image, rem } from '@mantine/core'
 import { notifications } from '@mantine/notifications'
 import { useMutation } from '@tanstack/react-query'
 // import { UserContext } from '@/providers/user'
-
-import Logo from 'public/logo_with_text.svg'
 
 import { request } from '@/utils/request'
 
@@ -77,114 +75,151 @@ const Header = () => {
   }, [search])
 
   return (
-    <MantineHeader
-      bg="#000"
-      height={rem(72)}
-      p="md"
-      style={{ zIndex: 1900 }}
-      withBorder={false}
-    >
-      <Container
-        maw={rem(1440)}
-        px={rem(64)}
+    <>
+      <MediaQuery
+        smallerThan="sm"
+        styles={{ display: 'none' }}
       >
-        <Flex
-          align="center"
-          justify="space-between"
+        <MantineHeader
+          bg="#000"
+          height={rem(72)}
+          p="md"
+          style={{ zIndex: 1900 }}
+          withBorder={false}
         >
-          <Link href="/">
-            <Center
-              c="#fff"
-              maw={162}
-              w={162}
-            >
-              <Logo />
-            </Center>
-          </Link>
-          <Box
-            maw={400}
-            miw={120}
-            mx={rem(24)}
-            style={{ flex: 1 }}
+          <Container
+            maw={rem(1440)}
+            px={rem(64)}
           >
-            <Select
-              data={!search ? [] : data?.map(_project => ({ ..._project, value: _project.id, label: _project.name })) || []}
-              filter={() => true}
-              itemComponent={AutoCompleteItem}
-              onSearchChange={value => setSearch(value)}
-              placeholder="Search for collections, NFTs or users"
-              radius="md"
-              rightSection={
-                <Text
-                  c="dark.4"
-                  component="span"
+            <Flex
+              align="center"
+              justify="space-between"
+            >
+              <Link href="/">
+                <Image
+                  alt="logo"
+                  mah={40}
+                  src="/logo_with_text.svg"
+                />
+              </Link>
+              <Box
+                maw={400}
+                miw={120}
+                mx={rem(24)}
+                style={{ flex: 1 }}
+              >
+                <Select
+                  data={!search ? [] : data?.map(_project => ({ ..._project, value: _project.id, label: _project.name })) || []}
+                  filter={() => true}
+                  itemComponent={AutoCompleteItem}
+                  onSearchChange={value => setSearch(value)}
+                  placeholder="Search for collections, NFTs or users"
+                  radius="md"
+                  rightSection={
+                    <Text
+                      c="dark.4"
+                      component="span"
+                    >
+                      <i className="fa-solid fa-magnifying-glass" />
+                    </Text>
+                  }
+                  searchable
+                  searchValue={search}
+                  styles={theme => ({
+                    dropdown: {
+                      backgroundColor: theme.colors.dark[5],
+                      border: 'none',
+                      color: theme.colors.dark[0],
+                    },
+                    input: {
+                      backgroundColor: theme.colors.dark[5],
+                      border: 'none',
+                      color: theme.colors.dark[0],
+                      '::placeholder': {
+                        color: theme.colors.dark[3],
+                      },
+                    },
+                  })}
+                />
+              </Box>
+              <Group
+                position="right"
+                maw={162}
+                noWrap
+                spacing="md"
+                w={162}
+              >
+                <a
+                  href="https://creator.tbkiosk.xyz"
+                  rel="noreferrer"
+                  target="_blank"
                 >
-                  <i className="fa-solid fa-magnifying-glass" />
-                </Text>
-              }
-              searchable
-              searchValue={search}
-              styles={theme => ({
-                dropdown: {
-                  backgroundColor: theme.colors.dark[5],
-                  border: 'none',
-                  color: theme.colors.dark[0],
-                },
-                input: {
-                  backgroundColor: theme.colors.dark[5],
-                  border: 'none',
-                  color: theme.colors.dark[0],
-                  '::placeholder': {
-                    color: theme.colors.dark[3],
-                  },
-                },
-              })}
-            />
-          </Box>
-          <Group
-            position="right"
-            maw={162}
-            noWrap
-            spacing="md"
-            w={162}
+                  <Button
+                    color="dark"
+                    radius="md"
+                    variant="filled"
+                  >
+                    List a Project
+                  </Button>
+                </a>
+              </Group>
+            </Flex>
+          </Container>
+        </MantineHeader>
+      </MediaQuery>
+
+      <MediaQuery
+        largerThan="sm"
+        styles={{ display: 'none' }}
+      >
+        <MantineHeader
+          bg="#000"
+          height={rem(72)}
+          p="md"
+          style={{ zIndex: 1900 }}
+          withBorder={false}
+        >
+          <Container
+            maw={rem(1440)}
+            px={0}
           >
-            <a
-              href="https://creator.tbkiosk.xyz"
-              rel="noreferrer"
-              target="_blank"
+            <Flex
+              align="center"
+              justify="space-between"
             >
-              <Button
-                color="dark"
-                radius="md"
-                variant="filled"
+              <Link href="/">
+                <Image
+                  alt="logo"
+                  mah={40}
+                  src="/logo_with_text.svg"
+                />
+              </Link>
+              <Group
+                position="right"
+                maw={120}
+                noWrap
+                spacing="md"
+                w={120}
               >
-                List a Project
-              </Button>
-            </a>
-            <a
-              href="https://twitter.com"
-              rel="noreferrer"
-              target="_blank"
-            >
-              <ActionIcon
-                radius="md"
-                size="lg"
-                sx={{
-                  backgroundColor: '#fd222a',
-                  '&:hover': {
-                    backgroundColor: '#fd222a',
-                    opacity: 0.8,
-                  },
-                }}
-                variant="filled"
-              >
-                <i className="fa-brands fa-x-twitter" />
-              </ActionIcon>
-            </a>
-          </Group>
-        </Flex>
-      </Container>
-    </MantineHeader>
+                <a
+                  href="https://creator.tbkiosk.xyz"
+                  rel="noreferrer"
+                  target="_blank"
+                >
+                  <Button
+                    color="dark"
+                    radius="md"
+                    variant="filled"
+                  >
+                    List a Project
+                  </Button>
+                </a>
+              </Group>
+            </Flex>
+          </Container>
+        </MantineHeader>
+      </MediaQuery>
+    </>
   )
 }
 

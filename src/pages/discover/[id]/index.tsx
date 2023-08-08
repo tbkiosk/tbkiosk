@@ -19,6 +19,7 @@ import {
   rem,
   useMantineTheme,
 } from '@mantine/core'
+import { useMediaQuery } from '@mantine/hooks'
 import { notifications } from '@mantine/notifications'
 import { Carousel } from '@mantine/carousel'
 import { useQuery } from '@tanstack/react-query'
@@ -35,6 +36,7 @@ const DiscoverDetail = () => {
   const router = useRouter()
 
   const theme = useMantineTheme()
+  const largeScreen = useMediaQuery('(min-width: 48em)')
 
   const { data: projectData, isLoading: projectDetailLoading } = useQuery<Project | undefined, Error>({
     queryKey: ['discover_details', router.query.id],
@@ -81,19 +83,19 @@ const DiscoverDetail = () => {
       <Container
         maw={rem(1440)}
         mih={480}
-        px={rem(72)}
+        px={largeScreen ? rem(64) : 'lg'}
         pb="lg"
       >
         <LoadingOverlay visible={projectDetailLoading} />
         {projectData && (
           <>
             <Box
-              h={480}
+              h={largeScreen ? 480 : 240}
               mb={rem(128)}
             >
               <Image
                 alt="bg"
-                height={480}
+                height={largeScreen ? 480 : 240}
                 left={0}
                 pos="absolute"
                 right={0}
@@ -114,7 +116,7 @@ const DiscoverDetail = () => {
                   pos="absolute"
                   radius="xl"
                   size="xl"
-                  top={48}
+                  top={rem(largeScreen ? 48 : 24)}
                   variant="filled"
                 >
                   <i
@@ -126,8 +128,11 @@ const DiscoverDetail = () => {
                   alt="bg"
                   bottom={-84}
                   height={168}
+                  left={0}
+                  mx={largeScreen ? 0 : 'auto'}
                   pos="absolute"
                   radius={56}
+                  right={0}
                   src={projectData.logoUrl}
                   styles={{
                     image: {
@@ -163,7 +168,7 @@ const DiscoverDetail = () => {
                     {projectData.projectStage}
                   </Badge>
                 </Group>
-                <Group spacing="lg">
+                <Group spacing={largeScreen ? 'lg' : 0}>
                   <FavoriteButton
                     defaultFavorited={false}
                     onFavorite={() => void 0}
@@ -210,81 +215,156 @@ const DiscoverDetail = () => {
                   </Menu>
                 </Group>
               </Flex>
-              <Group
-                noWrap
-                spacing="lg"
-              >
-                <Box>
-                  <Text
-                    component="span"
-                    mr={4}
-                  >
-                    By
-                  </Text>
-                  <Text
-                    color={isDarkTheme ? theme.colors.gray[2] : theme.colors.dark[7]}
-                    component="span"
-                    fw={700}
-                  >
-                    -
-                  </Text>
-                </Box>
-                <Box>
-                  <Text
-                    component="span"
-                    mr={4}
-                  >
-                    Created
-                  </Text>
-                  <Text
-                    color={isDarkTheme ? theme.colors.gray[2] : theme.colors.dark[7]}
-                    component="span"
-                    fw={700}
-                  >
-                    {new Date(projectData.createdAt).toDateString()}
-                  </Text>
-                </Box>
-              </Group>
-              <Group
-                noWrap
-                spacing="lg"
-              >
-                <Box>
-                  <Text
-                    component="span"
-                    mr={4}
-                  >
-                    Categories:
-                  </Text>
-                  <Badge
-                    color="dark"
-                    mr="xs"
-                    radius="sm"
-                    variant="filled"
-                  >
-                    {projectData.blockchain}
-                  </Badge>
-                </Box>
-                <Box>
-                  <Text
-                    component="span"
-                    mr={4}
-                  >
-                    Categories:
-                  </Text>
-                  {projectData?.categories?.map(_category => (
+              {largeScreen ? (
+                <Group
+                  noWrap
+                  spacing="lg"
+                >
+                  <Box>
+                    <Text
+                      component="span"
+                      mr={4}
+                    >
+                      By
+                    </Text>
+                    <Text
+                      color={isDarkTheme ? theme.colors.gray[2] : theme.colors.dark[7]}
+                      component="span"
+                      fw={700}
+                    >
+                      -
+                    </Text>
+                  </Box>
+                  <Box>
+                    <Text
+                      component="span"
+                      mr={4}
+                    >
+                      Created
+                    </Text>
+                    <Text
+                      color={isDarkTheme ? theme.colors.gray[2] : theme.colors.dark[7]}
+                      component="span"
+                      fw={700}
+                    >
+                      {new Date(projectData.createdAt).toDateString()}
+                    </Text>
+                  </Box>
+                </Group>
+              ) : (
+                <>
+                  <Box>
+                    <Text
+                      component="span"
+                      mr={4}
+                    >
+                      By
+                    </Text>
+                    <Text
+                      color={isDarkTheme ? theme.colors.gray[2] : theme.colors.dark[7]}
+                      component="span"
+                      fw={700}
+                    >
+                      -
+                    </Text>
+                  </Box>
+                  <Box>
+                    <Text
+                      component="span"
+                      mr={4}
+                    >
+                      Created
+                    </Text>
+                    <Text
+                      color={isDarkTheme ? theme.colors.gray[2] : theme.colors.dark[7]}
+                      component="span"
+                      fw={700}
+                    >
+                      {new Date(projectData.createdAt).toDateString()}
+                    </Text>
+                  </Box>
+                </>
+              )}
+              {largeScreen ? (
+                <Group
+                  noWrap
+                  spacing="lg"
+                >
+                  <Box>
+                    <Text
+                      component="span"
+                      mr={4}
+                    >
+                      Built on:
+                    </Text>
                     <Badge
                       color="dark"
-                      key={_category}
                       mr="xs"
                       radius="sm"
                       variant="filled"
                     >
-                      {_category}
+                      {projectData.blockchain}
                     </Badge>
-                  ))}
-                </Box>
-              </Group>
+                  </Box>
+                  <Box>
+                    <Text
+                      component="span"
+                      mr={4}
+                    >
+                      Categories:
+                    </Text>
+                    {projectData?.categories?.map(_category => (
+                      <Badge
+                        color="dark"
+                        key={_category}
+                        mr="xs"
+                        radius="sm"
+                        variant="filled"
+                      >
+                        {_category}
+                      </Badge>
+                    ))}
+                  </Box>
+                </Group>
+              ) : (
+                <>
+                  <Box>
+                    <Text
+                      component="span"
+                      mr={4}
+                    >
+                      Built on:
+                    </Text>
+                    <Badge
+                      color="dark"
+                      mr="xs"
+                      radius="sm"
+                      variant="filled"
+                    >
+                      {projectData.blockchain}
+                    </Badge>
+                  </Box>
+                  <Box>
+                    <Text
+                      component="span"
+                      mr={4}
+                    >
+                      Categories:
+                    </Text>
+                    {projectData?.categories?.map(_category => (
+                      <Badge
+                        color="dark"
+                        key={_category}
+                        mr="xs"
+                        radius="sm"
+                        variant="filled"
+                      >
+                        {_category}
+                      </Badge>
+                    ))}
+                  </Box>
+                </>
+              )}
               <Group
                 noWrap
                 spacing="xl"
@@ -358,11 +438,11 @@ const DiscoverDetail = () => {
               <Carousel
                 align="start"
                 draggable
-                height={480}
+                height={largeScreen ? 480 : 240}
                 loop
                 mb={rem(32)}
                 slideGap="md"
-                slideSize="50%"
+                slideSize={largeScreen ? '50%' : '100%'}
                 withControls={false}
                 withIndicators
               >
@@ -371,7 +451,7 @@ const DiscoverDetail = () => {
                     <Image
                       alt=""
                       fit="cover"
-                      height={480}
+                      height={largeScreen ? 480 : 240}
                       radius="md"
                       src={_pi}
                       width="100%"
