@@ -43,3 +43,6 @@ next-env.d.ts
 
 # vitest v8 cache
 v8-compile-cache*
+
+# Sentry Auth Token
+.sentryclirc

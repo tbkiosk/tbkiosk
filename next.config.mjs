@@ -39,8 +39,8 @@ export default withSentryConfig(
     // Suppresses source map uploading logs during build
     silent: true,
 
-    org: 'morphis',
-    project: 'morphis_airdawg',
+    org: 'tbkiosk',
+    project: 'kiosk',
   },
   {
     // For all available options, see:
