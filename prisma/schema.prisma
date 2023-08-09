@@ -96,8 +96,21 @@ model CreatorUser {
   projects      Project[]
   twitter       TwitterProfile?
   discord       DiscordProfile?
+  role          Role            @default(User)
 
   @@map("creator_users")
+}
+
+model AdminWallet {
+  id      String @id @default(auto()) @map("_id") @db.ObjectId
+  address String @unique
+
+  @@map("creator_admin_wallets")
+}
+
+enum Role {
+  User
+  Admin
 }
 
 type TwitterProfile {
@@ -125,8 +138,8 @@ model VerificationToken {
 }
 
 model Project {
-  id             String            @id @default(auto()) @map("_id") @db.ObjectId
-  blockchain     ProjectBlockchain
+  id             String              @id @default(auto()) @map("_id") @db.ObjectId
+  blockchains    ProjectBlockchain[] @default([])
   name           String
   logoUrl        String
   description    String
@@ -139,12 +152,12 @@ model Project {
   projectStage   ProjectStage
   status         ProjectStatus
   rejectedReason String?
-  isFeatured     Boolean           @default(false)
-  viewCount      Int               @default(0)
-  createdAt      DateTime          @default(now())
-  updatedAt      DateTime          @updatedAt
-  userId         String            @db.ObjectId
-  user           CreatorUser              @relation(fields: [userId], references: [id])
+  isFeatured     Boolean             @default(false)
+  viewCount      Int                 @default(0)
+  createdAt      DateTime            @default(now())
+  updatedAt      DateTime            @updatedAt
+  userId         String              @db.ObjectId
+  user           CreatorUser                @relation(fields: [userId], references: [id])
 
   @@map("creator_projects")
 }
@@ -153,6 +166,7 @@ enum ProjectStatus {
   Draft
   InReview
   Published
+  Rejected
 }
 
 enum ProjectStage {
