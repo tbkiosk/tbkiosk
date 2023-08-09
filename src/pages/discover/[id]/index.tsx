@@ -111,7 +111,13 @@ const DiscoverDetail = () => {
                 <ActionIcon
                   color="dark.0"
                   left={0}
-                  onClick={() => router.back()}
+                  onClick={() => {
+                    router.beforePopState(state => {
+                      state.options.scroll = false
+                      return true
+                    })
+                    router.back()
+                  }}
                   opacity={0.7}
                   pos="absolute"
                   radius="xl"

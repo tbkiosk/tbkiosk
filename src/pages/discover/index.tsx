@@ -84,12 +84,15 @@ const Discover = () => {
                   }
                 >
                   <source
-                    src="/preview2.mp4"
+                    src="/kiosk.mp4"
                     type="video/mp4"
                   />
                 </video>
               )}
-              <Text ta="center">
+              <Text
+                h={largeScreen ? 172 : 160}
+                ta="center"
+              >
                 {typeof largeScreen === 'boolean' && (
                   <Typewriter
                     onInit={typewriter => {
