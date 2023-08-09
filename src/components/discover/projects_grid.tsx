@@ -1,4 +1,3 @@
-import Link from 'next/link'
 import { Grid, LoadingOverlay, rem } from '@mantine/core'
 import { notifications } from '@mantine/notifications'
 import { useQuery } from '@tanstack/react-query'
@@ -62,13 +61,10 @@ const ProjectsGrid = ({ limit, pageNumber, pageSize, replace = false }: Projects
           sm={4}
           xs={6}
         >
-          <Link
-            href={`/discover/${_project.id}`}
-            passHref
+          <ProjectCard
+            {..._project}
             replace={replace}
-          >
-            <ProjectCard {..._project} />
-          </Link>
+          />
         </Grid.Col>
       ))}
     </Grid>

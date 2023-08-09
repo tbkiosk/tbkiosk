@@ -3,16 +3,21 @@ import { Card, AspectRatio, Image, Flex, Title, Group, Text, ActionIcon, Badge, 
 
 import type { Project } from '@prisma/client'
 
-const ProjectCard = ({ id, name, logoUrl, bannerImage, description, categories, website, twitter, discord }: Project) => {
+type ProjectCardProp = {
+  replace?: boolean
+} & Project
+
+const ProjectCard = ({ id, name, logoUrl, bannerImage, description, categories, website, twitter, discord, replace }: ProjectCardProp) => {
   const router = useRouter()
 
   return (
     <Card
       display="flex"
-      onClick={() => router.push(`/discover/${id}`)}
+      onClick={() => (replace ? router.replace(`/discover/${id}`) : router.push(`/discover/${id}`))}
       padding="sm"
       radius="md"
       sx={{
+        cursor: 'pointer',
         flexDirection: 'column',
         transition: 'box-shadow 0.4s ease',
         '&:hover': {
