@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
+import Head from 'next/head'
 
 const Index = () => {
   const router = useRouter()
@@ -8,7 +9,13 @@ const Index = () => {
     router.replace('/discover')
   }, [])
 
-  return <></>
+  return (
+    <>
+      <Head>
+        <title>Kiosk</title>
+      </Head>
+    </>
+  )
 }
 
 export default Index
