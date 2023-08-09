@@ -17,7 +17,6 @@ import {
   Badge,
   Divider,
   rem,
-  useMantineTheme,
 } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
 import { notifications } from '@mantine/notifications'
@@ -35,7 +34,6 @@ import type { Project } from '@prisma/client'
 const DiscoverDetail = () => {
   const router = useRouter()
 
-  const theme = useMantineTheme()
   const largeScreen = useMediaQuery('(min-width: 48em)')
 
   const { data: projectData, isLoading: projectDetailLoading } = useQuery<Project | undefined, Error>({
@@ -72,8 +70,6 @@ const DiscoverDetail = () => {
       method: 'PUT',
     })
   }, [router.query.id])
-
-  const isDarkTheme = theme.colorScheme === 'dark'
 
   return (
     <AppShell
@@ -143,7 +139,6 @@ const DiscoverDetail = () => {
                   styles={{
                     image: {
                       border: '9px solid',
-                      borderColor: isDarkTheme ? theme.colors.dark[7] : '#fff',
                     },
                   }}
                   width={168}
@@ -158,7 +153,6 @@ const DiscoverDetail = () => {
               >
                 <Group spacing="xs">
                   <Title
-                    color={isDarkTheme ? theme.colors.gray[2] : theme.colors.dark[7]}
                     order={3}
                     truncate
                   >
@@ -181,14 +175,12 @@ const DiscoverDetail = () => {
                     onUnfavorite={() => void 0}
                   />
                   <ActionIcon
-                    size="lg"
+                    color="dark"
                     radius="xl"
+                    size="lg"
                     variant="transparent"
                   >
-                    <i
-                      className="fa-solid fa-share-nodes"
-                      style={{ color: isDarkTheme ? theme.colors.gray[2] : theme.colors.dark[7] }}
-                    />
+                    <i className="fa-solid fa-share-nodes" />
                   </ActionIcon>
                   <Menu
                     shadow="md"
@@ -196,14 +188,12 @@ const DiscoverDetail = () => {
                   >
                     <Menu.Target>
                       <ActionIcon
-                        size="lg"
+                        color="dark"
                         radius="xl"
+                        size="lg"
                         variant="transparent"
                       >
-                        <i
-                          className="fa-solid fa-ellipsis"
-                          style={{ color: isDarkTheme ? theme.colors.gray[2] : theme.colors.dark[7] }}
-                        />
+                        <i className="fa-solid fa-ellipsis" />
                       </ActionIcon>
                     </Menu.Target>
                     <Menu.Dropdown>
@@ -234,7 +224,6 @@ const DiscoverDetail = () => {
                       By
                     </Text>
                     <Text
-                      color={isDarkTheme ? theme.colors.gray[2] : theme.colors.dark[7]}
                       component="span"
                       fw={700}
                     >
@@ -249,7 +238,6 @@ const DiscoverDetail = () => {
                       Created
                     </Text>
                     <Text
-                      color={isDarkTheme ? theme.colors.gray[2] : theme.colors.dark[7]}
                       component="span"
                       fw={700}
                     >
@@ -267,7 +255,6 @@ const DiscoverDetail = () => {
                       By
                     </Text>
                     <Text
-                      color={isDarkTheme ? theme.colors.gray[2] : theme.colors.dark[7]}
                       component="span"
                       fw={700}
                     >
@@ -282,7 +269,6 @@ const DiscoverDetail = () => {
                       Created
                     </Text>
                     <Text
-                      color={isDarkTheme ? theme.colors.gray[2] : theme.colors.dark[7]}
                       component="span"
                       fw={700}
                     >
@@ -303,14 +289,26 @@ const DiscoverDetail = () => {
                     >
                       Built on:
                     </Text>
-                    <Badge
-                      color="dark"
-                      mr="xs"
-                      radius="sm"
-                      variant="filled"
-                    >
-                      {projectData.blockchain}
-                    </Badge>
+                    {projectData.blockchains.length ? (
+                      projectData.blockchains.map(_b => (
+                        <Badge
+                          color="dark"
+                          key={_b}
+                          mr="xs"
+                          radius="sm"
+                          variant="filled"
+                        >
+                          {_b}
+                        </Badge>
+                      ))
+                    ) : (
+                      <Text
+                        component="span"
+                        fw={700}
+                      >
+                        -
+                      </Text>
+                    )}
                   </Box>
                   <Box>
                     <Text
@@ -341,14 +339,26 @@ const DiscoverDetail = () => {
                     >
                       Built on:
                     </Text>
-                    <Badge
-                      color="dark"
-                      mr="xs"
-                      radius="sm"
-                      variant="filled"
-                    >
-                      {projectData.blockchain}
-                    </Badge>
+                    {projectData.blockchains.length ? (
+                      projectData.blockchains.map(_b => (
+                        <Badge
+                          color="dark"
+                          key={_b}
+                          mr="xs"
+                          radius="sm"
+                          variant="filled"
+                        >
+                          {_b}
+                        </Badge>
+                      ))
+                    ) : (
+                      <Text
+                        component="span"
+                        fw={700}
+                      >
+                        -
+                      </Text>
+                    )}
                   </Box>
                   <Box>
                     <Text

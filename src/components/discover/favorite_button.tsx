@@ -13,8 +13,6 @@ const FavoriteButton = ({ defaultFavorited, onFavorite, onUnfavorite }: Favorite
   const [isFavorited, setIsFavorited] = useState(defaultFavorited)
   const [isLoading, setIsLoading] = useState(false)
 
-  const isDarkTheme = theme.colorScheme === 'dark'
-
   const onFavoriteOrUnfavorite = async () => {
     setIsLoading(true)
 
@@ -31,6 +29,7 @@ const FavoriteButton = ({ defaultFavorited, onFavorite, onUnfavorite }: Favorite
 
   return (
     <ActionIcon
+      color="dark"
       disabled={isLoading}
       onClick={() => onFavoriteOrUnfavorite()}
       size="lg"
@@ -39,7 +38,7 @@ const FavoriteButton = ({ defaultFavorited, onFavorite, onUnfavorite }: Favorite
     >
       <i
         className="fa-regular fa-star"
-        style={{ color: isFavorited ? theme.colors.yellow[3] : isDarkTheme ? theme.colors.gray[2] : theme.colors.dark[7] }}
+        style={{ color: isFavorited ? theme.colors.yellow[3] : 'inherit' }}
       />
     </ActionIcon>
   )

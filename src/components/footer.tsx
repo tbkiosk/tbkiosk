@@ -84,6 +84,9 @@ const Footer = () => {
                 alt="logo"
                 maw={136}
                 src="/logo_with_text_black.svg"
+                sx={theme => ({
+                  filter: theme.colorScheme === 'dark' ? 'invert(1)' : 'none',
+                })}
               />
             </Link>
             <Text fz="sm">©️ 2023 Kiosk</Text>
