@@ -2,8 +2,6 @@ import { MantineProvider, ColorSchemeProvider as MantineColorSchemeProvider, Col
 import { Notifications } from '@mantine/notifications'
 import { useLocalStorage, useHotkeys } from '@mantine/hooks'
 
-import { Fonts } from '@/components'
-
 import type { SingleNode } from '@/types/react_node'
 
 export const MantineUIProvider = ({ children }: SingleNode) => {
@@ -27,7 +25,6 @@ export const MantineUIProvider = ({ children }: SingleNode) => {
         withGlobalStyles
         withNormalizeCSS
       >
-        <Fonts />
         <Notifications />
         {children}
       </MantineProvider>

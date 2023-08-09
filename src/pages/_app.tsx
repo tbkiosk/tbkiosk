@@ -9,6 +9,7 @@ import { WalletProvider } from '@suiet/wallet-kit'
 
 import { MantineUIProvider } from '@/providers/mantine'
 
+import { Fonts } from '@/components'
 import ErrorBoundary from './error_boundary'
 
 import { wagmiConfig } from '@/lib/wagmi'
@@ -38,6 +39,7 @@ const App = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => (
                 />
               </Head>
               <MantineUIProvider>
+                <Fonts />
                 <ErrorBoundary>
                   <Component {...pageProps} />
                 </ErrorBoundary>
