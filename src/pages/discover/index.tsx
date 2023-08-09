@@ -79,7 +79,7 @@ const Discover = () => {
                   muted
                   style={
                     largeScreen
-                      ? { height: '360px', marginBottom: rem(72), objectFit: 'cover', width: '360px' }
+                      ? { height: '206', marginBottom: rem(72), objectFit: 'cover', width: '206px' }
                       : { height: '180px', marginBottom: rem(32), objectFit: 'cover', width: '180px' }
                   }
                 >

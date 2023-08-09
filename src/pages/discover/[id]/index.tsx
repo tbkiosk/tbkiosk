@@ -18,7 +18,7 @@ import {
   Divider,
   rem,
 } from '@mantine/core'
-import { useMediaQuery } from '@mantine/hooks'
+import { useMediaQuery, useClipboard } from '@mantine/hooks'
 import { notifications } from '@mantine/notifications'
 import { Carousel } from '@mantine/carousel'
 import { useQuery } from '@tanstack/react-query'
@@ -35,6 +35,7 @@ const DiscoverDetail = () => {
   const router = useRouter()
 
   const largeScreen = useMediaQuery('(min-width: 48em)')
+  const clipboard = useClipboard({ timeout: 0 })
 
   const { data: projectData, isLoading: projectDetailLoading } = useQuery<Project | undefined, Error>({
     queryKey: ['discover_details', router.query.id],
@@ -197,9 +198,22 @@ const DiscoverDetail = () => {
                       </ActionIcon>
                     </Menu.Target>
                     <Menu.Dropdown>
-                      <Menu.Item icon={<i className="fa-solid fa-copy" />}>Copy link</Menu.Item>
-                      <Menu.Item icon={<i className="fa-solid fa-paperclip" />}>Documentation</Menu.Item>
-                      <Menu.Item icon={<i className="fa-solid fa-circle-question" />}>Contact support</Menu.Item>
+                      <Menu.Item
+                        onClick={() => {
+                          clipboard.copy(location.href)
+                          notifications.show({
+                            color: 'green',
+                            message: 'Copied to clipboard',
+                            title: 'Success',
+                            withCloseButton: true,
+                          })
+                        }}
+                        icon={<i className="fa-solid fa-copy" />}
+                      >
+                        Copy link
+                      </Menu.Item>
+                      {/* <Menu.Item icon={<i className="fa-solid fa-paperclip" />}>Documentation</Menu.Item> */}
+                      {/* <Menu.Item icon={<i className="fa-solid fa-circle-question" />}>Contact support</Menu.Item> */}
                       <Menu.Divider />
                       <Menu.Item
                         color="red"
