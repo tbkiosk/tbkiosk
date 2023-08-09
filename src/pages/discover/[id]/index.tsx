@@ -177,6 +177,13 @@ const DiscoverDetail = () => {
                   />
                   <ActionIcon
                     color="dark"
+                    onClick={() =>
+                      window.open(
+                        `https://twitter.com/intent/tweet?url=${encodeURIComponent(location.href)}&text=${encodeURIComponent(
+                          `${projectData.name} | ${projectData.blockchains.join(' ')}`
+                        )}`
+                      )
+                    }
                     radius="xl"
                     size="lg"
                     variant="transparent"

@@ -10,11 +10,39 @@ export default class _Document extends Document {
     return (
       <Html lang="en">
         <Head>
+          <meta charSet="UTF-8" />
           <meta
             name="description"
             content="kiosk"
           />
-          <meta charSet="UTF-8" />
+          <meta
+            name="twitter:card"
+            content="summary"
+          />
+          <meta
+            name="twitter:site"
+            content="@tbkisk"
+          />
+          <meta
+            name="twitter:creator"
+            content="@tbkiosk"
+          />
+          <meta
+            property="og:url"
+            content="https://tbkiosk.xyz"
+          />
+          <meta
+            property="og:title"
+            content="Kiosk"
+          />
+          <meta
+            property="og:description"
+            content="Kiosk"
+          />
+          <meta
+            property="og:image"
+            content="https://tbkiosk.xyz/images/banner.png"
+          />
           <link
             rel="icon"
             href="/favicon.ico?v=2"
