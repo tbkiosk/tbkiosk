@@ -224,6 +224,11 @@ const DiscoverDetail = () => {
                       <Menu.Divider />
                       <Menu.Item
                         color="red"
+                        onClick={() =>
+                          window.open(
+                            `https://docs.google.com/forms/d/e/1FAIpQLSedEm56AAsrkssUTGF2pALbbHzoxiFgwJNrWW0h5uws4hYAxA/viewform?entry.1073118097=${projectData.id}`
+                          )
+                        }
                         icon={<i className="fa-solid fa-triangle-exclamation" />}
                       >
                         Report
