@@ -3,8 +3,6 @@ import { AppShell, Container, Center, Stack, Title, Box, Text, ActionIcon, rem, 
 import { useScrollIntoView, useMediaQuery } from '@mantine/hooks'
 import Typewriter from 'typewriter-effect'
 
-import { UserProvider } from '@/providers/user'
-
 import { Header, Footer, ProjectsGrid } from '@/components'
 import ScrollDown from '/public/icons/scrolldown.svg'
 
@@ -177,9 +175,7 @@ const DiscoverWrapper = () => {
           content="Kiosk discover"
         />
       </Head>
-      <UserProvider>
-        <Discover />
-      </UserProvider>
+      <Discover />
     </>
   )
 }

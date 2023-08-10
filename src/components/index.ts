@@ -1,3 +1,5 @@
+export { default as ErrorBoundary } from './error_boundary'
+
 export { default as Header } from './header'
 export { default as Footer } from './footer'
 export { default as Fonts } from './fonts'

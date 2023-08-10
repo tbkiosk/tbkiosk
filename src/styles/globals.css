@@ -7,8 +7,6 @@
 html,
 body,
 #__next {
-  height: 100vh;
-  max-width: 100vw;
   scroll-behavior: smooth;
 }
 

@@ -23,9 +23,7 @@ import { notifications } from '@mantine/notifications'
 import { Carousel } from '@mantine/carousel'
 import { useQuery } from '@tanstack/react-query'
 
-import { UserProvider } from '@/providers/user'
-
-import { Header, Footer, FavoriteButton, ProjectsGrid } from '@/components'
+import { Header, Footer, ProjectsGrid } from '@/components'
 
 import { request } from '@/utils/request'
 
@@ -170,11 +168,6 @@ const DiscoverDetail = () => {
                   </Badge>
                 </Group>
                 <Group spacing={largeScreen ? 'lg' : 0}>
-                  <FavoriteButton
-                    defaultFavorited={false}
-                    onFavorite={() => void 0}
-                    onUnfavorite={() => void 0}
-                  />
                   <ActionIcon
                     color="dark"
                     onClick={() =>
@@ -541,9 +534,7 @@ const DiscoverDetailWrapper = () => {
           content="Kiosk discover"
         />
       </Head>
-      <UserProvider>
-        <DiscoverDetail />
-      </UserProvider>
+      <DiscoverDetail />
     </>
   )
 }
