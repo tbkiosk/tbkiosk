@@ -17,10 +17,10 @@ type ProjectsGridProps = {
 
 const ProjectsGrid = ({ limit, pageNumber, pageSize, replace = false }: ProjectsGridProps) => {
   const { data, isLoading } = useQuery<Project[], Error>({
-    queryKey: ['discover'],
+    queryKey: ['projects'],
     queryFn: async () => {
       const { data, error } = await request<Project[], string>({
-        url: '/api/discover',
+        url: '/api/projects',
         params: {
           limit,
           pageNumber,

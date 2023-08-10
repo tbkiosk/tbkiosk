@@ -146,6 +146,7 @@ model Project {
   website        String?
   twitter        String?
   discord        String?
+  slug           String              @unique
   bannerImage    String
   categories     Category[]
   previewImages  String[]

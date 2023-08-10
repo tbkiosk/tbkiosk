@@ -8,12 +8,12 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<null>) => {
    * @returns project view count plus
    */
   if (req.method === 'PUT') {
-    const id = req.query.id as string
+    const slug = req.query.slug as string
 
     // TODO: restrict API call only from same origin
 
     try {
-      await prismaClient.project.update({ where: { id }, data: { viewCount: { increment: 1 } } })
+      await prismaClient.project.update({ where: { slug }, data: { viewCount: { increment: 1 } } })
 
       return res.status(200).json(null)
     } catch (err) {

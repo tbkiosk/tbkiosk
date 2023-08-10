@@ -9,11 +9,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Project | null>
    * @returns projects
    */
   if (req.method === 'GET') {
-    const id = req.query.id as string
+    const slug = req.query.slug as string
 
     try {
       const project = await prismaClient.project.findFirst({
-        where: { id },
+        where: { slug },
       })
 
       return res.status(200).json(project)

@@ -7,13 +7,24 @@ type ProjectCardProp = {
   replace?: boolean
 } & Project
 
-const ProjectCard = ({ id, name, logoUrl, bannerImage, description, categories, website, twitter, discord, replace }: ProjectCardProp) => {
+const ProjectCard = ({
+  slug,
+  name,
+  logoUrl,
+  bannerImage,
+  description,
+  categories,
+  website,
+  twitter,
+  discord,
+  replace,
+}: ProjectCardProp) => {
   const router = useRouter()
 
   return (
     <Card
       display="flex"
-      onClick={() => (replace ? router.replace(`/discover/${id}`) : router.push(`/discover/${id}`))}
+      onClick={() => (replace ? router.replace(`/projects/${slug}`) : router.push(`/projects/${slug}`))}
       padding="sm"
       radius="md"
       sx={{

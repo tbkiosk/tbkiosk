@@ -29,17 +29,17 @@ import { request } from '@/utils/request'
 
 import type { Project } from '@prisma/client'
 
-const DiscoverDetail = () => {
+const ProjectDetail = () => {
   const router = useRouter()
 
   const largeScreen = useMediaQuery('(min-width: 48em)')
   const clipboard = useClipboard({ timeout: 0 })
 
   const { data: projectData, isLoading: projectDetailLoading } = useQuery<Project | undefined, Error>({
-    queryKey: ['discover_details', router.query.id],
+    queryKey: ['project_details', router.query.slug],
     queryFn: async () => {
       const { data, error } = await request<Project | undefined, string>({
-        url: `/api/discover/${router.query.id}`,
+        url: `/api/projects/${router.query.slug}`,
       })
 
       if (error) {
@@ -48,7 +48,7 @@ const DiscoverDetail = () => {
 
       return data
     },
-    enabled: !!router.query.id,
+    enabled: !!router.query.slug,
     onError: (error: Error) => {
       notifications.show({
         color: 'red',
@@ -62,13 +62,13 @@ const DiscoverDetail = () => {
   })
 
   useEffect(() => {
-    if (!router.query.id) return
+    if (!router.query.slug) return
 
     request({
-      url: `/api/discover/${router.query.id}/view`,
+      url: `/api/projects/${router.query.slug}/view`,
       method: 'PUT',
     })
-  }, [router.query.id])
+  }, [router.query.slug])
 
   return (
     <AppShell
@@ -524,19 +524,19 @@ const DiscoverDetail = () => {
   )
 }
 
-const DiscoverDetailWrapper = () => {
+const ProjectDetailWrapper = () => {
   return (
     <>
       <Head>
-        <title>Kiosk - Discover</title>
+        <title>Kiosk - Project</title>
         <meta
           name="description"
-          content="Kiosk discover"
+          content="Kiosk project"
         />
       </Head>
-      <DiscoverDetail />
+      <ProjectDetail />
     </>
   )
 }
 
-export default DiscoverDetailWrapper
+export default ProjectDetailWrapper

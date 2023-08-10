@@ -14,9 +14,9 @@ import type { SelectItemProps } from '@mantine/core'
 
 type ItemProps = Project & SelectItemProps
 
-const AutoCompleteItem = forwardRef<HTMLAnchorElement, ItemProps>(({ logoUrl, name, id }: ItemProps, ref) => (
+const AutoCompleteItem = forwardRef<HTMLAnchorElement, ItemProps>(({ logoUrl, name }: ItemProps, ref) => (
   <Link
-    href={`/discover/${id}`}
+    href={`/projects/${name}`}
     ref={ref}
   >
     <Group
@@ -47,7 +47,7 @@ const Header = () => {
   const { data, mutate } = useMutation({
     mutationFn: async ({ search }: { search: string }) => {
       const { error, data } = await request<Project[]>({
-        url: '/api/discover',
+        url: '/api/projects',
         params: {
           search,
         },
