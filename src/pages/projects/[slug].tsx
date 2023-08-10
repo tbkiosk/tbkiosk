@@ -74,6 +74,14 @@ const ProjectDetail = () => {
     <AppShell
       header={<Header />}
       padding={0}
+      styles={{
+        main: {
+          overflowX: 'hidden',
+          paddingBottom: 0,
+          paddingLeft: 0,
+          paddingRight: 0,
+        },
+      }}
     >
       <Container
         maw={rem(1440)}
@@ -149,8 +157,13 @@ const ProjectDetail = () => {
               <Flex
                 align="center"
                 justify="space-between"
+                wrap="nowrap"
               >
-                <Group spacing="xs">
+                <Group
+                  noWrap
+                  spacing="xs"
+                  style={{ overflow: 'hidden' }}
+                >
                   <Title
                     order={3}
                     truncate
@@ -162,12 +175,16 @@ const ProjectDetail = () => {
                     color="yellow.3"
                     mr="xs"
                     radius="sm"
+                    style={{ flexShrink: 0 }}
                     variant="filled"
                   >
                     {projectData.projectStage}
                   </Badge>
                 </Group>
-                <Group spacing={largeScreen ? 'lg' : 0}>
+                <Group
+                  spacing={largeScreen ? 'lg' : 0}
+                  style={{ flexShrink: 0 }}
+                >
                   <ActionIcon
                     color="dark"
                     onClick={() =>
@@ -240,21 +257,7 @@ const ProjectDetail = () => {
                       component="span"
                       mr={4}
                     >
-                      By
-                    </Text>
-                    <Text
-                      component="span"
-                      fw={700}
-                    >
-                      -
-                    </Text>
-                  </Box>
-                  <Box>
-                    <Text
-                      component="span"
-                      mr={4}
-                    >
-                      Created
+                      Added
                     </Text>
                     <Text
                       component="span"
@@ -271,21 +274,7 @@ const ProjectDetail = () => {
                       component="span"
                       mr={4}
                     >
-                      By
-                    </Text>
-                    <Text
-                      component="span"
-                      fw={700}
-                    >
-                      -
-                    </Text>
-                  </Box>
-                  <Box>
-                    <Text
-                      component="span"
-                      mr={4}
-                    >
-                      Created
+                      Added
                     </Text>
                     <Text
                       component="span"
@@ -469,13 +458,22 @@ const ProjectDetail = () => {
                 )}
               </Group>
             </Stack>
+            <Title order={5}>Project Details</Title>
+            <Divider />
+            <Title
+              my={rem(32)}
+              order={3}
+            >
+              About Project
+            </Title>
+            <Text>{projectData.description}</Text>
             {!!projectData?.previewImages.length && (
               <Carousel
                 align="start"
                 draggable
                 height={largeScreen ? 480 : 240}
                 loop
-                mb={rem(32)}
+                my={rem(32)}
                 slideGap="md"
                 slideSize={largeScreen ? '50%' : '100%'}
                 withControls={false}
@@ -496,15 +494,6 @@ const ProjectDetail = () => {
                 ))}
               </Carousel>
             )}
-            <Title order={5}>Project Details</Title>
-            <Divider />
-            <Title
-              my={rem(32)}
-              order={3}
-            >
-              About Project
-            </Title>
-            <Text>{projectData.description}</Text>
             <Divider my={rem(32)} />
             <Title
               mb={rem(32)}

@@ -40,6 +40,7 @@ const Projects = () => {
       px={0}
       styles={{
         main: {
+          overflowX: 'hidden',
           paddingBottom: 0,
           paddingLeft: 0,
           paddingRight: 0,
