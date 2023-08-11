@@ -1,10 +1,16 @@
 import Head from 'next/head'
 import { AppShell, Container, Center, Stack, Title, Box, Text, ActionIcon, rem, createStyles, keyframes } from '@mantine/core'
 import { useScrollIntoView, useMediaQuery } from '@mantine/hooks'
+import { notifications } from '@mantine/notifications'
+import { useQuery } from '@tanstack/react-query'
 import Typewriter from 'typewriter-effect'
 
 import { Header, Footer, ProjectsGrid } from '@/components'
 import ScrollDown from '/public/icons/scrolldown.svg'
+
+import { request } from '@/utils/request'
+
+import type { Project } from '@prisma/client'
 
 const bounce = keyframes({
   '0%, 20%, 50%, 80%, 100%': {
@@ -33,6 +39,31 @@ const Projects = () => {
     offset: 120,
   })
   const largeScreen = useMediaQuery('(min-width: 48em)')
+
+  const { data, isLoading } = useQuery<Project[], Error>({
+    queryKey: ['projects'],
+    queryFn: async () => {
+      const { data, error } = await request<Project[], string>({
+        url: '/api/projects',
+      })
+
+      if (error) {
+        throw new Error(error)
+      }
+
+      return data || []
+    },
+    onError: (error: Error) => {
+      notifications.show({
+        color: 'red',
+        message: error.message,
+        title: 'Error',
+        withCloseButton: true,
+      })
+    },
+    retry: false,
+    refetchOnWindowFocus: false,
+  })
 
   return (
     <AppShell
@@ -157,7 +188,10 @@ const Projects = () => {
             >
               LATEST PROJECTS
             </Title>
-            <ProjectsGrid />
+            <ProjectsGrid
+              isLoading={isLoading}
+              projects={data}
+            />
             <Footer />
           </Container>
         </Container>

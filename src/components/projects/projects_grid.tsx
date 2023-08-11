@@ -1,51 +1,16 @@
 import { Grid, LoadingOverlay, rem } from '@mantine/core'
-import { notifications } from '@mantine/notifications'
-import { useQuery } from '@tanstack/react-query'
 
 import ProjectCard from './project_card'
-
-import { request } from '@/utils/request'
 
 import type { Project } from '@prisma/client'
 
 type ProjectsGridProps = {
-  limit?: number
-  pageSize?: number
-  pageNumber?: number
+  projects: Project[] | undefined
+  isLoading: boolean
   replace?: boolean
 }
 
-const ProjectsGrid = ({ limit, pageNumber, pageSize, replace = false }: ProjectsGridProps) => {
-  const { data, isLoading } = useQuery<Project[], Error>({
-    queryKey: ['projects'],
-    queryFn: async () => {
-      const { data, error } = await request<Project[], string>({
-        url: '/api/projects',
-        params: {
-          limit,
-          pageNumber,
-          pageSize,
-        },
-      })
-
-      if (error) {
-        throw new Error(error)
-      }
-
-      return data || []
-    },
-    onError: (error: Error) => {
-      notifications.show({
-        color: 'red',
-        message: error.message,
-        title: 'Error',
-        withCloseButton: true,
-      })
-    },
-    retry: false,
-    refetchOnWindowFocus: false,
-  })
-
+const ProjectsGrid = ({ projects, isLoading, replace = false }: ProjectsGridProps) => {
   return (
     <Grid
       gutter="xl"
@@ -54,7 +19,7 @@ const ProjectsGrid = ({ limit, pageNumber, pageSize, replace = false }: Projects
       pos="relative"
     >
       <LoadingOverlay visible={isLoading} />
-      {data?.map(_project => (
+      {projects?.map(_project => (
         <Grid.Col
           key={_project.id}
           md={3}

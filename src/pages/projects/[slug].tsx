@@ -61,6 +61,32 @@ const ProjectDetail = () => {
     refetchOnWindowFocus: false,
   })
 
+  const { data: recommendedProjects, isLoading: recommendedProjectsLoading } = useQuery<Project[], Error>({
+    queryKey: ['projects-recommendations'],
+    queryFn: async () => {
+      const { data, error } = await request<Project[], string>({
+        url: `/api/projects/${router.query.slug}/recommendations`,
+      })
+
+      if (error) {
+        throw new Error(error)
+      }
+
+      return data || []
+    },
+    enabled: !!router.query.slug,
+    onError: (error: Error) => {
+      notifications.show({
+        color: 'red',
+        message: error.message,
+        title: 'Error',
+        withCloseButton: true,
+      })
+    },
+    retry: false,
+    refetchOnWindowFocus: false,
+  })
+
   useEffect(() => {
     if (!router.query.slug) return
 
@@ -502,7 +528,8 @@ const ProjectDetail = () => {
               You may also like this
             </Title>
             <ProjectsGrid
-              limit={6}
+              isLoading={recommendedProjectsLoading}
+              projects={recommendedProjects}
               replace
             />
             <Footer />
