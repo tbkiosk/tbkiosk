@@ -6,6 +6,7 @@ import { useQuery } from '@tanstack/react-query'
 import Typewriter from 'typewriter-effect'
 
 import { Header, Footer, ProjectsGrid } from '@/components'
+import CanvasBG from '@/components/home/canvas_bg'
 import ScrollDown from '/public/icons/scrolldown.svg'
 
 import { request } from '@/utils/request'
@@ -29,6 +30,7 @@ const useStyles = createStyles(theme => ({
   },
   bounceArrow: {
     animation: `${bounce} 2s ease infinite`,
+    zIndex: 600,
   },
 }))
 
@@ -98,9 +100,11 @@ const Projects = () => {
             px={rem(64)}
             style={{ backgroundColor: '#000', color: '#fff' }}
           >
+            <CanvasBG />
             <Stack
               align="center"
               spacing={0}
+              style={{ zIndex: 600 }}
             >
               {typeof largeScreen === 'boolean' && (
                 <video
