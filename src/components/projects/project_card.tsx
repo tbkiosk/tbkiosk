@@ -37,11 +37,15 @@ const ProjectCard = ({
       }}
       withBorder
     >
-      <Card.Section>
-        <AspectRatio ratio={1}>
+      <Card.Section
+        pt={rem(8)}
+        px={rem(8)}
+      >
+        <AspectRatio ratio={3 / 2}>
           <Image
             alt="bg"
             height="100%"
+            radius="md"
             src={bannerImage}
             styles={{
               figure: {
