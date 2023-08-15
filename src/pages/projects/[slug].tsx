@@ -113,7 +113,6 @@ const ProjectDetail = () => {
         maw={rem(1440)}
         mih={480}
         px={largeScreen ? rem(64) : 'lg'}
-        pb="lg"
       >
         <LoadingOverlay visible={projectDetailLoading} />
         {projectData && (

@@ -1,4 +1,4 @@
-import { Grid, LoadingOverlay, rem } from '@mantine/core'
+import { Grid, LoadingOverlay, Center, Title, rem } from '@mantine/core'
 
 import ProjectCard from './project_card'
 
@@ -17,6 +17,7 @@ const ProjectsGrid = ({ projects, isLoading, replace = false }: ProjectsGridProp
       maw={rem(1440)}
       mb={rem(48)}
       pos="relative"
+      style={{ flex: 1 }}
     >
       <LoadingOverlay visible={isLoading} />
       {projects?.map(_project => (
@@ -32,6 +33,16 @@ const ProjectsGrid = ({ projects, isLoading, replace = false }: ProjectsGridProp
           />
         </Grid.Col>
       ))}
+      {!projects?.length && !isLoading && (
+        <Grid.Col
+          h="100%"
+          span={12}
+        >
+          <Center h="100%">
+            <Title color="gray">No projects</Title>
+          </Center>
+        </Grid.Col>
+      )}
     </Grid>
   )
 }

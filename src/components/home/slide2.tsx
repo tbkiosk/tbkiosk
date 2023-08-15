@@ -62,12 +62,14 @@ const Slide2 = () => {
       sx={theme => ({ backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[4] : '#fff' })}
     >
       <Container
+        h="100%"
         maw={1440}
         px={0}
+        style={{ display: 'flex', flexDirection: 'column' }}
       >
         <Title
-          my={rem(32)}
           order={4}
+          py={rem(32)}
         >
           LATEST PROJECTS
         </Title>

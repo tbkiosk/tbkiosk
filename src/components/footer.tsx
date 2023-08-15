@@ -6,7 +6,7 @@ const Footer = () => {
   const largeScreen = useMediaQuery('(min-width: 48em)')
 
   return (
-    <Box>
+    <Box pb="lg">
       <Divider my={rem(24)} />
       {largeScreen ? (
         <Group
