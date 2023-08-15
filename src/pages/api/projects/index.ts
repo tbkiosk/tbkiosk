@@ -17,6 +17,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Project[]>) => 
 
       const projects = await prismaClient.project.findMany({
         where: {
+          status: 'Published',
           OR: [{ name: { contains: search || '' } }],
         },
         take: limit ? +limit : undefined,
