@@ -10,6 +10,7 @@ import { queryClient } from '@/lib/query'
 import type { AppProps } from 'next/app'
 
 import '../styles/globals.css'
+import 'swiper/css'
 
 const App = ({ Component, pageProps: { ...pageProps } }: AppProps) => (
   <QueryClientProvider client={queryClient}>

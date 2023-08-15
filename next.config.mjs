@@ -24,9 +24,6 @@ const nextConfig = {
       },
     ],
   },
-  experimental: {
-    scrollRestoration: true,
-  },
 }
 
 const withBundleAnalyzer = NextBundleAnalyzer({

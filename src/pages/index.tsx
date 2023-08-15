@@ -1,25 +1,13 @@
 import Head from 'next/head'
-import { AppShell, Container, Center, Stack, Title, Box, Text, ActionIcon, rem, createStyles, keyframes } from '@mantine/core'
-import { useScrollIntoView, useMediaQuery } from '@mantine/hooks'
-import { notifications } from '@mantine/notifications'
-import { useQuery } from '@tanstack/react-query'
+import { AppShell, Container, Center, Stack, Box, Text, rem, createStyles } from '@mantine/core'
+import { useMediaQuery } from '@mantine/hooks'
 import Typewriter from 'typewriter-effect'
+import { Swiper, SwiperSlide } from 'swiper/react'
+import { HashNavigation } from 'swiper/modules'
 
-import { Header, Footer, ProjectsGrid } from '@/components'
-import CanvasBG from '@/components/home/canvas_bg'
-import ScrollDown from '/public/icons/scrolldown.svg'
-
-import { request } from '@/utils/request'
-
-import type { Project } from '@prisma/client'
-
-const bounce = keyframes({
-  '0%, 20%, 50%, 80%, 100%': {
-    transform: 'translateY(0)',
-  },
-  '40%': { transform: 'translateY(-14px)' },
-  '60%': { transform: 'translateY(-5px)' },
-})
+import { Header } from '@/components'
+import Slide1 from '@/components/home/slide1'
+import Slide2 from '@/components/home/slide2'
 
 const useStyles = createStyles(theme => ({
   cursor: {
@@ -28,44 +16,11 @@ const useStyles = createStyles(theme => ({
       fontSize: rem(20),
     },
   },
-  bounceArrow: {
-    animation: `${bounce} 2s ease infinite`,
-    zIndex: 600,
-  },
 }))
 
 const Projects = () => {
   const { classes, cx } = useStyles()
-  const { scrollIntoView, targetRef } = useScrollIntoView<HTMLHeadingElement>({
-    duration: 400,
-    offset: 120,
-  })
   const largeScreen = useMediaQuery('(min-width: 48em)')
-
-  const { data, isLoading } = useQuery<Project[], Error>({
-    queryKey: ['projects'],
-    queryFn: async () => {
-      const { data, error } = await request<Project[], string>({
-        url: '/api/projects',
-      })
-
-      if (error) {
-        throw new Error(error)
-      }
-
-      return data || []
-    },
-    onError: (error: Error) => {
-      notifications.show({
-        color: 'red',
-        message: error.message,
-        title: 'Error',
-        withCloseButton: true,
-      })
-    },
-    retry: false,
-    refetchOnWindowFocus: false,
-  })
 
   return (
     <AppShell
@@ -100,7 +55,6 @@ const Projects = () => {
             px={rem(64)}
             style={{ backgroundColor: '#000', color: '#fff' }}
           >
-            <CanvasBG />
             <Stack
               align="center"
               spacing={0}
@@ -154,51 +108,36 @@ const Projects = () => {
                 )}
               </Text>
             </Stack>
-            <Box
-              bottom={rem(8)}
-              className={classes.bounceArrow}
-              mx="auto"
-              pos="absolute"
-            >
-              <ActionIcon
-                onClick={() => scrollIntoView()}
-                variant="transparent"
-              >
-                <ScrollDown />
-              </ActionIcon>
-            </Box>
           </Center>
         </Box>
         <Box
-          bg="transparent"
           h="calc(100vh - 72px)"
-        />
-        <Container
-          fluid
-          pos="relative"
-          px={largeScreen ? rem(64) : 'lg'}
-          py="lg"
-          style={{ zIndex: 1200 }}
-          sx={theme => ({ backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[4] : '#fff' })}
+          mt={rem(-16)}
+          inset={0}
+          pos="absolute"
         >
-          <Container
-            maw={1440}
-            px={0}
+          <Swiper
+            direction="vertical"
+            hashNavigation={{
+              watchState: true,
+            }}
+            modules={[HashNavigation]}
+            noSwiping
+            slidesPerView={1}
+            spaceBetween={0}
+            style={{ height: '100%', width: '100%' }}
           >
-            <Title
-              my={rem(32)}
-              order={4}
-              ref={targetRef}
+            <SwiperSlide
+              data-hash="slide1"
+              style={{ position: 'relative' }}
             >
-              LATEST PROJECTS
-            </Title>
-            <ProjectsGrid
-              isLoading={isLoading}
-              projects={data}
-            />
-            <Footer />
-          </Container>
-        </Container>
+              <Slide1 />
+            </SwiperSlide>
+            <SwiperSlide data-hash="slide2">
+              <Slide2 />
+            </SwiperSlide>
+          </Swiper>
+        </Box>
       </Container>
     </AppShell>
   )
