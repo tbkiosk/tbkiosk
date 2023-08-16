@@ -1,7 +1,8 @@
 'use client'
 
 import Link from 'next/link'
-import { AppShell, Container, Image, Button, ActionIcon, Select, Group } from '@mantine/core'
+import { AppShell, Container, Button, ActionIcon, Select, Group } from '@mantine/core'
+import Logo from 'public/logo_with_text.svg'
 
 import classes from './index.module.css'
 
@@ -13,11 +14,7 @@ export default function Header() {
           className={classes.logo}
           href="/"
         >
-          <Image
-            alt="logo"
-            maw={136}
-            src="/logo_with_text.svg"
-          />
+          <Logo />
         </Link>
         <Select
           classNames={{

@@ -7,7 +7,19 @@
   padding: 0 var(--mantine-spacing-xl);
 }
 
-.logo,
+.logo {
+  align-items: center;
+  display: flex;
+  flex-shrink: 0;
+  justify-content: flex-start;
+  max-width: 180px;
+  width: 180px;
+
+  @mixin dark {
+    color: var(--mantine-color-white);
+  }
+}
+
 .links-container {
   flex-shrink: 0;
   width: 180px;
