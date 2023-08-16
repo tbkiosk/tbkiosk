@@ -1,0 +1,26 @@
+.container {
+  align-items: center;
+  display: flex;
+  height: 100%;
+  justify-content: space-between;
+  max-width: 1440px;
+  padding: 0 var(--mantine-spacing-xl);
+}
+
+.logo,
+.links-container {
+  flex-shrink: 0;
+  width: 180px;
+}
+
+.search-box-root {
+  padding: 0 var(--mantine-spacing-xl);
+}
+
+.search-box-input {
+  font-family: cera-variable, Arial, Helvetica, sans-serif;
+
+  @mixin dark {
+    border: none;
+  }
+}
