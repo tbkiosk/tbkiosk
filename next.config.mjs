@@ -1,7 +1,7 @@
 import { withSentryConfig } from '@sentry/nextjs'
 import NextBundleAnalyzer from '@next/bundle-analyzer'
 
-import './src/env.mjs'
+import './env.mjs'
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -16,6 +16,9 @@ const nextConfig = {
     })
 
     return config
+  },
+  compiler: {
+    styledComponents: true,
   },
   images: {
     remotePatterns: [
