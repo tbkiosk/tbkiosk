@@ -5,6 +5,10 @@
   justify-content: space-between;
   max-width: 1440px;
   padding: 0 var(--mantine-spacing-xl);
+
+  @mixin dark {
+    color: var(--mantine-color-white);
+  }
 }
 
 .logo {
@@ -14,10 +18,6 @@
   justify-content: flex-start;
   max-width: 180px;
   width: 180px;
-
-  @mixin dark {
-    color: var(--mantine-color-white);
-  }
 }
 
 .links-container {

@@ -1,0 +1,16 @@
+.container {
+  margin-top: 32px;
+}
+
+.divider {
+  margin-bottom: 32px;
+}
+
+.logo {
+  align-items: center;
+  display: flex;
+  flex-shrink: 0;
+  justify-content: flex-start;
+  max-width: 180px;
+  width: 180px;
+}

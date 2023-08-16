@@ -1,0 +1,71 @@
+.main {
+  height: 100%;
+
+  @mixin dark {
+    color: var(--mantine-color-white);
+  }
+}
+
+.bg-container {
+  inset: 0;
+  position: absolute;
+  top: 72px;
+  width: 100%;
+  z-index: 500;
+}
+
+.bg-wrapper {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: center;
+}
+
+.video {
+  height: 206px;
+  margin-bottom: 72px;
+  object-fit: cover;
+  width: 206px;
+
+  @media (max-width: $mantine-breakpoint-xs) {
+    height: 180px;
+    margin-bottom: 32px;
+    width: 180px;
+  }
+}
+
+.typewritter-container {
+  height: 172px;
+  text-align: center;
+
+  @media (max-width: $mantine-breakpoint-xs) {
+    height: 160px;
+  }
+}
+
+.cursor {
+  font-size: 32px;
+
+  @media (max-width: $mantine-breakpoint-xs) {
+    font-size: 20px;
+  }
+}
+
+.content-container {
+  inset: 0;
+  position: absolute;
+  top: 72px;
+  width: 100%;
+  z-index: 600;
+}
+
+.swiper {
+  height: 100%;
+  overflow: hidden;
+  width: 100%;
+}
+
+.slide {
+  position: relative;
+}

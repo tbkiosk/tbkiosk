@@ -1,4 +1,5 @@
 import '@mantine/core/styles.css'
+import 'swiper/css'
 import './index.css'
 
 import { MantineProvider, ColorSchemeScript } from '@mantine/core'
@@ -10,7 +11,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html
       lang="en"
-      suppressContentEditableWarning
       suppressHydrationWarning
     >
       <head>
@@ -49,7 +49,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
         <script
           crossOrigin="anonymous"
-          defer
           src="https://kit.fontawesome.com/205d88d001.js"
         />
       </head>

@@ -12,6 +12,7 @@ export const metadata: Metadata = {
 export default function Home() {
   return (
     <AppShell
+      h="100%"
       header={{ height: 72 }}
       padding={0}
     >
