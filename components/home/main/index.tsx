@@ -66,6 +66,7 @@ export default function Main() {
           oneWayMovement
           slidesPerView={1}
           spaceBetween={0}
+          speed={800}
         >
           <SwiperSlide className={classes.slide}>
             <SlideOne />

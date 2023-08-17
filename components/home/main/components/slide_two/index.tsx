@@ -1,9 +1,13 @@
 import { useRef } from 'react'
-import { Box } from '@mantine/core'
+import { Box, Title } from '@mantine/core'
 import { useSwiper, useSwiperSlide } from 'swiper/react'
 import { useSwipeable } from 'react-swipeable'
 
 import Footer from 'components/home/footer'
+import ProjectsGrid from 'components/projects/projects_grid'
+import Filters from './components/filters'
+
+import useProjects from 'hooks/use_projects'
 
 import classes from './index.module.css'
 
@@ -18,6 +22,8 @@ export default function SlideTwo() {
       projectsContainerRef.current?.scrollTop === 0 && eventData.deltaY > 50 && onPrevSlide()
     },
   })
+
+  const { projects, loading } = useProjects()
 
   const refPassthrough = (el: HTMLDivElement) => {
     handlers.ref(el)
@@ -40,10 +46,18 @@ export default function SlideTwo() {
       ref={refPassthrough}
     >
       <Box className={classes.wrapper}>
+        <Title
+          className={classes.title}
+          order={4}
+        >
+          LATEST PROJECTS
+        </Title>
+        <Filters />
         <Box className={classes['projects-container']}>
-          <h1>testr123</h1>
-          <h1 style={{ height: '1204px' }}>testr123</h1>
-          <h1>testr123</h1>
+          <ProjectsGrid
+            loading={loading}
+            projects={projects}
+          />
         </Box>
         <Footer />
       </Box>

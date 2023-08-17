@@ -11,7 +11,7 @@
   height: 100%;
   margin: 0 auto;
   max-width: 1440px;
-  padding: var(--mantine-spacing-md) var(--mantine-spacing-xl);
+  padding: 0 var(--mantine-spacing-xl);
 }
 
 .projects-container {
@@ -20,4 +20,9 @@
   flex-direction: column;
   flex-grow: 1;
   justify-content: center;
+}
+
+.title {
+  padding: 32px 0;
+  text-align: center;
 }

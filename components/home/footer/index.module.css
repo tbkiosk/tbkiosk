@@ -1,5 +1,6 @@
 .container {
   margin-top: 32px;
+  padding-bottom: var(--mantine-spacing-xl);
 }
 
 .divider {
