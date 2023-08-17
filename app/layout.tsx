@@ -1,8 +1,10 @@
 import '@mantine/core/styles.css'
+import '@mantine/notifications/styles.css'
 import 'swiper/css'
 import './index.css'
 
 import { MantineProvider, ColorSchemeScript } from '@mantine/core'
+import { Notifications } from '@mantine/notifications'
 import ColorSchemeHotKey from 'components/color_scheme_hot_key'
 
 import type { Metadata } from 'next'
@@ -53,8 +55,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body>
-        <MantineProvider defaultColorScheme="dark">
+        <MantineProvider
+          defaultColorScheme="dark"
+          theme={{ fontFamily: 'cera-variable' }}
+        >
           {children}
+          <Notifications />
           <ColorSchemeHotKey />
           <div id="portal" />
         </MantineProvider>
