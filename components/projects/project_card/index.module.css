@@ -1,0 +1,63 @@
+.card {
+  background-color: var(--mantine-color-white);
+  border: 1px solid rgba(217, 217, 217, 1);
+  border-radius: var(--mantine-radius-md);
+  color: var(--mantine-color-black);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  transition-duration: 400ms;
+  transition-property: box-shadow, border;
+  transition-timing-function: ease;
+  padding: var(--mantine-spacing-sm);
+}
+
+.card:hover {
+  border: 1px solid rgba(128, 128, 128, 1);
+  box-shadow: 0 4px 20px 0 rgba(141, 141, 141, 0.31);
+}
+
+.card-section {
+  padding: var(--mantine-radius-md) var(--mantine-radius-md) 0;
+}
+
+.banner {
+  border-radius: var(--mantine-radius-md);
+  height: 100%;
+  width: 100%;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  gap: var(--mantine-spacing-xs);
+  margin-top: var(--mantine-spacing-lg);
+}
+
+.name-row {
+  align-items: center;
+  display: flex;
+  flex-wrap: nowrap;
+  gap: var(--mantine-spacing-xs);
+}
+
+.logo {
+  border-radius: 14px;
+  height: 40px;
+  object-fit: cover;
+  width: 40px;
+}
+
+.name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.description {
+  font-size: var(--mantine-font-size-sm);
+  height: 84px;
+  line-height: 1.5;
+  max-height: 84px;
+}

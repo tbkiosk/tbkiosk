@@ -1,0 +1,5 @@
+.grid {
+  flex-grow: 1;
+  position: relative;
+  width: 100%;
+}
