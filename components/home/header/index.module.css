@@ -18,11 +18,21 @@
   justify-content: flex-start;
   max-width: 180px;
   width: 180px;
+
+  @media (max-width: $mantine-breakpoint-xs) {
+    width: auto;
+  }
 }
 
 .links-container {
+  display: flex;
   flex-shrink: 0;
+  justify-content: flex-end;
   width: 180px;
+
+  @media (max-width: $mantine-breakpoint-xs) {
+    width: auto;
+  }
 }
 
 .search-box-root {

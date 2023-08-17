@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { AppShell, Container, Button, ActionIcon, Select, Group } from '@mantine/core'
+import { AppShell, Container, Button, ActionIcon, Select, Group, Burger } from '@mantine/core'
 import Logo from 'public/logo_with_text.svg'
 
 import classes from './index.module.css'
@@ -25,6 +25,7 @@ export default function Header() {
           maw={480}
           placeholder="Search for collections, NFTs or users"
           rightSection={<i className="fa-solid fa-magnifying-glass" />}
+          visibleFrom="sm"
           w={480}
           withCheckIcon={false}
         />
@@ -39,6 +40,7 @@ export default function Header() {
             size="sm"
             target="_blank"
             variant="default"
+            visibleFrom="sm"
           >
             List a Project
           </Button>
@@ -52,9 +54,14 @@ export default function Header() {
             size={36}
             target="_blank"
             variant="default"
+            visibleFrom="sm"
           >
             <i className="fa-brands fa-x-twitter" />
           </ActionIcon>
+          <Burger
+            hiddenFrom="sm"
+            size="sm"
+          />
         </Group>
       </Container>
     </AppShell.Header>
