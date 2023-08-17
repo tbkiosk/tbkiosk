@@ -6,8 +6,18 @@
 }
 
 .wrapper {
+  display: flex;
+  flex-direction: column;
   height: 100%;
   margin: 0 auto;
   max-width: 1440px;
-  padding: 0 var(--mantine-spacing-xl);
+  padding: var(--mantine-spacing-md) var(--mantine-spacing-xl);
+}
+
+.projects-container {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  justify-content: center;
 }

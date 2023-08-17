@@ -1,4 +1,9 @@
 .container {
+  height: 100%;
+  position: relative;
+}
+
+.icon-container {
   animation: bounce 2s ease infinite;
   bottom: 12px;
   left: 0;

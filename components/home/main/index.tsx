@@ -60,9 +60,10 @@ export default function Main() {
       </Box>
       <Box className={classes['content-container']}>
         <Swiper
+          allowTouchMove={false}
           className={classes.swiper}
           direction="vertical"
-          noSwiping
+          oneWayMovement
           slidesPerView={1}
           spaceBetween={0}
         >
