@@ -8,16 +8,13 @@ import { Pagination } from 'swiper/modules'
 import dayjs from 'dayjs'
 
 import Footer from 'components/footer'
+import RelativeProjects from './relative_projects'
 
 import useProject from 'hooks/use_project'
 
 import classes from './styles.module.css'
 
-type SlugMainProps = {
-  slug: string
-}
-
-export default function SlugMain({ slug }: SlugMainProps) {
+export default function SlugMain({ slug }: { slug: string }) {
   const largeScreen = useMediaQuery('(min-width: 48em)')
 
   const { project, loading } = useProject(slug)
@@ -191,7 +188,7 @@ export default function SlugMain({ slug }: SlugMainProps) {
                     key={_c}
                     radius="sm"
                   >
-                    {project.blockchains}
+                    {_c}
                   </Badge>
                 ))}
               </Box>
@@ -206,7 +203,7 @@ export default function SlugMain({ slug }: SlugMainProps) {
                 <Swiper
                   className={classes.swiper}
                   modules={[Pagination]}
-                  pagination={project.previewImages.length > 1 ? { clickable: true } : false}
+                  pagination={{ clickable: true }}
                   slidesPerView={largeScreen ? 2 : 1}
                   spaceBetween={24}
                 >
@@ -229,6 +226,7 @@ export default function SlugMain({ slug }: SlugMainProps) {
             >
               You may also like this
             </Title>
+            <RelativeProjects slug={slug} />
             <Footer />
           </Box>
         </>
