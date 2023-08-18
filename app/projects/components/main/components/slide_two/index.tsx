@@ -3,7 +3,7 @@ import { Box, Title } from '@mantine/core'
 import { useSwiper, useSwiperSlide } from 'swiper/react'
 import { useSwipeable } from 'react-swipeable'
 
-import Footer from 'components/home/footer'
+import Footer from 'components/footer'
 import ProjectsGrid from 'components/projects/projects_grid'
 import Filters from './components/filters'
 

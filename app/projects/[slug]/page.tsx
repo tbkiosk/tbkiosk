@@ -1,6 +1,6 @@
 import { AppShell } from '@mantine/core'
 
-import Header from 'components/home/header'
+import Header from 'components/header'
 import SlugMain from './components/main'
 
 import type { Metadata } from 'next'

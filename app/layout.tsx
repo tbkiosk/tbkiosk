@@ -50,7 +50,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
         <link
           rel="shortcut icon"
-          href="/favicon.icon"
+          href="/favicon.ico"
         />
         <script
           crossOrigin="anonymous"
