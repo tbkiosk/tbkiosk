@@ -7,6 +7,7 @@
 }
 
 .bg-container {
+  background-color: var(--mantine-color-black);
   inset: 0;
   position: absolute;
   top: 72px;
