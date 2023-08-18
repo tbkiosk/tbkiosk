@@ -61,3 +61,34 @@
   line-height: 1.5;
   max-height: 84px;
 }
+
+.category-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  height: 48px;
+  max-height: 48px;
+  overflow: hidden;
+}
+
+.badge {
+  flex-shrink: 0;
+}
+
+.link-row {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+.icon {
+  color: #fd222a;
+  transition-duration: 200ms;
+  transition-property: transform, opacity;
+  transition-timing-function: ease;
+}
+
+.icon:hover {
+  opacity: 0.7;
+  transform: scale(1.1);
+}

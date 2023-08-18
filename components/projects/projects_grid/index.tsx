@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { Grid, LoadingOverlay, Center, Title } from '@mantine/core'
 
 import ProjectCard from '../project_card'
@@ -13,6 +13,8 @@ type ProjectsGridProps = {
 }
 
 export default function ProjectsGrid({ projects, loading }: ProjectsGridProps) {
+  const router = useRouter()
+
   return (
     <Grid
       className={classes.grid}
@@ -25,11 +27,10 @@ export default function ProjectsGrid({ projects, loading }: ProjectsGridProps) {
       {projects?.map(_project => (
         <Grid.Col
           key={_project.id}
+          onClick={() => router.push(`/projects/${_project.slug}`)}
           span={{ base: 12, lg: 3, sm: 4, xs: 6 }}
         >
-          <Link href={`/${_project.slug}`}>
-            <ProjectCard {..._project} />
-          </Link>
+          <ProjectCard {..._project} />
         </Grid.Col>
       ))}
       {!projects?.length && !loading && (

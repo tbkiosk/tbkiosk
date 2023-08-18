@@ -1,7 +1,119 @@
 .main {
+  background-color: var(--mantine-color-white);
+  color: var(--mantine-color-black);
   height: 100%;
+  position: relative;
 
   @mixin dark {
-    color: var(--mantine-color-white);
+    background-color: var(--mantine-color-white);
+    color: var(--mantine-color-black);
   }
+}
+
+.project-not-found-container {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  height: 100%;
+  justify-content: center;
+}
+
+.banner-container {
+  height: 480px;
+  position: relative;
+}
+
+.banner {
+  height: 100%;
+  object-fit: cover;
+  width: 100%;
+}
+
+.logo-container {
+  bottom: -84px;
+  left: 0;
+  margin: 0 auto;
+  max-width: 1440px;
+  padding: 0 var(--mantine-spacing-xl);
+  position: absolute;
+  right: 0;
+}
+
+.logo {
+  border: 9px solid var(--mantine-color-white);
+  border-radius: 56px;
+  height: 168px;
+  width: 168px;
+}
+
+.container {
+  margin: 0 auto;
+  max-width: 1440px;
+  padding: 108px var(--mantine-spacing-xl) var(--mantine-spacing-lg);
+}
+
+.name-row {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+}
+
+.name-group,
+.link-group {
+  align-items: center;
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 8px;
+}
+
+.name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.stage {
+  border-radius: var(--mantine-radius-sm);
+  color: #000000;
+  flex-shrink: 0;
+}
+
+.link-group {
+  gap: 18px;
+}
+
+.icon {
+  color: #fd222a;
+  transition-duration: 200ms;
+  transition-property: transform, opacity;
+  transition-timing-function: ease;
+}
+
+.icon:hover {
+  opacity: 0.7;
+  transform: scale(1.1);
+}
+
+.menu-dropdown {
+  background-color: var(--mantine-color-white);
+  border-color: var(--mantine-color-gray-2);
+  color: var(--mantine-color-black);
+}
+
+.divider {
+  border-color: var(--mantine-color-gray-3);
+}
+
+.menu-item {
+  background-color: var(--mantine-color-white);
+  color: var(--mantine-color-black);
+}
+
+.menu-item:hover {
+  background-color: var(--mantine-color-gray-2);
+}
+
+.menu-item-warning {
+  color: var(--mantine-color-red-6);
 }

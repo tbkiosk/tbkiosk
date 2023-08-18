@@ -3,13 +3,20 @@ import { notifications } from '@mantine/notifications'
 
 import type { Project } from '@prisma/client'
 
-export default function useProjects() {
-  const [projects, setProjects] = useState<Project[]>([])
+export default function useProject(slug?: string) {
+  const [project, setProject] = useState<Project | null>(null)
   const [loading, setLoading] = useState(true)
 
-  const getProjects = async () => {
+  if (!slug) {
+    return {
+      project,
+      loading,
+    }
+  }
+
+  const getProject = async () => {
     try {
-      const res = await fetch('/api/projects')
+      const res = await fetch(`/api/projects/${slug}`)
 
       if (!res.ok) {
         notifications.show({
@@ -19,8 +26,8 @@ export default function useProjects() {
         })
       }
 
-      const projects = await res.json()
-      setProjects(projects)
+      const project = await res.json()
+      setProject(project)
     } catch (error) {
       notifications.show({
         color: 'red',
@@ -33,8 +40,8 @@ export default function useProjects() {
   }
 
   useEffect(() => {
-    getProjects()
+    getProject()
   }, [])
 
-  return { projects, loading }
+  return { project, loading }
 }

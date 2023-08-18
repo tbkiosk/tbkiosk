@@ -1,10 +1,10 @@
-import { Card, AspectRatio, Image, Box, Title, Text } from '@mantine/core'
+import { Card, AspectRatio, Image, Box, Title, Text, Badge, ActionIcon } from '@mantine/core'
 
 import classes from './styles.module.css'
 
 import type { Project } from '@prisma/client'
 
-export default function ProjectCard({ name, bannerImage, logoUrl, description }: Project) {
+export default function ProjectCard({ name, bannerImage, logoUrl, description, categories, website, discord, twitter }: Project) {
   return (
     <Card
       className={classes.card}
@@ -39,6 +39,68 @@ export default function ProjectCard({ name, bannerImage, logoUrl, description }:
         >
           {description}
         </Text>
+        <Box className={classes['category-row']}>
+          {categories.map(_c => (
+            <Badge
+              className={classes.badge}
+              color="rgba(0, 0, 0, 1)"
+              key={_c}
+              radius="sm"
+            >
+              {_c}
+            </Badge>
+          ))}
+        </Box>
+        <Box className={classes['link-row']}>
+          {website && (
+            <a
+              href={website}
+              onClick={e => e.stopPropagation()}
+              rel="noreferrer"
+              target="_blank"
+            >
+              <ActionIcon
+                className={classes.icon}
+                size="sm"
+                variant="transparent"
+              >
+                <i className="fa-solid fa-globe" />
+              </ActionIcon>
+            </a>
+          )}
+          {discord && (
+            <a
+              href={discord}
+              onClick={e => e.stopPropagation()}
+              rel="noreferrer"
+              target="_blank"
+            >
+              <ActionIcon
+                className={classes.icon}
+                size="sm"
+                variant="transparent"
+              >
+                <i className="fa-brands fa-discord" />
+              </ActionIcon>
+            </a>
+          )}
+          {twitter && (
+            <a
+              href={twitter}
+              onClick={e => e.stopPropagation()}
+              rel="noreferrer"
+              target="_blank"
+            >
+              <ActionIcon
+                className={classes.icon}
+                size="sm"
+                variant="transparent"
+              >
+                <i className="fa-brands fa-x-twitter" />
+              </ActionIcon>
+            </a>
+          )}
+        </Box>
       </Box>
     </Card>
   )
