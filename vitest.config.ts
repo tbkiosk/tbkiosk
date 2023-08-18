@@ -7,7 +7,10 @@ dotenv.config({ path: '.env.local' })
 export default defineConfig({
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './src'),
+      app: path.resolve(__dirname, './app'),
+      components: path.resolve(__dirname, './components'),
+      hooks: path.resolve(__dirname, './hooks'),
+      public: path.resolve(__dirname, './public'),
     },
   },
   test: {
