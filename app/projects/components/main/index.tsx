@@ -4,6 +4,7 @@ import dynamic from 'next/dynamic'
 import { AppShell, Box } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
 import { Swiper, SwiperSlide } from 'swiper/react'
+import { HashNavigation } from 'swiper/modules'
 import cx from 'classix'
 
 import SlideOne from './components/slide_one'
@@ -63,6 +64,10 @@ export default function Main() {
           allowTouchMove={false}
           className={classes.swiper}
           direction="vertical"
+          hashNavigation={{
+            watchState: true,
+          }}
+          modules={[HashNavigation]}
           oneWayMovement
           slidesPerView={1}
           spaceBetween={0}
@@ -71,7 +76,7 @@ export default function Main() {
           <SwiperSlide className={classes.slide}>
             <SlideOne />
           </SwiperSlide>
-          <SwiperSlide>
+          <SwiperSlide data-hash="list">
             <SlideTwo />
           </SwiperSlide>
         </Swiper>
