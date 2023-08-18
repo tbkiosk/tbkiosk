@@ -1,7 +1,9 @@
-import { useRef } from 'react'
+import { useMemo, useRef } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { Box, Title } from '@mantine/core'
 import { useSwiper, useSwiperSlide } from 'swiper/react'
 import { useSwipeable } from 'react-swipeable'
+import dayjs from 'dayjs'
 
 import Footer from 'components/footer'
 import ProjectsGrid from 'components/projects/projects_grid'
@@ -9,9 +11,16 @@ import Filters from './components/filters'
 
 import useProjects from 'hooks/use_projects'
 
+import { CATEGORY_TYPE_ALL, CATEGORY_TYPE_NEW } from './components/filters'
+
 import classes from './index.module.css'
 
+import type { Category } from '@prisma/client'
+
 export default function SlideTwo() {
+  const searchParams = useSearchParams()
+  const type = searchParams.get('type') || CATEGORY_TYPE_ALL
+
   const projectsContainerRef = useRef<HTMLDivElement | null>(null)
 
   const swiper = useSwiper()
@@ -38,6 +47,16 @@ export default function SlideTwo() {
     e.deltaY < 0 && onPrevSlide()
   }
 
+  const filteredProjects = useMemo(() => {
+    if (!type || type === CATEGORY_TYPE_ALL) return projects
+
+    if (type === CATEGORY_TYPE_NEW) {
+      return projects.filter(_p => dayjs().diff(dayjs(_p.createdAt), 'day') <= 15)
+    }
+
+    return projects.filter(_p => _p.categories.includes(type as Category))
+  }, [type, projects])
+
   return (
     <Box
       className={classes.container}
@@ -56,7 +75,7 @@ export default function SlideTwo() {
         <Box className={classes['projects-container']}>
           <ProjectsGrid
             loading={loading}
-            projects={projects}
+            projects={filteredProjects}
           />
         </Box>
         <Footer />

@@ -9,6 +9,7 @@ import classes from './styles.module.css'
 import { Category } from '@prisma/client'
 
 export const CATEGORY_TYPE_ALL = 'all'
+export const CATEGORY_TYPE_NEW = 'new'
 
 export default function Filters() {
   const searchParams = useSearchParams()
@@ -16,7 +17,7 @@ export default function Filters() {
 
   return (
     <Box className={classes['filter-row']}>
-      {[CATEGORY_TYPE_ALL, ...Object.keys(Category)].map(_c => (
+      {[CATEGORY_TYPE_ALL, CATEGORY_TYPE_NEW, ...Object.keys(Category)].map(_c => (
         <Link
           href={`?type=${_c}`}
           key={_c}

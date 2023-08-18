@@ -9,7 +9,7 @@ export default function useProjects() {
 
   const getProjects = async () => {
     try {
-      const res = await fetch('/api/projects')
+      const res = await fetch(`/api/projects`)
 
       if (!res.ok) {
         notifications.show({
