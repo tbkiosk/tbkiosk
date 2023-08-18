@@ -1,6 +1,7 @@
 import '@mantine/core/styles.css'
 import '@mantine/notifications/styles.css'
 import 'swiper/css'
+import 'swiper/css/pagination'
 import './global.css'
 
 import { MantineProvider, ColorSchemeScript } from '@mantine/core'

@@ -1,7 +1,11 @@
 'use client'
 
 import Link from 'next/link'
-import { AppShell, Box, LoadingOverlay, Title, Button, Image, Badge, ActionIcon, Menu } from '@mantine/core'
+import { AppShell, Box, LoadingOverlay, Title, Button, Image, Badge, ActionIcon, Menu, Text, Divider } from '@mantine/core'
+import { useMediaQuery } from '@mantine/hooks'
+import { Swiper, SwiperSlide } from 'swiper/react'
+import { Pagination } from 'swiper/modules'
+import dayjs from 'dayjs'
 
 import Footer from 'components/footer'
 
@@ -14,6 +18,8 @@ type SlugMainProps = {
 }
 
 export default function SlugMain({ slug }: SlugMainProps) {
+  const largeScreen = useMediaQuery('(min-width: 48em)')
+
   const { project, loading } = useProject(slug)
 
   return (
@@ -157,6 +163,72 @@ export default function SlugMain({ slug }: SlugMainProps) {
                 </Menu>
               </Box>
             </Box>
+            <Box className={classes['info-row']}>
+              <Box className={classes.info}>
+                <Text className={classes.label}>By</Text>
+                <Text className={classes.text}>-</Text>
+              </Box>
+              <Box className={classes.info}>
+                <Text className={classes.label}>Added</Text>
+                <Text className={classes.text}>{dayjs(project.createdAt).format('MMM YYYY')}</Text>
+              </Box>
+            </Box>
+            <Box className={classes['chain-row']}>
+              <Box className={classes.info}>
+                <Text className={classes.label}>Built on:</Text>
+                <Badge
+                  color="rgba(0, 0, 0, 1)"
+                  radius="sm"
+                >
+                  {project.blockchains}
+                </Badge>
+              </Box>
+              <Box className={classes.info}>
+                <Text className={classes.label}>Categories:</Text>
+                {project.categories.map(_c => (
+                  <Badge
+                    color="rgba(0, 0, 0, 1)"
+                    key={_c}
+                    radius="sm"
+                  >
+                    {project.blockchains}
+                  </Badge>
+                ))}
+              </Box>
+            </Box>
+            <Box className={classes['project-details']}>
+              <Title order={5}>Project Details</Title>
+              <Divider color="rgba(0, 0, 0, 1)" />
+              <Text className={classes.desc}>{project.description}</Text>
+            </Box>
+            {!!project?.previewImages.length && (
+              <Box className={classes['swiper-container']}>
+                <Swiper
+                  className={classes.swiper}
+                  modules={[Pagination]}
+                  pagination={project.previewImages.length > 1 ? { clickable: true } : false}
+                  slidesPerView={largeScreen ? 2 : 1}
+                  spaceBetween={24}
+                >
+                  {project.previewImages.map(_pi => (
+                    <SwiperSlide key={_pi}>
+                      <Image
+                        className={classes['preview-image']}
+                        alt="preview img"
+                        src={_pi}
+                      />
+                    </SwiperSlide>
+                  ))}
+                </Swiper>
+              </Box>
+            )}
+            <Divider color="rgba(0, 0, 0, 1)" />
+            <Title
+              className={classes['recommendation-title']}
+              order={3}
+            >
+              You may also like this
+            </Title>
             <Footer />
           </Box>
         </>

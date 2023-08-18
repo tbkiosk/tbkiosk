@@ -50,13 +50,19 @@
 .container {
   margin: 0 auto;
   max-width: 1440px;
-  padding: 108px var(--mantine-spacing-xl) var(--mantine-spacing-lg);
+  padding: 108px var(--mantine-spacing-xl) 0;
+
+  @mixin dark {
+    background-color: var(--mantine-color-white);
+    color: var(--mantine-color-black);
+  }
 }
 
 .name-row {
   align-items: center;
   display: flex;
   justify-content: space-between;
+  margin-bottom: var(--mantine-spacing-md);
 }
 
 .name-group,
@@ -116,4 +122,54 @@
 
 .menu-item-warning {
   color: var(--mantine-color-red-6);
+}
+
+.info-row,
+.chain-row {
+  align-items: center;
+  display: flex;
+  gap: 16px;
+  margin-bottom: var(--mantine-spacing-md);
+}
+
+.info {
+  align-items: center;
+  display: flex;
+  gap: 8px;
+}
+
+.lable {
+  color: rgba(61, 61, 60, 1);
+}
+
+.text {
+  font-weight: bold;
+}
+
+.chain-row {
+  margin-bottom: 48px;
+}
+
+.desc {
+  padding: var(--mantine-spacing-md) 0;
+}
+
+.swiper-container {
+  height: 480px;
+  margin: var(--mantine-spacing-xl) 0;
+}
+
+.swiper {
+  height: 100%;
+}
+
+.preview-image {
+  border-radius: var(--mantine-radius-md);
+  height: 480px;
+  object-fit: cover;
+  width: 100%;
+}
+
+.recommendation-title {
+  margin: var(--mantine-spacing-xl) 0;
 }

@@ -8,7 +8,10 @@ import classes from './styles.module.css'
 export default function Footer() {
   return (
     <Box className={classes.container}>
-      <Divider className={classes.divider} />
+      <Divider
+        className={classes.divider}
+        color="rgba(0, 0, 0, 1)"
+      />
       <Group
         align="center"
         justify="space-between"
