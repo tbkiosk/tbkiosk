@@ -46,6 +46,17 @@ export default function SlugMain({ slug }: { slug: string }) {
               className={classes.banner}
               src={project.bannerImage}
             />
+            <Link
+              className={classes['back-button-container']}
+              href="/projects#list"
+            >
+              <Button
+                className={classes['back-button']}
+                leftSection={<i className="fa-solid fa-arrow-left" />}
+              >
+                Back to projects
+              </Button>
+            </Link>
             <Box className={classes['logo-container']}>
               <Image
                 alt="logo"
@@ -60,7 +71,6 @@ export default function SlugMain({ slug }: { slug: string }) {
                 <Title order={3}>{project.name}</Title>
                 <Badge
                   className={classes.stage}
-                  color="yellow.3"
                   variant="filled"
                 >
                   {project.projectStage}

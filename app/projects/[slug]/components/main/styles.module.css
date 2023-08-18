@@ -30,6 +30,22 @@
   width: 100%;
 }
 
+.back-button-container {
+  left: 0;
+  margin: 0 auto;
+  max-width: 1440px;
+  padding: 0 var(--mantine-spacing-xl);
+  position: absolute;
+  right: 0;
+  top: 24px;
+}
+
+.back-button {
+  background-color: #ffffff;
+  color: #000000;
+  opacity: 0.7;
+}
+
 .logo-container {
   bottom: -84px;
   left: 0;
@@ -80,6 +96,7 @@
 }
 
 .stage {
+  background-color: rgba(200, 253, 124, 1);
   border-radius: var(--mantine-radius-sm);
   color: #000000;
   flex-shrink: 0;
