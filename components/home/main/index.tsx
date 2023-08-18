@@ -9,7 +9,7 @@ import cx from 'classix'
 import SlideOne from './components/slide_one'
 import SlideTwo from './components/slide_two'
 
-import classes from './index.module.css'
+import classes from './styles.module.css'
 
 const Typewriter = dynamic(() => import('typewriter-effect'), { ssr: false })
 

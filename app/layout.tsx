@@ -1,7 +1,7 @@
 import '@mantine/core/styles.css'
 import '@mantine/notifications/styles.css'
 import 'swiper/css'
-import './index.css'
+import './global.css'
 
 import { MantineProvider, ColorSchemeScript } from '@mantine/core'
 import { Notifications } from '@mantine/notifications'
@@ -16,7 +16,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       suppressHydrationWarning
     >
       <head>
-        <ColorSchemeScript nonce="8IBTHwOdqNKAWeKl7plt8g==" />
+        <ColorSchemeScript
+          defaultColorScheme="dark"
+          nonce="8IBTHwOdqNKAWeKl7plt8g=="
+        />
         <meta
           name="twitter:card"
           content="summary"
@@ -51,6 +54,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
         <script
           crossOrigin="anonymous"
+          defer
           src="https://kit.fontawesome.com/205d88d001.js"
         />
       </head>

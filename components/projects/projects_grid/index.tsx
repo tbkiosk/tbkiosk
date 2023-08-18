@@ -1,8 +1,9 @@
+import Link from 'next/link'
 import { Grid, LoadingOverlay, Center, Title } from '@mantine/core'
 
 import ProjectCard from '../project_card'
 
-import classes from './index.module.css'
+import classes from './styles.module.css'
 
 import type { Project } from '@prisma/client'
 
@@ -16,16 +17,19 @@ export default function ProjectsGrid({ projects, loading }: ProjectsGridProps) {
     <Grid
       className={classes.grid}
       gutter="lg"
-      maw={1440}
-      mb={48}
     >
-      <LoadingOverlay visible={loading} />
+      <LoadingOverlay
+        overlayProps={{ backgroundOpacity: 0 }}
+        visible={loading}
+      />
       {projects?.map(_project => (
         <Grid.Col
           key={_project.id}
           span={{ base: 12, lg: 3, sm: 4, xs: 6 }}
         >
-          <ProjectCard {..._project} />
+          <Link href={`/${_project.slug}`}>
+            <ProjectCard {..._project} />
+          </Link>
         </Grid.Col>
       ))}
       {!projects?.length && !loading && (

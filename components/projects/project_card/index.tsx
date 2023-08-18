@@ -1,6 +1,6 @@
 import { Card, AspectRatio, Image, Box, Title, Text } from '@mantine/core'
 
-import classes from './index.module.css'
+import classes from './styles.module.css'
 
 import type { Project } from '@prisma/client'
 

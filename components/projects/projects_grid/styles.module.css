@@ -1,5 +1,7 @@
 .grid {
   flex-grow: 1;
+  margin-bottom: 48px;
+  max-width: 1440;
   position: relative;
   width: 100%;
 }

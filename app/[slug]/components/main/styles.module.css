@@ -1,0 +1,7 @@
+.main {
+  height: 100%;
+
+  @mixin dark {
+    color: var(--mantine-color-white);
+  }
+}

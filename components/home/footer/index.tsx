@@ -3,7 +3,7 @@ import { Box, Divider, Group, Text, Stack } from '@mantine/core'
 
 import Logo from 'public/logo_with_text.svg'
 
-import classes from './index.module.css'
+import classes from './styles.module.css'
 
 export default function Footer() {
   return (
