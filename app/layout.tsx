@@ -6,7 +6,9 @@ import './global.css'
 
 import { MantineProvider, ColorSchemeScript } from '@mantine/core'
 import { Notifications } from '@mantine/notifications'
+
 import ColorSchemeHotKey from 'components/color_scheme_hot_key'
+import Providers from './providers'
 
 import type { Metadata } from 'next'
 
@@ -64,10 +66,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           defaultColorScheme="dark"
           theme={{ fontFamily: 'cera-variable' }}
         >
-          {children}
+          <Providers>
+            {children}
+            <div id="portal" />
+          </Providers>
           <Notifications zIndex={9999} />
           <ColorSchemeHotKey />
-          <div id="portal" />
         </MantineProvider>
       </body>
     </html>
