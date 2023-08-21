@@ -17,5 +17,7 @@
     "activityBar.inactiveForeground": "#000000",
     "activityBarBadge.background": "#ff00ff",
     "activityBarBadge.foreground": "#ffffff"
-  }
+  },
+
+  "css.validate": false
 }
