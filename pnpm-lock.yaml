@@ -23,6 +23,9 @@ dependencies:
   '@t3-oss/env-nextjs':
     specifier: ^0.6.1
     version: 0.6.1(typescript@5.1.6)(zod@3.22.2)
+  '@tanstack/react-query':
+    specifier: 5.0.0-beta.18
+    version: 5.0.0-beta.18(react-dom@18.2.0)(react@18.2.0)
   classix:
     specifier: ^2.1.34
     version: 2.1.34
@@ -124,9 +127,9 @@ devDependencies:
   stylelint:
     specifier: ^15.10.3
     version: 15.10.3
-  stylelint-config-standard:
-    specifier: ^34.0.0
-    version: 34.0.0(stylelint@15.10.3)
+  stylelint-config-standard-scss:
+    specifier: ^10.0.0
+    version: 10.0.0(postcss@8.4.28)(stylelint@15.10.3)
   typescript:
     specifier: 5.1.6
     version: 5.1.6
@@ -2365,6 +2368,28 @@ packages:
       '@t3-oss/env-core': 0.6.1(typescript@5.1.6)(zod@3.22.2)
       typescript: 5.1.6
       zod: 3.22.2
+    dev: false
+
+  /@tanstack/query-core@5.0.0-beta.18:
+    resolution: {integrity: sha512-HSRDAFCsod0MsUOzNUuXsskdG3Y7cQcsSst3WQR3MD6hd2GUH6eu8NSg5XyQ/fAyfDIeYAL764rQ3WGhJgiS6Q==}
+    dev: false
+
+  /@tanstack/react-query@5.0.0-beta.18(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-A4rBAtKg79hnBuQB68WDL91xe0yXa9x0zWDuwkBgDDD/LchTlmHoFcSqUTut3V6UBOerg7o25At4/RdamvGV/A==}
+    peerDependencies:
+      react: ^18.0.0
+      react-dom: ^18.0.0
+      react-native: '*'
+    peerDependenciesMeta:
+      react-dom:
+        optional: true
+      react-native:
+        optional: true
+    dependencies:
+      '@tanstack/query-core': 5.0.0-beta.18
+      client-only: 0.0.1
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
     dev: false
 
   /@testing-library/dom@9.3.1:
@@ -5508,6 +5533,10 @@ packages:
       postcss: 8.4.28
     dev: true
 
+  /postcss-media-query-parser@0.2.3:
+    resolution: {integrity: sha512-3sOlxmbKcSHMjlUXQZKQ06jOswE7oVkXPxmZdoB1r5l0q6gTFTQSHxNxOrCccElbW7dxNytifNEo8qidX2Vsig==}
+    dev: true
+
   /postcss-mixins@9.0.4(postcss@8.4.28):
     resolution: {integrity: sha512-XVq5jwQJDRu5M1XGkdpgASqLk37OqkH4JCFDXl/Dn7janOJjCTEKL+36cnRVy7bMtoBzALfO7bV7nTIsFnUWLA==}
     engines: {node: '>=14.0'}
@@ -5550,6 +5579,15 @@ packages:
     engines: {node: '>=12.0'}
     peerDependencies:
       postcss: ^8.3.3
+    dependencies:
+      postcss: 8.4.28
+    dev: true
+
+  /postcss-scss@4.0.7(postcss@8.4.28):
+    resolution: {integrity: sha512-xPv2GseoyXPa58Nro7M73ZntttusuCmZdeOojUFR5PZDz2BR62vfYx1w9TyOnp1+nYFowgOMipsCBhxzVkAEPw==}
+    engines: {node: '>=12.0'}
+    peerDependencies:
+      postcss: ^8.4.19
     dependencies:
       postcss: 8.4.28
     dev: true
@@ -6257,23 +6295,64 @@ packages:
       react: 18.2.0
     dev: false
 
-  /stylelint-config-recommended@13.0.0(stylelint@15.10.3):
-    resolution: {integrity: sha512-EH+yRj6h3GAe/fRiyaoO2F9l9Tgg50AOFhaszyfov9v6ayXJ1IkSHwTxd7lB48FmOeSGDPLjatjO11fJpmarkQ==}
-    engines: {node: ^14.13.1 || >=16.0.0}
+  /stylelint-config-recommended-scss@12.0.0(postcss@8.4.28)(stylelint@15.10.3):
+    resolution: {integrity: sha512-5Bb2mlGy6WLa30oNeKpZvavv2lowJUsUJO25+OA68GFTemlwd1zbFsL7q0bReKipOSU3sG47hKneZ6Nd+ctrFA==}
     peerDependencies:
-      stylelint: ^15.10.0
+      postcss: ^8.3.3
+      stylelint: ^15.5.0
+    peerDependenciesMeta:
+      postcss:
+        optional: true
+    dependencies:
+      postcss: 8.4.28
+      postcss-scss: 4.0.7(postcss@8.4.28)
+      stylelint: 15.10.3
+      stylelint-config-recommended: 12.0.0(stylelint@15.10.3)
+      stylelint-scss: 5.1.0(stylelint@15.10.3)
+    dev: true
+
+  /stylelint-config-recommended@12.0.0(stylelint@15.10.3):
+    resolution: {integrity: sha512-x6x8QNARrGO2sG6iURkzqL+Dp+4bJorPMMRNPScdvaUK8PsynriOcMW7AFDKqkWAS5wbue/u8fUT/4ynzcmqdQ==}
+    peerDependencies:
+      stylelint: ^15.5.0
     dependencies:
       stylelint: 15.10.3
     dev: true
 
-  /stylelint-config-standard@34.0.0(stylelint@15.10.3):
-    resolution: {integrity: sha512-u0VSZnVyW9VSryBG2LSO+OQTjN7zF9XJaAJRX/4EwkmU0R2jYwmBSN10acqZisDitS0CLiEiGjX7+Hrq8TAhfQ==}
-    engines: {node: ^14.13.1 || >=16.0.0}
+  /stylelint-config-standard-scss@10.0.0(postcss@8.4.28)(stylelint@15.10.3):
+    resolution: {integrity: sha512-bChBEo1p3xUVWh/wenJI+josoMk21f2yuLDGzGjmKYcALfl2u3DFltY+n4UHswYiXghqXaA8mRh+bFy/q1hQlg==}
     peerDependencies:
-      stylelint: ^15.10.0
+      postcss: ^8.3.3
+      stylelint: ^15.5.0
+    peerDependenciesMeta:
+      postcss:
+        optional: true
+    dependencies:
+      postcss: 8.4.28
+      stylelint: 15.10.3
+      stylelint-config-recommended-scss: 12.0.0(postcss@8.4.28)(stylelint@15.10.3)
+      stylelint-config-standard: 33.0.0(stylelint@15.10.3)
+    dev: true
+
+  /stylelint-config-standard@33.0.0(stylelint@15.10.3):
+    resolution: {integrity: sha512-eyxnLWoXImUn77+ODIuW9qXBDNM+ALN68L3wT1lN2oNspZ7D9NVGlNHb2QCUn4xDug6VZLsh0tF8NyoYzkgTzg==}
+    peerDependencies:
+      stylelint: ^15.5.0
     dependencies:
       stylelint: 15.10.3
-      stylelint-config-recommended: 13.0.0(stylelint@15.10.3)
+      stylelint-config-recommended: 12.0.0(stylelint@15.10.3)
+    dev: true
+
+  /stylelint-scss@5.1.0(stylelint@15.10.3):
+    resolution: {integrity: sha512-E+KlQFXv1Euha43qw3q+wKBSli557wxbbo6/39DWhRNXlUa9Cz+FYrcgz+PT6ag0l6UisCYjAGCNhoSl4FcwlA==}
+    peerDependencies:
+      stylelint: ^14.5.1 || ^15.0.0
+    dependencies:
+      postcss-media-query-parser: 0.2.3
+      postcss-resolve-nested-selector: 0.1.1
+      postcss-selector-parser: 6.0.13
+      postcss-value-parser: 4.2.0
+      stylelint: 15.10.3
     dev: true
 
   /stylelint@15.10.3:
