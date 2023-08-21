@@ -10,7 +10,7 @@ export default function ProjectCard({ name, bannerImage, logoUrl, description, c
       className={classes.card}
       withBorder
     >
-      <Card.Section className={classes['card-section']}>
+      <Box className={classes['banner-container']}>
         <AspectRatio ratio={3 / 2}>
           <Image
             alt="banner"
@@ -18,7 +18,7 @@ export default function ProjectCard({ name, bannerImage, logoUrl, description, c
             src={bannerImage}
           />
         </AspectRatio>
-      </Card.Section>
+      </Box>
       <Box className={classes.content}>
         <Box className={classes['name-row']}>
           <Image

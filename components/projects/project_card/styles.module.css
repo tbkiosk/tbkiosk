@@ -9,7 +9,7 @@
   transition-duration: 400ms;
   transition-property: box-shadow, border;
   transition-timing-function: ease;
-  padding: var(--mantine-spacing-sm);
+  padding: var(--mantine-spacing-xs);
 }
 
 .card:hover {
@@ -17,8 +17,8 @@
   box-shadow: 0 4px 20px 0 rgba(141, 141, 141, 0.31);
 }
 
-.card-section {
-  padding: var(--mantine-radius-md) var(--mantine-radius-md) 0;
+.banner-container {
+  margin: -4px;
 }
 
 .banner {
