@@ -65,7 +65,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           theme={{ fontFamily: 'cera-variable' }}
         >
           {children}
-          <Notifications />
+          <Notifications zIndex={9999} />
           <ColorSchemeHotKey />
           <div id="portal" />
         </MantineProvider>
