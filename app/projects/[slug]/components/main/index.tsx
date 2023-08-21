@@ -1,8 +1,11 @@
 'use client'
 
+'use client'
+
 import Link from 'next/link'
 import { AppShell, Box, LoadingOverlay, Title, Button, Image, Badge, ActionIcon, Menu, Text, Divider } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
+import { useQuery } from '@tanstack/react-query'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Pagination } from 'swiper/modules'
 import dayjs from 'dayjs'
@@ -10,22 +13,34 @@ import dayjs from 'dayjs'
 import Footer from 'components/footer'
 import RelativeProjects from './relative_projects'
 
-import useProject from 'hooks/use_project'
-
 import classes from './styles.module.css'
+
+import type { Project } from '@prisma/client'
 
 export default function SlugMain({ slug }: { slug: string }) {
   const largeScreen = useMediaQuery('(min-width: 48em)')
 
-  const { project, loading } = useProject(slug)
+  const {
+    data: project,
+    isLoading,
+    isFetched,
+  } = useQuery<Project>({
+    enabled: !!slug,
+    queryKey: ['project-detail'],
+    queryFn: async () => {
+      const res = await fetch(`/api/projects/${slug}`)
+      const projects = await res.json()
+      return projects
+    },
+  })
 
   return (
     <AppShell.Main className={classes.main}>
       <LoadingOverlay
         overlayProps={{ backgroundOpacity: 0 }}
-        visible={loading}
+        visible={isLoading}
       />
-      {!project && !loading && (
+      {isFetched && !project && (
         <Box className={classes['project-not-found-container']}>
           <Title order={3}>Project not found</Title>
           <Link href="/projects#list">
@@ -38,7 +53,7 @@ export default function SlugMain({ slug }: { slug: string }) {
           </Link>
         </Box>
       )}
-      {project && !loading && (
+      {project && (
         <>
           <Box className={classes['banner-container']}>
             <Image

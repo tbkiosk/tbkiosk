@@ -1,10 +1,12 @@
 'use client'
 
 import Link from 'next/link'
-import { AppShell, Container, Button, ActionIcon, Select, Group, Burger } from '@mantine/core'
+import { AppShell, Container, Button, ActionIcon, Group, Burger } from '@mantine/core'
+
+import SearchBox from './components/search_box'
 import Logo from 'public/logo_with_text.svg'
 
-import classes from './index.module.css'
+import classes from './styles.module.css'
 
 export default function Header() {
   return (
@@ -16,19 +18,7 @@ export default function Header() {
         >
           <Logo />
         </Link>
-        <Select
-          classNames={{
-            root: classes['search-box-root'],
-            input: classes['search-box-input'],
-          }}
-          data={['React', 'Angular', 'Vue', 'Svelte']}
-          maw={480}
-          placeholder="Search for collections, NFTs or users"
-          rightSection={<i className="fa-solid fa-magnifying-glass" />}
-          visibleFrom="sm"
-          w={480}
-          withCheckIcon={false}
-        />
+        <SearchBox />
         <Group className={classes['links-container']}>
           <Button
             aria-label="list-project"

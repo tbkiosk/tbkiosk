@@ -34,15 +34,3 @@
     width: auto;
   }
 }
-
-.search-box-root {
-  padding: 0 var(--mantine-spacing-xl);
-}
-
-.search-box-input {
-  font-family: cera-variable, Arial, Helvetica, sans-serif;
-
-  @mixin dark {
-    border: none;
-  }
-}

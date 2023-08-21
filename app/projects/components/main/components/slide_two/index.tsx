@@ -1,6 +1,8 @@
-import { useMemo, useRef } from 'react'
+import { useMemo, useRef, useEffect } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { Box, Title } from '@mantine/core'
+import { notifications } from '@mantine/notifications'
+import { useQuery } from '@tanstack/react-query'
 import { useSwiper, useSwiperSlide } from 'swiper/react'
 import { useSwipeable } from 'react-swipeable'
 import dayjs from 'dayjs'
@@ -9,17 +11,15 @@ import Footer from 'components/footer'
 import ProjectsGrid from 'components/projects/projects_grid'
 import Filters from './components/filters'
 
-import useProjects from 'hooks/use_projects'
-
 import { CATEGORY_TYPE_ALL, CATEGORY_TYPE_NEW } from './components/filters'
 
 import classes from './index.module.css'
 
-import type { Category } from '@prisma/client'
+import type { Project, Category } from '@prisma/client'
 
 export default function SlideTwo() {
   const searchParams = useSearchParams()
-  const type = searchParams.get('type') || CATEGORY_TYPE_ALL
+  const categories = searchParams.get('categories') || CATEGORY_TYPE_ALL
 
   const projectsContainerRef = useRef<HTMLDivElement | null>(null)
 
@@ -32,7 +32,18 @@ export default function SlideTwo() {
     },
   })
 
-  const { projects, loading } = useProjects()
+  const {
+    data: projects,
+    isLoading,
+    error,
+  } = useQuery<Project[]>({
+    queryKey: ['projects'],
+    queryFn: async () => {
+      const res = await fetch(`/api/projects`)
+      const projects = await res.json()
+      return projects
+    },
+  })
 
   const refPassthrough = (el: HTMLDivElement) => {
     handlers.ref(el)
@@ -48,14 +59,24 @@ export default function SlideTwo() {
   }
 
   const filteredProjects = useMemo(() => {
-    if (!type || type === CATEGORY_TYPE_ALL) return projects
+    if (!categories || categories === CATEGORY_TYPE_ALL) return projects || []
 
-    if (type === CATEGORY_TYPE_NEW) {
-      return projects.filter(_p => dayjs().diff(dayjs(_p.createdAt), 'day') <= 15)
+    if (categories === CATEGORY_TYPE_NEW) {
+      return projects?.filter(_p => dayjs().diff(dayjs(_p.createdAt), 'day') <= 15) || []
     }
 
-    return projects.filter(_p => _p.categories.includes(type as Category))
-  }, [type, projects])
+    return projects?.filter(_p => _p.categories.includes(categories as Category)) || []
+  }, [categories, projects])
+
+  useEffect(() => {
+    if (error) {
+      notifications.show({
+        color: 'red',
+        title: 'Error',
+        message: (error as Error)?.message,
+      })
+    }
+  }, [error])
 
   return (
     <Box
@@ -74,7 +95,7 @@ export default function SlideTwo() {
         <Filters />
         <Box className={classes['projects-container']}>
           <ProjectsGrid
-            loading={loading}
+            loading={isLoading}
             projects={filteredProjects}
           />
         </Box>
