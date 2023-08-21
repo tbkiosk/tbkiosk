@@ -22,6 +22,11 @@ export default function SearchBox() {
     queryKey: ['projects-from-search-box', debouncedValue],
     queryFn: async () => {
       const res = await fetch(`/api/projects?search=${debouncedValue}`)
+
+      if (!res.ok) {
+        throw new Error(res.statusText)
+      }
+
       const projects = await res.json()
       return projects
     },

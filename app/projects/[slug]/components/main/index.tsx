@@ -29,6 +29,11 @@ export default function SlugMain({ slug }: { slug: string }) {
     queryKey: ['project-detail'],
     queryFn: async () => {
       const res = await fetch(`/api/projects/${slug}`)
+
+      if (!res.ok) {
+        throw new Error(res.statusText)
+      }
+
       const projects = await res.json()
       return projects
     },

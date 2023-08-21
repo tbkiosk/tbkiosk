@@ -11,7 +11,7 @@
   }
 }
 
-.logo {
+.logo-container {
   align-items: center;
   display: flex;
   flex-shrink: 0;
@@ -19,9 +19,15 @@
   max-width: 180px;
   width: 180px;
 
-  @media (max-width: $mantine-breakpoint-xs) {
+  @media (max-width: $mantine-breakpoint-sm) {
     width: auto;
   }
+}
+
+.logo-wrapper {
+  align-items: center;
+  display: flex;
+  justify-content: center;
 }
 
 .links-container {
@@ -30,7 +36,7 @@
   justify-content: flex-end;
   width: 180px;
 
-  @media (max-width: $mantine-breakpoint-xs) {
+  @media (max-width: $mantine-breakpoint-sm) {
     width: auto;
   }
 }

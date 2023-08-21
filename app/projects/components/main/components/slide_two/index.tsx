@@ -40,6 +40,11 @@ export default function SlideTwo() {
     queryKey: ['projects'],
     queryFn: async () => {
       const res = await fetch(`/api/projects`)
+
+      if (!res.ok) {
+        throw new Error(res.statusText)
+      }
+
       const projects = await res.json()
       return projects
     },

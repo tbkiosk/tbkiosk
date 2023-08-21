@@ -1,10 +1,11 @@
 'use client'
 
 import Link from 'next/link'
-import { AppShell, Container, Button, ActionIcon, Group, Burger } from '@mantine/core'
+import { AppShell, Container, Button, ActionIcon, Group, Box } from '@mantine/core'
 
 import SearchBox from './components/search_box'
-import Logo from 'public/logo_with_text.svg'
+import LogoWithText from 'public/logo_with_text.svg'
+import Logo from 'public/logo.svg'
 
 import classes from './styles.module.css'
 
@@ -16,10 +17,21 @@ export default function Header() {
     >
       <Container className={classes.container}>
         <Link
-          className={classes.logo}
+          className={classes['logo-container']}
           href="/"
         >
-          <Logo />
+          <Box
+            className={classes['logo-wrapper']}
+            visibleFrom="sm"
+          >
+            <LogoWithText />
+          </Box>
+          <Box
+            className={classes['logo-wrapper']}
+            hiddenFrom="sm"
+          >
+            <Logo />
+          </Box>
         </Link>
         <SearchBox />
         <Group className={classes['links-container']}>
@@ -33,7 +45,6 @@ export default function Header() {
             size="sm"
             target="_blank"
             variant="default"
-            visibleFrom="sm"
           >
             List a Project
           </Button>
@@ -51,10 +62,6 @@ export default function Header() {
           >
             <i className="fa-brands fa-x-twitter" />
           </ActionIcon>
-          <Burger
-            hiddenFrom="sm"
-            size="sm"
-          />
         </Group>
       </Container>
     </AppShell.Header>

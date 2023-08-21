@@ -1,15 +1,18 @@
 .container {
+  display: flex;
+  flex-grow: 1;
+  justify-content: center;
   position: relative;
 
-  @media (max-width: $mantine-breakpoint-xs) {
+  @media (max-width: $mantine-breakpoint-sm) {
     display: none;
   }
 }
 
 .search-box-root {
+  flex-grow: 1;
   max-width: 480px;
   padding: 0 var(--mantine-spacing-xl);
-  width: 480px;
 }
 
 .search-box-input {
