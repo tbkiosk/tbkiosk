@@ -10,7 +10,10 @@ import classes from './styles.module.css'
 
 export default function Header() {
   return (
-    <AppShell.Header withBorder={false}>
+    <AppShell.Header
+      withBorder={false}
+      zIndex={1500}
+    >
       <Container className={classes.container}>
         <Link
           className={classes.logo}

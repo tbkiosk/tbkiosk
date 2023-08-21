@@ -4,8 +4,33 @@
   gap: 8px;
   justify-content: center;
   padding: 0 64px 32px;
+
+  @media (max-width: $mantine-breakpoint-xs) {
+    display: none;
+  }
 }
 
-.button {
+.button,
+.filter-select-option {
   text-transform: capitalize;
+}
+
+.filter-select-root {
+  @media (min-width: $mantine-breakpoint-xs) {
+    display: none;
+  }
+}
+
+.filter-select-input {
+  background-color: #fff;
+  color: #000;
+  margin: var(--mantine-spacing-xs) 0 var(--mantine-spacing-xl);
+  text-transform: capitalize;
+}
+
+.filter-select-dropdown {
+  background-color: var(--mantine-color-white);
+  border-color: var(--mantine-color-gray-2);
+  color: var(--mantine-color-black);
+  z-index: 1100 !important;
 }

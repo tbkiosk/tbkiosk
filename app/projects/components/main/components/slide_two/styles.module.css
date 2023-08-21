@@ -1,6 +1,6 @@
 .container {
-  background-color: #ffffff;
-  color: #000000;
+  background-color: #fff;
+  color: #000;
   height: 100%;
   overflow-y: auto;
 }
@@ -24,5 +24,10 @@
 
 .title {
   padding: 32px 0;
+  position: relative;
   text-align: center;
+
+  @media (max-width: $mantine-breakpoint-xs) {
+    padding-bottom: 0;
+  }
 }

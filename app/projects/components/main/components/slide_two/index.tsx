@@ -13,7 +13,7 @@ import Filters from './components/filters'
 
 import { CATEGORY_TYPE_ALL, CATEGORY_TYPE_NEW } from './components/filters'
 
-import classes from './index.module.css'
+import classes from './styles.module.css'
 
 import type { Project, Category } from '@prisma/client'
 
