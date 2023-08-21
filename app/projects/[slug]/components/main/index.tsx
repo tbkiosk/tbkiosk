@@ -83,7 +83,12 @@ export default function SlugMain({ slug }: { slug: string }) {
           <Box className={classes['container']}>
             <Box className={classes['name-row']}>
               <Box className={classes['name-group']}>
-                <Title order={3}>{project.name}</Title>
+                <Title
+                  className={classes.name}
+                  order={3}
+                >
+                  {project.name}
+                </Title>
                 <Badge
                   className={classes.stage}
                   variant="filled"

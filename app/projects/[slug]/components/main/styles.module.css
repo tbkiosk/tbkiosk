@@ -41,8 +41,8 @@
 }
 
 .back-button {
-  background-color: #ffffff;
-  color: #000000;
+  background-color: #fff;
+  color: #000;
   opacity: 0.7;
 }
 
@@ -87,6 +87,13 @@
   display: flex;
   flex-wrap: nowrap;
   gap: 8px;
+  overflow: hidden;
+}
+
+.link-group {
+  flex-shrink: 0;
+  gap: 18px;
+  margin-left: var(--mantine-spacing-md);
 }
 
 .name {
@@ -98,12 +105,8 @@
 .stage {
   background-color: rgba(200, 253, 124, 1);
   border-radius: var(--mantine-radius-sm);
-  color: #000000;
+  color: #000;
   flex-shrink: 0;
-}
-
-.link-group {
-  gap: 18px;
 }
 
 .icon {
