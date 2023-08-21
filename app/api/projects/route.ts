@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 
 import { prismaClient } from 'lib/prisma'
-import { Category } from '@prisma/client'
+import { Category, Prisma } from '@prisma/client'
 
 export const runtime = 'nodejs'
 
@@ -15,7 +15,7 @@ export async function GET(request: Request) {
     where: {
       status: 'Published',
       AND: [
-        ...(search ? [{ name: { contains: search } }] : []),
+        ...(search ? [{ name: { contains: search, mode: Prisma.QueryMode.insensitive } }] : []),
         ...(categories.length ? [{ categories: { hasSome: categories as Category[] } }] : []),
       ],
     },
