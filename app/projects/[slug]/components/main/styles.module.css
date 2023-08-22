@@ -44,6 +44,14 @@
   background-color: #fff;
   color: #000;
   opacity: 0.7;
+  transition-duration: 200ms;
+  transition-property: transform, opacity;
+  transition-timing-function: ease;
+}
+
+.back-button:hover {
+  opacity: 0.5;
+  transform: scale(1.02);
 }
 
 .logo-container {

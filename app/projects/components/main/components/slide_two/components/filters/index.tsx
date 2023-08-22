@@ -27,6 +27,7 @@ export default function Filters() {
             <Button
               className={classes.button}
               color="rgba(0, 0, 0, 1)"
+              fw={categories === _c ? 700 : 500}
               variant={categories === _c ? 'light' : 'subtle'}
             >
               {_c}
