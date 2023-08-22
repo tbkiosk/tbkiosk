@@ -6,14 +6,14 @@ settings:
 
 dependencies:
   '@mantine/core':
-    specifier: 7.0.0-alpha.22
-    version: 7.0.0-alpha.22(@mantine/hooks@7.0.0-alpha.22)(@types/react@18.2.20)(react-dom@18.2.0)(react@18.2.0)
+    specifier: 7.0.0-beta.0
+    version: 7.0.0-beta.0(@mantine/hooks@7.0.0-beta.0)(@types/react@18.2.20)(react-dom@18.2.0)(react@18.2.0)
   '@mantine/hooks':
-    specifier: 7.0.0-alpha.22
-    version: 7.0.0-alpha.22(react@18.2.0)
+    specifier: 7.0.0-beta.0
+    version: 7.0.0-beta.0(react@18.2.0)
   '@mantine/notifications':
-    specifier: 7.0.0-alpha.22
-    version: 7.0.0-alpha.22(@mantine/core@7.0.0-alpha.22)(@mantine/hooks@7.0.0-alpha.22)(react-dom@18.2.0)(react@18.2.0)
+    specifier: 7.0.0-beta.0
+    version: 7.0.0-beta.0(@mantine/core@7.0.0-beta.0)(@mantine/hooks@7.0.0-beta.0)(react-dom@18.2.0)(react@18.2.0)
   '@prisma/client':
     specifier: ^5.1.1
     version: 5.1.1(prisma@5.1.1)
@@ -1776,15 +1776,15 @@ packages:
       '@jridgewell/resolve-uri': 3.1.1
       '@jridgewell/sourcemap-codec': 1.4.15
 
-  /@mantine/core@7.0.0-alpha.22(@mantine/hooks@7.0.0-alpha.22)(@types/react@18.2.20)(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-QdzFRYnuaiiNommEniGN90Tl9cRh/OkXey7uZurVM3jb2z1+zkWCZ2UgC/FaLRZIkMjXZCzr2DEqxQ6UYBBnBw==}
+  /@mantine/core@7.0.0-beta.0(@mantine/hooks@7.0.0-beta.0)(@types/react@18.2.20)(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-JRn3zrVneVZ7bMeE4w0rbT4RaXvVsLz4Kg687zUKufgsZ0hEu4jG/wqy6P5t8ph7tGY0/vLmbpXxxcPMCOa9FA==}
     peerDependencies:
-      '@mantine/hooks': 7.0.0-alpha.22
+      '@mantine/hooks': 7.0.0-beta.0
       react: ^18.2.0
       react-dom: ^18.2.0
     dependencies:
       '@floating-ui/react': 0.24.8(react-dom@18.2.0)(react@18.2.0)
-      '@mantine/hooks': 7.0.0-alpha.22(react@18.2.0)
+      '@mantine/hooks': 7.0.0-beta.0(react@18.2.0)
       clsx: 2.0.0
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
@@ -1796,32 +1796,32 @@ packages:
       - '@types/react'
     dev: false
 
-  /@mantine/hooks@7.0.0-alpha.22(react@18.2.0):
-    resolution: {integrity: sha512-Vd3OhhaCd3Kbo4f6nQNB0ZzdYowbdIwEJBxPyBFCWW85SS3KCV7nq0cUy9MzdrSyKbCCepV6LMBmzkLePiGjQw==}
+  /@mantine/hooks@7.0.0-beta.0(react@18.2.0):
+    resolution: {integrity: sha512-1/9D6astxgD5W1cEPB+of7ETViCn2MPy4DR9URqdSld827OA1HeLh405HWwlQCvrWfpoiNqeMjo/a4gj+11d/w==}
     peerDependencies:
       react: ^18.2.0
     dependencies:
       react: 18.2.0
     dev: false
 
-  /@mantine/notifications@7.0.0-alpha.22(@mantine/core@7.0.0-alpha.22)(@mantine/hooks@7.0.0-alpha.22)(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-UR2ETLbCJ2C3GKrqjOhKGFeOVYsjbUByCIDrCitJuxlGPhFbsMM0t8OxLb1r0ol3iawbMTeghoEv+a2vcXEzuQ==}
+  /@mantine/notifications@7.0.0-beta.0(@mantine/core@7.0.0-beta.0)(@mantine/hooks@7.0.0-beta.0)(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-NTcbCLvunb0aI4Q+ajO+8E9CkwSXDTtkyof7E7/zgaovuQk5ldavLvu9Bi8H8ptkdy5jFlppSYYCr6vOMUGpkA==}
     peerDependencies:
-      '@mantine/core': 7.0.0-alpha.22
-      '@mantine/hooks': 7.0.0-alpha.22
+      '@mantine/core': 7.0.0-beta.0
+      '@mantine/hooks': 7.0.0-beta.0
       react: ^18.2.0
       react-dom: ^18.2.0
     dependencies:
-      '@mantine/core': 7.0.0-alpha.22(@mantine/hooks@7.0.0-alpha.22)(@types/react@18.2.20)(react-dom@18.2.0)(react@18.2.0)
-      '@mantine/hooks': 7.0.0-alpha.22(react@18.2.0)
-      '@mantine/store': 7.0.0-alpha.22(react@18.2.0)
+      '@mantine/core': 7.0.0-beta.0(@mantine/hooks@7.0.0-beta.0)(@types/react@18.2.20)(react-dom@18.2.0)(react@18.2.0)
+      '@mantine/hooks': 7.0.0-beta.0(react@18.2.0)
+      '@mantine/store': 7.0.0-beta.0(react@18.2.0)
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
       react-transition-group: 4.4.5(react-dom@18.2.0)(react@18.2.0)
     dev: false
 
-  /@mantine/store@7.0.0-alpha.22(react@18.2.0):
-    resolution: {integrity: sha512-o5CgPOmHwc99hYGYHag0eaNHHWLjAmvDfA7J+Z1c9K1Aa5uMi5XclTO17BrWsiod85YY9XXDqY/rNGbuExg7fA==}
+  /@mantine/store@7.0.0-beta.0(react@18.2.0):
+    resolution: {integrity: sha512-uZk94KZTenJZ72jrYL/Vun3LTLZwPbW3y5C0U1q9dkYEzDYzLr+TVS0ZEDgf2zyLNxQCfM6JEhbWe1hCa2RtCQ==}
     peerDependencies:
       react: ^18.2.0
     dependencies:
@@ -2047,7 +2047,7 @@ packages:
       '@sentry/core': 7.64.0
       '@sentry/types': 7.64.0
       '@sentry/utils': 7.64.0
-      tslib: 2.6.1
+      tslib: 2.6.2
     dev: false
 
   /@sentry/browser@7.64.0:
@@ -2059,7 +2059,7 @@ packages:
       '@sentry/replay': 7.64.0
       '@sentry/types': 7.64.0
       '@sentry/utils': 7.64.0
-      tslib: 2.6.1
+      tslib: 2.6.2
     dev: false
 
   /@sentry/cli@1.75.2:
@@ -2085,7 +2085,7 @@ packages:
     dependencies:
       '@sentry/types': 7.64.0
       '@sentry/utils': 7.64.0
-      tslib: 2.6.1
+      tslib: 2.6.2
     dev: false
 
   /@sentry/integrations@7.64.0:
@@ -2095,7 +2095,7 @@ packages:
       '@sentry/types': 7.64.0
       '@sentry/utils': 7.64.0
       localforage: 1.10.0
-      tslib: 2.6.1
+      tslib: 2.6.2
     dev: false
 
   /@sentry/nextjs@7.64.0(next@13.4.19)(react@18.2.0):
@@ -2139,7 +2139,7 @@ packages:
       cookie: 0.4.2
       https-proxy-agent: 5.0.1
       lru_map: 0.3.3
-      tslib: 2.6.1
+      tslib: 2.6.2
     transitivePeerDependencies:
       - supports-color
     dev: false
@@ -2155,7 +2155,7 @@ packages:
       '@sentry/utils': 7.64.0
       hoist-non-react-statics: 3.3.2
       react: 18.2.0
-      tslib: 2.6.1
+      tslib: 2.6.2
     dev: false
 
   /@sentry/replay@7.64.0:
@@ -2177,7 +2177,7 @@ packages:
     engines: {node: '>=8'}
     dependencies:
       '@sentry/types': 7.64.0
-      tslib: 2.6.1
+      tslib: 2.6.2
     dev: false
 
   /@sentry/webpack-plugin@1.20.0:
@@ -2916,7 +2916,7 @@ packages:
     resolution: {integrity: sha512-xcLxITLe2HYa1cnYnwCjkOO1PqUHQpozB8x9AR0OgWN2woOBi5kSDVxKfd0b7sb1hw5qFeJhXm9H1nu3xSfLeQ==}
     engines: {node: '>=10'}
     dependencies:
-      tslib: 2.6.1
+      tslib: 2.6.2
     dev: false
 
   /aria-query@5.1.3:
@@ -5730,7 +5730,7 @@ packages:
       '@types/react': 18.2.20
       react: 18.2.0
       react-style-singleton: 2.2.1(@types/react@18.2.20)(react@18.2.0)
-      tslib: 2.6.1
+      tslib: 2.6.2
     dev: false
 
   /react-remove-scroll@2.5.6(@types/react@18.2.20)(react@18.2.0):
@@ -5747,7 +5747,7 @@ packages:
       react: 18.2.0
       react-remove-scroll-bar: 2.3.4(@types/react@18.2.20)(react@18.2.0)
       react-style-singleton: 2.2.1(@types/react@18.2.20)(react@18.2.0)
-      tslib: 2.6.1
+      tslib: 2.6.2
       use-callback-ref: 1.3.0(@types/react@18.2.20)(react@18.2.0)
       use-sidecar: 1.1.2(@types/react@18.2.20)(react@18.2.0)
     dev: false
@@ -5766,7 +5766,7 @@ packages:
       get-nonce: 1.0.1
       invariant: 2.2.4
       react: 18.2.0
-      tslib: 2.6.1
+      tslib: 2.6.2
     dev: false
 
   /react-swipeable@7.0.1(react@18.2.0):
@@ -6701,7 +6701,7 @@ packages:
     dependencies:
       '@types/react': 18.2.20
       react: 18.2.0
-      tslib: 2.6.1
+      tslib: 2.6.2
     dev: false
 
   /use-composed-ref@1.3.0(react@18.2.0):
@@ -6752,7 +6752,7 @@ packages:
       '@types/react': 18.2.20
       detect-node-es: 1.1.0
       react: 18.2.0
-      tslib: 2.6.1
+      tslib: 2.6.2
     dev: false
 
   /util-deprecate@1.0.2:
