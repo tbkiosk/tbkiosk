@@ -56,7 +56,7 @@ export default function Footer() {
         hiddenFrom="sm"
       >
         <Group
-          justify="center"
+          justify="space-between"
           w="100%"
           wrap="nowrap"
         >

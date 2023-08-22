@@ -94,6 +94,10 @@
   flex-shrink: 0;
   gap: 18px;
   margin-left: var(--mantine-spacing-md);
+
+  @media (max-width: $mantine-breakpoint-sm) {
+    margin-left: 0;
+  }
 }
 
 .name {
@@ -145,6 +149,7 @@
 }
 
 .info-row,
+.link-row,
 .chain-row {
   align-items: center;
   display: flex;
@@ -152,9 +157,20 @@
   margin-bottom: var(--mantine-spacing-md);
 }
 
+.chain-row {
+  @media (min-width: $mantine-breakpoint-sm) {
+    margin-bottom: 48px;
+  }
+}
+
+.categories-row {
+  margin-bottom: 48px;
+}
+
 .info {
   align-items: center;
   display: flex;
+  flex-wrap: wrap;
   gap: 8px;
 }
 
@@ -164,10 +180,6 @@
 
 .text {
   font-weight: bold;
-}
-
-.chain-row {
-  margin-bottom: 48px;
 }
 
 .desc {

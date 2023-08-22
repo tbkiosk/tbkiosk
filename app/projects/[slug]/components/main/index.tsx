@@ -100,98 +100,19 @@ export default function SlugMain({ slug }: { slug: string }) {
                   {project.projectStage}
                 </Badge>
               </Box>
+              <Box
+                className={classes['link-group']}
+                visibleFrom="sm"
+              >
+                <LinkGroup project={project} />
+              </Box>
+            </Box>
+            <Box
+              className={classes['link-row']}
+              hiddenFrom="sm"
+            >
               <Box className={classes['link-group']}>
-                {project.website && (
-                  <a
-                    href={project.website}
-                    onClick={e => e.stopPropagation()}
-                    rel="noreferrer"
-                    target="_blank"
-                  >
-                    <ActionIcon
-                      className={classes.icon}
-                      size="sm"
-                      variant="transparent"
-                    >
-                      <i className="fa-solid fa-globe" />
-                    </ActionIcon>
-                  </a>
-                )}
-                {project.discord && (
-                  <a
-                    href={project.discord}
-                    onClick={e => e.stopPropagation()}
-                    rel="noreferrer"
-                    target="_blank"
-                  >
-                    <ActionIcon
-                      className={classes.icon}
-                      size="sm"
-                      variant="transparent"
-                    >
-                      <i className="fa-brands fa-discord" />
-                    </ActionIcon>
-                  </a>
-                )}
-                {project.twitter && (
-                  <a
-                    href={project.twitter}
-                    onClick={e => e.stopPropagation()}
-                    rel="noreferrer"
-                    target="_blank"
-                  >
-                    <ActionIcon
-                      className={classes.icon}
-                      size="sm"
-                      variant="transparent"
-                    >
-                      <i className="fa-brands fa-x-twitter" />
-                    </ActionIcon>
-                  </a>
-                )}
-                <ActionIcon
-                  className={classes.icon}
-                  onClick={() =>
-                    window.open(
-                      `https://twitter.com/intent/tweet?url=${encodeURIComponent(location.href)}&text=${encodeURIComponent(
-                        `${project.name} | ${project.blockchains.join(' ')}`
-                      )}`
-                    )
-                  }
-                  size="sm"
-                  variant="transparent"
-                >
-                  <i className="fa-solid fa-share-nodes" />
-                </ActionIcon>
-                <Menu
-                  classNames={{ dropdown: classes['menu-dropdown'], item: classes['menu-item'] }}
-                  shadow="md"
-                >
-                  <Menu.Target>
-                    <ActionIcon
-                      className={classes.icon}
-                      size="sm"
-                      variant="transparent"
-                    >
-                      <i className="fa-solid fa-ellipsis" />
-                    </ActionIcon>
-                  </Menu.Target>
-                  <Menu.Dropdown>
-                    <Menu.Item leftSection={<i className="fa-solid fa-copy" />}>Copy link</Menu.Item>
-                    <Menu.Divider className={classes.divider} />
-                    <Menu.Item
-                      className={classes['menu-item-warning']}
-                      leftSection={<i className="fa-solid fa-triangle-exclamation" />}
-                      onClick={() =>
-                        window.open(
-                          `https://docs.google.com/forms/d/e/1FAIpQLSedEm56AAsrkssUTGF2pALbbHzoxiFgwJNrWW0h5uws4hYAxA/viewform?entry.1073118097=${project.id}`
-                        )
-                      }
-                    >
-                      Report
-                    </Menu.Item>
-                  </Menu.Dropdown>
-                </Menu>
+                <LinkGroup project={project} />
               </Box>
             </Box>
             <Box className={classes['info-row']}>
@@ -210,6 +131,26 @@ export default function SlugMain({ slug }: { slug: string }) {
                   {project.blockchains}
                 </Badge>
               </Box>
+              <Box
+                className={classes.info}
+                visibleFrom="sm"
+              >
+                <Text className={classes.label}>Categories:</Text>
+                {project.categories.map(_c => (
+                  <Badge
+                    color="rgba(0, 0, 0, 1)"
+                    key={_c}
+                    radius="sm"
+                  >
+                    {_c}
+                  </Badge>
+                ))}
+              </Box>
+            </Box>
+            <Box
+              className={cx(classes['chain-row'], classes['categories-row'])}
+              hiddenFrom="sm"
+            >
               <Box className={classes.info}>
                 <Text className={classes.label}>Categories:</Text>
                 {project.categories.map(_c => (
@@ -265,5 +206,103 @@ export default function SlugMain({ slug }: { slug: string }) {
         </>
       )}
     </AppShell.Main>
+  )
+}
+
+function LinkGroup({ project }: { project: Project }) {
+  return (
+    <>
+      {project.website && (
+        <a
+          href={project.website}
+          onClick={e => e.stopPropagation()}
+          rel="noreferrer"
+          target="_blank"
+        >
+          <ActionIcon
+            className={classes.icon}
+            size="sm"
+            variant="transparent"
+          >
+            <i className="fa-solid fa-globe" />
+          </ActionIcon>
+        </a>
+      )}
+      {project.discord && (
+        <a
+          href={project.discord}
+          onClick={e => e.stopPropagation()}
+          rel="noreferrer"
+          target="_blank"
+        >
+          <ActionIcon
+            className={classes.icon}
+            size="sm"
+            variant="transparent"
+          >
+            <i className="fa-brands fa-discord" />
+          </ActionIcon>
+        </a>
+      )}
+      {project.twitter && (
+        <a
+          href={project.twitter}
+          onClick={e => e.stopPropagation()}
+          rel="noreferrer"
+          target="_blank"
+        >
+          <ActionIcon
+            className={classes.icon}
+            size="sm"
+            variant="transparent"
+          >
+            <i className="fa-brands fa-x-twitter" />
+          </ActionIcon>
+        </a>
+      )}
+      <ActionIcon
+        className={classes.icon}
+        onClick={() =>
+          window.open(
+            `https://twitter.com/intent/tweet?url=${encodeURIComponent(location.href)}&text=${encodeURIComponent(
+              `${project.name} | ${project.blockchains.join(' ')}`
+            )}`
+          )
+        }
+        size="sm"
+        variant="transparent"
+      >
+        <i className="fa-solid fa-share-nodes" />
+      </ActionIcon>
+      <Menu
+        classNames={{ dropdown: classes['menu-dropdown'], item: classes['menu-item'] }}
+        shadow="md"
+      >
+        <Menu.Target>
+          <ActionIcon
+            className={classes.icon}
+            size="sm"
+            variant="transparent"
+          >
+            <i className="fa-solid fa-ellipsis" />
+          </ActionIcon>
+        </Menu.Target>
+        <Menu.Dropdown>
+          <Menu.Item leftSection={<i className="fa-solid fa-copy" />}>Copy link</Menu.Item>
+          <Menu.Divider className={classes.divider} />
+          <Menu.Item
+            className={classes['menu-item-warning']}
+            leftSection={<i className="fa-solid fa-triangle-exclamation" />}
+            onClick={() =>
+              window.open(
+                `https://docs.google.com/forms/d/e/1FAIpQLSedEm56AAsrkssUTGF2pALbbHzoxiFgwJNrWW0h5uws4hYAxA/viewform?entry.1073118097=${project.id}`
+              )
+            }
+          >
+            Report
+          </Menu.Item>
+        </Menu.Dropdown>
+      </Menu>
+    </>
   )
 }
