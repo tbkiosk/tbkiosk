@@ -183,6 +183,20 @@
   height: 100%;
 }
 
+.bullet-class,
+.bullet-active-class {
+  background-color: #fff;
+  border-radius: 32px;
+  box-shadow: var(--mantine-shadow-xs);
+  height: 5px;
+  opacity: 0.6;
+  width: 25px;
+}
+
+.bullet-active-class {
+  opacity: 1;
+}
+
 .preview-image {
   border-radius: var(--mantine-radius-md);
   height: 480px;

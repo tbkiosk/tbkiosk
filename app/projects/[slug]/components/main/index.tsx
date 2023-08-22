@@ -1,7 +1,5 @@
 'use client'
 
-'use client'
-
 import Link from 'next/link'
 import { AppShell, Box, LoadingOverlay, Title, Button, Image, Badge, ActionIcon, Menu, Text, Divider } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
@@ -9,6 +7,7 @@ import { useQuery } from '@tanstack/react-query'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Pagination } from 'swiper/modules'
 import dayjs from 'dayjs'
+import { cx } from 'classix'
 
 import Footer from 'components/footer'
 import RelativeProjects from './relative_projects'
@@ -197,12 +196,8 @@ export default function SlugMain({ slug }: { slug: string }) {
             </Box>
             <Box className={classes['info-row']}>
               <Box className={classes.info}>
-                <Text className={classes.label}>By</Text>
-                <Text className={classes.text}>-</Text>
-              </Box>
-              <Box className={classes.info}>
                 <Text className={classes.label}>Added</Text>
-                <Text className={classes.text}>{dayjs(project.createdAt).format('MMM YYYY')}</Text>
+                <Text className={classes.text}>{dayjs(project.createdAt).format('MMM DD YYYY')}</Text>
               </Box>
             </Box>
             <Box className={classes['chain-row']}>
@@ -238,7 +233,10 @@ export default function SlugMain({ slug }: { slug: string }) {
                 <Swiper
                   className={classes.swiper}
                   modules={[Pagination]}
-                  pagination={{ clickable: true }}
+                  pagination={{
+                    bulletActiveClass: cx('swiper-pagination-bullet-active', classes['bullet-active-class']),
+                    bulletClass: cx('swiper-pagination-bullet', classes['bullet-class']),
+                  }}
                   slidesPerView={largeScreen ? 2 : 1}
                   spaceBetween={24}
                 >
