@@ -4,6 +4,7 @@ import 'swiper/css'
 import 'swiper/css/pagination'
 import './global.css'
 
+import Script from 'next/script'
 import { MantineProvider, ColorSchemeScript } from '@mantine/core'
 import { Notifications } from '@mantine/notifications'
 
@@ -19,6 +20,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       suppressHydrationWarning
     >
       <head>
+        <Script
+          crossOrigin="anonymous"
+          src="https://kit.fontawesome.com/205d88d001.js"
+        />
         <ColorSchemeScript
           defaultColorScheme="dark"
           nonce="8IBTHwOdqNKAWeKl7plt8g=="
@@ -54,11 +59,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link
           rel="shortcut icon"
           href="/favicon.ico"
-        />
-        <script
-          crossOrigin="anonymous"
-          defer
-          src="https://kit.fontawesome.com/205d88d001.js"
         />
       </head>
       <body>
