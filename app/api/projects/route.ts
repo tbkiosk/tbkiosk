@@ -19,6 +19,9 @@ export async function GET(request: Request) {
         ...(categories.length ? [{ categories: { hasSome: categories as Category[] } }] : []),
       ],
     },
+    orderBy: {
+      updatedAt: 'desc',
+    },
     take: limit ? +limit : undefined,
   })
 
