@@ -65,17 +65,16 @@ export default function SlugMain({ slug }: { slug: string }) {
               className={classes.banner}
               src={project.bannerImage}
             />
-            <Link
-              className={classes['back-button-container']}
-              href="/projects#list"
-            >
-              <Button
-                className={classes['back-button']}
-                leftSection={<i className="fa-solid fa-arrow-left" />}
-              >
-                Back to projects
-              </Button>
-            </Link>
+            <Box className={classes['back-button-container']}>
+              <Link href="/projects#list">
+                <Button
+                  className={classes['back-button']}
+                  leftSection={<i className="fa-solid fa-arrow-left" />}
+                >
+                  Back to projects
+                </Button>
+              </Link>
+            </Box>
             <Box className={classes['logo-container']}>
               <Image
                 alt="logo"

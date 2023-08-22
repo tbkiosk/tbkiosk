@@ -197,6 +197,10 @@
 .swiper-container {
   height: 480px;
   margin: var(--mantine-spacing-xl) 0;
+
+  @media (max-width: $mantine-breakpoint-sm) {
+    height: 240px;
+  }
 }
 
 .swiper {
@@ -222,6 +226,10 @@
   height: 480px;
   object-fit: cover;
   width: 100%;
+
+  @media (max-width: $mantine-breakpoint-sm) {
+    height: 240px;
+  }
 }
 
 .recommendation-title {
