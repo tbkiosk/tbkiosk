@@ -6,14 +6,14 @@ settings:
 
 dependencies:
   '@mantine/core':
-    specifier: 7.0.0-beta.0
-    version: 7.0.0-beta.0(@mantine/hooks@7.0.0-beta.0)(@types/react@18.2.21)(react-dom@18.2.0)(react@18.2.0)
+    specifier: 7.0.0-beta.1
+    version: 7.0.0-beta.1(@mantine/hooks@7.0.0-beta.1)(@types/react@18.2.21)(react-dom@18.2.0)(react@18.2.0)
   '@mantine/hooks':
-    specifier: 7.0.0-beta.0
-    version: 7.0.0-beta.0(react@18.2.0)
+    specifier: 7.0.0-beta.1
+    version: 7.0.0-beta.1(react@18.2.0)
   '@mantine/notifications':
-    specifier: 7.0.0-beta.0
-    version: 7.0.0-beta.0(@mantine/core@7.0.0-beta.0)(@mantine/hooks@7.0.0-beta.0)(react-dom@18.2.0)(react@18.2.0)
+    specifier: 7.0.0-beta.1
+    version: 7.0.0-beta.1(@mantine/core@7.0.0-beta.1)(@mantine/hooks@7.0.0-beta.1)(react-dom@18.2.0)(react@18.2.0)
   '@prisma/client':
     specifier: ^5.1.1
     version: 5.1.1(prisma@5.1.1)
@@ -1773,15 +1773,15 @@ packages:
       '@jridgewell/resolve-uri': 3.1.1
       '@jridgewell/sourcemap-codec': 1.4.15
 
-  /@mantine/core@7.0.0-beta.0(@mantine/hooks@7.0.0-beta.0)(@types/react@18.2.21)(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-JRn3zrVneVZ7bMeE4w0rbT4RaXvVsLz4Kg687zUKufgsZ0hEu4jG/wqy6P5t8ph7tGY0/vLmbpXxxcPMCOa9FA==}
+  /@mantine/core@7.0.0-beta.1(@mantine/hooks@7.0.0-beta.1)(@types/react@18.2.21)(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-5sqmKakoffvNIqIyn9jJQVINkX6Rg1Lk/KigJofubOxhM7B+cSjbdqR2WAoADt7Gmf9xdF7VGjptBKHqoJl8wQ==}
     peerDependencies:
-      '@mantine/hooks': 7.0.0-beta.0
+      '@mantine/hooks': 7.0.0-beta.1
       react: ^18.2.0
       react-dom: ^18.2.0
     dependencies:
       '@floating-ui/react': 0.24.8(react-dom@18.2.0)(react@18.2.0)
-      '@mantine/hooks': 7.0.0-beta.0(react@18.2.0)
+      '@mantine/hooks': 7.0.0-beta.1(react@18.2.0)
       clsx: 2.0.0
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
@@ -1793,32 +1793,32 @@ packages:
       - '@types/react'
     dev: false
 
-  /@mantine/hooks@7.0.0-beta.0(react@18.2.0):
-    resolution: {integrity: sha512-1/9D6astxgD5W1cEPB+of7ETViCn2MPy4DR9URqdSld827OA1HeLh405HWwlQCvrWfpoiNqeMjo/a4gj+11d/w==}
+  /@mantine/hooks@7.0.0-beta.1(react@18.2.0):
+    resolution: {integrity: sha512-pf4k8q8bjIFsnb6sGaFySReG+TgmNJRE03WuwGiM9AD7nqnw6JEWH45M5RjGWIjo/j2iq7DDyu2mgifzLeQkKA==}
     peerDependencies:
       react: ^18.2.0
     dependencies:
       react: 18.2.0
     dev: false
 
-  /@mantine/notifications@7.0.0-beta.0(@mantine/core@7.0.0-beta.0)(@mantine/hooks@7.0.0-beta.0)(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-NTcbCLvunb0aI4Q+ajO+8E9CkwSXDTtkyof7E7/zgaovuQk5ldavLvu9Bi8H8ptkdy5jFlppSYYCr6vOMUGpkA==}
+  /@mantine/notifications@7.0.0-beta.1(@mantine/core@7.0.0-beta.1)(@mantine/hooks@7.0.0-beta.1)(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-KwbJueqMdmyLxTm/gTrDSN5TGvTKY2klbhf1sFgamdJYe26aFmE6DOEdWKLeit0LSZEgvl+3VeOT44SyK2ecGQ==}
     peerDependencies:
-      '@mantine/core': 7.0.0-beta.0
-      '@mantine/hooks': 7.0.0-beta.0
+      '@mantine/core': 7.0.0-beta.1
+      '@mantine/hooks': 7.0.0-beta.1
       react: ^18.2.0
       react-dom: ^18.2.0
     dependencies:
-      '@mantine/core': 7.0.0-beta.0(@mantine/hooks@7.0.0-beta.0)(@types/react@18.2.21)(react-dom@18.2.0)(react@18.2.0)
-      '@mantine/hooks': 7.0.0-beta.0(react@18.2.0)
-      '@mantine/store': 7.0.0-beta.0(react@18.2.0)
+      '@mantine/core': 7.0.0-beta.1(@mantine/hooks@7.0.0-beta.1)(@types/react@18.2.21)(react-dom@18.2.0)(react@18.2.0)
+      '@mantine/hooks': 7.0.0-beta.1(react@18.2.0)
+      '@mantine/store': 7.0.0-beta.1(react@18.2.0)
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
       react-transition-group: 4.4.5(react-dom@18.2.0)(react@18.2.0)
     dev: false
 
-  /@mantine/store@7.0.0-beta.0(react@18.2.0):
-    resolution: {integrity: sha512-uZk94KZTenJZ72jrYL/Vun3LTLZwPbW3y5C0U1q9dkYEzDYzLr+TVS0ZEDgf2zyLNxQCfM6JEhbWe1hCa2RtCQ==}
+  /@mantine/store@7.0.0-beta.1(react@18.2.0):
+    resolution: {integrity: sha512-IT+5mVEMRyK2fZqFDX/3BbvaMbrkLQxUV9dRYpT+Tii5UfI2ImYAn95DtmbFQzF6mHsmSZi8puWa/J3qa6ed9w==}
     peerDependencies:
       react: ^18.2.0
     dependencies:
