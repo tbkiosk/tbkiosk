@@ -168,3 +168,84 @@
 .button__disabled {
   background-color: #ccc;
 }
+
+.detail-container {
+  display: flex;
+  gap: 64px;
+  padding: 84px 0;
+
+  @media (max-width: $mantine-breakpoint-sm) {
+    flex-direction: column;
+  }
+}
+
+.details-col {
+  flex: 1;
+}
+
+.about {
+  font-size: 32px;
+  font-weight: 500;
+  margin-bottom: 16px;
+
+  @media (max-width: $mantine-breakpoint-sm) {
+    font-size: 24px;
+  }
+}
+
+.tag-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: 32px;
+}
+
+.tag {
+  border: 1px solid #000;
+  border-radius: 8px;
+  padding: 2px 16px;
+}
+
+.attr-row {
+  display: flex;
+  gap: 32px;
+}
+
+.attr-label {
+  color: rgba(166, 169, 174, 1);
+  line-height: 36px;
+}
+
+.value {
+  line-height: 36px;
+}
+
+.desc-col {
+  flex: 1;
+}
+
+.beep {
+  align-items: center;
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.beep-logo {
+  border-radius: 50%;
+  height: 24px;
+  width: 24px;
+}
+
+.desc {
+  color: rgba(166, 169, 174, 1);
+  font-size: 14px;
+}
+
+.num-row {
+  margin-top: 48px;
+}
+
+.num-icon {
+  margin-right: 8px;
+}

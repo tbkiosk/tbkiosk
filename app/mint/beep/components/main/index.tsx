@@ -107,6 +107,67 @@ export default function Main() {
             </Box>
           </Box>
         </Box>
+        <Box className={classes['detail-container']}>
+          <Box className={classes['details-col']}>
+            <Box className={classes['about-row']}>
+              <Title className={classes.about}>ABOUT BEEP BOT #666</Title>
+            </Box>
+            <Box className={classes['tag-row']}>
+              <Box className={classes.tag}>Image</Box>
+              <Box className={classes.tag}>Interactive</Box>
+              <Box className={classes.tag}>Responsive</Box>
+            </Box>
+            <Box className={classes['attr-row']}>
+              <Box className={classes['label-col']}>
+                <Text className={classes['attr-label']}>Growth Pattern</Text>
+                <Text className={classes['attr-label']}>Fractal Depth</Text>
+                <Text className={classes['attr-label']}>Fragmentation</Text>
+                <Text className={classes['attr-label']}>Completeness</Text>
+                <Text className={classes['attr-label']}>Background</Text>
+                <Text className={classes['attr-label']}>Scale</Text>
+                <Text className={classes['attr-label']}>Paper Color</Text>
+              </Box>
+              <Box className={classes['value-col']}>
+                <Text className={classes.value}>cluster</Text>
+                <Text className={classes.value}>medium</Text>
+                <Text className={classes.value}>none</Text>
+                <Text className={classes.value}>complete</Text>
+                <Text className={classes.value}>blank</Text>
+                <Text className={classes.value}>fit</Text>
+                <Text className={classes.value}>warm</Text>
+              </Box>
+            </Box>
+            <Box className={classes['num-row']}>
+              <Text>
+                <i className={cx('fa-solid fa-table-list', classes['num-icon'])} />
+                <span>666 of 5,000</span>
+              </Text>
+            </Box>
+          </Box>
+          <Box className={classes['desc-col']}>
+            <Box className={classes['beep']}>
+              <Image
+                alt="beep"
+                className={classes['beep-logo']}
+                src="/beep-logo.jpg"
+              />
+              <Text fw={500}>BEEP BOT</Text>
+            </Box>
+            <Text
+              className={classes.desc}
+              fw={500}
+            >
+              <Text>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean consectetur eleifend sapien eget pharetra. Lorem ipsum dolor
+                sit amet, consectetur adipiscing elit. Aenean consectetur eleifend sapien eget pharetra.
+              </Text>
+              <Text>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean consectetur eleifend sapien eget pharetra. Lorem ipsum dolor
+                sit amet, consectetur adipiscing elit. Aenean consectetur eleifend sapien eget pharetra.
+              </Text>
+            </Text>
+          </Box>
+        </Box>
       </Box>
     </AppShell.Main>
   )
