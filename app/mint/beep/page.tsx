@@ -1,6 +1,7 @@
 import { AppShell } from '@mantine/core'
 
 import Header from './components/header'
+import Main from './components/main'
 
 import type { Metadata } from 'next'
 
@@ -16,6 +17,7 @@ export default function Beep() {
       padding={0}
     >
       <Header />
+      <Main />
     </AppShell>
   )
 }

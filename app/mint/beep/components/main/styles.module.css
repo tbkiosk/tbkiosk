@@ -1,0 +1,170 @@
+.main {
+  background-color: #fff;
+  color: #000;
+}
+
+.container {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 64px var(--mantine-spacing-xl) 16px;
+}
+
+.link {
+  align-items: center;
+  display: flex;
+  flex-wrap: nowrap;
+  transition-duration: 200ms;
+  transition-property: opacity;
+  transition-timing-function: ease;
+}
+
+.link:hover {
+  opacity: 0.7;
+}
+
+.back-icon {
+  font-size: 12px;
+  margin-right: 8px;
+}
+
+.mint-container {
+  align-items: center;
+  border-bottom: 1px solid #000;
+  border-top: 1px solid #000;
+  display: flex;
+  gap: 48px;
+  height: calc(500px + 84px * 2);
+  margin-top: 8px;
+  padding: 84px 0;
+
+  @media (max-width: $mantine-breakpoint-sm) {
+    flex-direction: column;
+    height: auto;
+  }
+}
+
+.beep-image {
+  aspect-ratio: 1 / 1;
+  height: 100%;
+  width: auto;
+
+  @media (max-width: $mantine-breakpoint-lg) {
+    height: 360px;
+    width: 360px;
+  }
+
+  @media (max-width: $mantine-breakpoint-sm) {
+    height: 180px;
+    width: 180px;
+  }
+}
+
+.mint-info-container {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  width: 50%;
+
+  @media (max-width: $mantine-breakpoint-sm) {
+    width: 100%;
+  }
+}
+
+.address-row {
+  align-items: center;
+  display: flex;
+  gap: 8px;
+}
+
+.name {
+  font-size: 60px;
+  font-weight: 700;
+  line-height: 86px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  @media (max-width: $mantine-breakpoint-sm) {
+    font-size: 40px;
+  }
+}
+
+.mint-info-row {
+  display: flex;
+  flex-wrap: nowrap;
+  padding: 64px 0 64px 24px;
+  gap: 64px;
+
+  @media (max-width: $mantine-breakpoint-sm) {
+    flex-direction: column;
+  }
+}
+
+.mint-price-col,
+.mint-time-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.lable {
+  color: rgba(166, 169, 174, 1);
+  font-weight: 500;
+}
+
+.time-label {
+  display: flex;
+  gap: 32px;
+}
+
+.mint-price-row {
+  align-items: center;
+  display: flex;
+  gap: 8px;
+}
+
+.coin-box {
+  align-items: center;
+  background-color: #000;
+  border-radius: 50%;
+  display: flex;
+  flex-shrink: 0;
+  height: 40px;
+  justify-content: center;
+  width: 40px;
+}
+
+.coin {
+  color: #ccc;
+  font-size: 24px;
+}
+
+.mint-price,
+.mint-time-row {
+  font-size: 36px;
+  font-weight: 700;
+  line-height: 52px;
+}
+
+.mint-time-row {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 4px;
+}
+
+.button {
+  background-color: #000;
+  color: #fff;
+  max-width: 400px;
+  transition-duration: 200ms;
+  transition-property: opacity;
+  transition-timing-function: ease;
+  width: 100%;
+}
+
+.button:hover {
+  opacity: 0.7;
+}
+
+.button__disabled {
+  background-color: #ccc;
+}

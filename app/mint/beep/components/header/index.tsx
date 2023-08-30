@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { AppShell, Container, Box, Group } from '@mantine/core'
 import { ConnectWallet } from '@thirdweb-dev/react'
 
-import LogoWithText from 'public/logo_with_text.svg'
+import LogoWithTextBlack from 'public/logo_with_text_black.svg'
 import Logo from 'public/logo.svg'
 
 import classes from './styles.module.css'
@@ -12,6 +12,7 @@ import classes from './styles.module.css'
 export default function Header() {
   return (
     <AppShell.Header
+      className={classes.header}
       withBorder={false}
       zIndex={1500}
     >
@@ -24,7 +25,7 @@ export default function Header() {
             className={classes['logo-wrapper']}
             visibleFrom="sm"
           >
-            <LogoWithText />
+            <LogoWithTextBlack />
           </Box>
           <Box
             className={classes['logo-wrapper']}
@@ -36,16 +37,6 @@ export default function Header() {
         <Group className={classes['buttons-container']}>
           <ConnectWallet
             className={classes['connect-button']}
-            // detailsBtn={() => (
-            //   <Button
-            //     color="gray"
-            //     radius="md"
-            //     size="sm"
-            //     variant="default"
-            //   >
-            //     {address ? `${address.slice(0, 6)}...${address.slice(-4)}` : ''}
-            //   </Button>
-            // )}
             theme="light"
           />
         </Group>
