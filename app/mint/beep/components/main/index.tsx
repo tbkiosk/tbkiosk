@@ -1,45 +1,12 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
-import { AppShell, Box, Image, Text, Title, Button } from '@mantine/core'
-import { useConnectionStatus } from '@thirdweb-dev/react'
+import { AppShell, Box, Image, Text, Title, Button, Group } from '@mantine/core'
 import { cx } from 'classix'
-import dayjs, { type Dayjs } from 'dayjs'
 
 import classes from './styles.module.css'
 
-const mintTime = +dayjs().add(2, 'day')
-
 export default function Main() {
-  const [now, setNow] = useState(+new Date())
-  const [minted, setMinted] = useState<null | Dayjs>(null)
-
-  const connectionStatus = useConnectionStatus()
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (+new Date() > mintTime) {
-        setNow(mintTime)
-        clearInterval(interval)
-        return
-      }
-
-      setNow(+new Date())
-    }, 1000)
-
-    return () => clearInterval(interval)
-  }, [])
-
-  const diffDay = useMemo(() => `0${dayjs(mintTime).diff(now, 'hours')}`.slice(-2), [now])
-  const diffMin = useMemo(() => `0${dayjs(mintTime).diff(now, 'minutes') % 24}`.slice(-2), [now])
-  const diffSec = useMemo(() => `0${dayjs(mintTime).diff(now, 'seconds') % 60}`.slice(-2), [now])
-
-  const onMint = () => {
-    if (connectionStatus !== 'connected') return
-    setMinted(dayjs())
-  }
-
   return (
     <AppShell.Main className={classes.main}>
       <Box className={classes.container}>
@@ -57,16 +24,16 @@ export default function Main() {
             src="/beep.jpg"
           />
           <Box className={classes['mint-info-container']}>
-            <Box className={classes['address-row']}>
-              <i className="fa-brands fa-hashnode" />
-              <Text fw={500}>0x31...45iE</Text>
-            </Box>
+            <Group>
+              <Box className={classes['address-row']}>
+                <i className="fa-brands fa-hashnode" />
+                <Text fw={500}>0x31...45iE</Text>
+              </Box>
+            </Group>
             <Box className={classes['name-row']}>
-              <Title className={classes.name}>BEEP BOT #666</Title>
+              <Title className={classes.name}>BEEP BOT</Title>
             </Box>
-            <Box className={classes['mint-status-row']}>
-              {minted ? `Minted ${minted.format('MMM DD YYYY, HH:ss')}` : 'Available to mint'}
-            </Box>
+            <Box className={classes['mint-status-row']}>Available to mint</Box>
             <Box className={classes['mint-info-row']}>
               <Box className={classes['mint-price-col']}>
                 <Text className={classes.lable}>Mint Price</Text>
@@ -74,31 +41,13 @@ export default function Main() {
                   <Box className={classes['coin-box']}>
                     <i className={cx('fa-brands fa-ethereum', classes.coin)} />
                   </Box>
-                  <Text className={classes['mint-price']}>0.01 ETH</Text>
+                  <Text className={classes['mint-price']}>Free</Text>
                 </Box>
-                <Text className={classes.lable}>12.3547 USD</Text>
-              </Box>
-              <Box className={classes['mint-time-col']}>
-                <Text className={classes.lable}>Time Remaining</Text>
-                <Box className={classes['mint-time-row']}>
-                  <span>{diffDay}</span>
-                  <span>:</span>
-                  <span>{diffMin}</span>
-                  <span>:</span>
-                  <span>{diffSec}</span>
-                </Box>
-                <Text className={cx(classes.lable, classes['time-label'])}>
-                  <span>Hour</span>
-                  <span>Min</span>
-                  <span>Sec</span>
-                </Text>
               </Box>
             </Box>
             <Box>
               <Button
-                className={cx(classes.button, connectionStatus !== 'connected' && classes['button__disabled'])}
-                disabled={connectionStatus !== 'connected'}
-                onClick={() => onMint()}
+                className={cx(classes.button)}
                 radius="xl"
                 size="sm"
               >
@@ -110,32 +59,7 @@ export default function Main() {
         <Box className={classes['detail-container']}>
           <Box className={classes['details-col']}>
             <Box className={classes['about-row']}>
-              <Title className={classes.about}>ABOUT BEEP BOT #666</Title>
-            </Box>
-            <Box className={classes['tag-row']}>
-              <Box className={classes.tag}>Image</Box>
-              <Box className={classes.tag}>Interactive</Box>
-              <Box className={classes.tag}>Responsive</Box>
-            </Box>
-            <Box className={classes['attr-row']}>
-              <Box className={classes['label-col']}>
-                <Text className={classes['attr-label']}>Growth Pattern</Text>
-                <Text className={classes['attr-label']}>Fractal Depth</Text>
-                <Text className={classes['attr-label']}>Fragmentation</Text>
-                <Text className={classes['attr-label']}>Completeness</Text>
-                <Text className={classes['attr-label']}>Background</Text>
-                <Text className={classes['attr-label']}>Scale</Text>
-                <Text className={classes['attr-label']}>Paper Color</Text>
-              </Box>
-              <Box className={classes['value-col']}>
-                <Text className={classes.value}>cluster</Text>
-                <Text className={classes.value}>medium</Text>
-                <Text className={classes.value}>none</Text>
-                <Text className={classes.value}>complete</Text>
-                <Text className={classes.value}>blank</Text>
-                <Text className={classes.value}>fit</Text>
-                <Text className={classes.value}>warm</Text>
-              </Box>
+              <Title className={classes.about}>Supply</Title>
             </Box>
             <Box className={classes['num-row']}>
               <Text>
@@ -153,19 +77,21 @@ export default function Main() {
               />
               <Text fw={500}>BEEP BOT</Text>
             </Box>
-            <Text
+            <Box
               className={classes.desc}
               fw={500}
             >
               <Text>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean consectetur eleifend sapien eget pharetra. Lorem ipsum dolor
-                sit amet, consectetur adipiscing elit. Aenean consectetur eleifend sapien eget pharetra.
+                Beep is your personal trading companion and a new take on what&apos;s possible with ERC 6551 smart NFTs. Brought to you by
+                Kiosk, Beep is a revolutionary experiment that combines the power of NFTs, DeFi, and smart account into one seamless
+                experience.
               </Text>
-              <Text>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean consectetur eleifend sapien eget pharetra. Lorem ipsum dolor
-                sit amet, consectetur adipiscing elit. Aenean consectetur eleifend sapien eget pharetra.
+              <Text mt={'md'}>
+                Beep is an automated trading bot designed to Dollar Cost Averaging (DCA) stable coins into WETH (Wrapped ETH). DCA is a
+                time-tested investment approach that involves making regular purchases over time, smoothing out the impact of price
+                volatility.
               </Text>
-            </Text>
+            </Box>
           </Box>
         </Box>
       </Box>
