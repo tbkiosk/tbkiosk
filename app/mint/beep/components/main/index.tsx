@@ -1,10 +1,233 @@
 'use client'
 
 import Link from 'next/link'
-import { AppShell, Box, Image, Text, Title, Button, Group } from '@mantine/core'
+import { AppShell, Box, Image, Text, Title, Button, Group, Loader } from '@mantine/core'
 import { cx } from 'classix'
 
 import classes from './styles.module.css'
+import { match } from 'ts-pattern'
+import { BeepContractAddress, BeepTbaImplementationAddress } from '../../../../../constants/beep'
+import { chain, explorer } from '../../../../../constants/chain'
+import { useEffect, useState } from 'react'
+import { TokenboundClient } from '@tokenbound/sdk'
+import {
+  ConnectWallet,
+  useAddress,
+  useChain,
+  useConnectionStatus,
+  useContract,
+  useOwnedNFTs,
+  useSigner,
+  useSwitchChain,
+  useTotalCirculatingSupply,
+  useTotalCount,
+  Web3Button,
+} from '@thirdweb-dev/react'
+import { notifications } from '@mantine/notifications'
+
+const CONTRACT_ADDRESS = BeepContractAddress[chain.chainId]
+const IMPLEMENTATION_ADDRESS = BeepTbaImplementationAddress[chain.chainId]
+
+type ButtonStatus = 'Loading' | 'Deployed' | 'NotDeployed' | 'Error' | 'NoToken'
+
+const useLastOwnedBeepTbaDeployedStatus = () => {
+  const address = useAddress()
+  const signer = useSigner()
+  const { contract } = useContract(CONTRACT_ADDRESS)
+  const { data, isLoading } = useOwnedNFTs(contract, address)
+  const ownedNFTs = data?.map(nft => nft.metadata.id)
+  const lastOwnedNFT = ownedNFTs?.[ownedNFTs.length - 1]
+  const tokenboundClient = new TokenboundClient({ signer: signer, chainId: chain.chainId })
+  const [accountDeployedStatus, setAccountDeployedStatus] = useState<ButtonStatus>('Loading')
+
+  const checkAccountDeployment = async (tokenId: string) => {
+    const tokenBoundAccount = tokenboundClient.getAccount({
+      tokenContract: CONTRACT_ADDRESS,
+      tokenId: tokenId,
+      implementationAddress: IMPLEMENTATION_ADDRESS,
+    })
+
+    if (signer?.provider) {
+      const contractByteCode = await signer.provider.getCode(tokenBoundAccount)
+      if (contractByteCode === '0x') {
+        setAccountDeployedStatus('NotDeployed')
+      } else {
+        setAccountDeployedStatus('Deployed')
+      }
+    }
+  }
+
+  useEffect(() => {
+    if (isLoading) return
+    if (lastOwnedNFT) {
+      checkAccountDeployment(lastOwnedNFT.toString()).catch(e => {
+        console.error(e)
+        setAccountDeployedStatus('Error')
+      })
+    } else {
+      setAccountDeployedStatus('NoToken')
+    }
+  }, [lastOwnedNFT, isLoading])
+
+  return {
+    status: accountDeployedStatus,
+    lastOwnedNFT,
+    setAccountDeployedStatus,
+  }
+}
+
+type ThirdWebError = {
+  reason: string
+}
+
+const ActionButton = () => {
+  const connectionStatus = useConnectionStatus()
+  const [tokenId, setTokenId] = useState<null | string>(null)
+  const signer = useSigner()
+  const tokenboundClient = new TokenboundClient({ signer: signer, chainId: chain.chainId })
+  const { status, lastOwnedNFT, setAccountDeployedStatus } = useLastOwnedBeepTbaDeployedStatus()
+  const [isDeploying, setIsDeploying] = useState(false)
+  const currentChain = useChain()
+  const switchChain = useSwitchChain()
+
+  const submit = async () => {
+    if (currentChain?.chainId !== chain.chainId) {
+      notifications.show({
+        title: 'Error',
+        message: `Please switch to ${chain.name} network`,
+        color: 'red',
+      })
+      return switchChain(chain.chainId)
+    }
+    setIsDeploying(true)
+    try {
+      const tokenID = tokenId ?? lastOwnedNFT
+      const tbaTransaction = await tokenboundClient.prepareCreateAccount({
+        tokenContract: CONTRACT_ADDRESS,
+        tokenId: tokenID ?? '',
+        implementationAddress: IMPLEMENTATION_ADDRESS,
+      })
+      if (signer) {
+        const tx = await signer.sendTransaction({
+          data: tbaTransaction.data,
+          value: tbaTransaction.value,
+          to: tbaTransaction.to,
+        })
+        await tx.wait()
+        setAccountDeployedStatus('Deployed')
+        notifications.show({
+          title: 'Success',
+          message: `You have deployed token bound account for Beep #${tokenID}`,
+          color: 'green',
+        })
+      }
+    } catch (e) {
+      notifications.show({
+        title: 'Error',
+        message: (e as unknown as ThirdWebError)?.reason ?? 'Failed to deploy',
+        color: 'red',
+      })
+    } finally {
+      setIsDeploying(false)
+    }
+  }
+
+  const claimNftButton = (
+    <Web3Button
+      contractAddress={CONTRACT_ADDRESS}
+      action={contract => contract.erc721.claim(1)}
+      theme="dark"
+      className={cx(classes.button)}
+      onSuccess={data => {
+        const tokenId = data[0].id.toNumber()
+        setTokenId(tokenId.toString())
+        setAccountDeployedStatus('NotDeployed')
+        notifications.show({
+          title: 'Success',
+          message: `You have successfully minted Beep #${tokenId}`,
+          color: 'green',
+        })
+      }}
+      onError={e => {
+        notifications.show({
+          title: 'Error',
+          message: (e as unknown as ThirdWebError).reason,
+          color: 'red',
+        })
+      }}
+    >
+      Mint
+    </Web3Button>
+  )
+
+  if (connectionStatus !== 'connected') {
+    return (
+      <ConnectWallet
+        theme="light"
+        btnTitle="Connect to Mint"
+        className={cx(classes.button)}
+      />
+    )
+  }
+
+  return (
+    <Box mt={10}>
+      {match(status)
+        .with('Loading', () => (
+          <Button
+            className={cx(classes.button, classes.button__hide_loading_overlay)}
+            loading={true}
+          />
+        ))
+        .with('Deployed', () => claimNftButton)
+        .with('NotDeployed', () => (
+          <Button
+            onClick={submit}
+            className={cx(classes.button, classes.button__hide_loading_overlay)}
+            loading={isDeploying}
+          >
+            Deploy Token Bound Account
+          </Button>
+        ))
+        .with('Error', () => <div>Something Went wrong while trying to fetch data</div>)
+        .with('NoToken', () => claimNftButton)
+        .exhaustive()}
+    </Box>
+  )
+}
+
+const SupplyInfo = () => {
+  const { contract } = useContract(CONTRACT_ADDRESS)
+  const { data: totalCirculatingSupply, isLoading: isTotalCirculatingSupplyLoading } = useTotalCirculatingSupply(contract)
+  const { data: totalCount, isLoading: isTotalCountLoading } = useTotalCount(contract)
+
+  if (isTotalCirculatingSupplyLoading || isTotalCountLoading)
+    return (
+      <Loader
+        type="bars"
+        color={'dark'}
+        size={'sm'}
+      />
+    )
+
+  return (
+    <Text>
+      <i className={cx('fa-solid fa-table-list', classes['num-icon'])} />
+      <span>
+        {totalCirculatingSupply?.toString()} of {totalCount?.toString()}
+      </span>
+    </Text>
+  )
+}
+
+const maskAddress = (address: string) => {
+  return `${address.slice(0, 6)}...${address.slice(-4)}`
+}
+
+const openContractInExplorer = (address: string) => {
+  const explorerBase = explorer[chain.chainId]
+  window.open(`${explorerBase}/address/${address}`, '_blank')
+}
 
 export default function Main() {
   return (
@@ -25,9 +248,12 @@ export default function Main() {
           />
           <Box className={classes['mint-info-container']}>
             <Group>
-              <Box className={classes['address-row']}>
+              <Box
+                className={classes['address-row']}
+                onClick={() => openContractInExplorer(CONTRACT_ADDRESS)}
+              >
                 <i className="fa-brands fa-hashnode" />
-                <Text fw={500}>0x31...45iE</Text>
+                <Text fw={500}>{maskAddress(CONTRACT_ADDRESS)}</Text>
               </Box>
             </Group>
             <Box className={classes['name-row']}>
@@ -45,15 +271,7 @@ export default function Main() {
                 </Box>
               </Box>
             </Box>
-            <Box>
-              <Button
-                className={cx(classes.button)}
-                radius="xl"
-                size="sm"
-              >
-                Mint
-              </Button>
-            </Box>
+            <ActionButton />
           </Box>
         </Box>
         <Box className={classes['detail-container']}>
@@ -62,10 +280,7 @@ export default function Main() {
               <Title className={classes.about}>Supply</Title>
             </Box>
             <Box className={classes['num-row']}>
-              <Text>
-                <i className={cx('fa-solid fa-table-list', classes['num-icon'])} />
-                <span>666 of 5,000</span>
-              </Text>
+              <SupplyInfo />
             </Box>
           </Box>
           <Box className={classes['desc-col']}>
