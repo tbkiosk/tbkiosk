@@ -1,0 +1,27 @@
+.main {
+  background-color: #000;
+  height: 100%;
+}
+
+.container {
+  color: #fff;
+  padding: 64px var(--mantine-spacing-xl) var(--mantine-spacing-xl);
+}
+
+.title {
+  font-size: 24px;
+  line-height: 36px;
+  margin-bottom: 24px;
+}
+
+.beeps-container {
+  display: flex;
+  gap: 16px;
+  min-height: 240px;
+}
+
+.nft-image {
+  height: 286px;
+  width: 286px;
+  object-fit: cover;
+}
