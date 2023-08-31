@@ -1,14 +1,9 @@
 'use client'
 
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { AppShell, Box, Image, Text, Title, Button, Group, Loader } from '@mantine/core'
-import { cx } from 'classix'
-
-import classes from './styles.module.css'
-import { match } from 'ts-pattern'
-import { BeepContractAddress, BeepTbaImplementationAddress } from '../../../../../constants/beep'
-import { chain, explorer } from '../../../../../constants/chain'
-import { useEffect, useState } from 'react'
+import { notifications } from '@mantine/notifications'
 import { TokenboundClient } from '@tokenbound/sdk'
 import {
   ConnectWallet,
@@ -23,7 +18,13 @@ import {
   useTotalCount,
   Web3Button,
 } from '@thirdweb-dev/react'
-import { notifications } from '@mantine/notifications'
+import { match } from 'ts-pattern'
+import { cx } from 'classix'
+
+import classes from './styles.module.css'
+
+import { BeepContractAddress, BeepTbaImplementationAddress } from 'constants/beep'
+import { chain, explorer } from 'constants/chain'
 
 const CONTRACT_ADDRESS = BeepContractAddress[chain.chainId]
 const IMPLEMENTATION_ADDRESS = BeepTbaImplementationAddress[chain.chainId]
@@ -288,7 +289,7 @@ export default function Main() {
               <Image
                 alt="beep"
                 className={classes['beep-logo']}
-                src="/beep-logo.jpg"
+                src="/beep-avatar.jpg"
               />
               <Text fw={500}>BEEP BOT</Text>
             </Box>
