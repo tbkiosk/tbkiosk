@@ -27,14 +27,18 @@
 
 .logo-wrapper {
   align-items: center;
+  background-clip: text;
+  background-image: linear-gradient(90deg, rgba(120, 237, 193, 1), rgba(76, 214, 162, 1), rgba(36, 199, 137, 1), rgba(0, 163, 101, 1));
+  background-size: 100%;
   display: flex;
+  font-family: gridular, sans-serif;
+  font-size: 36px;
   justify-content: center;
-}
-
-.logo {
-  height: 50px;
-  object-fit: contain;
-  width: 114px;
+  letter-spacing: 4px;
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -moz-text-fill-color: transparent;
 }
 
 .connect-button {
