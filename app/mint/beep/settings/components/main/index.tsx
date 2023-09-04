@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect } from 'react'
+import Link from 'next/link'
 import { AppShell, Box, Container, Title, LoadingOverlay, Image } from '@mantine/core'
 import { notifications } from '@mantine/notifications'
 import { useChainId, useAddress, useContract, useOwnedNFTs } from '@thirdweb-dev/react'
@@ -47,12 +48,16 @@ function Beeps({ chainId }: { chainId: number }) {
         visible={isLoading}
       />
       {data?.map(_nft => (
-        <Image
-          alt={`${_nft.metadata.name}`}
-          className={classes['nft-image']}
+        <Link
+          href={`/mint/beep/${_nft.metadata.id}`}
           key={_nft.metadata.id}
-          src={_nft.metadata.image}
-        />
+        >
+          <Image
+            alt={`${_nft.metadata.name}`}
+            className={classes['nft-image']}
+            src={_nft.metadata.image}
+          />
+        </Link>
       ))}
     </Box>
   )
