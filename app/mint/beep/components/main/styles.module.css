@@ -287,9 +287,9 @@
 
 .category {
   padding: 4px 16px;
-  background: #060C0C;
+  background: #060c0c;
   border-radius: 8px;
-  color: #F4F0E5;
+  color: #f4f0e5;
   font-size: 14px;
 }
 
@@ -303,7 +303,7 @@
 }
 
 .contract-info-label {
-  color: #A6A9AE;
+  color: #a6a9ae;
   font-size: 16px;
   font-weight: 500;
   min-width: 130px;

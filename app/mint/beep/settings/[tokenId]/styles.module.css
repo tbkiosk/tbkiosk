@@ -1,0 +1,78 @@
+.main {
+  background-color: #000;
+  height: 100%;
+}
+
+.container {
+  color: #fff;
+  margin: 0 auto;
+  max-width: 1440px;
+  padding: 64px var(--mantine-spacing-xl) var(--mantine-spacing-xl);
+}
+
+.link {
+  align-items: center;
+  display: flex;
+  flex-wrap: nowrap;
+  transition-duration: 200ms;
+  transition-property: opacity;
+  transition-timing-function: ease;
+}
+
+.link:hover {
+  opacity: 0.7;
+}
+
+.back-icon {
+  font-size: 12px;
+  margin-right: 8px;
+}
+
+.content-container {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 32px;
+  justify-content: center;
+  padding: 64px;
+}
+
+.nft-image {
+  height: 534px;
+  object-fit: cover;
+  width: 534px;
+}
+
+.settings-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  height: 534px;
+  overflow: hidden;
+  width: 534px;
+}
+
+.title-row {
+  align-items: center;
+  display: flex;
+  gap: 8px;
+  justify-content: space-between;
+}
+
+.title {
+  font-size: 36px;
+  font-weight: 700;
+  line-height: 52px;
+}
+
+.description-row {
+  align-items: center;
+  display: flex;
+  gap: 16px;
+}
+
+.no {
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 26px;
+}

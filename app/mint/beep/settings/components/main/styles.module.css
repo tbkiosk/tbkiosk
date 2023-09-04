@@ -22,11 +22,11 @@
 
 .nft-image {
   height: 286px;
-  width: 286px;
   object-fit: cover;
   transition-duration: 200ms;
   transition-property: transform;
   transition-timing-function: ease;
+  width: 286px;
 }
 
 .nft-image:hover {
