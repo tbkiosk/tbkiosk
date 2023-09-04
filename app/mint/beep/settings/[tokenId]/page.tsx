@@ -10,7 +10,7 @@ import classes from './styles.module.css'
 export default function BeepSettingsByTokenId({ params }: { params: { tokenId: string } }) {
   useQuery<{ name: string; description: string; image: string }>({
     enabled: false,
-    queryKey: ['project-detail'],
+    queryKey: ['token-meta'],
     queryFn: async () => {
       const res = await fetch(`https://unitba-249bfef801d8.herokuapp.com/api/meta/${params.tokenId}`)
 
