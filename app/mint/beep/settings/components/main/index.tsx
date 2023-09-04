@@ -49,7 +49,7 @@ function Beeps({ chainId }: { chainId: number }) {
       />
       {data?.map(_nft => (
         <Link
-          href={`/mint/beep/${_nft.metadata.id}`}
+          href={`/mint/beep/settings/${_nft.metadata.id}`}
           key={_nft.metadata.id}
         >
           <Image
