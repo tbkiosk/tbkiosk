@@ -11,7 +11,7 @@
 
 .link {
   align-items: center;
-  display: flex;
+  display: inline-flex;
   flex-wrap: nowrap;
   transition-duration: 200ms;
   transition-property: opacity;
@@ -30,7 +30,6 @@
 .mint-container {
   align-items: center;
   border-bottom: 1px solid #000;
-  border-top: 1px solid #000;
   display: flex;
   gap: 48px;
   height: calc(500px + 84px * 2);
@@ -171,6 +170,7 @@
   border-radius: 45px !important;
   height: 60px !important;
 }
+
 .button svg {
   width: 24px !important;
   height: 24px !important;
@@ -201,7 +201,7 @@
 .detail-container {
   display: flex;
   gap: 64px;
-  padding: 84px 0;
+  padding: 40px 0 84px;
 
   @media (max-width: $mantine-breakpoint-sm) {
     flex-direction: column;
@@ -251,6 +251,11 @@
 
 .desc-col {
   flex: 1;
+  margin-top: 24px;
+
+  @media (max-width: $mantine-breakpoint-sm) {
+    margin-top: 0;
+  }
 }
 
 .beep {
@@ -269,6 +274,7 @@
 .desc {
   color: rgba(166, 169, 174, 1);
   font-size: 14px;
+  font-weight: 500;
 }
 
 .num-row {
@@ -277,4 +283,34 @@
 
 .num-icon {
   margin-right: 8px;
+}
+
+.category {
+  padding: 4px 16px;
+  background: #060C0C;
+  border-radius: 8px;
+  color: #F4F0E5;
+  font-size: 14px;
+}
+
+.contract-info {
+  display: grid;
+  gap: 16px;
+}
+
+.contract-info-item {
+  gap: 48px;
+}
+
+.contract-info-label {
+  color: #A6A9AE;
+  font-size: 16px;
+  font-weight: 500;
+  min-width: 130px;
+}
+
+.contract-info-value {
+  color: #000;
+  font-size: 16px;
+  font-weight: 500;
 }
