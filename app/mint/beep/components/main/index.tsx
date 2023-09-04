@@ -21,10 +21,12 @@ import {
 import { match } from 'ts-pattern'
 import { cx } from 'classix'
 
-import classes from './styles.module.css'
-
 import { BeepContractAddress, BeepTbaImplementationAddress } from 'constants/beep'
 import { chain, explorer } from 'constants/chain'
+
+import { maskAddress } from 'utils/address'
+
+import classes from './styles.module.css'
 
 const CONTRACT_ADDRESS = BeepContractAddress[chain.chainId]
 const IMPLEMENTATION_ADDRESS = BeepTbaImplementationAddress[chain.chainId]
@@ -219,10 +221,6 @@ const SupplyInfo = () => {
       </span>
     </Text>
   )
-}
-
-const maskAddress = (address: string) => {
-  return `${address.slice(0, 6)}...${address.slice(-4)}`
 }
 
 const openContractInExplorer = (address: string) => {
