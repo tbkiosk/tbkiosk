@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import Link from 'next/link'
 import { AppShell, Box, Image, Text, Title, Button, Group, Center, SimpleGrid, Loader } from '@mantine/core'
 import { useClipboard } from '@mantine/hooks'
@@ -8,11 +8,9 @@ import { notifications } from '@mantine/notifications'
 import { TokenboundClient } from '@tokenbound/sdk'
 import {
   ConnectWallet,
-  useAddress,
   useChain,
   useConnectionStatus,
   useContract,
-  useOwnedNFTs,
   useSigner,
   useSwitchChain,
   useTotalCirculatingSupply,
@@ -25,13 +23,12 @@ import { BeepContractAddress, BeepTbaImplementationAddress } from 'constants/bee
 import { chain } from 'constants/chain'
 
 import { maskAddress } from 'utils/address'
+import { useOwnedBeepTbaDeployedStatus } from 'hooks/use_owned_beep_tba_deployed_status'
 
 import classes from './styles.module.css'
 
 const CONTRACT_ADDRESS = BeepContractAddress[chain.chainId]
 const IMPLEMENTATION_ADDRESS = BeepTbaImplementationAddress[chain.chainId]
-
-type ButtonStatus = 'Loading' | 'Deployed' | 'NotDeployed' | 'Error' | 'NoToken'
 
 const ArrowRight = () => (
   <svg
@@ -60,52 +57,6 @@ const ArrowRight = () => (
   </svg>
 )
 
-const useLastOwnedBeepTbaDeployedStatus = () => {
-  const address = useAddress()
-  const signer = useSigner()
-  const { contract } = useContract(CONTRACT_ADDRESS)
-  const { data, isLoading } = useOwnedNFTs(contract, address)
-  const ownedNFTs = data?.map(nft => nft.metadata.id)
-  const lastOwnedNFT = ownedNFTs?.[ownedNFTs.length - 1]
-  const tokenboundClient = new TokenboundClient({ signer: signer, chainId: chain.chainId })
-  const [accountDeployedStatus, setAccountDeployedStatus] = useState<ButtonStatus>('Loading')
-
-  const checkAccountDeployment = async (tokenId: string) => {
-    const tokenBoundAccount = tokenboundClient.getAccount({
-      tokenContract: CONTRACT_ADDRESS,
-      tokenId: tokenId,
-      implementationAddress: IMPLEMENTATION_ADDRESS,
-    })
-
-    if (signer?.provider) {
-      const contractByteCode = await signer.provider.getCode(tokenBoundAccount)
-      if (contractByteCode === '0x') {
-        setAccountDeployedStatus('NotDeployed')
-      } else {
-        setAccountDeployedStatus('Deployed')
-      }
-    }
-  }
-
-  useEffect(() => {
-    if (isLoading) return
-    if (lastOwnedNFT) {
-      checkAccountDeployment(lastOwnedNFT.toString()).catch(e => {
-        console.error(e)
-        setAccountDeployedStatus('Error')
-      })
-    } else {
-      setAccountDeployedStatus('NoToken')
-    }
-  }, [lastOwnedNFT, isLoading])
-
-  return {
-    status: accountDeployedStatus,
-    lastOwnedNFT,
-    setAccountDeployedStatus,
-  }
-}
-
 type ThirdWebError = {
   reason: string
 }
@@ -115,7 +66,7 @@ const ActionButton = () => {
   const [tokenId, setTokenId] = useState<null | string>(null)
   const signer = useSigner()
   const tokenboundClient = new TokenboundClient({ signer: signer, chainId: chain.chainId })
-  const { status, lastOwnedNFT, setAccountDeployedStatus } = useLastOwnedBeepTbaDeployedStatus()
+  const { status, nft: lastOwnedNFT, setAccountDeployedStatus } = useOwnedBeepTbaDeployedStatus({ lastOwned: true })
   const [isDeploying, setIsDeploying] = useState(false)
   const currentChain = useChain()
   const switchChain = useSwitchChain()
