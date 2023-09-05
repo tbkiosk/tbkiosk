@@ -5,6 +5,8 @@ import { AppShell, Container, Box, Image, Text, Switch, CopyButton, Button, Load
 import { useQuery } from '@tanstack/react-query'
 import { cx } from 'classix'
 
+import { useOwnedBeepTbaDeployedStatus } from 'hooks/use_owned_beep_tba_deployed_status'
+
 import classes from './styles.module.css'
 
 export default function BeepSettingsByTokenId({ params }: { params: { tokenId: string } }) {
@@ -23,10 +25,15 @@ export default function BeepSettingsByTokenId({ params }: { params: { tokenId: s
     },
   })
 
+  useOwnedBeepTbaDeployedStatus({ tokenId: params.tokenId })
+
   return (
     <AppShell.Main className={classes.main}>
       <Container className={classes.container}>
-        <LoadingOverlay visible={isLoading} />
+        <LoadingOverlay
+          overlayProps={{ backgroundOpacity: 0 }}
+          visible={isLoading}
+        />
         <Box className={classes['link-container']}>
           <Link
             className={classes.link}

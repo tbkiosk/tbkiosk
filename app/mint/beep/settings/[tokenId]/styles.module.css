@@ -6,6 +6,7 @@
 .container {
   background-color: #000;
   color: #fff;
+  height: 100%;
   margin: 0 auto;
   max-width: 1440px;
   padding: 64px var(--mantine-spacing-xl) var(--mantine-spacing-xl);
