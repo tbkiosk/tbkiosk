@@ -2,11 +2,8 @@ import { useState, useEffect } from 'react'
 import { useAddress, useSigner, useContract, useOwnedNFTs } from '@thirdweb-dev/react'
 import { TokenboundClient } from '@tokenbound/sdk'
 
-import { BeepContractAddress, BeepTbaImplementationAddress } from 'constants/beep'
+import { CONTRACT_ADDRESS, IMPLEMENTATION_ADDRESS } from 'constants/beep'
 import { chain } from 'constants/chain'
-
-const CONTRACT_ADDRESS = BeepContractAddress[chain.chainId]
-const IMPLEMENTATION_ADDRESS = BeepTbaImplementationAddress[chain.chainId]
 
 type ButtonStatus = 'Loading' | 'Deployed' | 'NotDeployed' | 'Error' | 'NoToken'
 
