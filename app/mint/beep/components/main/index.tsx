@@ -90,7 +90,7 @@ export default function Main() {
             <Image
               alt="beep"
               className={classes['beep-image']}
-              src="/beep.jpg"
+              src="/beep.png"
             />
             <Box className={classes['mint-info-container']}>
               <Group gap={8}>
