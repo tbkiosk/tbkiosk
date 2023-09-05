@@ -4,10 +4,12 @@
 }
 
 .container {
+  background-color: #000;
   color: #fff;
   margin: 0 auto;
   max-width: 1440px;
   padding: 64px var(--mantine-spacing-xl) var(--mantine-spacing-xl);
+  position: relative;
 }
 
 .link {
@@ -37,10 +39,21 @@
   padding: 64px;
 }
 
-.nft-image {
+.nft-image-container {
   height: 534px;
-  object-fit: cover;
   width: 534px;
+
+  @media (max-width: $mantine-breakpoint-sm) {
+    height: 256px;
+    width: 256px;
+  }
+}
+
+.nft-image {
+  border-radius: 16px;
+  height: 100%;
+  object-fit: cover;
+  width: 100%;
 }
 
 .settings-container {
