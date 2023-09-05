@@ -98,8 +98,8 @@
 .mint-info-row {
   display: flex;
   flex-wrap: nowrap;
-  margin-top: 96px;
-  margin-bottom: 27px;
+  margin-top: 92px;
+  margin-bottom: 20px;
 
   @media (max-width: $mantine-breakpoint-sm) {
     flex-direction: column;
