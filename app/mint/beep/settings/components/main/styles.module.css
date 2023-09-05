@@ -4,6 +4,7 @@
 }
 
 .container {
+  background-color: #000;
   color: #fff;
   padding: 64px var(--mantine-spacing-xl) var(--mantine-spacing-xl);
 }
@@ -16,8 +17,13 @@
 
 .beeps-container {
   display: flex;
+  flex-wrap: wrap;
   gap: 16px;
   min-height: 240px;
+}
+
+.nft-image-container {
+  position: relative;
 }
 
 .nft-image {
@@ -27,8 +33,36 @@
   transition-property: transform;
   transition-timing-function: ease;
   width: 286px;
+
+  @media (max-width: $mantine-breakpoint-sm) {
+    aspect-ratio: 1;
+    height: auto;
+    width: 100%;
+  }
 }
 
 .nft-image:hover {
   transform: scale(1.01);
+}
+
+.account-info-container {
+  height: 100%;
+  inset: 0;
+  position: absolute;
+  width: 100%;
+}
+
+.account-info-text {
+  font-family: gridular, sans-serif;
+  text-shadow: 0px 0px 10px rgba(0, 255, 255, 0.75);
+}
+
+.id {
+  margin-left: 10%;
+  margin-top: 30%;
+}
+
+.switch-icon {
+  margin-left: 10%;
+  width: 52px;
 }
