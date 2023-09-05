@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { AppShell, Box, Image, Text, Title, Button, Group, Center, SimpleGrid } from '@mantine/core'
+import { AppShell, Box, Image, Text, Title, Button, Group, Center, SimpleGrid, Loader } from '@mantine/core'
 import { useClipboard } from '@mantine/hooks'
 import { notifications } from '@mantine/notifications'
 import { TokenboundClient } from '@tokenbound/sdk'
@@ -15,6 +15,7 @@ import {
   useOwnedNFTs,
   useSigner,
   useSwitchChain,
+  useTotalCirculatingSupply,
   Web3Button,
 } from '@thirdweb-dev/react'
 import { match } from 'ts-pattern'
@@ -227,6 +228,22 @@ const ActionButton = () => {
 
 const Category = ({ label }: { label: string }) => <Box className={classes.category}>{label}</Box>
 
+const MintedCount = () => {
+  const { contract } = useContract(CONTRACT_ADDRESS)
+  const { data, isLoading } = useTotalCirculatingSupply(contract)
+
+  if (isLoading) {
+    return (
+      <Loader
+        color="dark"
+        type="bars"
+        size={'xs'}
+      />
+    )
+  }
+  return <Text fw={500}>{data?.toString()} minted</Text>
+}
+
 export default function Main() {
   const clipboard = useClipboard()
 
@@ -373,13 +390,8 @@ export default function Main() {
                 </Box>
               </Box>
               <ActionButton />
-              <Center>
-                <Text
-                  fw={500}
-                  mt={4}
-                >
-                  666 minted
-                </Text>
+              <Center mt={4}>
+                <MintedCount />
               </Center>
             </Box>
           </Box>
