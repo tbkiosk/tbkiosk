@@ -19,16 +19,13 @@ import {
 import { match } from 'ts-pattern'
 import { cx } from 'classix'
 
-import { BeepContractAddress, BeepTbaImplementationAddress } from 'constants/beep'
+import { CONTRACT_ADDRESS, IMPLEMENTATION_ADDRESS } from 'constants/beep'
 import { chain } from 'constants/chain'
 
 import { maskAddress } from 'utils/address'
 import { useOwnedBeepTbaDeployedStatus } from 'hooks/use_owned_beep_tba_deployed_status'
 
 import classes from './styles.module.css'
-
-const CONTRACT_ADDRESS = BeepContractAddress[chain.chainId]
-const IMPLEMENTATION_ADDRESS = BeepTbaImplementationAddress[chain.chainId]
 
 const ArrowRight = () => (
   <svg
