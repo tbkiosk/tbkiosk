@@ -2,30 +2,19 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { AppShell, Box, Image, Text, Title, Button, Group, Center, SimpleGrid, Loader } from '@mantine/core'
-import { useClipboard } from '@mantine/hooks'
+import { AppShell, Box, Image, Text, Title, Group, Center, SimpleGrid, Loader } from '@mantine/core'
+import { useClipboard, useDisclosure } from '@mantine/hooks'
 import { notifications } from '@mantine/notifications'
-import { TokenboundClient } from '@tokenbound/sdk'
-import {
-  ConnectWallet,
-  useChain,
-  useConnectionStatus,
-  useContract,
-  useSigner,
-  useSwitchChain,
-  useTotalCirculatingSupply,
-  Web3Button,
-} from '@thirdweb-dev/react'
-import { match } from 'ts-pattern'
+import { useContract, useTotalCirculatingSupply } from '@thirdweb-dev/react'
 import { cx } from 'classix'
 
-import { CONTRACT_ADDRESS, IMPLEMENTATION_ADDRESS } from 'constants/beep'
-import { chain } from 'constants/chain'
+import { CONTRACT_ADDRESS } from 'constants/beep'
 
 import { maskAddress } from 'utils/address'
-import { useOwnedBeepTbaDeployedStatus } from 'hooks/use_owned_beep_tba_deployed_status'
 
 import classes from './styles.module.css'
+import { DeployModal } from 'app/mint/beep/components/main/DeployModal'
+import { MintButton } from 'app/mint/beep/components/main/MintButton'
 
 const ArrowRight = () => (
   <svg
@@ -54,126 +43,6 @@ const ArrowRight = () => (
   </svg>
 )
 
-type ThirdWebError = {
-  reason: string
-}
-
-const ActionButton = () => {
-  const connectionStatus = useConnectionStatus()
-  const [tokenId, setTokenId] = useState<null | string>(null)
-  const signer = useSigner()
-  const tokenboundClient = new TokenboundClient({ signer: signer, chainId: chain.chainId })
-  const { status, nft: lastOwnedNFT, setAccountDeployedStatus } = useOwnedBeepTbaDeployedStatus({ lastOwned: true })
-  const [isDeploying, setIsDeploying] = useState(false)
-  const currentChain = useChain()
-  const switchChain = useSwitchChain()
-
-  const submit = async () => {
-    if (currentChain?.chainId !== chain.chainId) {
-      notifications.show({
-        title: 'Error',
-        message: `Please switch to ${chain.name} network`,
-        color: 'red',
-      })
-      return switchChain(chain.chainId)
-    }
-    setIsDeploying(true)
-    try {
-      const tokenID = tokenId ?? lastOwnedNFT
-      const tbaTransaction = await tokenboundClient.prepareCreateAccount({
-        tokenContract: CONTRACT_ADDRESS,
-        tokenId: tokenID ?? '',
-        implementationAddress: IMPLEMENTATION_ADDRESS,
-      })
-      if (signer) {
-        const tx = await signer.sendTransaction({
-          data: tbaTransaction.data,
-          value: tbaTransaction.value,
-          to: tbaTransaction.to,
-        })
-        await tx.wait()
-        setAccountDeployedStatus('Deployed')
-        notifications.show({
-          title: 'Success',
-          message: `You have deployed token bound account for Beep #${tokenID}`,
-          color: 'green',
-        })
-      }
-    } catch (e) {
-      notifications.show({
-        title: 'Error',
-        message: (e as unknown as ThirdWebError)?.reason ?? 'Failed to deploy',
-        color: 'red',
-      })
-    } finally {
-      setIsDeploying(false)
-    }
-  }
-
-  const claimNftButton = (
-    <Web3Button
-      contractAddress={CONTRACT_ADDRESS}
-      action={contract => contract.erc721.claim(1)}
-      theme="dark"
-      className={cx(classes.button)}
-      onSuccess={data => {
-        const tokenId = data[0].id.toNumber()
-        setTokenId(tokenId.toString())
-        setAccountDeployedStatus('NotDeployed')
-        notifications.show({
-          title: 'Success',
-          message: `You have successfully minted Beep #${tokenId}`,
-          color: 'green',
-        })
-      }}
-      onError={e => {
-        notifications.show({
-          title: 'Error',
-          message: (e as unknown as ThirdWebError).reason,
-          color: 'red',
-        })
-      }}
-    >
-      Mint
-    </Web3Button>
-  )
-
-  if (connectionStatus !== 'connected') {
-    return (
-      <ConnectWallet
-        theme="light"
-        btnTitle="Connect to Mint"
-        className={cx(classes.button)}
-      />
-    )
-  }
-
-  return (
-    <Box mt={10}>
-      {match(status)
-        .with('Loading', () => (
-          <Button
-            className={cx(classes.button, classes.button__hide_loading_overlay)}
-            loading={true}
-          />
-        ))
-        .with('Deployed', () => claimNftButton)
-        .with('NotDeployed', () => (
-          <Button
-            onClick={submit}
-            className={cx(classes.button, classes.button__hide_loading_overlay)}
-            loading={isDeploying}
-          >
-            Deploy Token Bound Account
-          </Button>
-        ))
-        .with('Error', () => <div>Something Went wrong while trying to fetch data</div>)
-        .with('NoToken', () => claimNftButton)
-        .exhaustive()}
-    </Box>
-  )
-}
-
 const Category = ({ label }: { label: string }) => <Box className={classes.category}>{label}</Box>
 
 const MintedCount = () => {
@@ -193,7 +62,9 @@ const MintedCount = () => {
 }
 
 export default function Main() {
+  const [tokenId, setTokenId] = useState<null | string>(null)
   const clipboard = useClipboard()
+  const [isModalOpen, modalHandler] = useDisclosure(false)
 
   const copyContractAddress = () => {
     clipboard.copy(CONTRACT_ADDRESS)
@@ -337,7 +208,12 @@ export default function Main() {
                   <Text className={classes['mint-price-usd']}>0.00 USD</Text>
                 </Box>
               </Box>
-              <ActionButton />
+              <MintButton
+                onSuccess={tokenId => {
+                  setTokenId(tokenId)
+                  modalHandler.open()
+                }}
+              />
               <Center mt={4}>
                 <MintedCount />
               </Center>
@@ -516,6 +392,11 @@ export default function Main() {
           </Box>
         </Box>
       </Box>
+      <DeployModal
+        isOpen={isModalOpen}
+        onClose={modalHandler.close}
+        tokenId={tokenId}
+      />
     </AppShell.Main>
   )
 }
