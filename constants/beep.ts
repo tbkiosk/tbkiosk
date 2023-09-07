@@ -1,15 +1,15 @@
-import { Sepolia, Ethereum } from '@thirdweb-dev/chains'
+import { Goerli, Ethereum } from '@thirdweb-dev/chains'
 
 import { chain } from 'constants/chain'
 
 export const BeepContractAddress = {
-  [Sepolia.chainId]: '0x79E0a7769F078A75F5AeFBCDd98cD94700329D6C',
-  [Ethereum.chainId]: '0x79E0a7769F078A75F5AeFBCDd98cD94700329D6C',
+  [Goerli.chainId]: '0xd600e1a922fFF055Dfd7ce298DB30Bf3AD377F7c',
+  [Ethereum.chainId]: '0xd600e1a922fFF055Dfd7ce298DB30Bf3AD377F7c',
 } as { [key: number]: `0x${string}` }
 
 export const BeepTbaImplementationAddress = {
-  [Sepolia.chainId]: '0xd9a326f0ba21ef25663a0673874ee944658ba41b',
-  [Ethereum.chainId]: '0xd9a326f0ba21ef25663a0673874ee944658ba41b',
+  [Goerli.chainId]: '0x55830df01D89923477F6650b39c65a03f3BB2c8c',
+  [Ethereum.chainId]: '0x55830df01D89923477F6650b39c65a03f3BB2c8c',
 } as { [key: number]: `0x${string}` }
 
 // TODO: Do not hardcode contract address and implementation address
