@@ -47,6 +47,7 @@
   display: flex;
   flex-direction: column;
   max-width: 528px;
+  padding: 32px 0;
 }
 
 .mint-beep-title {
@@ -73,6 +74,7 @@
 }
 
 .mint-beep-link-container {
+  align-items: flex-start;
   display: flex;
   flex-direction: column-reverse;
   flex-grow: 1;
@@ -80,6 +82,7 @@
 }
 
 .mint-beep-link {
+  padding: 0 48px;
   transition-duration: 200ms;
   transition-property: opacity;
   transition-timing-function: ease;
