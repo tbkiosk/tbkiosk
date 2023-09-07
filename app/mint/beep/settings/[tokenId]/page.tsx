@@ -1,11 +1,21 @@
 'use client'
 
+import { useMemo } from 'react'
 import Link from 'next/link'
 import { AppShell, Container, Box, Image, Text, Switch, CopyButton, Button, LoadingOverlay } from '@mantine/core'
 import { useQuery } from '@tanstack/react-query'
+import { useSigner } from '@thirdweb-dev/react'
+import { TokenboundClient } from '@tokenbound/sdk'
+import { match } from 'ts-pattern'
 import { cx } from 'classix'
 
+import Undeployed from './components/undeployed'
+
 import { useOwnedBeepTbaDeployedStatus } from 'hooks/use_owned_beep_tba_deployed_status'
+import { maskAddress } from 'utils/address'
+
+import { CONTRACT_ADDRESS, IMPLEMENTATION_ADDRESS } from 'constants/beep'
+import { chain } from 'constants/chain'
 
 import classes from './styles.module.css'
 
@@ -25,7 +35,19 @@ export default function BeepSettingsByTokenId({ params }: { params: { tokenId: s
     },
   })
 
-  useOwnedBeepTbaDeployedStatus({ tokenId: params.tokenId })
+  const { status } = useOwnedBeepTbaDeployedStatus({ tokenId: params.tokenId })
+
+  const signer = useSigner()
+
+  const tokenboundClient = new TokenboundClient({ signer: signer, chainId: chain.chainId })
+
+  const tbaAddresss = useMemo(() => {
+    return tokenboundClient.getAccount({
+      tokenContract: CONTRACT_ADDRESS,
+      tokenId: params.tokenId ?? '',
+      implementationAddress: IMPLEMENTATION_ADDRESS,
+    })
+  }, [params.tokenId])
 
   return (
     <AppShell.Main className={classes.main}>
@@ -68,21 +90,36 @@ export default function BeepSettingsByTokenId({ params }: { params: { tokenId: s
               </Box>
               <Box className={classes['description-row']}>
                 <Text className={classes.no}>{meta.name}</Text>
-                <CopyButton value="https://mantine.dev">
-                  {({ copy, copied }) => (
-                    <Button
-                      className={classes['copy-button']}
-                      color="rgba(166, 169, 174, 1)"
-                      onClick={copy}
-                      radius="xl"
-                      rightSection={copied ? <i className="fa-solid fa-check" /> : <i className="fa-regular fa-copy" />}
-                      size="xs"
-                      variant="outline"
-                    >
-                      0x12346...09822
-                    </Button>
-                  )}
-                </CopyButton>
+                {status === 'Deployed' && tbaAddresss && (
+                  <CopyButton value={tbaAddresss}>
+                    {({ copy, copied }) => (
+                      <Button
+                        className={classes['copy-button']}
+                        color="rgba(166, 169, 174, 1)"
+                        onClick={copy}
+                        radius="xl"
+                        rightSection={copied ? <i className="fa-solid fa-check" /> : <i className="fa-regular fa-copy" />}
+                        size="xs"
+                        variant="outline"
+                      >
+                        {maskAddress(tbaAddresss)}
+                      </Button>
+                    )}
+                  </CopyButton>
+                )}
+              </Box>
+              <Box className={classes['profile-container']}>
+                {match(status)
+                  .with('NotDeployed', () => <Undeployed tokenId={params.tokenId} />)
+                  .with('Loading', () => (
+                    <LoadingOverlay
+                      overlayProps={{ backgroundOpacity: 0 }}
+                      visible
+                    />
+                  ))
+                  .otherwise(() => (
+                    <h1>test113</h1>
+                  ))}
               </Box>
             </Box>
           </Box>

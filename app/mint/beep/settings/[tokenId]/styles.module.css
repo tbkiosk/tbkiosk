@@ -6,9 +6,9 @@
 .container {
   background-color: #000;
   color: #fff;
-  height: 100%;
   margin: 0 auto;
   max-width: 1440px;
+  min-height: 100%;
   padding: 64px var(--mantine-spacing-xl) var(--mantine-spacing-xl);
   position: relative;
 }
@@ -38,6 +38,10 @@
   gap: 32px;
   justify-content: center;
   padding: 64px;
+
+  @media (max-width: $mantine-breakpoint-sm) {
+    padding: 32px 0;
+  }
 }
 
 .nft-image-container {
@@ -89,4 +93,9 @@
   font-size: 18px;
   font-weight: 500;
   line-height: 26px;
+}
+
+.profile-container {
+  flex: 1;
+  position: relative;
 }
