@@ -1,6 +1,6 @@
 import { useMemo, useRef, useEffect } from 'react'
 import { useSearchParams } from 'next/navigation'
-import { Box, Title } from '@mantine/core'
+import { Box, Title, Text, AspectRatio, Button, Image } from '@mantine/core'
 import { notifications } from '@mantine/notifications'
 import { useQuery } from '@tanstack/react-query'
 import { useSwiper, useSwiperSlide } from 'swiper/react'
@@ -91,6 +91,36 @@ export default function SlideTwo() {
       ref={refPassthrough}
     >
       <Box className={classes.wrapper}>
+        <Box className={classes['mint-beep-container']}>
+          <AspectRatio
+            className={classes['mint-beep-image-container']}
+            maw={500}
+            ratio={1}
+            w="100%"
+          >
+            <Image
+              alt="beep"
+              className={classes['beep-image']}
+              src="/beep-poster.png"
+            />
+          </AspectRatio>
+          <Box className={classes['mint-beep-description-col']}>
+            <Text className={classes['mint-beep-title']}>BEEP</Text>
+            <Text
+              className={classes['mint-beep-text']}
+            >{`Beep is your personal trading companion and a new take on what's possible with ERC6551 Smart NFTs. Brought to you by Kiosk.`}</Text>
+            <Box className={classes['mint-beep-link-container']}>
+              <Button
+                className={classes['mint-beep-link']}
+                color="rgba(0, 0, 0, 1)"
+                radius="xl"
+                variant="filled"
+              >
+                Join waitlist
+              </Button>
+            </Box>
+          </Box>
+        </Box>
         <Title
           className={classes.title}
           order={4}
