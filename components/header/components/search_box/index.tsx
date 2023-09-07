@@ -17,7 +17,7 @@ export default function SearchBox() {
 
   const [debouncedValue] = useDebouncedValue(value, 500)
 
-  const { data, isLoading } = useQuery<Project[]>({
+  const { data, isFetching } = useQuery<Project[]>({
     enabled: !!debouncedValue,
     queryKey: ['projects-from-search-box', debouncedValue],
     queryFn: async () => {
@@ -39,13 +39,13 @@ export default function SearchBox() {
   }
 
   useEffect(() => {
-    if (isLoading || !debouncedValue) {
+    if (isFetching || !debouncedValue) {
       setOpened(false)
       return
     }
 
     setOpened(focused)
-  }, [focused, isLoading])
+  }, [focused, isFetching])
 
   useEffect(() => {
     if (opened) {
@@ -71,7 +71,7 @@ export default function SearchBox() {
             onFocus={() => setFocused(true)}
             placeholder="Search for collections, NFTs or users"
             rightSection={
-              isLoading ? (
+              isFetching ? (
                 <Loader
                   color="gray"
                   size="xs"
