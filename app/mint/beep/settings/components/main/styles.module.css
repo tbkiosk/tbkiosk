@@ -4,8 +4,10 @@
 }
 
 .container {
-  background-color: #000;
+  background-color: hsl(0deg, 0%, 0%);
   color: #fff;
+  margin: 0 auto;
+  max-width: 1440px;
   padding: 64px var(--mantine-spacing-xl) var(--mantine-spacing-xl);
 }
 
