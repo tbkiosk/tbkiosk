@@ -3,7 +3,7 @@ import { cx } from 'classix'
 import classes from 'app/mint/beep/components/main/styles.module.css'
 import { chain } from '../../../../../constants/chain'
 import { notifications } from '@mantine/notifications'
-import { useChain, useSigner, useSwitchChain } from '@thirdweb-dev/react'
+import { useChain, useContract, useSigner, useSwitchChain, useContractWrite } from '@thirdweb-dev/react'
 import { useMemo, useState } from 'react'
 import { TokenboundClient } from '@tokenbound/sdk'
 import { useOwnedBeepTbaDeployedStatus } from 'hooks/use_owned_beep_tba_deployed_status'
@@ -92,8 +92,9 @@ export const DeployModal = ({ tokenId, isOpen, onClose }: Props) => {
   const currentChain = useChain()
   const switchChain = useSwitchChain()
   const { nft: lastOwnedNFT, setAccountDeployedStatus } = useOwnedBeepTbaDeployedStatus({ lastOwned: true })
-  const [isDeploying, setIsDeploying] = useState(false)
   const [isDeployed, setIsDeployed] = useState(false)
+  const { contract } = useContract('0x02101dfB77FDE026414827Fdc604ddAF224F0921')
+  const { mutateAsync, isLoading } = useContractWrite(contract, 'createAccount')
 
   const deployTba = async () => {
     if (currentChain?.chainId !== chain.chainId) {
@@ -104,32 +105,19 @@ export const DeployModal = ({ tokenId, isOpen, onClose }: Props) => {
       })
       return switchChain(chain.chainId)
     }
-    setIsDeploying(true)
     try {
       const tokenID = tokenId ?? lastOwnedNFT
-      const tbaTransaction = await tokenboundClient.prepareCreateAccount({
-        tokenContract: CONTRACT_ADDRESS,
-        tokenId: tokenID ?? '',
-        implementationAddress: IMPLEMENTATION_ADDRESS,
+      await mutateAsync({
+        args: [IMPLEMENTATION_ADDRESS, chain.chainId, CONTRACT_ADDRESS, tokenID ?? '', 0, '0x'],
       })
-      if (signer) {
-        const tx = await signer.sendTransaction({
-          data: tbaTransaction.data,
-          value: tbaTransaction.value,
-          to: tbaTransaction.to,
-        })
-        await tx.wait()
-        setIsDeployed(true)
-        setAccountDeployedStatus('Deployed')
-      }
+      setIsDeployed(true)
+      setAccountDeployedStatus('Deployed')
     } catch (e) {
       notifications.show({
         title: 'Error',
         message: (e as unknown as ThirdWebError)?.reason ?? 'Failed to deploy',
         color: 'red',
       })
-    } finally {
-      setIsDeploying(false)
     }
   }
 
@@ -152,7 +140,7 @@ export const DeployModal = ({ tokenId, isOpen, onClose }: Props) => {
       </Text>
       <Button
         className={cx(classes.button, classes.button__hide_loading_overlay)}
-        loading={isDeploying}
+        loading={isLoading}
         onClick={deployTba}
       >
         Deploy Token Bound Account
