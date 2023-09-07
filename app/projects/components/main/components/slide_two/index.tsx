@@ -111,9 +111,14 @@ export default function SlideTwo() {
             >{`Beep is your personal trading companion and a new take on what's possible with ERC6551 Smart NFTs. Brought to you by Kiosk.`}</Text>
             <Box className={classes['mint-beep-link-container']}>
               <Button
+                component="a"
                 className={classes['mint-beep-link']}
                 color="rgba(0, 0, 0, 1)"
+                href="https://forms.gle/4XCifz7YWuNppNHd6"
                 radius="xl"
+                rel="noreferrer"
+                size="lg"
+                target="_blank"
                 variant="filled"
               >
                 Join waitlist
