@@ -10,6 +10,7 @@ import { match } from 'ts-pattern'
 import { cx } from 'classix'
 
 import Undeployed from './components/undeployed'
+import Deployed from './components/deployed'
 
 import { useOwnedBeepTbaDeployedStatus } from 'hooks/use_owned_beep_tba_deployed_status'
 import { maskAddress } from 'utils/address'
@@ -20,6 +21,8 @@ import { chain } from 'constants/chain'
 import classes from './styles.module.css'
 
 export default function BeepSettingsByTokenId({ params }: { params: { tokenId: string } }) {
+  const { status } = useOwnedBeepTbaDeployedStatus({ tokenId: params.tokenId })
+
   const { data: meta, isLoading } = useQuery<{ name: string; description: string; image: string }>({
     enabled: !!params.tokenId,
     queryKey: ['token-meta'],
@@ -35,8 +38,6 @@ export default function BeepSettingsByTokenId({ params }: { params: { tokenId: s
     },
   })
 
-  const { status } = useOwnedBeepTbaDeployedStatus({ tokenId: params.tokenId })
-
   const signer = useSigner()
 
   const tokenboundClient = new TokenboundClient({ signer: signer, chainId: chain.chainId })
@@ -48,6 +49,30 @@ export default function BeepSettingsByTokenId({ params }: { params: { tokenId: s
       implementationAddress: IMPLEMENTATION_ADDRESS,
     })
   }, [params.tokenId])
+
+  const { data: profile, isLoading: isProfileLoading } = useQuery<{
+    user: {
+      NEXT_UPDATE: string
+      CREATED_AT: string
+      AMOUNT: number
+      ID: string
+      FREQUENCY: string
+      IS_ACTIVE: boolean
+    }
+  }>({
+    enabled: !!params.tokenId && status === 'Deployed',
+    queryKey: ['token-bound-account-profile'],
+    queryFn: async () => {
+      const res = await fetch(`/api/beep/profile/${tbaAddresss}`)
+
+      if (!res.ok) {
+        throw new Error(res.statusText)
+      }
+
+      const projects = await res.json()
+      return projects
+    },
+  })
 
   return (
     <AppShell.Main className={classes.main}>
@@ -82,11 +107,14 @@ export default function BeepSettingsByTokenId({ params }: { params: { tokenId: s
                 >
                   Set up your Beep
                 </Text>
-                <Switch
-                  className={classes.switch}
-                  color="rgba(0, 231, 166, 1)"
-                  size="lg"
-                />
+                {status === 'Deployed' && tbaAddresss && profile && (
+                  <Switch
+                    className={classes.switch}
+                    color="rgba(0, 231, 166, 1)"
+                    disabled={isProfileLoading}
+                    size="lg"
+                  />
+                )}
               </Box>
               <Box className={classes['description-row']}>
                 <Text className={classes.no}>{meta.name}</Text>
@@ -110,6 +138,7 @@ export default function BeepSettingsByTokenId({ params }: { params: { tokenId: s
               </Box>
               <Box className={classes['profile-container']}>
                 {match(status)
+                  .with('Deployed', () => <Deployed tokenId={params.tokenId} />)
                   .with('NotDeployed', () => <Undeployed tokenId={params.tokenId} />)
                   .with('Loading', () => (
                     <LoadingOverlay
@@ -118,7 +147,7 @@ export default function BeepSettingsByTokenId({ params }: { params: { tokenId: s
                     />
                   ))
                   .otherwise(() => (
-                    <h1>test113</h1>
+                    <h1>error</h1>
                   ))}
               </Box>
             </Box>
