@@ -40,6 +40,7 @@ export default function Undeployed({ tokenId }: { tokenId: string }) {
         tokenId,
         implementationAddress: IMPLEMENTATION_ADDRESS,
       })
+
       if (signer) {
         const tx = await signer.sendTransaction({
           data: tbaTransaction.data,
