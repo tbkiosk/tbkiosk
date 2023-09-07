@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 
-export const runtime = 'nodejs'
+export const runtime = 'edge'
 
 export async function GET(request: Request, { params }: { params: { tokenId: string } }) {
   const tokenId = params.tokenId
