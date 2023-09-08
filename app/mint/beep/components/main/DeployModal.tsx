@@ -143,12 +143,12 @@ export const DeployModal = ({ tokenId, isOpen, onClose }: Props) => {
 
   const undeployContent = (
     <>
-      <Text className={cx(classes['deploy-modal-text'])}>Great! Your Beep is already minted.</Text>
+      <Text className={cx(classes['deploy-modal-text'])}>Congratulations! Your Beep has minted.</Text>
       <Text
         mb={40}
         className={cx(classes['deploy-modal-text'])}
       >
-        Now Deploy your token bound account to start use beep!
+        Click Deploy Token Bound Account to start using Beep!
       </Text>
       <Button
         className={cx(classes.button, classes.button__hide_loading_overlay)}
@@ -162,7 +162,7 @@ export const DeployModal = ({ tokenId, isOpen, onClose }: Props) => {
 
   const deployedContent = (
     <>
-      <Text className={cx(classes['deploy-modal-text'])}>Your Beep account is ready!</Text>
+      <Text className={cx(classes['deploy-modal-text'])}>Your Beep is ready to use! </Text>
       <Text
         className={cx(classes['deploy-modal-text'])}
         c={'#A6A9AE'}
@@ -174,7 +174,7 @@ export const DeployModal = ({ tokenId, isOpen, onClose }: Props) => {
         mt={16}
         mb={40}
       >
-        You can set up your Beep now.
+        Set up your Beep now
       </Text>
       <Link href={'/mint/beep/settings'}>
         <Button className={cx(classes.button, classes.button__hide_loading_overlay)}>Go setting page</Button>
