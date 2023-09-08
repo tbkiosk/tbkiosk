@@ -50,11 +50,19 @@
   padding: 32px 0;
 }
 
+.mint-beep-creator {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.logo-text {
+  margin-left: 8px;
+}
+
 .mint-beep-title {
   font-size: 80px;
   font-weight: 700;
   line-height: 80px;
-  margin-bottom: 16px;
   text-align: left;
 
   @media (max-width: $mantine-breakpoint-sm) {
@@ -63,8 +71,13 @@
   }
 }
 
-.mint-beep-text {
+.mint-beep-coming-soon {
   color: rgba(128, 128, 128, 1);
+  font-size: 16px;
+  margin-bottom: 16px;
+}
+
+.mint-beep-text {
   font-size: 18px;
   font-weight: 500;
 

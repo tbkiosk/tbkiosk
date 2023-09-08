@@ -10,6 +10,7 @@ import dayjs from 'dayjs'
 import Footer from 'components/footer'
 import ProjectsGrid from 'components/projects/projects_grid'
 import Filters from './components/filters'
+import LogoText from 'public/logo-text.svg'
 
 import { CATEGORY_TYPE_ALL, CATEGORY_TYPE_NEW } from './components/filters'
 
@@ -105,10 +106,21 @@ export default function SlideTwo() {
             />
           </AspectRatio>
           <Box className={classes['mint-beep-description-col']}>
-            <Text className={classes['mint-beep-title']}>BEEP</Text>
-            <Text
-              className={classes['mint-beep-text']}
-            >{`Beep is your personal trading companion and a new take on what's possible with ERC6551 Smart NFTs. Brought to you by Kiosk.`}</Text>
+            <Text className={classes['mint-beep-creator']}>
+              <span>Created by</span>
+              <span className={classes['logo-text']}>
+                <LogoText />
+              </span>
+            </Text>
+            <Text className={classes['mint-beep-title']}>BEEP BOT</Text>
+            <Text className={classes['mint-beep-coming-soon']}>Coming soon</Text>
+            <Text className={classes['mint-beep-text']}>
+              Beep is a Dollar-cost averaging (DCA) bot with a token-bound account.
+              <br />
+              <br />
+              In a volatile market, Beep is your reliable companion, helping you navigate fluctuations by strategically spreading your
+              purchases across different price levels.
+            </Text>
             <Box className={classes['mint-beep-link-container']}>
               <Button
                 component="a"
