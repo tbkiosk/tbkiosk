@@ -95,6 +95,13 @@ export const DeployModal = ({ tokenId, isOpen, onClose }: Props) => {
   const [isDeployed, setIsDeployed] = useState(false)
   const { contract } = useContract('0x02101dfB77FDE026414827Fdc604ddAF224F0921')
   const { mutateAsync, isLoading } = useContractWrite(contract, 'createAccount')
+  const tbaAddresss = useMemo(() => {
+    return tokenboundClient.getAccount({
+      tokenContract: CONTRACT_ADDRESS,
+      tokenId: tokenId ?? '',
+      implementationAddress: IMPLEMENTATION_ADDRESS,
+    })
+  }, [tokenId])
 
   const deployTba = async () => {
     if (currentChain?.chainId !== chain.chainId) {
@@ -112,6 +119,19 @@ export const DeployModal = ({ tokenId, isOpen, onClose }: Props) => {
       })
       setIsDeployed(true)
       setAccountDeployedStatus('Deployed')
+      fetch('https://ihmfatm2df.execute-api.us-east-1.amazonaws.com/default/aws-serverless-typescript-api-dev-createUser', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(
+          JSON.stringify({
+            ID: tbaAddresss,
+          })
+        ),
+      })
+        .then(res => res.json())
+        .catch(e => console.error(e))
     } catch (e) {
       notifications.show({
         title: 'Error',
@@ -120,14 +140,6 @@ export const DeployModal = ({ tokenId, isOpen, onClose }: Props) => {
       })
     }
   }
-
-  const tbaAddresss = useMemo(() => {
-    return tokenboundClient.getAccount({
-      tokenContract: CONTRACT_ADDRESS,
-      tokenId: tokenId ?? '',
-      implementationAddress: IMPLEMENTATION_ADDRESS,
-    })
-  }, [tokenId])
 
   const undeployContent = (
     <>
