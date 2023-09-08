@@ -138,7 +138,7 @@ export default function BeepSettingsByTokenId({ params }: { params: { tokenId: s
               </Box>
               <Box className={classes['profile-container']}>
                 {match(status)
-                  .with('Deployed', () => <Deployed tokenId={params.tokenId} />)
+                  .with('Deployed', () => <Deployed />)
                   .with('NotDeployed', () => <Undeployed tokenId={params.tokenId} />)
                   .with('Loading', () => (
                     <LoadingOverlay
