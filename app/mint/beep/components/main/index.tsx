@@ -15,6 +15,7 @@ import { maskAddress } from 'utils/address'
 import classes from './styles.module.css'
 import { DeployModal } from 'app/mint/beep/components/main/DeployModal'
 import { MintButton } from 'app/mint/beep/components/main/MintButton'
+import { DiscoverProjects } from 'app/mint/beep/components/main/DiscoverProjects'
 
 const ArrowRight = () => (
   <svg
@@ -390,6 +391,9 @@ export default function Main() {
               </SimpleGrid>
             </Box>
           </Box>
+        </Box>
+        <Box className={classes['discover-project']}>
+          <DiscoverProjects />
         </Box>
       </Box>
       <DeployModal
