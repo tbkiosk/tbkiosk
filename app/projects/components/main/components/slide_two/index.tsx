@@ -91,53 +91,53 @@ export default function SlideTwo() {
       {...handlers}
       ref={refPassthrough}
     >
-      <Box className={classes.wrapper}>
-        <Box className={classes['mint-beep-container']}>
-          <AspectRatio
-            className={classes['mint-beep-image-container']}
-            maw={500}
-            ratio={1}
-            w="100%"
-          >
-            <Image
-              alt="beep"
-              className={classes['beep-image']}
-              src="/beep-poster.png"
-            />
-          </AspectRatio>
-          <Box className={classes['mint-beep-description-col']}>
-            <Text className={classes['mint-beep-creator']}>
-              <span>Created by</span>
-              <span className={classes['logo-text']}>
-                <LogoText />
-              </span>
-            </Text>
-            <Text className={classes['mint-beep-title']}>BEEP BOT</Text>
-            <Text className={classes['mint-beep-coming-soon']}>Coming soon</Text>
-            <Text className={classes['mint-beep-text']}>
-              Beep is a Dollar-cost averaging (DCA) bot with a token-bound account.
-              <br />
-              <br />
-              In a volatile market, Beep is your reliable companion, helping you navigate fluctuations by strategically spreading your
-              purchases across different price levels.
-            </Text>
-            <Box className={classes['mint-beep-link-container']}>
-              <Button
-                component="a"
-                className={classes['mint-beep-link']}
-                color="rgba(0, 0, 0, 1)"
-                href="https://forms.gle/4XCifz7YWuNppNHd6"
-                radius="xl"
-                rel="noreferrer"
-                size="lg"
-                target="_blank"
-                variant="filled"
-              >
-                Join waitlist
-              </Button>
-            </Box>
+      <Box className={classes['mint-beep-container']}>
+        <AspectRatio
+          className={classes['mint-beep-image-container']}
+          maw={500}
+          ratio={1}
+          w="100%"
+        >
+          <Image
+            alt="beep"
+            className={classes['beep-image']}
+            src="/beep-poster.png"
+          />
+        </AspectRatio>
+        <Box className={classes['mint-beep-description-col']}>
+          <Text className={classes['mint-beep-creator']}>
+            <span>Created by</span>
+            <span className={classes['logo-text']}>
+              <LogoText />
+            </span>
+          </Text>
+          <Text className={classes['mint-beep-title']}>BEEP BOT</Text>
+          <Text className={classes['mint-beep-coming-soon']}>Coming soon</Text>
+          <Text className={classes['mint-beep-text']}>
+            Beep is a Dollar-cost averaging (DCA) bot with a token-bound account.
+            <br />
+            <br />
+            In a volatile market, Beep is your reliable companion, helping you navigate fluctuations by strategically spreading your
+            purchases across different price levels.
+          </Text>
+          <Box className={classes['mint-beep-link-container']}>
+            <Button
+              component="a"
+              className={classes['mint-beep-link']}
+              color="rgba(0, 0, 0, 1)"
+              href="https://forms.gle/4XCifz7YWuNppNHd6"
+              radius="xl"
+              rel="noreferrer"
+              size="lg"
+              target="_blank"
+              variant="filled"
+            >
+              Join waitlist
+            </Button>
           </Box>
         </Box>
+      </Box>
+      <Box className={classes.wrapper}>
         <Title
           className={classes.title}
           order={4}
