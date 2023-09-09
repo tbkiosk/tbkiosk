@@ -1,7 +1,7 @@
-import { useState } from 'react'
+import { useMemo } from 'react'
 import { Box, Image, Text, Button } from '@mantine/core'
 import { notifications } from '@mantine/notifications'
-import { useChain, useSigner, useSwitchChain } from '@thirdweb-dev/react'
+import { useChain, useSigner, useSwitchChain, useContract, useContractWrite } from '@thirdweb-dev/react'
 import { TokenboundClient } from '@tokenbound/sdk'
 
 import { CONTRACT_ADDRESS, IMPLEMENTATION_ADDRESS } from 'constants/beep'
@@ -17,12 +17,20 @@ export default function Undeployed({ tokenId }: { tokenId: string }) {
   const signer = useSigner()
   const currentChain = useChain()
   const switchChain = useSwitchChain()
+  const { contract } = useContract('0x02101dfB77FDE026414827Fdc604ddAF224F0921')
+  const { mutateAsync, isLoading } = useContractWrite(contract, 'createAccount')
 
   const { setAccountDeployedStatus } = useOwnedBeepTbaDeployedStatus({ tokenId })
 
-  const [isDeploying, setIsDeploying] = useState(false)
-
   const tokenboundClient = new TokenboundClient({ signer: signer, chainId: chain.chainId })
+
+  const tbaAddresss = useMemo(() => {
+    return tokenboundClient.getAccount({
+      tokenContract: CONTRACT_ADDRESS,
+      tokenId: tokenId ?? '',
+      implementationAddress: IMPLEMENTATION_ADDRESS,
+    })
+  }, [tokenId])
 
   const deployTba = async () => {
     if (currentChain?.chainId !== chain.chainId) {
@@ -33,31 +41,22 @@ export default function Undeployed({ tokenId }: { tokenId: string }) {
       })
       return switchChain(chain.chainId)
     }
-    setIsDeploying(true)
-    try {
-      const tbaTransaction = await tokenboundClient.prepareCreateAccount({
-        tokenContract: CONTRACT_ADDRESS,
-        tokenId,
-        implementationAddress: IMPLEMENTATION_ADDRESS,
-      })
 
-      if (signer) {
-        const tx = await signer.sendTransaction({
-          data: tbaTransaction.data,
-          value: tbaTransaction.value,
-          to: tbaTransaction.to,
-        })
-        await tx.wait()
-        setAccountDeployedStatus('Deployed')
-      }
+    try {
+      await mutateAsync({
+        args: [IMPLEMENTATION_ADDRESS, chain.chainId, CONTRACT_ADDRESS, tokenId ?? '', 0, '0x'],
+      })
+      setAccountDeployedStatus('Deployed')
+
+      await fetch(`/api/beep/profile/${tbaAddresss}`, {
+        method: 'POST',
+      })
     } catch (e) {
       notifications.show({
         title: 'Error',
         message: (e as unknown as ThirdWebError)?.reason ?? 'Failed to deploy',
         color: 'red',
       })
-    } finally {
-      setIsDeploying(false)
     }
   }
 
@@ -73,7 +72,7 @@ export default function Undeployed({ tokenId }: { tokenId: string }) {
       </Text>
       <Button
         color="rgba(0, 0, 0, 1)"
-        loading={isDeploying}
+        loading={isLoading}
         onClick={() => deployTba()}
         radius="xl"
         variant="white"

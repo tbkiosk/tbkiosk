@@ -119,19 +119,10 @@ export const DeployModal = ({ tokenId, isOpen, onClose }: Props) => {
       })
       setIsDeployed(true)
       setAccountDeployedStatus('Deployed')
-      fetch('https://ihmfatm2df.execute-api.us-east-1.amazonaws.com/default/aws-serverless-typescript-api-dev-createUser', {
+
+      await fetch(`/api/beep/profile/${tbaAddresss}`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(
-          JSON.stringify({
-            ID: tbaAddresss,
-          })
-        ),
       })
-        .then(res => res.json())
-        .catch(e => console.error(e))
     } catch (e) {
       notifications.show({
         title: 'Error',
