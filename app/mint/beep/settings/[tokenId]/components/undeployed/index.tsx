@@ -1,8 +1,6 @@
-import { useMemo } from 'react'
 import { Box, Image, Text, Button } from '@mantine/core'
 import { notifications } from '@mantine/notifications'
-import { useChain, useSigner, useSwitchChain, useContract, useContractWrite } from '@thirdweb-dev/react'
-import { TokenboundClient } from '@tokenbound/sdk'
+import { useChain, useSwitchChain, useContract, useContractWrite } from '@thirdweb-dev/react'
 
 import { CONTRACT_ADDRESS, IMPLEMENTATION_ADDRESS } from 'constants/beep'
 import { chain } from 'constants/chain'
@@ -13,24 +11,13 @@ import classes from './styles.module.css'
 
 import type { ThirdWebError } from 'types'
 
-export default function Undeployed({ tokenId }: { tokenId: string }) {
-  const signer = useSigner()
+export default function Undeployed({ tokenId, tbaAddresss }: { tokenId: string; tbaAddresss: string }) {
   const currentChain = useChain()
   const switchChain = useSwitchChain()
   const { contract } = useContract('0x02101dfB77FDE026414827Fdc604ddAF224F0921')
   const { mutateAsync, isLoading } = useContractWrite(contract, 'createAccount')
 
   const { setAccountDeployedStatus } = useOwnedBeepTbaDeployedStatus({ tokenId })
-
-  const tokenboundClient = new TokenboundClient({ signer: signer, chainId: chain.chainId })
-
-  const tbaAddresss = useMemo(() => {
-    return tokenboundClient.getAccount({
-      tokenContract: CONTRACT_ADDRESS,
-      tokenId: tokenId ?? '',
-      implementationAddress: IMPLEMENTATION_ADDRESS,
-    })
-  }, [tokenId])
 
   const deployTba = async () => {
     if (currentChain?.chainId !== chain.chainId) {
@@ -48,9 +35,13 @@ export default function Undeployed({ tokenId }: { tokenId: string }) {
       })
       setAccountDeployedStatus('Deployed')
 
-      await fetch(`/api/beep/profile/${tbaAddresss}`, {
+      const res = await fetch(`/api/beep/profile/${tbaAddresss}`, {
         method: 'POST',
       })
+
+      if (!res.ok) {
+        throw new Error(res.statusText)
+      }
     } catch (e) {
       notifications.show({
         title: 'Error',
