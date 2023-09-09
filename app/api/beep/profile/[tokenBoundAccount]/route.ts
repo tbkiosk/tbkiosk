@@ -21,9 +21,11 @@ export async function POST(request: Request, { params }: { params: { tokenBoundA
 
   const res = await fetch(`https://ihmfatm2df.execute-api.us-east-1.amazonaws.com/default/aws-serverless-typescript-api-dev-createUser`, {
     method: 'POST',
-    body: JSON.stringify({
-      ID: tokenBoundAccount,
-    }),
+    body: JSON.stringify(
+      JSON.stringify({
+        ID: tokenBoundAccount,
+      })
+    ),
   })
 
   if (!res.ok) {
