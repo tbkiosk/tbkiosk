@@ -8,7 +8,7 @@ export async function GET(request: Request, { params }: { params: { tokenBoundAc
   const res = await fetch(`https://kiwr7bffu9.execute-api.us-east-1.amazonaws.com/dev/profile/${tokenBoundAccount}`)
 
   if (!res.ok) {
-    throw new Error(res.statusText)
+    return NextResponse.json({ error: res.statusText }, { status: res.status })
   }
 
   const profile = await res.json()
@@ -29,10 +29,39 @@ export async function POST(request: Request, { params }: { params: { tokenBoundA
   })
 
   if (!res.ok) {
-    throw new Error(res.statusText)
+    return NextResponse.json({ error: res.statusText }, { status: res.status })
   }
 
-  const response: { statusCode: number; body: string } = await res.json()
+  const response = await res.json()
+
+  if (response.status >= 400) {
+    return NextResponse.json({ error: response.statusText }, { status: response.status })
+  }
+
+  return NextResponse.json(response)
+}
+
+export async function PUT(request: Request, { params }: { params: { tokenBoundAccount: string } }) {
+  const tokenBoundAccount = params.tokenBoundAccount
+
+  const res = await fetch(`https://ys7uibhuwg.execute-api.us-east-1.amazonaws.com/default/aws-serverless-typescript-api-dev-updateUser`, {
+    method: 'POST',
+    body: JSON.stringify(
+      JSON.stringify({
+        ID: tokenBoundAccount,
+      })
+    ),
+  })
+
+  if (!res.ok) {
+    return NextResponse.json({ error: res.statusText }, { status: res.status })
+  }
+
+  const response = await res.json()
+
+  if (response.status >= 400) {
+    return NextResponse.json({ error: response.statusText }, { status: response.status })
+  }
 
   return NextResponse.json(response)
 }
