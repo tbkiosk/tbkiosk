@@ -120,9 +120,13 @@ export const DeployModal = ({ tokenId, isOpen, onClose }: Props) => {
       setIsDeployed(true)
       setAccountDeployedStatus('Deployed')
 
-      await fetch(`/api/beep/profile/${tbaAddresss}`, {
+      const res = await fetch(`/api/beep/profile/${tbaAddresss}`, {
         method: 'POST',
       })
+
+      if (!res.ok) {
+        throw new Error(res.statusText)
+      }
     } catch (e) {
       notifications.show({
         title: 'Error',

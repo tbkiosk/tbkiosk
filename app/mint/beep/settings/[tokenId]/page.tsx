@@ -1,8 +1,9 @@
 'use client'
 
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import Link from 'next/link'
 import { AppShell, Container, Box, Image, Text, Switch, CopyButton, Button, LoadingOverlay } from '@mantine/core'
+import { notifications } from '@mantine/notifications'
 import { useQuery } from '@tanstack/react-query'
 import { useSigner } from '@thirdweb-dev/react'
 import { TokenboundClient } from '@tokenbound/sdk'
@@ -23,7 +24,11 @@ import classes from './styles.module.css'
 export default function BeepSettingsByTokenId({ params }: { params: { tokenId: string } }) {
   const { status } = useOwnedBeepTbaDeployedStatus({ tokenId: params.tokenId })
 
-  const { data: meta, isLoading } = useQuery<{ name: string; description: string; image: string }>({
+  const {
+    data: meta,
+    isLoading,
+    error,
+  } = useQuery<{ name: string; description: string; image: string }>({
     enabled: !!params.tokenId,
     queryKey: ['token-meta'],
     queryFn: async () => {
@@ -73,6 +78,16 @@ export default function BeepSettingsByTokenId({ params }: { params: { tokenId: s
       return projects
     },
   })
+
+  useEffect(() => {
+    if (error) {
+      notifications.show({
+        title: 'Error',
+        message: (error as Error)?.message || 'Failed to load NFT meta',
+        color: 'red',
+      })
+    }
+  }, [error])
 
   return (
     <AppShell.Main className={classes.main}>
@@ -139,7 +154,12 @@ export default function BeepSettingsByTokenId({ params }: { params: { tokenId: s
               <Box className={classes['profile-container']}>
                 {match(status)
                   .with('Deployed', () => <Deployed />)
-                  .with('NotDeployed', () => <Undeployed tokenId={params.tokenId} />)
+                  .with('NotDeployed', () => (
+                    <Undeployed
+                      tbaAddresss={tbaAddresss}
+                      tokenId={params.tokenId}
+                    />
+                  ))
                   .with('Loading', () => (
                     <LoadingOverlay
                       overlayProps={{ backgroundOpacity: 0 }}
