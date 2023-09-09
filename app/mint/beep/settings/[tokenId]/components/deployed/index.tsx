@@ -1,11 +1,17 @@
 import { useState } from 'react'
 import { Box, Text, Button, Image, Select, TextInput } from '@mantine/core'
+// import { useQuery } from '@tanstack/react-query'
 import { cx } from 'classix'
 
 import classes from './styles.module.css'
+import { notifications } from '@mantine/notifications'
 
-export default function Deployed() {
-  const [amount, setAmount] = useState<string | number>('0')
+export default function Deployed({ isActivated }: { isActivated: boolean }) {
+  const [defaultAmount, setDefaultAmount] = useState<string>('0')
+  const [amount, setAmount] = useState<string>(defaultAmount)
+  const [defaultFrequency, setDefaultFrequency] = useState<string>('1')
+  const [frequency, setFrequency] = useState<string>(defaultFrequency)
+  const [saving, setSaving] = useState(false)
 
   const onAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.currentTarget.value) {
@@ -16,6 +22,29 @@ export default function Deployed() {
     if (!/^[1-9]\d*$/.test(e.currentTarget.value)) return
 
     setAmount(e.currentTarget.value)
+  }
+
+  const onSave = async () => {
+    setSaving(true)
+    await new Promise(res => {
+      setTimeout(() => {
+        res(null)
+      }, 1000)
+    })
+    setDefaultAmount(amount)
+    setDefaultFrequency(frequency)
+    setSaving(false)
+
+    notifications.show({
+      title: 'Success',
+      message: 'Successfully updated the account',
+      color: 'green',
+    })
+  }
+
+  const onReset = () => {
+    setAmount(defaultAmount)
+    setFrequency(defaultFrequency)
   }
 
   return (
@@ -30,6 +59,7 @@ export default function Deployed() {
               }}
               data={['ETH']}
               defaultValue="ETH"
+              disabled={!isActivated}
               leftSection={
                 <Image
                   alt="eth"
@@ -53,9 +83,11 @@ export default function Deployed() {
                 { value: '3', label: '3 day' },
                 { value: '7', label: '1 week' },
               ]}
-              defaultValue="1"
+              disabled={!isActivated}
+              onChange={v => setFrequency(v || '1')}
               radius="xl"
               rightSection={<i className="fa-solid fa-caret-down" />}
+              value={frequency}
             />
           </Box>
         </Box>
@@ -65,19 +97,21 @@ export default function Deployed() {
               classNames={{
                 input: classes['amount-input'],
               }}
+              disabled={!isActivated}
               maw={360}
               onChange={e => onAmountChange(e)}
-              rightSection="wei"
               value={amount}
-              w={60 + String(amount).length * 14}
+              w={360}
             />
           </Box>
           <Select
             classNames={{
               root: classes['select-root'],
+              dropdown: classes['usdc-dropdown-container'],
             }}
             data={['USDC']}
             defaultValue="USDC"
+            disabled={!isActivated}
             leftSection={
               <Image
                 alt="usdc"
@@ -100,6 +134,8 @@ export default function Deployed() {
         <Button
           className={classes.button}
           color="rgba(255, 255, 255, 1)"
+          disabled={!isActivated}
+          onClick={() => onReset()}
           radius="xl"
           variant="outline"
         >
@@ -108,6 +144,9 @@ export default function Deployed() {
         <Button
           className={classes.button}
           color="rgba(0, 0, 0, 1)"
+          disabled={!isActivated}
+          loading={saving}
+          onClick={() => onSave()}
           radius="xl"
           variant="white"
         >

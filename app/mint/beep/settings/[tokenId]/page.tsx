@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
 import { AppShell, Container, Box, Image, Text, Switch, CopyButton, Button, LoadingOverlay } from '@mantine/core'
 import { notifications } from '@mantine/notifications'
@@ -21,8 +21,11 @@ import { chain } from 'constants/chain'
 
 import classes from './styles.module.css'
 
+import type { Profile } from 'types/profile'
+
 export default function BeepSettingsByTokenId({ params }: { params: { tokenId: string } }) {
   const { status } = useOwnedBeepTbaDeployedStatus({ tokenId: params.tokenId })
+  const [isActivated, setIsActivated] = useState(false)
 
   const {
     data: meta,
@@ -55,17 +58,18 @@ export default function BeepSettingsByTokenId({ params }: { params: { tokenId: s
     })
   }, [params.tokenId])
 
-  const { data: profile, isLoading: isProfileLoading } = useQuery<{
-    user: {
-      NEXT_UPDATE: string
-      CREATED_AT: string
-      AMOUNT: number
-      ID: string
-      FREQUENCY: string
-      IS_ACTIVE: boolean
-    }
-  }>({
+  // const [setIsAccountCreated] = useState<null | boolean>(null)
+
+  const {
+    data: profile,
+    isFetching: isProfileLoading,
+    error: profileError,
+    // refetch,
+  } = useQuery<Profile>({
     enabled: !!params.tokenId && status === 'Deployed',
+    refetchInterval: 0,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
     queryKey: ['token-bound-account-profile'],
     queryFn: async () => {
       const res = await fetch(`/api/beep/profile/${tbaAddresss}`)
@@ -74,8 +78,17 @@ export default function BeepSettingsByTokenId({ params }: { params: { tokenId: s
         throw new Error(res.statusText)
       }
 
-      const projects = await res.json()
-      return projects
+      const profile = await res.json()
+
+      if (profile?.status === 400) {
+        // setIsAccountCreated(false)
+      }
+
+      if (profile?.user) {
+        // setIsAccountCreated(true)
+      }
+
+      return profile
     },
   })
 
@@ -87,7 +100,15 @@ export default function BeepSettingsByTokenId({ params }: { params: { tokenId: s
         color: 'red',
       })
     }
-  }, [error])
+
+    if (profileError) {
+      notifications.show({
+        title: 'Error',
+        message: (error as Error)?.message || 'Failed to load account profile',
+        color: 'red',
+      })
+    }
+  }, [error, profileError])
 
   return (
     <AppShell.Main className={classes.main}>
@@ -125,8 +146,10 @@ export default function BeepSettingsByTokenId({ params }: { params: { tokenId: s
                 {status === 'Deployed' && tbaAddresss && profile && (
                   <Switch
                     className={classes.switch}
+                    checked={isActivated}
                     color="rgba(0, 231, 166, 1)"
                     disabled={isProfileLoading}
+                    onChange={event => setIsActivated(event.currentTarget.checked)}
                     size="lg"
                   />
                 )}
@@ -152,8 +175,35 @@ export default function BeepSettingsByTokenId({ params }: { params: { tokenId: s
                 )}
               </Box>
               <Box className={classes['profile-container']}>
+                <LoadingOverlay
+                  overlayProps={{ backgroundOpacity: 0 }}
+                  visible={isProfileLoading}
+                />
                 {match(status)
-                  .with('Deployed', () => <Deployed />)
+                  .with('Deployed', () => {
+                    // if (isProfileLoading || profileError || isAccountCreated === null) return null
+                    // if (profile && isAccountCreated) {
+                    //   return (
+                    // <Deployed
+                    //   tbaAddresss={tbaAddresss}
+                    //   tokenId={params.tokenId}
+                    // />
+                    //   )
+                    // }
+                    // return (
+                    //   <CreateAccountButton
+                    //     refetch={refetch}
+                    //     tbaAddresss={tbaAddresss}
+                    //   />
+                    // )
+                    return (
+                      <Deployed
+                        isActivated={isActivated}
+                        // tbaAddresss={tbaAddresss}
+                        // tokenId={params.tokenId}
+                      />
+                    )
+                  })
                   .with('NotDeployed', () => (
                     <Undeployed
                       tbaAddresss={tbaAddresss}
@@ -177,3 +227,45 @@ export default function BeepSettingsByTokenId({ params }: { params: { tokenId: s
     </AppShell.Main>
   )
 }
+
+// function CreateAccountButton({ tbaAddresss, refetch }: { tbaAddresss: string; refetch: () => Promise<unknown> }) {
+//   const [creating, setCreating] = useState(false)
+
+//   const onCreateAccount = async () => {
+//     try {
+//       setCreating(true)
+
+//       const res = await fetch(`/api/beep/profile/${tbaAddresss}`, {
+//         method: 'POST',
+//         headers: { 'Content-Type': 'application/json' },
+//         body: null,
+//       })
+
+//       if (!res.ok) {
+//         throw new Error(res.statusText)
+//       }
+
+//       refetch()
+//     } catch (error) {
+//       notifications.show({
+//         title: 'Error',
+//         message: (error as Error)?.message || 'Failed to create account',
+//         color: 'red',
+//       })
+//     } finally {
+//       setCreating(false)
+//     }
+//   }
+
+//   return (
+//     <Button
+//       color="rgba(255, 255, 255, 1)"
+//       loading={creating}
+//       onClick={() => onCreateAccount()}
+//       radius="xl"
+//       variant="outline"
+//     >
+//       Create account
+//     </Button>
+//   )
+// }
