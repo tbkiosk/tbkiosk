@@ -365,7 +365,7 @@
   width: 218px;
   height: 296px;
   flex-shrink: 0;
-  background: linear-gradient(270deg, #FFF 25.38%, rgba(255, 255, 255, 0.00) 100%);
+  background: linear-gradient(270deg, #fff 25.38%, rgba(255, 255, 255, 0) 100%);
   position: absolute;
   right: 0;
   top: 0;
@@ -385,12 +385,12 @@
   left: 0;
   right: auto;
   justify-content: left;
-  background: linear-gradient(90deg, #FFF 25.38%, rgba(255, 255, 255, 0.00) 100%);
+  background: linear-gradient(90deg, #fff 25.38%, rgba(255, 255, 255, 0) 100%);
 }
 
 .discover-project-nav-button {
   border-radius: 80px;
-  background: rgba(255, 255, 255, 0.60);
+  background: rgba(255, 255, 255, 0.6);
   display: flex;
   width: 80px;
   height: 80px;
