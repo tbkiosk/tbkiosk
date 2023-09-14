@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
-import { AppShell, Container, Box, Image, Text, Switch, CopyButton, Button, LoadingOverlay } from '@mantine/core'
+import { AppShell, Container, Box, Image, Text, Switch, CopyButton, Button, LoadingOverlay, Loader } from '@mantine/core'
 import { notifications } from '@mantine/notifications'
 import { useQuery } from '@tanstack/react-query'
 import { useSigner } from '@thirdweb-dev/react'
@@ -25,7 +25,7 @@ import type { Profile } from 'types/profile'
 
 export default function BeepSettingsByTokenId({ params }: { params: { tokenId: string } }) {
   const { status } = useOwnedBeepTbaDeployedStatus({ tokenId: params.tokenId })
-  const [isActivated, setIsActivated] = useState(false)
+  const [isAccountUpdating, setIsAccountUpdating] = useState(false)
 
   const {
     data: meta,
@@ -58,13 +58,11 @@ export default function BeepSettingsByTokenId({ params }: { params: { tokenId: s
     })
   }, [params.tokenId])
 
-  // const [setIsAccountCreated] = useState<null | boolean>(null)
-
   const {
     data: profile,
     isFetching: isProfileLoading,
     error: profileError,
-    // refetch,
+    refetch,
   } = useQuery<Profile>({
     enabled: !!params.tokenId && status === 'Deployed',
     refetchInterval: 0,
@@ -80,17 +78,46 @@ export default function BeepSettingsByTokenId({ params }: { params: { tokenId: s
 
       const profile = await res.json()
 
-      if (profile?.status === 400) {
-        // setIsAccountCreated(false)
-      }
-
-      if (profile?.user) {
-        // setIsAccountCreated(true)
-      }
-
       return profile
     },
   })
+
+  const onUpdateStatus = async () => {
+    setIsAccountUpdating(true)
+
+    try {
+      const res = await fetch(`/api/beep/profile/${tbaAddresss}/status`, {
+        method: 'PUT',
+        body: JSON.stringify({
+          ID: tbaAddresss,
+          IS_ACTIVE: !profile?.user.IS_ACTIVE,
+        }),
+      })
+
+      if (!res.ok) {
+        throw new Error(res.statusText)
+      }
+
+      const response = await res.json()
+      if (response?.user) {
+        notifications.show({
+          title: 'Success',
+          message: 'Successfully updated account',
+          color: 'green',
+        })
+
+        refetch()
+      }
+    } catch (err) {
+      notifications.show({
+        title: 'Error',
+        message: (error as Error)?.message || 'Failed to update account',
+        color: 'red',
+      })
+    } finally {
+      setIsAccountUpdating(false)
+    }
+  }
 
   useEffect(() => {
     if (error) {
@@ -146,11 +173,19 @@ export default function BeepSettingsByTokenId({ params }: { params: { tokenId: s
                 {status === 'Deployed' && tbaAddresss && profile && (
                   <Switch
                     className={classes.switch}
-                    checked={isActivated}
+                    checked={profile.user.IS_ACTIVE}
                     color="rgba(0, 231, 166, 1)"
-                    disabled={isProfileLoading}
-                    onChange={event => setIsActivated(event.currentTarget.checked)}
+                    disabled={isAccountUpdating}
+                    onChange={() => onUpdateStatus()}
                     size="lg"
+                    thumbIcon={
+                      isAccountUpdating || isProfileLoading ? (
+                        <Loader
+                          color="rgba(0, 231, 166, 1)"
+                          size={10}
+                        />
+                      ) : null
+                    }
                   />
                 )}
               </Box>
@@ -181,28 +216,7 @@ export default function BeepSettingsByTokenId({ params }: { params: { tokenId: s
                 />
                 {match(status)
                   .with('Deployed', () => {
-                    // if (isProfileLoading || profileError || isAccountCreated === null) return null
-                    // if (profile && isAccountCreated) {
-                    //   return (
-                    // <Deployed
-                    //   tbaAddresss={tbaAddresss}
-                    //   tokenId={params.tokenId}
-                    // />
-                    //   )
-                    // }
-                    // return (
-                    //   <CreateAccountButton
-                    //     refetch={refetch}
-                    //     tbaAddresss={tbaAddresss}
-                    //   />
-                    // )
-                    return (
-                      <Deployed
-                        isActivated={isActivated}
-                        // tbaAddresss={tbaAddresss}
-                        // tokenId={params.tokenId}
-                      />
-                    )
+                    return <Deployed tbaAddresss={tbaAddresss} />
                   })
                   .with('NotDeployed', () => (
                     <Undeployed
