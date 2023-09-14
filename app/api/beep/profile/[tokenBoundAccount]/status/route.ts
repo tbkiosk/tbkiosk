@@ -15,12 +15,10 @@ export async function PUT(request: Request, { params }: { params: { tokenBoundAc
 
   const res = await fetch(`https://ceqrnop0wl.execute-api.us-east-1.amazonaws.com/default/aws-serverless-typescript-api-dev-updateStatus`, {
     method: 'POST',
-    body: JSON.stringify(
-      JSON.stringify({
-        ID: tokenBoundAccount,
-        IS_ACTIVE,
-      })
-    ),
+    body: JSON.stringify({
+      ID: tokenBoundAccount,
+      IS_ACTIVE,
+    }),
   })
 
   if (!res.ok) {
@@ -29,8 +27,8 @@ export async function PUT(request: Request, { params }: { params: { tokenBoundAc
 
   const response = await res.json()
 
-  if (response.status >= 400) {
-    return NextResponse.json({ error: response.statusText }, { status: response.status })
+  if (!response?.user) {
+    return NextResponse.json({ error: response.statusText || response.message }, { status: response.status || 400 })
   }
 
   return NextResponse.json(response)
