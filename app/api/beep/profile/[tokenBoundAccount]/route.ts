@@ -21,11 +21,9 @@ export async function POST(request: Request, { params }: { params: { tokenBoundA
 
   const res = await fetch(`https://ihmfatm2df.execute-api.us-east-1.amazonaws.com/default/aws-serverless-typescript-api-dev-createUser`, {
     method: 'POST',
-    body: JSON.stringify(
-      JSON.stringify({
-        ID: tokenBoundAccount,
-      })
-    ),
+    body: JSON.stringify({
+      ID: tokenBoundAccount,
+    }),
   })
 
   if (!res.ok) {
@@ -41,17 +39,31 @@ export async function POST(request: Request, { params }: { params: { tokenBoundA
   return NextResponse.json(response)
 }
 
+export type UpdateSettingsPayload = {
+  ID: string
+  SIGNATURE?: string
+  OWNER_ADDRESS?: string
+  FREQUENCY?: string
+  AMOUNT?: string
+}
+
 export async function PUT(request: Request, { params }: { params: { tokenBoundAccount: string } }) {
   const tokenBoundAccount = params.tokenBoundAccount
+  const { FREQUENCY, AMOUNT } = await request.json()
 
-  const res = await fetch(`https://ys7uibhuwg.execute-api.us-east-1.amazonaws.com/default/aws-serverless-typescript-api-dev-updateUser`, {
-    method: 'POST',
-    body: JSON.stringify(
-      JSON.stringify({
-        ID: tokenBoundAccount,
-      })
-    ),
-  })
+  const res = await fetch(
+    `https://x7xo5ntbj4.execute-api.us-east-1.amazonaws.com/default/aws-serverless-typescript-api-dev-updateSettings`,
+    {
+      method: 'POST',
+      body: JSON.stringify(
+        JSON.stringify({
+          ID: tokenBoundAccount,
+          FREQUENCY,
+          AMOUNT,
+        })
+      ),
+    }
+  )
 
   if (!res.ok) {
     return NextResponse.json({ error: res.statusText }, { status: res.status })
