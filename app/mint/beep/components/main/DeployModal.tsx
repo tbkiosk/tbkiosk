@@ -91,7 +91,7 @@ export const DeployModal = ({ tokenId, isOpen, onClose }: Props) => {
   const tokenboundClient = new TokenboundClient({ signer: signer, chainId: chain.chainId })
   const { nft: lastOwnedNFT, setAccountDeployedStatus } = useOwnedBeepTbaDeployedStatus({ lastOwned: true })
   const [isDeployed, setIsDeployed] = useState(false)
-  const tbaAddresss = useMemo(() => {
+  const tbaAddress = useMemo(() => {
     return tokenboundClient.getAccount({
       tokenContract: CONTRACT_ADDRESS,
       tokenId: tokenId ?? '',
@@ -101,7 +101,7 @@ export const DeployModal = ({ tokenId, isOpen, onClose }: Props) => {
 
   const createAccount = async () => {
     try {
-      const res = await fetch(`/api/beep/profile/${tbaAddresss}`, {
+      const res = await fetch(`/api/beep/profile/${tbaAddress}`, {
         method: 'POST',
       })
       if (!res.ok) {
@@ -159,7 +159,7 @@ export const DeployModal = ({ tokenId, isOpen, onClose }: Props) => {
         className={cx(classes['deploy-modal-text'])}
         c={'#A6A9AE'}
       >
-        {maskAddress(tbaAddresss)}
+        {maskAddress(tbaAddress)}
       </Text>
       <Text
         className={cx(classes['deploy-modal-text'])}
