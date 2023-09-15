@@ -3,12 +3,12 @@ import { cx } from 'classix'
 import classes from 'app/mint/beep/components/main/styles.module.css'
 import { chain } from '../../../../../constants/chain'
 import { notifications } from '@mantine/notifications'
-import { useChain, useContract, useSigner, useSwitchChain, useContractWrite } from '@thirdweb-dev/react'
+import { useSigner, Web3Button } from '@thirdweb-dev/react'
 import { useMemo, useState } from 'react'
-import { TokenboundClient } from '@tokenbound/sdk'
+import { TokenboundClient, erc6551RegistryAbi } from '@tokenbound/sdk'
 import { useOwnedBeepTbaDeployedStatus } from 'hooks/use_owned_beep_tba_deployed_status'
 import { ThirdWebError } from '../../../../../types'
-import { CONTRACT_ADDRESS, IMPLEMENTATION_ADDRESS } from 'constants/beep'
+import { CONTRACT_ADDRESS, IMPLEMENTATION_ADDRESS, REGISTRY_ADDRESS } from 'constants/beep'
 import { maskAddress } from '../../../../../utils/address'
 import Link from 'next/link'
 
@@ -89,12 +89,8 @@ type Props = {
 export const DeployModal = ({ tokenId, isOpen, onClose }: Props) => {
   const signer = useSigner()
   const tokenboundClient = new TokenboundClient({ signer: signer, chainId: chain.chainId })
-  const currentChain = useChain()
-  const switchChain = useSwitchChain()
   const { nft: lastOwnedNFT, setAccountDeployedStatus } = useOwnedBeepTbaDeployedStatus({ lastOwned: true })
   const [isDeployed, setIsDeployed] = useState(false)
-  const { contract } = useContract('0x02101dfB77FDE026414827Fdc604ddAF224F0921')
-  const { mutateAsync, isLoading } = useContractWrite(contract, 'createAccount')
   const tbaAddresss = useMemo(() => {
     return tokenboundClient.getAccount({
       tokenContract: CONTRACT_ADDRESS,
@@ -103,34 +99,18 @@ export const DeployModal = ({ tokenId, isOpen, onClose }: Props) => {
     })
   }, [tokenId])
 
-  const deployTba = async () => {
-    if (currentChain?.chainId !== chain.chainId) {
-      notifications.show({
-        title: 'Error',
-        message: `Please switch to ${chain.name} network`,
-        color: 'red',
-      })
-      return switchChain(chain.chainId)
-    }
+  const createAccount = async () => {
     try {
-      const tokenID = tokenId ?? lastOwnedNFT
-      await mutateAsync({
-        args: [IMPLEMENTATION_ADDRESS, chain.chainId, CONTRACT_ADDRESS, tokenID ?? '', 0, '0x'],
-      })
-      setIsDeployed(true)
-      setAccountDeployedStatus('Deployed')
-
       const res = await fetch(`/api/beep/profile/${tbaAddresss}`, {
         method: 'POST',
       })
-
       if (!res.ok) {
         throw new Error(res.statusText)
       }
     } catch (e) {
       notifications.show({
         title: 'Error',
-        message: (e as unknown as ThirdWebError)?.reason ?? 'Failed to deploy',
+        message: 'Failed to create user account',
         color: 'red',
       })
     }
@@ -145,13 +125,30 @@ export const DeployModal = ({ tokenId, isOpen, onClose }: Props) => {
       >
         Click Deploy Token Bound Account to start using Beep!
       </Text>
-      <Button
-        className={cx(classes.button, classes.button__hide_loading_overlay)}
-        loading={isLoading}
-        onClick={deployTba}
+      <Web3Button
+        contractAddress={REGISTRY_ADDRESS}
+        theme="dark"
+        contractAbi={erc6551RegistryAbi}
+        className={cx(classes.button)}
+        action={async contract => {
+          const tokenID = tokenId ?? lastOwnedNFT
+          await contract.call('createAccount', [IMPLEMENTATION_ADDRESS, chain.chainId, CONTRACT_ADDRESS, tokenID ?? '', 0, '0x'])
+        }}
+        onSuccess={() => {
+          setIsDeployed(true)
+          setAccountDeployedStatus('Deployed')
+          createAccount()
+        }}
+        onError={e => {
+          notifications.show({
+            title: 'Error',
+            message: (e as unknown as ThirdWebError).reason ?? 'Failed to deploy',
+            color: 'red',
+          })
+        }}
       >
         Deploy Token Bound Account
-      </Button>
+      </Web3Button>
     </>
   )
 
