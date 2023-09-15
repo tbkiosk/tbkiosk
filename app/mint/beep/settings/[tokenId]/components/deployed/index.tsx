@@ -1,50 +1,113 @@
-import { useState } from 'react'
-import { Box, Text, Button, Image, Select, TextInput } from '@mantine/core'
-// import { useQuery } from '@tanstack/react-query'
+import { useEffect, useState } from 'react'
+import { Box, Text, Button, Image, Select, NumberInput } from '@mantine/core'
+import { useQuery } from '@tanstack/react-query'
 import { cx } from 'classix'
 
 import classes from './styles.module.css'
 import { notifications } from '@mantine/notifications'
 
-export default function Deployed({ isActivated }: { isActivated: boolean }) {
-  const [defaultAmount, setDefaultAmount] = useState<string>('0')
-  const [amount, setAmount] = useState<string>(defaultAmount)
-  const [defaultFrequency, setDefaultFrequency] = useState<string>('1')
-  const [frequency, setFrequency] = useState<string>(defaultFrequency)
-  const [saving, setSaving] = useState(false)
+import type { Profile } from 'types/profile'
 
-  const onAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!e.currentTarget.value) {
-      setAmount('0')
-      return
+export default function Deployed({ tbaAddresss }: { tbaAddresss: string }) {
+  const {
+    data: profile,
+    isFetching: isProfileLoading,
+    error: profileError,
+    refetch,
+  } = useQuery<Profile | { status: number; message: string }>({
+    enabled: !!tbaAddresss,
+    refetchInterval: 0,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    queryKey: ['token-bound-account-profile'],
+    queryFn: async () => {
+      const res = await fetch(`/api/beep/profile/${tbaAddresss}`)
+
+      if (!res.ok) {
+        throw new Error(res.statusText)
+      }
+
+      const profile = await res.json()
+
+      return profile
+    },
+  })
+
+  const [amount, setAmount] = useState<string>('0')
+  const [frequency, setFrequency] = useState<string>('1')
+  const [isAccountUpdating, setIsAccountUpdating] = useState(false)
+
+  useEffect(() => {
+    if (profile && 'user' in profile) {
+      setAmount(String(profile.user.AMOUNT))
+      setFrequency(String(profile.user.FREQUENCY))
     }
+  }, [profile])
 
-    if (!/^[1-9]\d*$/.test(e.currentTarget.value)) return
+  useEffect(() => {
+    if (profileError) {
+      notifications.show({
+        title: 'Error',
+        message: (profileError as Error)?.message || 'Failed to load account profile',
+        color: 'red',
+      })
+    }
+  }, [profileError])
 
-    setAmount(e.currentTarget.value)
-  }
+  const onUpdateSettings = async () => {
+    setIsAccountUpdating(true)
 
-  const onSave = async () => {
-    setSaving(true)
-    await new Promise(res => {
-      setTimeout(() => {
-        res(null)
-      }, 1000)
-    })
-    setDefaultAmount(amount)
-    setDefaultFrequency(frequency)
-    setSaving(false)
+    try {
+      const res = await fetch(`/api/beep/profile/${tbaAddresss}`, {
+        method: 'PUT',
+        body: JSON.stringify({
+          ID: tbaAddresss,
+          AMOUNT: amount,
+          FREQUENCY: frequency,
+        }),
+      })
 
-    notifications.show({
-      title: 'Success',
-      message: 'Successfully updated the account',
-      color: 'green',
-    })
+      if (!res.ok) {
+        throw new Error(res.statusText)
+      }
+
+      const response = await res.json()
+      if (response?.user) {
+        notifications.show({
+          title: 'Success',
+          message: 'Successfully updated account',
+          color: 'green',
+        })
+
+        refetch()
+      }
+    } catch (err) {
+      notifications.show({
+        title: 'Error',
+        message: (err as Error)?.message || 'Failed to update account',
+        color: 'red',
+      })
+    } finally {
+      setIsAccountUpdating(false)
+    }
   }
 
   const onReset = () => {
-    setAmount(defaultAmount)
-    setFrequency(defaultFrequency)
+    if (profile && 'user' in profile) {
+      setAmount(String(profile.user.AMOUNT))
+      setFrequency(String(profile.user.FREQUENCY))
+    }
+  }
+
+  if (!profile || isProfileLoading) return null
+
+  if ('message' in profile && profile.message === 'USER_NOT_FOUND') {
+    return (
+      <CreateAccountButton
+        refetch={refetch}
+        tbaAddresss={tbaAddresss}
+      />
+    )
   }
 
   return (
@@ -54,12 +117,12 @@ export default function Deployed({ isActivated }: { isActivated: boolean }) {
           <Box className={classes['item-container']}>
             <Text className={classes.label}>Buy</Text>
             <Select
+              allowDeselect={false}
               classNames={{
                 root: classes['select-root'],
               }}
               data={['ETH']}
-              defaultValue="ETH"
-              disabled={!isActivated}
+              value="ETH"
               leftSection={
                 <Image
                   alt="eth"
@@ -75,6 +138,7 @@ export default function Deployed({ isActivated }: { isActivated: boolean }) {
           <Box className={classes['item-container']}>
             <Text className={classes.label}>every</Text>
             <Select
+              allowDeselect={false}
               classNames={{
                 root: classes['select-root'],
               }}
@@ -83,7 +147,6 @@ export default function Deployed({ isActivated }: { isActivated: boolean }) {
                 { value: '3', label: '3 day' },
                 { value: '7', label: '1 week' },
               ]}
-              disabled={!isActivated}
               onChange={v => setFrequency(v || '1')}
               radius="xl"
               rightSection={<i className="fa-solid fa-caret-down" />}
@@ -93,25 +156,27 @@ export default function Deployed({ isActivated }: { isActivated: boolean }) {
         </Box>
         <Box className={classes['amount-row']}>
           <Box className={classes['amount-input-container']}>
-            <TextInput
+            <NumberInput
+              allowDecimal={false}
+              allowNegative={false}
               classNames={{
                 input: classes['amount-input'],
               }}
-              disabled={!isActivated}
+              hideControls
               maw={360}
-              onChange={e => onAmountChange(e)}
+              onChange={value => setAmount(String(value))}
               value={amount}
               w={360}
             />
           </Box>
           <Select
+            allowDeselect={false}
             classNames={{
               root: classes['select-root'],
               dropdown: classes['usdc-dropdown-container'],
             }}
             data={['USDC']}
             defaultValue="USDC"
-            disabled={!isActivated}
             leftSection={
               <Image
                 alt="usdc"
@@ -134,7 +199,6 @@ export default function Deployed({ isActivated }: { isActivated: boolean }) {
         <Button
           className={classes.button}
           color="rgba(255, 255, 255, 1)"
-          disabled={!isActivated}
           onClick={() => onReset()}
           radius="xl"
           variant="outline"
@@ -144,9 +208,8 @@ export default function Deployed({ isActivated }: { isActivated: boolean }) {
         <Button
           className={classes.button}
           color="rgba(0, 0, 0, 1)"
-          disabled={!isActivated}
-          loading={saving}
-          onClick={() => onSave()}
+          loading={isAccountUpdating}
+          onClick={() => onUpdateSettings()}
           radius="xl"
           variant="white"
         >
@@ -154,5 +217,47 @@ export default function Deployed({ isActivated }: { isActivated: boolean }) {
         </Button>
       </Box>
     </Box>
+  )
+}
+
+function CreateAccountButton({ tbaAddresss, refetch }: { tbaAddresss: string; refetch: () => Promise<unknown> }) {
+  const [creating, setCreating] = useState(false)
+
+  const onCreateAccount = async () => {
+    try {
+      setCreating(true)
+
+      const res = await fetch(`/api/beep/profile/${tbaAddresss}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: null,
+      })
+
+      if (!res.ok) {
+        throw new Error(res.statusText)
+      }
+
+      refetch()
+    } catch (error) {
+      notifications.show({
+        title: 'Error',
+        message: (error as Error)?.message || 'Failed to create account',
+        color: 'red',
+      })
+    } finally {
+      setCreating(false)
+    }
+  }
+
+  return (
+    <Button
+      color="rgba(255, 255, 255, 1)"
+      loading={creating}
+      onClick={() => onCreateAccount()}
+      radius="xl"
+      variant="outline"
+    >
+      Create account
+    </Button>
   )
 }

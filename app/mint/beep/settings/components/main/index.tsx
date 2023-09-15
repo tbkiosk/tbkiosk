@@ -120,7 +120,8 @@ function AccountInfo({ tokenId }: { tokenId: string }) {
       <Text className={cx(classes['account-info-text'], classes.balance)}>
         {data?.formatted || (
           <Loader
-            color="blue"
+            color="rgba(0, 231, 166, 1)"
+            size={12}
             type="bars"
           />
         )}
@@ -131,7 +132,8 @@ function AccountInfo({ tokenId }: { tokenId: string }) {
           Number(data.formatted) * price.USD ?? '-'
         ) : (
           <Loader
-            color="blue"
+            color="rgba(0, 231, 166, 1)"
+            size={12}
             type="bars"
           />
         )}
