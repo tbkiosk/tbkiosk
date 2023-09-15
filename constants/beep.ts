@@ -15,3 +15,4 @@ export const BeepTbaImplementationAddress = {
 // TODO: Do not hardcode contract address and implementation address
 export const CONTRACT_ADDRESS = BeepContractAddress[chain.chainId]
 export const IMPLEMENTATION_ADDRESS = BeepTbaImplementationAddress[chain.chainId]
+export const REGISTRY_ADDRESS = '0x02101dfB77FDE026414827Fdc604ddAF224F0921' as `0x${string}`
