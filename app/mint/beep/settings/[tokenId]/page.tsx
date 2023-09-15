@@ -111,7 +111,7 @@ export default function BeepSettingsByTokenId({ params }: { params: { tokenId: s
     } catch (err) {
       notifications.show({
         title: 'Error',
-        message: (error as Error)?.message || 'Failed to update account',
+        message: (err as Error)?.message || 'Failed to update account',
         color: 'red',
       })
     } finally {
@@ -173,7 +173,7 @@ export default function BeepSettingsByTokenId({ params }: { params: { tokenId: s
                 {status === 'Deployed' && tbaAddresss && profile && (
                   <Switch
                     className={classes.switch}
-                    checked={profile.user.IS_ACTIVE}
+                    checked={profile?.user?.IS_ACTIVE}
                     color="rgba(0, 231, 166, 1)"
                     disabled={isAccountUpdating}
                     onChange={() => onUpdateStatus()}
@@ -241,45 +241,3 @@ export default function BeepSettingsByTokenId({ params }: { params: { tokenId: s
     </AppShell.Main>
   )
 }
-
-// function CreateAccountButton({ tbaAddresss, refetch }: { tbaAddresss: string; refetch: () => Promise<unknown> }) {
-//   const [creating, setCreating] = useState(false)
-
-//   const onCreateAccount = async () => {
-//     try {
-//       setCreating(true)
-
-//       const res = await fetch(`/api/beep/profile/${tbaAddresss}`, {
-//         method: 'POST',
-//         headers: { 'Content-Type': 'application/json' },
-//         body: null,
-//       })
-
-//       if (!res.ok) {
-//         throw new Error(res.statusText)
-//       }
-
-//       refetch()
-//     } catch (error) {
-//       notifications.show({
-//         title: 'Error',
-//         message: (error as Error)?.message || 'Failed to create account',
-//         color: 'red',
-//       })
-//     } finally {
-//       setCreating(false)
-//     }
-//   }
-
-//   return (
-//     <Button
-//       color="rgba(255, 255, 255, 1)"
-//       loading={creating}
-//       onClick={() => onCreateAccount()}
-//       radius="xl"
-//       variant="outline"
-//     >
-//       Create account
-//     </Button>
-//   )
-// }
