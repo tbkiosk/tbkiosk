@@ -1,8 +1,9 @@
-import { Box, Image, Text, Button } from '@mantine/core'
+import { Box, Image, Text } from '@mantine/core'
 import { notifications } from '@mantine/notifications'
-import { useChain, useSwitchChain, useContract, useContractWrite } from '@thirdweb-dev/react'
+import { Web3Button } from '@thirdweb-dev/react'
+import { erc6551RegistryAbi } from '@tokenbound/sdk'
 
-import { CONTRACT_ADDRESS, IMPLEMENTATION_ADDRESS } from 'constants/beep'
+import { CONTRACT_ADDRESS, IMPLEMENTATION_ADDRESS, REGISTRY_ADDRESS } from 'constants/beep'
 import { chain } from 'constants/chain'
 
 import { useOwnedBeepTbaDeployedStatus } from 'hooks/use_owned_beep_tba_deployed_status'
@@ -12,29 +13,10 @@ import classes from './styles.module.css'
 import type { ThirdWebError } from 'types'
 
 export default function Undeployed({ tokenId, tbaAddresss }: { tokenId: string; tbaAddresss: string }) {
-  const currentChain = useChain()
-  const switchChain = useSwitchChain()
-  const { contract } = useContract('0x02101dfB77FDE026414827Fdc604ddAF224F0921')
-  const { mutateAsync, isLoading } = useContractWrite(contract, 'createAccount')
-
   const { setAccountDeployedStatus } = useOwnedBeepTbaDeployedStatus({ tokenId })
 
-  const deployTba = async () => {
-    if (currentChain?.chainId !== chain.chainId) {
-      notifications.show({
-        title: 'Error',
-        message: `Please switch to ${chain.name} network`,
-        color: 'red',
-      })
-      return switchChain(chain.chainId)
-    }
-
+  const createAccount = async () => {
     try {
-      await mutateAsync({
-        args: [IMPLEMENTATION_ADDRESS, chain.chainId, CONTRACT_ADDRESS, tokenId ?? '', 0, '0x'],
-      })
-      setAccountDeployedStatus('Deployed')
-
       const res = await fetch(`/api/beep/profile/${tbaAddresss}`, {
         method: 'POST',
       })
@@ -45,7 +27,7 @@ export default function Undeployed({ tokenId, tbaAddresss }: { tokenId: string; 
     } catch (e) {
       notifications.show({
         title: 'Error',
-        message: (e as unknown as ThirdWebError)?.reason ?? 'Failed to deploy',
+        message: 'Failed to create user account',
         color: 'red',
       })
     }
@@ -61,15 +43,28 @@ export default function Undeployed({ tokenId, tbaAddresss }: { tokenId: string; 
       <Text className={classes.tip}>
         {`You haven't deployed your token bound account yet. So you will not be able to use auto-invest function now.`}
       </Text>
-      <Button
-        color="rgba(0, 0, 0, 1)"
-        loading={isLoading}
-        onClick={() => deployTba()}
-        radius="xl"
-        variant="white"
+      <Web3Button
+        contractAddress={REGISTRY_ADDRESS}
+        theme="dark"
+        contractAbi={erc6551RegistryAbi}
+        className={classes.button}
+        action={async contract => {
+          await contract.call('createAccount', [IMPLEMENTATION_ADDRESS, chain.chainId, CONTRACT_ADDRESS, tokenId ?? '', 0, '0x'])
+        }}
+        onSuccess={() => {
+          setAccountDeployedStatus('Deployed')
+          createAccount()
+        }}
+        onError={e => {
+          notifications.show({
+            title: 'Error',
+            message: (e as unknown as ThirdWebError).reason ?? 'Failed to deploy',
+            color: 'red',
+          })
+        }}
       >
-        Deploy token bound account
-      </Button>
+        Deploy Token Bound Account
+      </Web3Button>
     </Box>
   )
 }
