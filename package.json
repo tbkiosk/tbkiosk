@@ -6,7 +6,7 @@
     "node": ">=16.18.0",
     "pnpm": ">=8.0.0"
   },
-  "packageManager": "pnpm@8.7.5",
+  "packageManager": "pnpm@8.7.6",
   "scripts": {
     "dev": "next dev -p 3799",
     "build": "pnpm prisma && next build",
