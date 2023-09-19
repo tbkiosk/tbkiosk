@@ -83,8 +83,6 @@ export function BeepIframe({ src, className }: { src: string; className?: string
         visible={!loaded}
       />
       <iframe
-        // eslint-disable-next-line
-        allowTransparency
         className={cx(classes.iframe, loaded && classes['iframe-loaded'], className)}
         onLoad={() => setLoaded(true)}
         src={src}

@@ -89,6 +89,13 @@ export default function BeepSettingsByTokenId({ params }: { params: { tokenId: s
     setIsAccountUpdating(true)
 
     try {
+      await signer?.signMessage(
+        JSON.stringify({
+          ID: tbaAddresss,
+          IS_ACTIVE: !profile?.user.IS_ACTIVE,
+        })
+      )
+
       const res = await fetch(`/api/beep/profile/${tbaAddresss}/status`, {
         method: 'PUT',
         body: JSON.stringify({
