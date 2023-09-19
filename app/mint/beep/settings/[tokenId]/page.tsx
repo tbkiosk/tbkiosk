@@ -2,21 +2,22 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
-import { AppShell, Container, Box, Image, Text, Switch, CopyButton, Button, LoadingOverlay, Loader } from '@mantine/core'
+import { AppShell, Container, Box, Text, Switch, CopyButton, Button, LoadingOverlay, Loader } from '@mantine/core'
 import { notifications } from '@mantine/notifications'
 import { useQuery } from '@tanstack/react-query'
-import { useSigner } from '@thirdweb-dev/react'
+import { useSigner, useChainId } from '@thirdweb-dev/react'
 import { TokenboundClient } from '@tokenbound/sdk'
 import { match } from 'ts-pattern'
 import { cx } from 'classix'
 
 import Undeployed from './components/undeployed'
 import Deployed from './components/deployed'
+import { BeepIframe } from '../components/main'
 
 import { useOwnedBeepTbaDeployedStatus } from 'hooks/use_owned_beep_tba_deployed_status'
 import { maskAddress } from 'utils/address'
 
-import { CONTRACT_ADDRESS, IMPLEMENTATION_ADDRESS } from 'constants/beep'
+import { CONTRACT_ADDRESS, IMPLEMENTATION_ADDRESS, BeepContractAddress } from 'constants/beep'
 import { chain } from 'constants/chain'
 
 import classes from './styles.module.css'
@@ -25,6 +26,7 @@ import type { Profile } from 'types/profile'
 
 export default function BeepSettingsByTokenId({ params }: { params: { tokenId: string } }) {
   const { status } = useOwnedBeepTbaDeployedStatus({ tokenId: params.tokenId })
+
   const [isAccountUpdating, setIsAccountUpdating] = useState(false)
 
   const {
@@ -47,6 +49,7 @@ export default function BeepSettingsByTokenId({ params }: { params: { tokenId: s
   })
 
   const signer = useSigner()
+  const chainId = useChainId()
 
   const tokenboundClient = new TokenboundClient({ signer: signer, chainId: chain.chainId })
 
@@ -141,6 +144,9 @@ export default function BeepSettingsByTokenId({ params }: { params: { tokenId: s
     <AppShell.Main className={classes.main}>
       <Container className={classes.container}>
         <LoadingOverlay
+          loaderProps={{
+            color: 'rgba(0, 231, 166, 1)',
+          }}
           overlayProps={{ backgroundOpacity: 0 }}
           visible={isLoading}
         />
@@ -153,13 +159,12 @@ export default function BeepSettingsByTokenId({ params }: { params: { tokenId: s
             Back
           </Link>
         </Box>
-        {meta && (
+        {chainId && meta && (
           <Box className={classes['content-container']}>
-            <Box className={classes['nft-image-container']}>
-              <Image
-                alt={`${meta.name}`}
-                className={classes['nft-image']}
-                src={meta.image}
+            <Box className={classes['nft-iframe-container']}>
+              <BeepIframe
+                className={classes['nft-iframe']}
+                src={`https://beep-iframe.vercel.app/${BeepContractAddress[chainId]}/${chainId}/${params.tokenId}`}
               />
             </Box>
             <Box className={classes['settings-container']}>
@@ -211,6 +216,9 @@ export default function BeepSettingsByTokenId({ params }: { params: { tokenId: s
               </Box>
               <Box className={classes['profile-container']}>
                 <LoadingOverlay
+                  loaderProps={{
+                    color: 'rgba(0, 231, 166, 1)',
+                  }}
                   overlayProps={{ backgroundOpacity: 0 }}
                   visible={isProfileLoading}
                 />
@@ -226,6 +234,9 @@ export default function BeepSettingsByTokenId({ params }: { params: { tokenId: s
                   ))
                   .with('Loading', () => (
                     <LoadingOverlay
+                      loaderProps={{
+                        color: 'rgba(0, 231, 166, 1)',
+                      }}
                       overlayProps={{ backgroundOpacity: 0 }}
                       visible
                     />

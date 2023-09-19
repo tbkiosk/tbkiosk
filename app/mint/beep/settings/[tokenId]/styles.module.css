@@ -44,7 +44,7 @@
   }
 }
 
-.nft-image-container {
+.nft-iframe-container {
   height: 534px;
   width: 534px;
 
@@ -54,11 +54,12 @@
   }
 }
 
-.nft-image {
-  border-radius: 16px;
-  height: 100%;
-  object-fit: cover;
-  width: 100%;
+.nft-iframe {
+  border-radius: 18px;
+
+  @media (max-width: $mantine-breakpoint-sm) {
+    border-radius: 10px;
+  }
 }
 
 .settings-container {
@@ -81,6 +82,11 @@
   font-size: 36px;
   font-weight: 700;
   line-height: 52px;
+
+  @media (max-width: $mantine-breakpoint-sm) {
+    font-size: 24px;
+    line-height: 42px;
+  }
 }
 
 .description-row {
@@ -97,5 +103,6 @@
 
 .profile-container {
   flex: 1;
+  overflow: hidden;
   position: relative;
 }
