@@ -58,7 +58,7 @@ export async function PUT(request: Request, { params }: { params: { tokenBoundAc
       body: JSON.stringify({
         ID: tokenBoundAccount,
         FREQUENCY: +FREQUENCY,
-        AMOUNT,
+        AMOUNT: +AMOUNT,
       }),
     }
   )
