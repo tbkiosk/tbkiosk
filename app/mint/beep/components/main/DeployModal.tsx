@@ -168,7 +168,10 @@ export const DeployModal = ({ tokenId, isOpen, onClose }: Props) => {
       >
         Set up your Beep now
       </Text>
-      <Link href={'/mint/beep/settings'}>
+      <Link
+        href={'/mint/beep/settings'}
+        target="_blank"
+      >
         <Button className={cx(classes.button, classes.button__hide_loading_overlay)}>Go setting page</Button>
       </Link>
     </>

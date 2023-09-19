@@ -300,7 +300,10 @@ export default function Main() {
                 <Text mt={'md'}>Beep is a new take on what&apos;s possible with ERC 6551 smart NFTs. Brought to you by Kiosk.</Text>
               </Box>
               <SimpleGrid style={{ gap: '10px' }}>
-                <Link href={'/mint/beep/settings'}>
+                <Link
+                  href={'/mint/beep/settings'}
+                  target="_blank"
+                >
                   <Group gap={8}>
                     <svg
                       width="16"
@@ -330,7 +333,10 @@ export default function Main() {
                     <ArrowRight />
                   </Group>
                 </Link>
-                <Link href={'/mint/beep/settings'}>
+                <Link
+                  href={'/mint/beep/settings'}
+                  target="_blank"
+                >
                   <Group gap={8}>
                     <svg
                       width="16"
