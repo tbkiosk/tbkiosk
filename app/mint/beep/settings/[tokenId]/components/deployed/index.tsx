@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Box, Text, Button, Image, Select, NumberInput } from '@mantine/core'
 import { useQuery } from '@tanstack/react-query'
+import { useSigner } from '@thirdweb-dev/react'
 import { cx } from 'classix'
 
 import classes from './styles.module.css'
@@ -9,6 +10,8 @@ import { notifications } from '@mantine/notifications'
 import type { Profile } from 'types/profile'
 
 export default function Deployed({ tbaAddresss }: { tbaAddresss: string }) {
+  const signer = useSigner()
+
   const {
     data: profile,
     isFetching: isProfileLoading,
@@ -34,6 +37,7 @@ export default function Deployed({ tbaAddresss }: { tbaAddresss: string }) {
   })
 
   const [amount, setAmount] = useState<string>('0')
+  const [amountError, setAmountError] = useState<null | string>(null)
   const [frequency, setFrequency] = useState<string>('1')
   const [isAccountUpdating, setIsAccountUpdating] = useState(false)
 
@@ -55,9 +59,22 @@ export default function Deployed({ tbaAddresss }: { tbaAddresss: string }) {
   }, [profileError])
 
   const onUpdateSettings = async () => {
+    if (isNaN(+amount) || +amount < 20) {
+      setAmountError('Amount should be no less than 20')
+      return
+    }
+
     setIsAccountUpdating(true)
 
     try {
+      await signer?.signMessage(
+        JSON.stringify({
+          ID: tbaAddresss,
+          AMOUNT: amount,
+          FREQUENCY: frequency,
+        })
+      )
+
       const res = await fetch(`/api/beep/profile/${tbaAddresss}`, {
         method: 'PUT',
         body: JSON.stringify({
@@ -95,6 +112,7 @@ export default function Deployed({ tbaAddresss }: { tbaAddresss: string }) {
   const onReset = () => {
     if (profile && 'user' in profile) {
       setAmount(String(profile.user.AMOUNT))
+      setAmountError(null)
       setFrequency(String(profile.user.FREQUENCY))
     }
   }
@@ -161,10 +179,16 @@ export default function Deployed({ tbaAddresss }: { tbaAddresss: string }) {
               allowNegative={false}
               classNames={{
                 input: classes['amount-input'],
+                error: classes['amount-error'],
               }}
+              error={amountError}
               hideControls
               maw={360}
-              onChange={value => setAmount(String(value))}
+              min={20}
+              onChange={value => {
+                setAmount(String(value))
+                setAmountError(null)
+              }}
               value={amount}
               w={360}
             />

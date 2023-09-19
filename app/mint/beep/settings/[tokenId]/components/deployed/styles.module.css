@@ -69,9 +69,8 @@
   display: none;
 }
 
-.amount-unit {
-  color: rgba(166, 169, 174, 1);
-  margin-left: 8px;
+.amount-error {
+  text-align: center;
 }
 
 .tip {
