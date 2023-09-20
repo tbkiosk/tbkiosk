@@ -173,6 +173,7 @@
   font-weight: 500;
   border-radius: 45px !important;
   height: 56px !important;
+  text-align: center;
 }
 
 .button svg {
