@@ -3,14 +3,15 @@ import { cx } from 'classix'
 import classes from 'app/mint/beep/components/main/styles.module.css'
 import { chain } from '../../../../../constants/chain'
 import { notifications } from '@mantine/notifications'
-import { useSigner, Web3Button } from '@thirdweb-dev/react'
-import { useMemo, useState } from 'react'
-import { TokenboundClient, erc6551RegistryAbi } from '@tokenbound/sdk'
+import { Web3Button } from '@thirdweb-dev/react'
+import { useState } from 'react'
+import { erc6551RegistryAbi } from '@tokenbound/sdk'
 import { useOwnedBeepTbaDeployedStatus } from 'hooks/use_owned_beep_tba_deployed_status'
 import { ThirdWebError } from '../../../../../types'
 import { CONTRACT_ADDRESS, IMPLEMENTATION_ADDRESS, REGISTRY_ADDRESS } from 'constants/beep'
 import { maskAddress } from '../../../../../utils/address'
 import Link from 'next/link'
+import { useGetTbaAccount } from 'hooks/use_get_tba_account'
 
 const Robot = () => (
   <svg
@@ -87,17 +88,13 @@ type Props = {
 }
 
 export const DeployModal = ({ tokenId, isOpen, onClose }: Props) => {
-  const signer = useSigner()
-  const tokenboundClient = new TokenboundClient({ signer: signer, chainId: chain.chainId })
   const { nft: lastOwnedNFT, setAccountDeployedStatus } = useOwnedBeepTbaDeployedStatus({ lastOwned: true })
   const [isDeployed, setIsDeployed] = useState(false)
-  const tbaAddress = useMemo(() => {
-    return tokenboundClient.getAccount({
-      tokenContract: CONTRACT_ADDRESS,
-      tokenId: tokenId ?? '',
-      implementationAddress: IMPLEMENTATION_ADDRESS,
-    })
-  }, [tokenId])
+  const tbaAddress = useGetTbaAccount({
+    tokenId: tokenId ?? '',
+    implementationAddress: IMPLEMENTATION_ADDRESS,
+    contractAddress: CONTRACT_ADDRESS,
+  })
 
   const createAccount = async () => {
     try {
