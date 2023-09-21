@@ -301,7 +301,7 @@ export default function Main() {
                 </Text>
                 <Text mt={'md'}>Beep is a new take on what&apos;s possible with ERC 6551 smart NFTs. Brought to you by Kiosk.</Text>
               </Box>
-              <SimpleGrid style={{ gap: '10px' }}>
+              <SimpleGrid style={{ gap: '10px', display: 'inline-grid' }}>
                 <Link
                   href={'/mint/beep/settings'}
                   target="_blank"
