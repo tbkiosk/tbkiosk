@@ -16,6 +16,7 @@ import classes from './styles.module.css'
 import { DeployModal } from 'app/mint/beep/components/main/DeployModal'
 import { MintButton } from 'app/mint/beep/components/main/MintButton'
 import { DiscoverProjects } from 'app/mint/beep/components/main/DiscoverProjects'
+import { InstructionModal } from 'app/mint/beep/components/main/InstructionModal'
 
 const ArrowRight = () => (
   <svg
@@ -66,6 +67,7 @@ export default function Main() {
   const [tokenId, setTokenId] = useState<null | string>(null)
   const clipboard = useClipboard()
   const [isModalOpen, modalHandler] = useDisclosure(false)
+  const [isInstructionModalOpen, instructionModalHandler] = useDisclosure(false)
 
   const copyContractAddress = () => {
     clipboard.copy(CONTRACT_ADDRESS)
@@ -366,7 +368,13 @@ export default function Main() {
                     <ArrowRight />
                   </Group>
                 </Link>
-                <Group gap={8}>
+                <Group
+                  gap={8}
+                  style={{
+                    cursor: 'pointer',
+                  }}
+                  onClick={instructionModalHandler.open}
+                >
                   <svg
                     width="16"
                     height="17"
@@ -406,6 +414,10 @@ export default function Main() {
         isOpen={isModalOpen}
         onClose={modalHandler.close}
         tokenId={tokenId}
+      />
+      <InstructionModal
+        isOpen={isInstructionModalOpen}
+        onClose={instructionModalHandler.close}
       />
     </AppShell.Main>
   )

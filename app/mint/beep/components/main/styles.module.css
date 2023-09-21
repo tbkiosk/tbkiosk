@@ -409,3 +409,24 @@
 .discover-project-svg-rotate {
   transform: rotate(180deg);
 }
+
+.instruction-main-text {
+  color: #000;
+  font-size: 20px;
+  font-weight: 500;
+  margin-bottom: 32px;
+}
+
+.instruction-sub-text {
+  color: #222325;
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.instruction-step {
+  flex-shrink: 0;
+}
+
+.instruction-link {
+  text-decoration: underline;
+}
