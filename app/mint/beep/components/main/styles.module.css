@@ -430,3 +430,7 @@
 .instruction-link {
   text-decoration: underline;
 }
+
+.modal-header svg path {
+  fill: #a6a9ae;
+}
