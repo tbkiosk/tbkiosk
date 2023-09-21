@@ -59,9 +59,12 @@ export const InstructionModal = ({ isOpen, onClose }: Props) => {
           padding: 32,
         },
         header: {
-          backgroundColor: '#FFF',
+          backgroundColor: 'transparent',
           padding: 0,
         },
+      }}
+      classNames={{
+        header: cx('mantine-Modal-header', classes['modal-header']),
       }}
     >
       <Center mb={32}>
