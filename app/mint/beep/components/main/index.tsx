@@ -153,7 +153,7 @@ export default function Main() {
                     </clipPath>
                   </defs>
                 </svg>
-                <Text>On Polygon</Text>
+                <Text>On Testnet</Text>
               </Group>
               <Text
                 fw={500}
@@ -272,7 +272,7 @@ export default function Main() {
                 </Group>
                 <Group className={classes['contract-info-item']}>
                   <Text className={classes['contract-info-label']}>Blockchain</Text>
-                  <Text className={classes['contract-info-value']}>Polygon</Text>
+                  <Text className={classes['contract-info-value']}>Testnet</Text>
                 </Group>
                 <Group className={classes['contract-info-item']}>
                   <Text className={classes['contract-info-label']}>Token standard</Text>
