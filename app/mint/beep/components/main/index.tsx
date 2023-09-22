@@ -121,7 +121,7 @@ export default function Main() {
               <Box className={classes['name-row']}>
                 <Title className={classes.name}>BEEP BOT</Title>
               </Box>
-              <Box className={classes['mint-status-row']}>Mint starts on: Aug 18 2023, 13:45 GMT+8</Box>
+              <Box className={classes['mint-status-row']}>Live</Box>
               <Group gap={12}>
                 <svg
                   width="24"
@@ -160,7 +160,7 @@ export default function Main() {
                 fz={14}
                 mt={32}
               >
-                Beep is a DCA (Dollar-cost averaging) bot with a token-bound account.
+                Beep is a DCA (Dollar Cost Averaging) bot with a token-bound account.
               </Text>
               <Box className={classes['mint-info-row']}>
                 <Box className={classes['mint-price-col']}>
@@ -295,7 +295,7 @@ export default function Main() {
               </Box>
               <Box className={classes.desc}>
                 <Text>
-                  Beep is Dollar-cost averaging (DCA) bot with a token-bound account. In a volatile market, Beep is your reliable companion,
+                  Beep is Dollar Cost Averaging (DCA) bot with a token-bound account. In a volatile market, Beep is your reliable companion,
                   helping you navigate fluctuations by strategically spreading your purchases across different price levels. Say goodbye to
                   emotional trading decisions and start accumulating with confidence.
                 </Text>

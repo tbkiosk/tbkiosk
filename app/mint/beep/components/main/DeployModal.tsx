@@ -151,7 +151,7 @@ export const DeployModal = ({ tokenId, isOpen, onClose }: Props) => {
 
   const deployedContent = (
     <>
-      <Text className={cx(classes['deploy-modal-text'])}>Your Beep is ready to use! </Text>
+      <Text className={cx(classes['deploy-modal-text'])}>Congrats, Your Beep Bot Is Ready To Use! Your Token Bound Account(TBA) is </Text>
       <Text
         className={cx(classes['deploy-modal-text'])}
         c={'#A6A9AE'}
@@ -163,13 +163,13 @@ export const DeployModal = ({ tokenId, isOpen, onClose }: Props) => {
         mt={16}
         mb={40}
       >
-        Set up your Beep now
+        Deposit USDC to your TBA and set up your intervals to get started.
       </Text>
       <Link
         href={'/mint/beep/settings'}
         target="_blank"
       >
-        <Button className={cx(classes.button, classes.button__hide_loading_overlay)}>Go setting page</Button>
+        <Button className={cx(classes.button, classes.button__hide_loading_overlay)}>Set Up Your Beep Now</Button>
       </Link>
     </>
   )
