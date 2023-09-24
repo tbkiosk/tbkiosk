@@ -166,7 +166,7 @@ export const DeployModal = ({ tokenId, isOpen, onClose }: Props) => {
         Deposit USDC to your TBA and set up your intervals to get started.
       </Text>
       <Link
-        href={'/mint/beep/settings'}
+        href={`/mint/beep/settings/${tokenId}`}
         target="_blank"
       >
         <Button className={cx(classes.button, classes.button__hide_loading_overlay)}>Set Up Your Beep Now</Button>
