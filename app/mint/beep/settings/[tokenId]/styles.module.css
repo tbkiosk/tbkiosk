@@ -1,16 +1,18 @@
 .main {
-  background-color: #000;
   height: 100%;
 }
 
 .container {
-  background-color: #000;
   color: #fff;
   margin: 0 auto;
   max-width: 1440px;
   min-height: 100%;
   padding: 64px var(--mantine-spacing-xl) var(--mantine-spacing-xl);
   position: relative;
+}
+
+.link-container {
+  margin-bottom: 8px;
 }
 
 .link {
@@ -33,6 +35,9 @@
 
 .content-container {
   align-items: center;
+  border: 1px solid #222325;
+  background-color: #000;
+  border-radius: 40px;
   display: flex;
   flex-wrap: wrap;
   gap: 32px;
@@ -105,4 +110,8 @@
   flex: 1;
   overflow: hidden;
   position: relative;
+}
+
+.switch {
+  flex-shrink: 0;
 }
