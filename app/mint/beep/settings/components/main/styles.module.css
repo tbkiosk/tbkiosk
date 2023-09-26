@@ -4,10 +4,13 @@
 }
 
 .container {
-  background-color: hsl(0deg, 0%, 0%);
+  background-color: #000;
+  background-image: url('../../../../../../public/images/tba-bg.svg');
   color: #fff;
+  height: 100%;
   margin: 0 auto;
   max-width: 1440px;
+  overflow-y: auto;
   padding: 64px var(--mantine-spacing-xl) var(--mantine-spacing-xl);
 }
 
@@ -54,7 +57,7 @@
 }
 
 .iframe {
-  background-color: red;
+  background-color: #000;
   border: none;
   color-scheme: normal;
   height: 100%;

@@ -1,4 +1,5 @@
 .shell {
   background-color: #000;
   background-image: url('../../../../public/images/tba-bg.svg');
+  overflow: hidden;
 }
