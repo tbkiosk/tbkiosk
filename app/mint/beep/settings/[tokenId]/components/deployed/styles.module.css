@@ -20,6 +20,11 @@
   align-items: center;
   display: flex;
   gap: 8px;
+
+  @media (max-width: $mantine-breakpoint-sm) {
+    align-items: flex-start;
+    flex-direction: column;
+  }
 }
 
 .item-container {
@@ -27,6 +32,10 @@
   display: flex;
   font-weight: 500;
   gap: 8px;
+
+  @media (max-width: $mantine-breakpoint-sm) {
+    width: 100%;
+  }
 }
 
 .label {
@@ -35,6 +44,10 @@
 
 .select-root {
   width: auto;
+
+  @media (max-width: $mantine-breakpoint-sm) {
+    flex-grow: 1;
+  }
 }
 
 .select-icon {
@@ -55,6 +68,10 @@
   align-items: center;
   display: flex;
   justify-content: center;
+
+  @media (max-width: $mantine-breakpoint-sm) {
+    margin: 24px 0;
+  }
 }
 
 .amount-input {

@@ -213,23 +213,28 @@ export default function BeepSettingsByTokenId({ params }: { params: { tokenId: s
               </Box>
               <Box className={classes['description-row']}>
                 <Text className={classes.no}>{meta.name}</Text>
-                {status === 'Deployed' && tbaAddresss && (
-                  <CopyButton value={tbaAddresss}>
-                    {({ copy, copied }) => (
-                      <Button
-                        className={classes['copy-button']}
-                        color="rgba(166, 169, 174, 1)"
-                        onClick={copy}
-                        radius="xl"
-                        rightSection={copied ? <i className="fa-solid fa-check" /> : <i className="fa-regular fa-copy" />}
-                        size="xs"
-                        variant="outline"
-                      >
-                        {maskAddress(tbaAddresss)}
-                      </Button>
-                    )}
-                  </CopyButton>
-                )}
+                <Box className={classes['address-container']}>
+                  {status === 'Deployed' && tbaAddresss && (
+                    <>
+                      <span>Your address</span>
+                      <CopyButton value={tbaAddresss}>
+                        {({ copy, copied }) => (
+                          <Button
+                            className={classes['copy-button']}
+                            color="rgba(166, 169, 174, 1)"
+                            onClick={copy}
+                            radius="xl"
+                            rightSection={copied ? <i className="fa-solid fa-check" /> : <i className="fa-regular fa-copy" />}
+                            size="xs"
+                            variant="outline"
+                          >
+                            {maskAddress(tbaAddresss)}
+                          </Button>
+                        )}
+                      </CopyButton>
+                    </>
+                  )}
+                </Box>
               </Box>
               <Box className={classes['profile-container']}>
                 <LoadingOverlay

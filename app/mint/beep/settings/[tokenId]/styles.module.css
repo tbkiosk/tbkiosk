@@ -1,5 +1,6 @@
 .main {
   height: 100%;
+  overflow-y: auto;
 }
 
 .container {
@@ -73,7 +74,12 @@
   gap: 16px;
   height: 534px;
   overflow: hidden;
+  padding: 16px;
   width: 534px;
+
+  @media (max-width: $mantine-breakpoint-sm) {
+    height: auto;
+  }
 }
 
 .title-row {
@@ -81,6 +87,11 @@
   display: flex;
   gap: 8px;
   justify-content: space-between;
+
+  @media (max-width: $mantine-breakpoint-sm) {
+    align-items: flex-start;
+    flex-direction: column;
+  }
 }
 
 .title {
@@ -98,6 +109,11 @@
   align-items: center;
   display: flex;
   gap: 16px;
+
+  @media (max-width: $mantine-breakpoint-sm) {
+    align-items: flex-start;
+    flex-direction: column;
+  }
 }
 
 .no {
@@ -114,4 +130,10 @@
 
 .switch {
   flex-shrink: 0;
+}
+
+.address-container {
+  align-items: center;
+  display: flex;
+  gap: 16px;
 }

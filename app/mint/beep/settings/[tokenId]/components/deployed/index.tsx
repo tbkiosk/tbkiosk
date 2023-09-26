@@ -164,7 +164,7 @@ export default function Deployed({ tbaAddresss }: { tbaAddresss: string }) {
             />
           </Box>
           <Box className={classes['item-container']}>
-            <Text className={classes.label}>every</Text>
+            <Text className={classes.label}>Every</Text>
             <Select
               allowDeselect={false}
               classNames={{
