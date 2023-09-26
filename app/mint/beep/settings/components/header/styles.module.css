@@ -76,3 +76,7 @@
 .connect-button > div:nth-child(2) > span {
   color: rgba(120, 237, 193, 1) !important;
 }
+
+.transparent {
+  background: transparent;
+}

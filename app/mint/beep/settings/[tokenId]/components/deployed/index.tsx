@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Box, Text, Button, Image, Select, NumberInput } from '@mantine/core'
 import { useQuery } from '@tanstack/react-query'
 import { useSigner } from '@thirdweb-dev/react'
+import { useBalance } from 'wagmi'
 import { cx } from 'classix'
 
 import classes from './styles.module.css'
@@ -11,6 +12,12 @@ import type { Profile } from 'types/profile'
 
 export default function Deployed({ tbaAddresss }: { tbaAddresss: string }) {
   const signer = useSigner()
+
+  const { data: usdcBalance, isLoading: isBalanceLoading } = useBalance({
+    address: tbaAddresss as `0x${string}`,
+    chainId: 5,
+    token: '0x07865c6E87B9F70255377e024ace6630C1Eaa37F',
+  })
 
   const {
     data: profile,
@@ -117,7 +124,7 @@ export default function Deployed({ tbaAddresss }: { tbaAddresss: string }) {
     }
   }
 
-  if (!profile || isProfileLoading) return null
+  if (!profile || isProfileLoading || isBalanceLoading) return null
 
   if ('message' in profile && profile.message === 'USER_NOT_FOUND') {
     return (
@@ -127,6 +134,8 @@ export default function Deployed({ tbaAddresss }: { tbaAddresss: string }) {
       />
     )
   }
+
+  const disabled = ('user' in profile && !profile.user.IS_ACTIVE) || !usdcBalance?.value
 
   return (
     <Box className={classes.container}>
@@ -139,8 +148,9 @@ export default function Deployed({ tbaAddresss }: { tbaAddresss: string }) {
               classNames={{
                 root: classes['select-root'],
               }}
-              data={['ETH']}
-              value="ETH"
+              data={['WETH']}
+              disabled={disabled}
+              value="WETH"
               leftSection={
                 <Image
                   alt="eth"
@@ -162,9 +172,10 @@ export default function Deployed({ tbaAddresss }: { tbaAddresss: string }) {
               }}
               data={[
                 { value: '1', label: '1 day' },
-                { value: '3', label: '3 day' },
+                { value: '3', label: '3 days' },
                 { value: '7', label: '1 week' },
               ]}
+              disabled={disabled}
               onChange={v => setFrequency(v || '1')}
               radius="xl"
               rightSection={<i className="fa-solid fa-caret-down" />}
@@ -181,6 +192,7 @@ export default function Deployed({ tbaAddresss }: { tbaAddresss: string }) {
                 input: classes['amount-input'],
                 error: classes['amount-error'],
               }}
+              // disabled={disabled}
               error={amountError}
               hideControls
               maw={360}
@@ -200,6 +212,7 @@ export default function Deployed({ tbaAddresss }: { tbaAddresss: string }) {
               dropdown: classes['usdc-dropdown-container'],
             }}
             data={['USDC']}
+            disabled={disabled}
             defaultValue="USDC"
             leftSection={
               <Image
@@ -217,21 +230,25 @@ export default function Deployed({ tbaAddresss }: { tbaAddresss: string }) {
       </Box>
       <Text className={classes.tip}>
         <i className={cx('fa-solid fa-clock-rotate-left', classes['tip-icon'])} />
-        Your auto-invest cycle will begin as soon as it is created
+        {`Your Beep Bot is now active and will Auto-Buy WETH Every ${
+          'user' in profile && +profile.user.FREQUENCY > 0 ? profile.user.FREQUENCY : '-'
+        } day(s)`}
       </Text>
       <Box className={classes['button-row']}>
         <Button
           className={classes.button}
           color="rgba(255, 255, 255, 1)"
+          disabled={disabled}
           onClick={() => onReset()}
           radius="xl"
           variant="outline"
         >
-          Cancel
+          Reset
         </Button>
         <Button
           className={classes.button}
           color="rgba(0, 0, 0, 1)"
+          // disabled={disabled}
           loading={isAccountUpdating}
           onClick={() => onUpdateSettings()}
           radius="xl"

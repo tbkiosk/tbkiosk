@@ -2,17 +2,18 @@
 
 import { AppShell, Container, Box } from '@mantine/core'
 import { ConnectWallet } from '@thirdweb-dev/react'
+import cx from 'classix'
 
 import classes from './styles.module.css'
 
-export default function BeepSettingsHeader() {
+export default function BeepSettingsHeader({ transparent }: { transparent?: boolean }) {
   return (
     <AppShell.Header
-      className={classes.header}
+      className={cx(classes.header, transparent && classes.transparent)}
       withBorder={false}
       zIndex={1500}
     >
-      <Container className={classes.container}>
+      <Container className={cx(classes.container, transparent && classes.transparent)}>
         <Box
           className={classes['logo-wrapper']}
           visibleFrom="sm"

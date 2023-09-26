@@ -110,11 +110,19 @@ export default function BeepSettingsByTokenId({ params }: { params: { tokenId: s
 
       const response = await res.json()
       if (response?.user) {
-        notifications.show({
-          title: 'Success',
-          message: 'Successfully updated account',
-          color: 'green',
-        })
+        if (response.user.IS_ACTIVE) {
+          notifications.show({
+            title: 'Success',
+            message: 'Congrats! Your Beep Is Running Successfully And Has Made Its First Purchase',
+            color: 'green',
+          })
+        } else {
+          notifications.show({
+            title: 'Success',
+            message: 'Your Beep is disactivated',
+            color: 'green',
+          })
+        }
 
         refetch()
       }
@@ -188,6 +196,8 @@ export default function BeepSettingsByTokenId({ params }: { params: { tokenId: s
                     checked={profile?.user?.IS_ACTIVE}
                     color="rgba(0, 231, 166, 1)"
                     disabled={isAccountUpdating}
+                    label="Activate Beep"
+                    labelPosition="left"
                     onChange={() => onUpdateStatus()}
                     size="lg"
                     thumbIcon={
