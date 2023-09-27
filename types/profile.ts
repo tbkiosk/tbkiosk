@@ -6,5 +6,6 @@ export type Profile = {
     ID: string
     FREQUENCY: string
     IS_ACTIVE: boolean
+    SETTINGS_COMPLETE: boolean
   }
 }

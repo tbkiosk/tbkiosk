@@ -135,7 +135,7 @@ export default function Deployed({ tbaAddresss }: { tbaAddresss: string }) {
     )
   }
 
-  const disabled = ('user' in profile && !profile.user.IS_ACTIVE) || !usdcBalance?.value
+  const noUSDC = !usdcBalance?.value
 
   return (
     <Box className={classes.container}>
@@ -149,7 +149,7 @@ export default function Deployed({ tbaAddresss }: { tbaAddresss: string }) {
                 root: classes['select-root'],
               }}
               data={['WETH']}
-              disabled={disabled}
+              disabled={noUSDC}
               value="WETH"
               leftSection={
                 <Image
@@ -175,7 +175,7 @@ export default function Deployed({ tbaAddresss }: { tbaAddresss: string }) {
                 { value: '3', label: '3 days' },
                 { value: '7', label: '1 week' },
               ]}
-              disabled={disabled}
+              disabled={noUSDC}
               onChange={v => setFrequency(v || '1')}
               radius="xl"
               rightSection={<i className="fa-solid fa-caret-down" />}
@@ -212,7 +212,7 @@ export default function Deployed({ tbaAddresss }: { tbaAddresss: string }) {
               dropdown: classes['usdc-dropdown-container'],
             }}
             data={['USDC']}
-            disabled={disabled}
+            disabled={noUSDC}
             defaultValue="USDC"
             leftSection={
               <Image
@@ -238,7 +238,7 @@ export default function Deployed({ tbaAddresss }: { tbaAddresss: string }) {
         <Button
           className={classes.button}
           color="rgba(255, 255, 255, 1)"
-          disabled={disabled}
+          disabled={noUSDC}
           onClick={() => onReset()}
           radius="xl"
           variant="outline"
@@ -248,7 +248,7 @@ export default function Deployed({ tbaAddresss }: { tbaAddresss: string }) {
         <Button
           className={classes.button}
           color="rgba(0, 0, 0, 1)"
-          // disabled={disabled}
+          disabled={noUSDC}
           loading={isAccountUpdating}
           onClick={() => onUpdateSettings()}
           radius="xl"
