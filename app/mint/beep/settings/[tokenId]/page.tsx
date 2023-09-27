@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
-import { AppShell, Container, Box, Text, Switch, CopyButton, Button, LoadingOverlay, Loader } from '@mantine/core'
+import { AppShell, Container, Box, Text, Switch, CopyButton, Button, LoadingOverlay, Loader, HoverCard } from '@mantine/core'
 import { notifications } from '@mantine/notifications'
 import { useQuery } from '@tanstack/react-query'
 import { useSigner, useChainId } from '@thirdweb-dev/react'
@@ -119,7 +119,7 @@ export default function BeepSettingsByTokenId({ params }: { params: { tokenId: s
         } else {
           notifications.show({
             title: 'Success',
-            message: 'Your Beep is disactivated',
+            message: 'Your Beep is Deactivated',
             color: 'green',
           })
         }
@@ -189,6 +189,22 @@ export default function BeepSettingsByTokenId({ params }: { params: { tokenId: s
                   truncate
                 >
                   Set up your Beep
+                  <HoverCard
+                    position="bottom"
+                    shadow="md"
+                    width={320}
+                    withArrow
+                  >
+                    <HoverCard.Target>
+                      <i className={cx('fa-regular fa-circle-question', classes['question-icon'])} />
+                    </HoverCard.Target>
+                    <HoverCard.Dropdown>
+                      <Text size="sm">1. Copy Your Beep TBA Address below.</Text>
+                      <Text size="sm">2. Send USDC from your wallet to the TBA.</Text>
+                      <Text size="sm">3. Enter how much and when you want to DCA and click save.</Text>
+                      <Text size="sm">4. Activate your Beep. Enable Activate toggle only after settings have been saved.</Text>
+                    </HoverCard.Dropdown>
+                  </HoverCard>
                 </Text>
                 {status === 'Deployed' && tbaAddresss && profile && (
                   <Switch

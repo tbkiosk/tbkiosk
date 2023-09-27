@@ -83,15 +83,11 @@
 }
 
 .title-row {
-  align-items: center;
+  align-items: flex-start;
   display: flex;
+  flex-direction: column;
   gap: 8px;
   justify-content: space-between;
-
-  @media (max-width: $mantine-breakpoint-sm) {
-    align-items: flex-start;
-    flex-direction: column;
-  }
 }
 
 .title {
@@ -102,6 +98,17 @@
   @media (max-width: $mantine-breakpoint-sm) {
     font-size: 24px;
     line-height: 42px;
+  }
+}
+
+.question-icon {
+  cursor: pointer;
+  font-size: 24px;
+  font-weight: normal;
+  margin-left: 8px;
+
+  @media (max-width: $mantine-breakpoint-sm) {
+    font-size: 16px;
   }
 }
 
