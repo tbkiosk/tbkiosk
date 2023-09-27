@@ -195,7 +195,7 @@ export default function BeepSettingsByTokenId({ params }: { params: { tokenId: s
                     className={classes.switch}
                     checked={profile?.user?.IS_ACTIVE}
                     color="rgba(0, 231, 166, 1)"
-                    disabled={isAccountUpdating}
+                    disabled={isAccountUpdating || !profile?.user?.SETTINGS_COMPLETE}
                     label="Activate Beep"
                     labelPosition="left"
                     onChange={() => onUpdateStatus()}
