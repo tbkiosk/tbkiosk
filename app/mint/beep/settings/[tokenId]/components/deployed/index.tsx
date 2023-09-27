@@ -137,6 +137,22 @@ export default function Deployed({ tbaAddresss }: { tbaAddresss: string }) {
 
   const noUSDC = !usdcBalance?.value
 
+  const renderTip = () => {
+    if (!('user' in profile)) return null
+
+    if (!profile.user.SETTINGS_COMPLETE) {
+      return 'Your Beep Is Inactive, please send USDC to your TBA and save settings to get started'
+    }
+
+    if (!profile.user.IS_ACTIVE) {
+      return 'Please Activate your Beep To Start Buying ETH'
+    }
+
+    return `Your Beep Bot is now active and will Buy WETH worth ${profile.user.AMOUNT ?? '-'} USDC Every ${
+      profile.user.FREQUENCY ?? '-'
+    } Day(s)`
+  }
+
   return (
     <Box className={classes.container}>
       <Box className={classes['settings-container']}>
@@ -230,9 +246,7 @@ export default function Deployed({ tbaAddresss }: { tbaAddresss: string }) {
       </Box>
       <Text className={classes.tip}>
         <i className={cx('fa-solid fa-clock-rotate-left', classes['tip-icon'])} />
-        {`Your Beep Bot is now active and will Auto-Buy WETH Every ${
-          'user' in profile && +profile.user.FREQUENCY > 0 ? profile.user.FREQUENCY : '-'
-        } day(s)`}
+        {renderTip()}
       </Text>
       <Box className={classes['button-row']}>
         <Button
