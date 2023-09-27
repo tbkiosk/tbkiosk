@@ -1,11 +1,8 @@
 .main {
-  background-color: #000;
   height: 100%;
 }
 
 .container {
-  background-color: #000;
-  background-image: url('../../../../../../public/images/tba-bg.svg');
   color: #fff;
   height: 100%;
   margin: 0 auto;
