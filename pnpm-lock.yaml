@@ -110,8 +110,8 @@ devDependencies:
     specifier: ^8.4.29
     version: 8.4.29
   postcss-preset-mantine:
-    specifier: 1.7.0
-    version: 1.7.0(postcss@8.4.29)
+    specifier: 1.8.0
+    version: 1.8.0(postcss@8.4.29)
   postcss-simple-vars:
     specifier: ^7.0.1
     version: 7.0.1(postcss@8.4.29)
@@ -5556,8 +5556,8 @@ packages:
       postcss-selector-parser: 6.0.13
     dev: true
 
-  /postcss-preset-mantine@1.7.0(postcss@8.4.29):
-    resolution: {integrity: sha512-mA3Qr57P/M4qCuGAgLlGwcMTDtZlG3nouUgq5lIv50WDpuqHme9d7GA6FngBb37pLKYKngTkR2TXP+v5HxvW/g==}
+  /postcss-preset-mantine@1.8.0(postcss@8.4.29):
+    resolution: {integrity: sha512-aLc+EoDXsvnXM2lWWF1MI+lgGqbd5xatVJ3KyTmsheNoXBYN0OFAkRFqyy3tfdveH64Fno2SLNEr4w/njPSInw==}
     peerDependencies:
       postcss: '>=8.0.0'
     dependencies:
