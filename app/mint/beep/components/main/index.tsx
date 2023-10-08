@@ -121,7 +121,6 @@ export default function Main() {
               <Box className={classes['name-row']}>
                 <Title className={classes.name}>BEEP BOT</Title>
               </Box>
-              <Box className={classes['mint-status-row']}>Live</Box>
               <Group gap={12}>
                 <svg
                   width="24"
