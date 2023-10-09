@@ -1,4 +1,0 @@
-src/*/esm/**/*.css
-src/*/cjs/**/*.css
-docs/.next
-docs/out

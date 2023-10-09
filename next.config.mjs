@@ -7,14 +7,17 @@ import './env.mjs'
 const nextConfig = {
   reactStrictMode: true,
   webpack: config => {
-    config.resolve.fallback = { fs: false, net: false, tls: false }
-
     config.module.rules.push({
       test: /\.svg$/i,
-      issuer: /\.[jt]sx?$/,
-      use: ['@svgr/webpack'],
+      use: [
+        {
+          loader: '@svgr/webpack',
+          options: {
+            icon: "100%",
+          },
+        },
+      ],
     })
-
     return config
   },
   compiler: {
