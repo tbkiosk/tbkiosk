@@ -3,6 +3,8 @@ import dynamic from 'next/dynamic'
 import Header from '@/components/header'
 import Typewriter from './components/typewriter'
 
+import type { Metadata } from 'next'
+
 const Slideshow = dynamic(() => import('./components/home_slideshow'), { ssr: false })
 
 const Projects = () => (
@@ -29,5 +31,11 @@ const Projects = () => (
     </main>
   </>
 )
+
+export const metadata: Metadata = {
+  title: 'Kiosk - ERC 6551 Projects',
+  description: 'Digital ownership and utilities, powered by ERC 6551',
+  keywords: ['NFT', 'ERC 6551', 'ETH', 'Web3'],
+}
 
 export default Projects
