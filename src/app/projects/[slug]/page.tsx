@@ -2,7 +2,6 @@ import NextImage from 'next/image'
 import { Image } from '@nextui-org/image'
 import dayjs from 'dayjs'
 
-import Header from '@/components/header'
 import ProjectLinks from '@/components/project_link'
 import ProjectPreviewSwiper from './components/project_preview_swiper'
 import ProjectRecommendation from './components/project_recommendation'

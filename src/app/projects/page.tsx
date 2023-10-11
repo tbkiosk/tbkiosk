@@ -1,6 +1,5 @@
 import dynamic from 'next/dynamic'
 
-import Header from '@/components/header'
 import Typewriter from './components/typewriter'
 
 import type { Metadata } from 'next'
