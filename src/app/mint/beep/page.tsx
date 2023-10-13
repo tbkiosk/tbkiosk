@@ -1,11 +1,10 @@
-import dynamic from 'next/dynamic'
 import NextImage from 'next/image'
 import { Image } from '@nextui-org/image'
 
-const ConnectWalletButton = dynamic(() => import('@/components/connect_wallet_button'))
-const MintButton = dynamic(() => import('./components/mint_button'))
-const MintedCount = dynamic(() => import('./components/mint_count'))
+import ConnectWalletButton from '@/components/connect_wallet_button'
 import CopyButton from '@/components/copy_button'
+import MintButton from './components/mint_button'
+import MintedCount from './components/mint_count'
 import DCAButton from './components/dca_button'
 import MoreProjects from './components/more_projects'
 
