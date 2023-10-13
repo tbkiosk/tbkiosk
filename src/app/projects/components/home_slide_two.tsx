@@ -78,7 +78,7 @@ const HomeSlideTwo = () => {
                 rel="noreferrer"
                 target="_blank"
               >
-                <Button className="h-12 w-full bg-[#000000] hover:bg-[#0F0F0F] text-[#ffffff] rounded-full font-medium text-lg">
+                <Button className="h-12 w-full bg-black hover:bg-[#0F0F0F] text-[#ffffff] rounded-full font-medium text-lg">
                   Join waitlist
                 </Button>
               </a>
