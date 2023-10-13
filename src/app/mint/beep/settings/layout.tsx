@@ -16,7 +16,10 @@ const BeepSettingsLayout = ({ children }: { children: React.ReactNode }) => {
           <span className="h-[50px]">
             <BeepTextLogo />
           </span>
-          <ConnectWalletButton className="!bg-transparent !border-[#78edc1]" />
+          <ConnectWalletButton
+            className="!bg-transparent !text-[#78edc1] [&>div>span:first-child]:text-[#78edc1]"
+            style={{ border: '1px solid #78edc1' }}
+          />
         </div>
       </header>
       {children}

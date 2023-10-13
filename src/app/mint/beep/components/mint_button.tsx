@@ -24,7 +24,7 @@ const MintButton = () => {
   if (connectionStatus !== 'connected') {
     return (
       <div className="mt-4">
-        <ConnectWalletButton className="!w-full" />
+        <ConnectWalletButton className="!h-12 !w-full !text-xl !rounded-full" />
       </div>
     )
   }
