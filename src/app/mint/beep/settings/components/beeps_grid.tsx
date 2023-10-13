@@ -34,7 +34,7 @@ const BeepsGridInner = ({ chainId }: { chainId: number }) => {
   }
 
   return (
-    <div className="h-full w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-6 gap-4">
+    <div className="h-full w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-4">
       {data?.map(_nft => (
         <div
           className="relative aspect-square transition-transform hover:scale-[1.02]"
