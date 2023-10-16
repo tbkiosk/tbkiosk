@@ -1,11 +1,13 @@
 'use client'
 
 import { useMemo } from 'react'
-import { useSigner, useChainId } from '@thirdweb-dev/react'
+import { useSigner } from '@thirdweb-dev/react'
 import { TokenboundClient } from '@tokenbound/sdk'
 
 import BeepIframe from '../../components/beep_iframe'
 import CopyButton from '@/components/copy_button'
+import DepositButton from './deposit_button'
+import WithdrawButton from './withdraw_button'
 
 import { CONTRACT_ADDRESS, IMPLEMENTATION_ADDRESS } from '@/constants/beep'
 import { chain } from '@/constants/chain'
@@ -14,7 +16,7 @@ import { maskAddress } from '@/utils/address'
 
 const TBAContainer = ({ tokenId }: { tokenId: string }) => {
   const signer = useSigner()
-  const chainId = useChainId()
+  // const chainId = useChainId()
 
   const tokenboundClient = new TokenboundClient({ signer: signer, chainId: chain.chainId })
 
@@ -33,7 +35,7 @@ const TBAContainer = ({ tokenId }: { tokenId: string }) => {
       </div>
       <div className="">
         <h1 className="mb-4 font-bold text-4xl">Set up your Beep</h1>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-4 mb-8">
           <span className="font-medium text-xl">Beep #{tokenId}</span>
           <CopyButton
             className="px-4 py-1 border border-[#a6a9ae] rounded-full font-normal text-sm text-[#a6a9ae] hover:border-[#666666]"
@@ -41,6 +43,16 @@ const TBAContainer = ({ tokenId }: { tokenId: string }) => {
           >
             {maskAddress(tbaAddresss)}
           </CopyButton>
+        </div>
+        <div className="flex gap-4">
+          <DepositButton
+            tbaAddresss={tbaAddresss}
+            tokenId={tokenId}
+          />
+          <WithdrawButton
+            tbaAddresss={tbaAddresss}
+            tokenId={tokenId}
+          />
         </div>
       </div>
     </div>

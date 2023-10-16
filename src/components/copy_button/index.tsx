@@ -7,7 +7,17 @@ import { twMerge } from 'tailwind-merge'
 import CopyIcon from 'public/icons/copy.svg'
 import CheckIcon from 'public/icons/check.svg'
 
-const CopyButton = ({ copyText, children, className }: { copyText: string; children: React.ReactNode; className?: string }) => {
+const CopyButton = ({
+  copyText,
+  children,
+  className,
+  hideIcon = false,
+}: {
+  copyText: string
+  children: React.ReactNode
+  className?: string
+  hideIcon?: boolean
+}) => {
   const [copied, setCopied] = useState(false)
   const [, copy] = useCopyToClipboard()
 
@@ -27,7 +37,7 @@ const CopyButton = ({ copyText, children, className }: { copyText: string; child
       onClick={onCopy}
     >
       <span>{children}</span>
-      <span className="h-4 w-4">{copied ? <CheckIcon /> : <CopyIcon />}</span>
+      {!hideIcon && <span className="h-4 w-4">{copied ? <CheckIcon /> : <CopyIcon />}</span>}
     </button>
   )
 }
