@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { useChainId, useAddress, useContract, useOwnedNFTs } from '@thirdweb-dev/react'
 import { Spinner } from '@nextui-org/spinner'
 
@@ -34,11 +35,9 @@ const BeepsGrid = () => {
           className="relative aspect-square transition-transform hover:scale-[1.02]"
           key={_nft.metadata.id}
         >
-          <a
+          <Link
             className="h-full w-full absolute inset-0 z-10"
             href={`/mint/beep/settings/${_nft.metadata.id}`}
-            rel="noreferrer"
-            target="_blank"
           />
           <BeepIframe tokenId={_nft.metadata.id} />
         </div>
