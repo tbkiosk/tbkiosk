@@ -4,10 +4,6 @@ import BeepTextLogo from 'public/beep/beep-text-logo.svg'
 
 import type { Metadata } from 'next'
 
-export const metadata: Metadata = {
-  title: 'Kiosk - Beep Settings',
-}
-
 const BeepSettingsLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="h-[100vh] bg-black bg-[url('/beep/tba-bg.svg')] bg-cover bg-no-repeat overflow-y-auto">
@@ -25,6 +21,10 @@ const BeepSettingsLayout = ({ children }: { children: React.ReactNode }) => {
       {children}
     </div>
   )
+}
+
+export const metadata: Metadata = {
+  title: 'Kiosk - Beep Settings',
 }
 
 export default BeepSettingsLayout
