@@ -22,7 +22,7 @@ const BeepIframe = ({ tokenId }: { tokenId: string | number }) => {
         </div>
       )}
       <iframe
-        className={clsx('h-full w-full bg-black border-none rounded-xl opacity-0', loaded && 'opacity-100')}
+        className={clsx('h-full w-full bg-black border-none rounded-[4%] opacity-0', loaded && 'opacity-100')}
         onLoad={() => setLoaded(true)}
         src={`https://beep-iframe.vercel.app/${BeepContractAddress[chainId]}/${chainId}/${tokenId}`}
         style={{ colorScheme: 'normal' }}
