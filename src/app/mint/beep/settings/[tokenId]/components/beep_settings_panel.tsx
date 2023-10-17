@@ -4,6 +4,7 @@ import { Spinner } from '@nextui-org/spinner'
 import { match } from 'ts-pattern'
 
 import BeepUndeployed from './beep_undeployed'
+import BeepDeployed from './beep_deployed'
 
 import { useOwnedBeepTbaDeployedStatus } from '@/hooks/use_owned_beep_tba_deployed_status'
 
@@ -19,9 +20,10 @@ const BeepSettingsPanel = ({ tokenId, tbaAddress }: { tokenId: string; tbaAddres
           </div>
         ))
         .with('Deployed', () => (
-          <>
-            <h1>deployed</h1>
-          </>
+          <BeepDeployed
+            tbaAddress={tbaAddress}
+            tokenId={tokenId}
+          />
         ))
         .with('NotDeployed', () => (
           <BeepUndeployed
