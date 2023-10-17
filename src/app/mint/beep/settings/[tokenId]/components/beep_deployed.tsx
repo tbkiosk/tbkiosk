@@ -3,14 +3,18 @@
 import { useQuery } from '@tanstack/react-query'
 import { Spinner } from '@nextui-org/spinner'
 import { Button } from '@nextui-org/button'
+import { useDisclosure } from '@nextui-org/modal'
 
 import BeepAccountNotCreated from './beep_account_not_created'
+import PlanModal from './plan_modal'
 
 import RobotSuccess from 'public/beep/robot-success.svg'
 
 import type { Profile } from '@/types/profile'
 
 const BeepDeployed = ({ tokenId, tbaAddress }: { tokenId: string; tbaAddress: string }) => {
+  const { isOpen, onOpen, onOpenChange } = useDisclosure()
+
   const {
     data: profile,
     isFetching: isProfileLoading,
@@ -63,11 +67,20 @@ const BeepDeployed = ({ tokenId, tbaAddress }: { tokenId: string; tbaAddress: st
   if (!profile.user.SETTINGS_COMPLETE) {
     return (
       <div className="flex flex-col items-center grow">
+        <PlanModal
+          isOpen={isOpen}
+          onOpenChange={onOpenChange}
+          refetch={refetch}
+          tbaAddress={tbaAddress}
+        />
         <div className="grow h-16 mb-4">
           <RobotSuccess />
         </div>
         <p className="mb-4">Your Beep does not have any plan yet</p>
-        <Button className="bg-white font-bold text-sm text-black tracking-wide rounded-full transition-colors hover:bg-[#e1e1e1]">
+        <Button
+          className="bg-white font-bold text-sm text-black tracking-wide rounded-full transition-colors hover:bg-[#e1e1e1]"
+          onClick={onOpen}
+        >
           Create a plan now
         </Button>
       </div>
