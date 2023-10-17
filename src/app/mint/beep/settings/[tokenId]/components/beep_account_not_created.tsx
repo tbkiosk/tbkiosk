@@ -2,7 +2,6 @@
 
 import { useState } from 'react'
 import { toast } from 'react-toastify'
-
 import { Button } from '@nextui-org/button'
 
 import Note from 'public/beep/note.svg'
