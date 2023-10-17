@@ -1,6 +1,6 @@
 export type Profile = {
   user: {
-    NEXT_UPDATE: string
+    NEXT_UPDATE: number
     CREATED_AT: string
     AMOUNT: number
     ID: string

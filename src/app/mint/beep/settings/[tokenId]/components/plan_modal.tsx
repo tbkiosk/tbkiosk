@@ -1,3 +1,5 @@
+'use client'
+
 import { useState } from 'react'
 import { useSigner } from '@thirdweb-dev/react'
 import { useBalance } from 'wagmi'
@@ -160,8 +162,9 @@ const PlanModal = ({
                             'bg-transparent font-bold text-white text-xs border border-[#808080] rounded-full',
                             frequency === _option.frequency && 'bg-[#10cb93] font-bold text-black border-none'
                           )}
-                          onPress={() => setFrequency(_option.frequency)}
+                          isLoading={isAccountUpdating}
                           key={_option.frequency}
+                          onPress={() => setFrequency(_option.frequency)}
                         >
                           {_option.name}
                         </Button>

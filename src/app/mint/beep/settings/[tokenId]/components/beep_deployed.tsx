@@ -7,12 +7,13 @@ import { useDisclosure } from '@nextui-org/modal'
 
 import BeepAccountNotCreated from './beep_account_not_created'
 import PlanModal from './plan_modal'
+import SettingsBoard from './settings_board'
 
 import RobotSuccess from 'public/beep/robot-success.svg'
 
 import type { Profile } from '@/types/profile'
 
-const BeepDeployed = ({ tokenId, tbaAddress }: { tokenId: string; tbaAddress: string }) => {
+const BeepDeployed = ({ tbaAddress }: { tokenId: string; tbaAddress: string }) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
 
   const {
@@ -87,7 +88,13 @@ const BeepDeployed = ({ tokenId, tbaAddress }: { tokenId: string; tbaAddress: st
     )
   }
 
-  return <div></div>
+  return (
+    <SettingsBoard
+      profile={profile}
+      refetch={refetch}
+      tbaAddress={tbaAddress}
+    />
+  )
 }
 
 export default BeepDeployed
