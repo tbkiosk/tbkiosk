@@ -2,7 +2,6 @@
 
 import { useState } from 'react'
 import { useSigner } from '@thirdweb-dev/react'
-import { useBalance } from 'wagmi'
 import { Modal, ModalContent, ModalHeader, ModalBody } from '@nextui-org/modal'
 import { Button } from '@nextui-org/button'
 import { Input } from '@nextui-org/input'
@@ -35,12 +34,6 @@ const PlanModal = ({
   tbaAddress: string
 }) => {
   const signer = useSigner()
-
-  const { data: usdcBalance, isLoading: isBalanceLoading } = useBalance({
-    address: tbaAddress as `0x${string}`,
-    chainId: 5,
-    token: '0x07865c6E87B9F70255377e024ace6630C1Eaa37F',
-  })
 
   const [amount, setAmount] = useState<string>(propAmount || '0')
   const [amountError, setAmountError] = useState<null | string>(null)

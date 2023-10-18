@@ -76,7 +76,7 @@ const TBAContainer = ({ tokenId }: { tokenId: string }) => {
               tbaAddress={tbaAddress}
               tokenId={tokenId}
             />
-            <WithdrawButton />
+            <WithdrawButton tbaAddress={tbaAddress} />
           </div>
           <BeepSettingsPanel
             tbaAddress={tbaAddress}
