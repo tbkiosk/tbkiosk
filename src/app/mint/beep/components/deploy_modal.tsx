@@ -56,7 +56,9 @@ const DeployModal = ({ isOpen, onOpenChange, tokenId }: Pick<ModalProps, 'isOpen
             <ModalHeader />
             <ModalBody className="px-8 pb-8">
               <div className="flex justify-center">
-                <RobotSuccess />
+                <span className="h-24 w-24">
+                  <RobotSuccess />
+                </span>
               </div>
               {match(isDeployed)
                 .with(false, () => (
