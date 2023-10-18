@@ -15,6 +15,8 @@ import EthereumCircleBlack from 'public/icons/tokens/ethereum-circle-black.svg'
 import ChevronRight from 'public/icons/chevron-right.svg'
 
 import type { Metadata } from 'next'
+import { maskAddress } from '@/utils/address'
+import { CONTRACT_ADDRESS } from '@/constants/beep'
 
 export const metadata: Metadata = {
   title: 'Kiosk - Mint Beep',
@@ -99,7 +101,7 @@ const Mint = () => (
                 </div>
                 <div className="flex items-center justify-between md:justify-start gap-12 my-4 font-medium">
                   <span className="md:min-w-[130px] inline-block text-[#a6a9ae]">Contract address</span>
-                  <CopyButton copyText="0x86818Bf7d23FB9E588eFD5E927F6362E43244fa9">0x8681...4fa9</CopyButton>
+                  <CopyButton copyText={CONTRACT_ADDRESS}>{maskAddress(CONTRACT_ADDRESS)}</CopyButton>
                 </div>
                 <div className="flex items-center justify-between md:justify-start gap-12 my-4 font-medium">
                   <span className="md:min-w-[130px] inline-block text-[#a6a9ae]">Blockchain</span>
