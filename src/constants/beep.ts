@@ -3,13 +3,13 @@ import { Goerli, Ethereum } from '@thirdweb-dev/chains'
 import { chain } from '@/constants/chain'
 
 export const BeepContractAddress = {
-  [Goerli.chainId]: '0xD9e27B5781639E002259f7CCA3326CF978274Ae2',
-  [Ethereum.chainId]: '0xD9e27B5781639E002259f7CCA3326CF978274Ae2',
+  [Goerli.chainId]: '0x86818Bf7d23FB9E588eFD5E927F6362E43244fa9',
+  [Ethereum.chainId]: '0x86818Bf7d23FB9E588eFD5E927F6362E43244fa9',
 } as { [key: number]: `0x${string}` }
 
 export const BeepTbaImplementationAddress = {
-  [Goerli.chainId]: '0x55830df01D89923477F6650b39c65a03f3BB2c8c',
-  [Ethereum.chainId]: '0x55830df01D89923477F6650b39c65a03f3BB2c8c',
+  [Goerli.chainId]: '0xF72E72F264DbEe03C0e6d39c866d950832A6480e',
+  [Ethereum.chainId]: '0xF72E72F264DbEe03C0e6d39c866d950832A6480e',
 } as { [key: number]: `0x${string}` }
 
 // TODO: Do not hardcode contract address and implementation address
