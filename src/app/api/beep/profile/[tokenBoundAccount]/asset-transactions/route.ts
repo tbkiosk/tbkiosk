@@ -8,6 +8,7 @@ export type TransferTransaction = {
   value: number
   timestamp: string
   type: 'Deposit' | 'Withdraw'
+  currency: string
 }
 
 export async function GET(request: Request, { params }: { params: { tokenBoundAccount: string } }) {
@@ -39,8 +40,8 @@ export async function GET(request: Request, { params }: { params: { tokenBoundAc
       excludeZeroValue: true,
     })
 
-    const uniswapWethUsdcContract = '0x6337b3caf9c5236c7f3d1694410776119edaf9fa'
-    const botWallet = '0x449f07dc7616c43b47dbe8cf57dc1f6e34ef82f8'
+    const wethContract = '0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619'
+    const feeWallet = '0x88f92ba0D9E7C91F5B67A9B31c4Fe917141447AF'
 
     const [depositData, withdrawData] = await Promise.all([depositDataPromise, withdrawPromise])
 
@@ -55,14 +56,15 @@ export async function GET(request: Request, { params }: { params: { tokenBoundAc
           value: item.value,
           timestamp: item.metadata.blockTimestamp,
           type: 'Deposit',
+          currency: 'USDC',
         }
       })
 
     const usdcWithdraw = withdrawData.transfers
       .filter(transfer => {
-        if (transfer.to === botWallet) return false
+        if (transfer.to === feeWallet) return false
         else if (transfer.asset !== 'USDC') return false
-        else return transfer.to !== uniswapWethUsdcContract
+        else return transfer.to !== wethContract
       })
       .map(item => {
         return {
@@ -71,6 +73,7 @@ export async function GET(request: Request, { params }: { params: { tokenBoundAc
           value: item.value,
           timestamp: item.metadata.blockTimestamp,
           type: 'Withdraw',
+          currency: item.asset,
         }
       })
 

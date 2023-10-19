@@ -45,6 +45,7 @@ export const DepositHistory = ({ tbaAddress }: Props) => {
       value: item.value,
       date,
       type: item.type,
+      currency: item.currency,
     }
   })
 
@@ -70,7 +71,9 @@ export const DepositHistory = ({ tbaAddress }: Props) => {
             className={'text-[#F5F5F5]'}
           >
             <TableCell className="font-medium py-5">{item.type}</TableCell>
-            <TableCell className="font-medium">{item.value} USDT</TableCell>
+            <TableCell className="font-medium">
+              {item.value} {item.currency}
+            </TableCell>
             <TableCell className="font-medium">{item.date}</TableCell>
             <TableCell className="font-medium text-right">
               <ExplorerLink
