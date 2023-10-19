@@ -7,6 +7,7 @@ import MintButton from './components/mint_button'
 import MintedCount from './components/mint_count'
 import DCAButton from './components/dca_button'
 import MoreProjects from './components/more_projects'
+import FAQ from './components/faq'
 
 import LogoBlack from 'public/logo/logo-black.svg'
 import LogoText from 'public/logo/logo-text.svg'
@@ -208,6 +209,8 @@ const Mint = () => (
                   </span>
                 </a>
                 <DCAButton />
+                <h1 className="mt-8 md:mt-24 mb-6 md:mb-12 font-medium text-3xl">Frequently Asked Questions</h1>
+                <FAQ />
               </div>
             </div>
           </div>
