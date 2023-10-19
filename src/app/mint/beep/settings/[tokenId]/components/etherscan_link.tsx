@@ -1,7 +1,10 @@
-const EtherscanLink = ({ txhash, isSuccessful }: { txhash: string; isSuccessful: boolean }) => {
+import { chain, explorer } from '@/constants/chain'
+
+const ExplorerLink = ({ txhash, isSuccessful }: { txhash: string; isSuccessful: boolean }) => {
+  const explorerBase = explorer[chain.chainId]
   return (
     <a
-      href={`https://goerli.etherscan.io/tx/${txhash}`}
+      href={`${explorerBase}/tx/${txhash}`}
       className="inline-flex items-center"
       target={'_blank'}
       rel="noreferrer"
@@ -25,4 +28,4 @@ const EtherscanLink = ({ txhash, isSuccessful }: { txhash: string; isSuccessful:
   )
 }
 
-export default EtherscanLink
+export default ExplorerLink
