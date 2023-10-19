@@ -74,7 +74,7 @@ const HomeSlideTwo = () => {
             <div className="flex flex-col-reverse items-start grow mt-8">
               <a
                 className="w-full"
-                href="https://forms.gle/4XCifz7YWuNppNHd6"
+                href="https://tally.so/r/mKxWEX"
                 rel="noreferrer"
                 target="_blank"
               >

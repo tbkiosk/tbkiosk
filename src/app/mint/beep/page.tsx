@@ -81,7 +81,7 @@ const Mint = () => (
                     Join the&nbsp;
                     <a
                       className="underline"
-                      href="https://docs.google.com/forms/d/e/1FAIpQLSfLf1xuXqMReN9KyJpBS42HipIu5ufyMJNZnEEK8m8n-Qeq8A/viewform"
+                      href="https://tally.so/r/mKxWEX"
                       rel="noreferrer"
                       target="_blank"
                     >
