@@ -155,7 +155,7 @@ const PlanModal = ({
                             'bg-transparent font-bold text-white text-xs border border-[#808080] rounded-full',
                             frequency === _option.frequency && 'bg-[#10cb93] font-bold text-black border-none'
                           )}
-                          isLoading={isAccountUpdating}
+                          disabled={isAccountUpdating}
                           key={_option.frequency}
                           onPress={() => setFrequency(_option.frequency)}
                         >
@@ -166,6 +166,7 @@ const PlanModal = ({
                   </div>
                   <Button
                     className="w-[200px] bg-white font-bold text-sm text-black tracking-wide rounded-full"
+                    isLoading={isAccountUpdating}
                     onPress={onSave}
                   >
                     Save Plan
