@@ -71,19 +71,25 @@ const Mint = () => (
                   </span>
                   <span>On Polygon</span>
                 </div>
-                <p className="mt-8 font-medium text-sm">
-                  Beep is a DCA (Dollar-cost averaging) bot with a token-bound account. Beep is currently in internal beta testing, and only
-                  allowlisted addresses can mint. Join the{' '}
-                  <a
-                    className="underline"
-                    href="https://docs.google.com/forms/d/e/1FAIpQLSfLf1xuXqMReN9KyJpBS42HipIu5ufyMJNZnEEK8m8n-Qeq8A/viewform"
-                    rel="noreferrer"
-                    target="_blank"
-                  >
-                    waitlist
-                  </a>{' '}
-                  to be among the first to hear about the public release of Beep!
-                </p>
+                <div className="mt-8 font-medium text-sm">
+                  <p className="mb-2">
+                    Beep Bot, is an experimental NFT app that lets you add a Dollar Cost Averaging (DCA) feature to any decentralized
+                    wallet. We are currently in close beta, and only allowlisted addresses can mint. Join the Beep waitlist now and be first
+                    in line for its public release. Don&apos;t miss out!
+                  </p>
+                  <p>
+                    Join the&nbsp;
+                    <a
+                      className="underline"
+                      href="https://docs.google.com/forms/d/e/1FAIpQLSfLf1xuXqMReN9KyJpBS42HipIu5ufyMJNZnEEK8m8n-Qeq8A/viewform"
+                      rel="noreferrer"
+                      target="_blank"
+                    >
+                      waitlist
+                    </a>
+                    &nbsp;to be among the first to hear about the public release of Beep!
+                  </p>
+                </div>
                 <div className="py-4 md:grow" />
                 <p className="font-medium text-[#a6a9ae] leading-normal">Mint Price</p>
                 <div className="flex items-center gap-4">
@@ -140,14 +146,16 @@ const Mint = () => (
                   />
                   <span className="font-medium">BEEP BOT</span>
                 </div>
-                <p className="mb-4 text-[#a6a9ae]">
-                  Beep is Dollar Cost Averaging (DCA) bot with a token-bound account. In a volatile market, Beep is your reliable companion,
-                  helping you navigate fluctuations by strategically spreading your purchases across different price levels. Say goodbye to
-                  emotional trading decisions and start accumulating with confidence.
-                </p>
-                <p className="mb-8 text-[#a6a9ae]">
-                  Beep is a new take on what&apos;s possible with ERC 6551 smart NFTs. Brought to you by Kiosk.
-                </p>
+                <div className="mb-4 text-[#a6a9ae]">
+                  <p className="mb-2">
+                    Beep is a game-changing NFT that instantly adds a Dollar Cost Averaging (DCA) feature to any decentralized wallet.{' '}
+                  </p>
+                  <p className="mb-2">No fuss, just mint Beep, tailor your settings and experience the magic of DCA in your wallet.</p>
+                  <p className="mb-2">
+                    Forget waking up every Sunday morning and manually buying ETH. Step into the future and maximize your wallet&apos;s
+                    potential with Beep!
+                  </p>
+                </div>
                 <a
                   className="flex items-center gap-2 mb-2"
                   href="/mint/beep/settings"

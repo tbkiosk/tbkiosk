@@ -23,7 +23,7 @@ const TbaRecord = ({ tbaAddress }: Props) => {
       >
         <Tab
           key="invest"
-          title={'Invest History'}
+          title="History"
         >
           <InvestmentHistory tbaAddress={tbaAddress} />
         </Tab>

@@ -64,7 +64,8 @@ const DeployModal = ({ isOpen, onOpenChange, tokenId }: Pick<ModalProps, 'isOpen
                 .with(false, () => (
                   <>
                     <p className="my-4 font-medium text-xl text-center">
-                      Great! Your Beep is already minted. Now deploy your token bound account to start using beep!
+                      <p className="mb-2">Congratulations! Your Beep has minted.</p>
+                      <p className="mb-2">Now let us deploy you Beep&apos;s wallet!</p>
                     </p>
                     <Web3Button
                       action={async contract => {
@@ -91,19 +92,15 @@ const DeployModal = ({ isOpen, onOpenChange, tokenId }: Pick<ModalProps, 'isOpen
                       }}
                       theme="dark"
                     >
-                      Deploy Token Bound Account
+                      Deploy Beep&apos;s Wallet
                     </Web3Button>
                   </>
                 ))
                 .with(true, () => (
                   <>
-                    <p className="mt-4 font-medium text-xl text-center">
-                      Congrats, Your Beep Bot is ready! Your Token Bound Account(TBA) is
-                    </p>
+                    <p className="mt-4 font-medium text-xl text-center">Congrats, Your Beep&apos;s Wallet is live and ready to use!</p>
                     <p className="font-medium text-xl text-center text-[#a6a9ae]">{maskAddress(tbaAddress)}</p>
-                    <p className="my-4 font-medium text-xl text-center">
-                      Deposit USDC to your TBA and set up your intervals to get started.
-                    </p>
+                    <p className="my-4 font-medium text-xl text-center">Send USDC into you Beep&apos;s wallet to get started.</p>
                     <a
                       className="block"
                       href={`/mint/beep/settings/${tokenId}`}
