@@ -1,4 +1,5 @@
 import NextImage from 'next/image'
+import Link from 'next/link'
 import { Image } from '@nextui-org/image'
 
 import ConnectWalletButton from '@/components/connect_wallet_button'
@@ -40,8 +41,8 @@ const Mint = () => (
       </div>
     </header>
     <main className="h-[100vh] pt-[var(--header-height)] bg-white text-black overflow-hidden">
-      <div className="h-full px-4 md:px-8 pt-16 pb-8 overflow-y-auto custom-scrollbar">
-        <div className="max-w-screen-2xl mx-auto">
+      <div className="h-full px-4 md:px-8 pt-16 pb-4 overflow-y-auto custom-scrollbar">
+        <div className="max-w-screen-2xl mx-auto pb-4">
           <div className="p-8 md:p-20 bg-[#f5f5f5] rounded-[20px]">
             <div className="flex flex-col md:flex-row gap-8 md:gap-16">
               <Image
@@ -225,6 +226,39 @@ const Mint = () => (
           <h1 className="mt-20 mb-4 font-medium text-2xl">Discover More Projects</h1>
           <MoreProjects />
         </div>
+        <footer className="md:h-[var(--header-height)] max-w-screen-2xl mx-auto flex flex-col md:flex-row justify-between items-center font-medium">
+          <div className="w-auto md:w-[180px] flex gap-4 items-center text-white">
+            <div className="w-[2.75rem] h-[2.75rem] text-white">
+              <LogoBlack />
+            </div>
+            <div className="h-5 block text-black">
+              <LogoText />
+            </div>
+          </div>
+          <div className="flex flex-col md:flex-row items-center gap-2 md:gap-8 my-2 md:my-0 transition-colors">
+            <a
+              className="hover:text-[#6a6a6a]"
+              href="https://twitter.com/tbkiosk"
+              rel="noreferrer"
+              target="_blank"
+            >
+              TWITTER
+            </a>
+            <a
+              className="hover:text-[#6a6a6a]"
+              href="mailto:info@tbkiosk.xyz"
+            >
+              SUPPORT
+            </a>
+            <Link
+              className="hover:text-[#6a6a6a]"
+              href="/projects"
+            >
+              MANAGE PROJECT
+            </Link>
+          </div>
+          <span>@2023 Kiosk</span>
+        </footer>
       </div>
     </main>
   </>
