@@ -1,7 +1,7 @@
 'use client'
 
 import { Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from '@nextui-org/table'
-import EtherscanLink from '@/app/mint/beep/settings/[tokenId]/components/etherscan_link'
+import ExplorerLink from '@/app/mint/beep/settings/[tokenId]/components/etherscan_link'
 import { useQuery } from '@tanstack/react-query'
 import { Spinner } from '@nextui-org/spinner'
 import dayjs from 'dayjs'
@@ -73,7 +73,7 @@ export const DepositHistory = ({ tbaAddress }: Props) => {
             <TableCell className="font-medium">{item.value} USDT</TableCell>
             <TableCell className="font-medium">{item.date}</TableCell>
             <TableCell className="font-medium text-right">
-              <EtherscanLink
+              <ExplorerLink
                 txhash={item.hash}
                 isSuccessful={true}
               />
