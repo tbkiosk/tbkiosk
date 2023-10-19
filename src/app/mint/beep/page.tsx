@@ -10,8 +10,7 @@ import MoreProjects from './components/more_projects'
 
 import LogoBlack from 'public/logo/logo-black.svg'
 import LogoText from 'public/logo/logo-text.svg'
-import Ethereum from 'public/icons/tokens/ethereum.svg'
-import EthereumCircleBlack from 'public/icons/tokens/ethereum-circle-black.svg'
+import Polygon from 'public/icons/tokens/polygon.svg'
 import ChevronRight from 'public/icons/chevron-right.svg'
 
 import type { Metadata } from 'next'
@@ -48,7 +47,7 @@ const Mint = () => (
                 alt="beep"
                 as={NextImage}
                 classNames={{
-                  wrapper: 'max-w-[480px] grow',
+                  wrapper: 'w-full max-w-[480px]',
                   img: 'aspect-square object-cover',
                 }}
                 height={480}
@@ -57,7 +56,7 @@ const Mint = () => (
                 src="/beep/beep.png"
                 width={480}
               />
-              <div className="flex flex-col grow">
+              <div className="flex flex-col grow-0">
                 <div className="flex items-center gap-2 font-bold">
                   <span>Created by</span>
                   <span className="h-3 text-[#ed3733]">
@@ -67,18 +66,30 @@ const Mint = () => (
                 <p className="font-bold text-5xl leading-snug md:leading-normal">BEEP BOT</p>
                 <div className="flex items-center gap-2">
                   <span className="h-6 w-6">
-                    <Ethereum />
+                    <Polygon />
                   </span>
-                  <span>On Testnet</span>
+                  <span>On Polygon</span>
                 </div>
-                <p className="mt-8 font-medium text-sm">Beep is a DCA (Dollar Cost Averaging) bot with a token-bound account.</p>
+                <p className="mt-8 font-medium text-sm">
+                  Beep is a DCA (Dollar-cost averaging) bot with a token-bound account. Beep is currently in internal beta testing, and only
+                  allowlisted addresses can mint. Join the{' '}
+                  <a
+                    className="underline"
+                    href="https://docs.google.com/forms/d/e/1FAIpQLSfLf1xuXqMReN9KyJpBS42HipIu5ufyMJNZnEEK8m8n-Qeq8A/viewform"
+                    rel="noreferrer"
+                    target="_blank"
+                  >
+                    waitlist
+                  </a>{' '}
+                  to be among the first to hear about the public release of Beep!
+                </p>
                 <div className="py-4 md:grow" />
                 <p className="font-medium text-[#a6a9ae] leading-normal">Mint Price</p>
                 <div className="flex items-center gap-4">
                   <span className="h-6 w-6">
-                    <EthereumCircleBlack />
+                    <Polygon />
                   </span>
-                  <span className="font-medium text-3xl leading-normal">0.00 ETH</span>
+                  <span className="font-medium text-3xl leading-normal">FREE</span>
                 </div>
                 <p className="font-medium text-[#a6a9ae] leading-normal">0.00 USD</p>
                 <MintButton />
