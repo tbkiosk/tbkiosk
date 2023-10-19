@@ -21,6 +21,7 @@
     "prepare": "husky install"
   },
   "dependencies": {
+    "@nextui-org/accordion": "^2.0.23",
     "@nextui-org/button": "^2.0.21",
     "@nextui-org/dropdown": "^2.1.10",
     "@nextui-org/image": "^2.0.21",
