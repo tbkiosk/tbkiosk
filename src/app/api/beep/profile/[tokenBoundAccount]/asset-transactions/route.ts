@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { Alchemy, AssetTransfersCategory, Network, SortingOrder } from 'alchemy-sdk'
 
 import { env } from 'env.mjs'
+import { utils, BigNumber } from 'ethers'
 
 export type TransferTransaction = {
   isSuccess: boolean
@@ -10,6 +11,28 @@ export type TransferTransaction = {
   timestamp: string
   type: 'Deposit' | 'Withdraw'
   currency: string
+}
+
+type ScanTransaction = {
+  blockNumber: string
+  timeStamp: string
+  hash: string
+  nonce: string
+  blockHash: string
+  from: string
+  contractAddress: string
+  to: string
+  value: string
+  tokenName: string
+  tokenSymbol: string
+  tokenDecimal: string
+  transactionIndex: string
+  gas: string
+  gasPrice: string
+  gasUsed: string
+  cumulativeGasUsed: string
+  input: string
+  confirmations: string
 }
 
 export async function GET(request: Request, { params }: { params: { tokenBoundAccount: string } }) {
@@ -78,7 +101,29 @@ export async function GET(request: Request, { params }: { params: { tokenBoundAc
         }
       })
 
-    const result = [...usdcDeposit, ...usdcWithdraw].sort((a, b) => new Date(b.timestamp).valueOf() - new Date(a.timestamp).valueOf())
+    const key = env.POLYGONSCAN_KEY
+    const wethTransactionResponse = await fetch(
+      `https://api.polygonscan.com/api?module=account&action=tokentx&contractaddress=${wethContract}&address=${tokenBoundAccount}&page=1&offset=500&startblock=0&endblock=99999999&sort=asc&apikey=${key}`
+    )
+    const wethTransactionData = await wethTransactionResponse.json()
+    const wethWithdraw = wethTransactionData.result
+      .filter((item: ScanTransaction) => item.from.toLowerCase() === tokenBoundAccount.toLowerCase())
+      .map((transaction: ScanTransaction) => {
+        const value = BigNumber.from(transaction.value)
+        const decimals = BigNumber.from(transaction.tokenDecimal)
+        return {
+          isSuccess: true,
+          hash: transaction.hash,
+          value: utils.formatUnits(value, decimals),
+          timestamp: parseInt(transaction.timeStamp) * 1000,
+          type: 'Withdraw',
+          currency: transaction.tokenSymbol,
+        }
+      })
+
+    const result = [...usdcDeposit, ...usdcWithdraw, ...wethWithdraw].sort(
+      (a, b) => new Date(b.timestamp).valueOf() - new Date(a.timestamp).valueOf()
+    )
 
     return NextResponse.json(result)
   } catch (error) {
