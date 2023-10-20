@@ -8,7 +8,7 @@ import { Spinner } from '@nextui-org/spinner'
 import { useDisclosure } from '@nextui-org/modal'
 import dayjs from 'dayjs'
 
-import PlanModal from './plan_modal'
+import PlanModal, { FREQUENCY_OPTIONS } from './plan_modal'
 
 import EthereumCircle from 'public/icons/tokens/ethereum-circle.svg'
 import GearIcon from 'public/icons/gear.svg'
@@ -70,7 +70,10 @@ const SettingsBoard = ({ profile, refetch, tbaAddress }: { tbaAddress: string; r
         </span>
         <div className="grow">
           <div className="font-bold text-lg leading-normal">ETH</div>
-          <div className="text-sm text-[#a6a9ae] tracking-wide leading-normal">Invest {profile.user.AMOUNT || '-'} USDC weekly</div>
+          <div className="text-sm text-[#a6a9ae] tracking-wide leading-normal">
+            Invest {profile.user.AMOUNT || '-'} USDC&nbsp;
+            {FREQUENCY_OPTIONS.find(_option => _option.frequency === profile.user.FREQUENCY)?.name}
+          </div>
         </div>
         <div
           className="h-6 w-6 flex justify-center items-center bg-white text-black rounded-full cursor-pointer transition-colors hover:bg-[#e1e1e1]"
