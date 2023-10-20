@@ -72,7 +72,7 @@ const SettingsBoard = ({ profile, refetch, tbaAddress }: { tbaAddress: string; r
           <div className="font-bold text-lg leading-normal">ETH</div>
           <div className="text-sm text-[#a6a9ae] tracking-wide leading-normal">
             Invest {profile.user.AMOUNT || '-'} USDC&nbsp;
-            {FREQUENCY_OPTIONS.find(_option => _option.frequency === profile.user.FREQUENCY)?.name}
+            {FREQUENCY_OPTIONS.find(_option => +_option.frequency === +profile.user.FREQUENCY)?.name}
           </div>
         </div>
         <div
