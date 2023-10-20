@@ -3,15 +3,15 @@
 import { useState } from 'react'
 import { useSigner } from '@thirdweb-dev/react'
 import { TokenboundClient } from '@tokenbound/sdk'
-import { useBalance } from 'wagmi'
 import { Button } from '@nextui-org/button'
+import { useQuery } from '@tanstack/react-query'
 import { Modal, ModalContent, ModalHeader, ModalBody, useDisclosure } from '@nextui-org/modal'
 import { Select, SelectItem } from '@nextui-org/select'
 import { Input } from '@nextui-org/input'
 import { Spinner } from '@nextui-org/spinner'
 import { toast } from 'react-toastify'
 
-import { chain } from '@/constants/chain'
+import { chain, explorer } from '@/constants/chain'
 
 import EthereumCircle from 'public/icons/tokens/ethereum-circle.svg'
 import USDC from 'public/icons/tokens/usdc.svg'
@@ -21,16 +21,6 @@ const WithdrawButton = ({ tbaAddress }: { tbaAddress: string }) => {
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
 
-  const { data: ethBalance, isLoading: ethLoading } = useBalance({
-    address: tbaAddress as `0x${string}`,
-    chainId: 5,
-  })
-  const { data: usdcBalance, isLoading: usdcLoading } = useBalance({
-    address: tbaAddress as `0x${string}`,
-    chainId: 5,
-    token: '0x07865c6E87B9F70255377e024ace6630C1Eaa37F',
-  })
-
   const [token, setToken] = useState('Ethereum')
   const [amount, setAmount] = useState('0')
   const [amountError, setAmountError] = useState<null | string>(null)
@@ -38,18 +28,32 @@ const WithdrawButton = ({ tbaAddress }: { tbaAddress: string }) => {
   const [addressError, setAddressError] = useState<null | string>(null)
   const [withdrawing, setWithdrawing] = useState(false)
 
+  const { data: balances, isLoading: balancesLoading } = useQuery<{ usdc: string; weth: string }>({
+    queryKey: ['tba-balances', tbaAddress],
+    queryFn: async () => {
+      const res = await fetch(`/api/beep/profile/${tbaAddress}/balances`)
+
+      if (!res.ok) {
+        throw new Error(res.statusText)
+      }
+
+      return await res.json()
+    },
+    enabled: isOpen,
+  })
+
   const onConfirmWithdrawal = async () => {
     if (isNaN(+amount)) {
       setAmountError('Invalid amount')
       return
     }
 
-    if (token === 'Ethereum' && +amount > (ethBalance?.value ?? 0)) {
+    if (token === 'Ethereum' && +amount > +(balances?.weth ?? 0)) {
       setAmountError('Not enough Ethereum balance')
       return
     }
 
-    if (token === 'USDC' && +amount > (usdcBalance?.value ?? 0)) {
+    if (token === 'USDC' && +amount > +(balances?.usdc ?? 0)) {
       setAmountError('Not enough USDC balance')
       return
     }
@@ -60,13 +64,27 @@ const WithdrawButton = ({ tbaAddress }: { tbaAddress: string }) => {
       setWithdrawing(true)
 
       if (token === 'Ethereum') {
-        const txHash = await tokenboundClient.transferETH({
+        const txHash = await tokenboundClient.transferERC20({
           account: tbaAddress as `0x${string}`,
           amount: +amount,
           recipientAddress: address as `0x${string}`,
+          erc20tokenAddress: '0x7ceb23fd6bc0add59e62ac25578270cff1b9f619',
+          erc20tokenDecimals: 18,
         })
 
-        toast.success('')
+        toast.success(
+          <p>
+            Successfully transferred WETH.&nbsp;
+            <a
+              className="underline"
+              href={`${explorer[chain.chainId]}/tx/${txHash}`}
+              rel="noreferrer"
+              target="_blank"
+            >
+              {txHash}
+            </a>
+          </p>
+        )
         return
       }
 
@@ -75,11 +93,23 @@ const WithdrawButton = ({ tbaAddress }: { tbaAddress: string }) => {
           account: tbaAddress as `0x${string}`,
           amount: +amount,
           recipientAddress: address as `0x${string}`,
-          erc20tokenAddress: '0x07865c6E87B9F70255377e024ace6630C1Eaa37F',
-          erc20tokenDecimals: usdcBalance?.decimals || 6,
+          erc20tokenAddress: '0x2791bca1f2de4661ed88a30c99a7a9449aa84174',
+          erc20tokenDecimals: 6,
         })
 
-        toast.success('')
+        toast.success(
+          <p>
+            Successfully transferred USDC.&nbsp;
+            <a
+              className="underline"
+              href={`${explorer[chain.chainId]}/tx/${txHash}`}
+              rel="noreferrer"
+              target="_blank"
+            >
+              {txHash}
+            </a>
+          </p>
+        )
         return
       }
     } catch (error) {
@@ -111,6 +141,7 @@ const WithdrawButton = ({ tbaAddress }: { tbaAddress: string }) => {
                         trigger: 'h-[56px] bg-black hover:!bg-[#0f0f0f]',
                         value: 'font-bold text-lg text-center',
                       }}
+                      label="Select token"
                       labelPlacement="outside"
                       onSelectionChange={keys => {
                         setAmountError(null)
@@ -132,30 +163,16 @@ const WithdrawButton = ({ tbaAddress }: { tbaAddress: string }) => {
                         </SelectItem>
                       ))}
                     </Select>
-                    {token === 'Ethereum' && (
-                      <p className="text-center text-sm">
-                        {ethLoading ? (
-                          <Spinner
-                            color="default"
-                            size="sm"
-                          />
-                        ) : (
-                          `Balance: ${ethBalance?.formatted || '-'}`
-                        )}
-                      </p>
-                    )}
-                    {token === 'USDC' && (
-                      <p className="text-center text-sm">
-                        {ethLoading ? (
-                          <Spinner
-                            color="default"
-                            size="sm"
-                          />
-                        ) : (
-                          `Balance: ${usdcBalance?.formatted || '-'}`
-                        )}
-                      </p>
-                    )}
+                    <p className="text-center text-sm">
+                      {balancesLoading ? (
+                        <Spinner
+                          color="default"
+                          size="sm"
+                        />
+                      ) : (
+                        `Balance: ${token === 'Ethereum' ? balances?.weth || '-' : balances?.usdc || '-'}`
+                      )}
+                    </p>
                   </div>
                   <div className="w-full flex flex-col items-center">
                     <Input
@@ -202,7 +219,7 @@ const WithdrawButton = ({ tbaAddress }: { tbaAddress: string }) => {
                   </div>
                   <Button
                     className="h-12 w-full max-w-[320px] mt-8 px-8 bg-white font-bold text-xl text-black rounded-full tracking-wider transition-colors hover:bg-[#e1e1e1]"
-                    disabled={ethLoading || usdcLoading}
+                    disabled={balancesLoading}
                     isLoading={withdrawing}
                     onClick={onConfirmWithdrawal}
                   >
