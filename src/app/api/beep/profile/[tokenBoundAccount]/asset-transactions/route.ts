@@ -17,7 +17,7 @@ export async function GET(request: Request, { params }: { params: { tokenBoundAc
 
   const config = {
     apiKey: env.ALCHEMY_KEY,
-    network: Network.ETH_GOERLI,
+    network: Network.MATIC_MAINNET,
   }
 
   try {
