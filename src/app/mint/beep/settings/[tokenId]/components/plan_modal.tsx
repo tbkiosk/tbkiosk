@@ -115,7 +115,7 @@ const PlanModal = ({
                         </span>
                       }
                     >
-                      ETH
+                      WETH
                     </Button>
                   </div>
                   <div>
@@ -137,7 +137,7 @@ const PlanModal = ({
                             </span>
                           }
                         >
-                          ETH
+                          USDC
                         </Button>
                       }
                       label="Amount Per Period"
