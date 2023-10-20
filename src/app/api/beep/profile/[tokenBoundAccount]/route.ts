@@ -39,17 +39,9 @@ export async function POST(request: Request, { params }: { params: { tokenBoundA
   return NextResponse.json(response)
 }
 
-export type UpdateSettingsPayload = {
-  ID: string
-  SIGNATURE?: string
-  OWNER_ADDRESS?: string
-  FREQUENCY?: string
-  AMOUNT?: string
-}
-
 export async function PUT(request: Request, { params }: { params: { tokenBoundAccount: string } }) {
   const tokenBoundAccount = params.tokenBoundAccount
-  const { FREQUENCY, AMOUNT } = await request.json()
+  const { FREQUENCY, AMOUNT, END_DATE } = await request.json()
 
   const res = await fetch(
     `https://x7xo5ntbj4.execute-api.us-east-1.amazonaws.com/default/aws-serverless-typescript-api-dev-updateSettings`,
@@ -59,6 +51,7 @@ export async function PUT(request: Request, { params }: { params: { tokenBoundAc
         ID: tokenBoundAccount,
         FREQUENCY: +FREQUENCY,
         AMOUNT: +AMOUNT,
+        END_DATE: +END_DATE,
       }),
     }
   )

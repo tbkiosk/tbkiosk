@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { Alchemy, AssetTransfersCategory, Network, SortingOrder } from 'alchemy-sdk'
-import { env } from '../../../../../../../env.mjs'
+
+import { env } from 'env.mjs'
 
 export type TransferTransaction = {
   isSuccess: boolean
