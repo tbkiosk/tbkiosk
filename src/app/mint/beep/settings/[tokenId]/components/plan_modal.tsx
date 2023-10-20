@@ -8,10 +8,10 @@ import { Input } from '@nextui-org/input'
 import { toast } from 'react-toastify'
 import clsx from 'clsx'
 
-import EthereumCircle from 'public/icons/tokens/ethereum-circle.svg'
-import USDC from 'public/icons/tokens/usdc.svg'
+import WETH from 'public/icons/tokens/weth.svg'
+import WUSDC from 'public/icons/tokens/wusdc.svg'
 
-const FREQUENCY_OPTIONS = [
+export const FREQUENCY_OPTIONS = [
   { frequency: '1', name: 'Daily' },
   { frequency: '7', name: 'Weekly' },
   { frequency: '14', name: 'Bi-Weekly' },
@@ -111,7 +111,7 @@ const PlanModal = ({
                       disableRipple
                       startContent={
                         <span className="h-6 w-6">
-                          <EthereumCircle />
+                          <WETH />
                         </span>
                       }
                     >
@@ -121,7 +121,7 @@ const PlanModal = ({
                   <div>
                     <Input
                       classNames={{
-                        base: 'px-4 rounded-full border border-[#808080]',
+                        base: 'pl-4 rounded-full border border-[#808080]',
                         label: '!font-normal text-white',
                         innerWrapper: 'bg-transparent',
                         input: 'bg-transparent font-bold text-lg text-end',
@@ -129,11 +129,11 @@ const PlanModal = ({
                       }}
                       endContent={
                         <Button
-                          className="bg-[#292929] text-white rounded-full"
+                          className="w-[120px] bg-[#292929] text-white rounded-full"
                           disableRipple
                           startContent={
                             <span className="h-6 w-6 shrink-0">
-                              <USDC />
+                              <WUSDC />
                             </span>
                           }
                         >
