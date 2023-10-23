@@ -65,7 +65,7 @@ const DeployModal = ({ isOpen, onOpenChange, tokenId }: Pick<ModalProps, 'isOpen
                   <>
                     <p className="my-4 font-medium text-xl text-center">
                       <p className="mb-2">Congratulations! Your Beep has minted.</p>
-                      <p className="mb-2">Now let us deploy you Beep&apos;s wallet!</p>
+                      <p className="mb-2">Now let us deploy your Beep&apos;s wallet!</p>
                     </p>
                     <Web3Button
                       action={async contract => {
@@ -100,7 +100,7 @@ const DeployModal = ({ isOpen, onOpenChange, tokenId }: Pick<ModalProps, 'isOpen
                   <>
                     <p className="mt-4 font-medium text-xl text-center">Congrats, Your Beep&apos;s Wallet is live and ready to use!</p>
                     <p className="font-medium text-xl text-center text-[#a6a9ae]">{maskAddress(tbaAddress)}</p>
-                    <p className="my-4 font-medium text-xl text-center">Send USDC into you Beep&apos;s wallet to get started.</p>
+                    <p className="my-4 font-medium text-xl text-center">Send USDC into your Beep&apos;s wallet to get started.</p>
                     <a
                       className="block"
                       href={`/mint/beep/settings/${tokenId}`}
