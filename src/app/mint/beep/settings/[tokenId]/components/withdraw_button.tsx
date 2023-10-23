@@ -12,6 +12,7 @@ import { Spinner } from '@nextui-org/spinner'
 import { toast } from 'react-toastify'
 
 import { chain, explorer } from '@/constants/chain'
+import { USDC_DECIMAL } from '@/constants/token'
 
 import EthereumCircle from 'public/icons/tokens/ethereum-circle.svg'
 import USDC from 'public/icons/tokens/usdc.svg'
@@ -94,7 +95,7 @@ const WithdrawButton = ({ tbaAddress }: { tbaAddress: string }) => {
           amount: +amount,
           recipientAddress: address as `0x${string}`,
           erc20tokenAddress: '0x2791bca1f2de4661ed88a30c99a7a9449aa84174',
-          erc20tokenDecimals: 6,
+          erc20tokenDecimals: USDC_DECIMAL,
         })
 
         toast.success(
