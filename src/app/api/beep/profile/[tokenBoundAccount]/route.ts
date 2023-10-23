@@ -1,5 +1,9 @@
 import { NextResponse } from 'next/server'
 
+import { USDC_DECIMAL } from '@/constants/token'
+
+import type { Profile } from '@/types/profile'
+
 export const runtime = 'edge'
 
 export async function GET(request: Request, { params }: { params: { tokenBoundAccount: string } }) {
@@ -11,9 +15,9 @@ export async function GET(request: Request, { params }: { params: { tokenBoundAc
     return NextResponse.json({ error: res.statusText }, { status: res.status })
   }
 
-  const profile = await res.json()
+  const profile: Profile = await res.json()
 
-  return NextResponse.json(profile)
+  return NextResponse.json({ ...profile, user: { ...profile.user, AMOUNT: profile.user.AMOUNT / 10 ** USDC_DECIMAL } })
 }
 
 export async function POST(request: Request, { params }: { params: { tokenBoundAccount: string } }) {
@@ -50,7 +54,7 @@ export async function PUT(request: Request, { params }: { params: { tokenBoundAc
       body: JSON.stringify({
         ID: tokenBoundAccount,
         FREQUENCY: +FREQUENCY,
-        AMOUNT: +AMOUNT,
+        AMOUNT: +AMOUNT * 10 ** USDC_DECIMAL,
         END_DATE: +END_DATE,
       }),
     }
