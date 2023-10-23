@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useSigner } from '@thirdweb-dev/react'
 import { TokenboundClient } from '@tokenbound/sdk'
 import { Button } from '@nextui-org/button'
@@ -29,7 +29,11 @@ const WithdrawButton = ({ tbaAddress }: { tbaAddress: string }) => {
   const [addressError, setAddressError] = useState<null | string>(null)
   const [withdrawing, setWithdrawing] = useState(false)
 
-  const { data: balances, isLoading: balancesLoading } = useQuery<{ usdc: string; weth: string }>({
+  const {
+    data: balances,
+    isLoading: balancesLoading,
+    error,
+  } = useQuery<{ usdc: string; weth: string }>({
     queryKey: ['tba-balances', tbaAddress],
     queryFn: async () => {
       const res = await fetch(`/api/beep/profile/${tbaAddress}/balances`)
@@ -42,6 +46,12 @@ const WithdrawButton = ({ tbaAddress }: { tbaAddress: string }) => {
     },
     enabled: isOpen,
   })
+
+  useEffect(() => {
+    if (error) {
+      toast.error((error as Error)?.message || 'Failed to load balances')
+    }
+  }, [error])
 
   const onConfirmWithdrawal = async () => {
     if (isNaN(+amount)) {

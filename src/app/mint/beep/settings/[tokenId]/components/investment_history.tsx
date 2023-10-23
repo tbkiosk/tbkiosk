@@ -30,7 +30,7 @@ const InvestmentHistory = ({ tbaAddress }: Props) => {
     enabled: !!tbaAddress,
   })
 
-  if (status === 'loading') {
+  if (status === 'pending') {
     return <Spinner color="default" />
   }
 
