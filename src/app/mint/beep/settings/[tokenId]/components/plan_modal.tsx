@@ -1,15 +1,20 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, forwardRef } from 'react'
 import { useSigner } from '@thirdweb-dev/react'
 import { Modal, ModalContent, ModalHeader, ModalBody } from '@nextui-org/modal'
 import { Button } from '@nextui-org/button'
-import { Input } from '@nextui-org/input'
+import { Input, InputProps } from '@nextui-org/input'
 import { toast } from 'react-toastify'
+import DatePicker from 'react-datepicker'
 import clsx from 'clsx'
+import dayjs from 'dayjs'
 
 import WETH from 'public/icons/tokens/weth.svg'
 import WUSDC from 'public/icons/tokens/wusdc.svg'
+
+import './plan_modal.css'
+import 'react-datepicker/dist/react-datepicker.css'
 
 export const FREQUENCY_OPTIONS = [
   { frequency: '1', name: 'Daily' },
@@ -21,6 +26,7 @@ export const FREQUENCY_OPTIONS = [
 const PlanModal = ({
   amount: propAmount,
   frequncy: propFrequncy,
+  endDate: propEndDate,
   isOpen,
   onOpenChange,
   refetch,
@@ -28,6 +34,7 @@ const PlanModal = ({
 }: {
   amount?: string
   frequncy?: string
+  endDate?: number | null
   isOpen: boolean
   onOpenChange: () => void
   refetch: () => Promise<unknown>
@@ -35,9 +42,10 @@ const PlanModal = ({
 }) => {
   const signer = useSigner()
 
-  const [amount, setAmount] = useState<string>(propAmount || '0')
+  const [amount, setAmount] = useState(propAmount || '0')
   const [amountError, setAmountError] = useState<null | string>(null)
-  const [frequency, setFrequency] = useState<string>(propFrequncy || '1')
+  const [frequency, setFrequency] = useState(propFrequncy || '1')
+  const [endDate, setEndDate] = useState<Date | null>(propEndDate ? new Date(propEndDate) : null)
   const [isAccountUpdating, setIsAccountUpdating] = useState(false)
 
   const onValueChange = (value: string) => {
@@ -62,6 +70,7 @@ const PlanModal = ({
           ID: tbaAddress,
           AMOUNT: amount,
           FREQUENCY: frequency,
+          END_DATE: endDate ? +endDate : null,
         })
       )
 
@@ -71,6 +80,7 @@ const PlanModal = ({
           ID: tbaAddress,
           AMOUNT: amount,
           FREQUENCY: frequency,
+          END_DATE: endDate ? +endDate : null,
         }),
       })
 
@@ -90,6 +100,26 @@ const PlanModal = ({
       setIsAccountUpdating(false)
     }
   }
+
+  // eslint-disable-next-line
+  const EndDateInput = forwardRef<HTMLInputElement>(({ value, onClick }: InputProps, ref) => (
+    <Input
+      classNames={{
+        base: 'px-4 rounded-full border border-[#808080]',
+        clearButton: '!bottom-3',
+        label: '!font-normal text-white',
+        innerWrapper: 'bg-transparent',
+        input: 'bg-transparent font-bold text-lg text-end',
+        inputWrapper: '!bg-transparent',
+      }}
+      isClearable
+      label="End date"
+      onClear={() => setEndDate(null)}
+      onClick={onClick}
+      ref={ref}
+      value={value ? dayjs(value).format('MM/DD/YYYY') : ''}
+    />
+  ))
 
   return (
     <Modal
@@ -163,6 +193,15 @@ const PlanModal = ({
                         </Button>
                       ))}
                     </div>
+                  </div>
+                  <div className="w-full [&>.react-datepicker-wrapper]:w-full">
+                    <DatePicker
+                      customInput={<EndDateInput />}
+                      minDate={dayjs().add(1, 'day').toDate()}
+                      onChange={setEndDate}
+                      popperPlacement="top"
+                      selected={endDate}
+                    />
                   </div>
                   <Button
                     className="w-[200px] bg-white font-bold text-sm text-black tracking-wide rounded-full"

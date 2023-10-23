@@ -7,6 +7,6 @@ export type Profile = {
     FREQUENCY: string
     IS_ACTIVE: boolean
     SETTINGS_COMPLETE: boolean
-    END_DATE: number
+    END_DATE: number | null
   }
 }

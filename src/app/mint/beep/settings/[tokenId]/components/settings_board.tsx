@@ -81,6 +81,7 @@ const SettingsBoard = ({ profile, refetch, tbaAddress }: { tbaAddress: string; r
         >
           <PlanModal
             amount={String(profile.user.AMOUNT)}
+            endDate={profile.user.END_DATE}
             frequncy={String(profile.user.FREQUENCY)}
             isOpen={isOpen}
             onOpenChange={onOpenChange}
