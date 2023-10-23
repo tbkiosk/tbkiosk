@@ -43,7 +43,7 @@ const ProjectsGrid = () => {
 
       return data
     },
-    initialPageParam: 0,
+    initialPageParam: undefined,
     getNextPageParam: lastPage => (lastPage?.metaData.hasNextPage ? lastPage?.metaData.cursor : undefined),
     staleTime: Infinity,
   })
