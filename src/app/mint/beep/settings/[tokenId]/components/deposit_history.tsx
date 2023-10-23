@@ -30,7 +30,7 @@ export const DepositHistory = ({ tbaAddress }: Props) => {
     enabled: !!tbaAddress,
   })
 
-  if (status === 'loading') {
+  if (status === 'pending') {
     return <Spinner color="default" />
   }
 

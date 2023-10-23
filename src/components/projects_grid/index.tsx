@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { Button } from '@nextui-org/button'
 import { Spinner } from '@nextui-org/spinner'
@@ -11,7 +12,6 @@ import ProjectCard from './project_card'
 import { CATEGORY_TYPE_ALL } from '@/app/projects/components/filters'
 
 import type { Project } from '@prisma/client'
-import { useEffect } from 'react'
 
 /**
  * there will 1, 2, 3, 4 and 6 columns by window width
@@ -24,7 +24,7 @@ const ProjectsGrid = () => {
 
   const categories = searchParams.get('categories') || CATEGORY_TYPE_ALL
 
-  const { data, isLoading, hasNextPage, fetchNextPage, isFetchingNextPage } = useInfiniteQuery<{
+  const { data, isLoading, error, hasNextPage, fetchNextPage, isFetchingNextPage } = useInfiniteQuery<{
     data: Project[]
     metaData: {
       cursor: string | null
@@ -43,14 +43,16 @@ const ProjectsGrid = () => {
 
       return data
     },
+    initialPageParam: 0,
     getNextPageParam: lastPage => (lastPage?.metaData.hasNextPage ? lastPage?.metaData.cursor : undefined),
     staleTime: Infinity,
-    onError: (error: unknown) => {
-      toast.error((error as Error)?.message || 'Failed to load projects')
-    },
   })
 
-  useEffect
+  useEffect(() => {
+    if (error) {
+      toast.error((error as Error)?.message || 'Failed to load projects')
+    }
+  }, [error])
 
   return (
     <div className="min-h-[240px] flex flex-col items-center justify-center">

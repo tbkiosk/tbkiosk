@@ -64,7 +64,7 @@ const MoreProjects = () => {
   return (
     <div>
       {match(status)
-        .with('loading', () => (
+        .with('pending', () => (
           <div className="flex justify-center">
             <Spinner color="default" />
           </div>
