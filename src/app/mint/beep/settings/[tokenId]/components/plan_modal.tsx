@@ -29,6 +29,7 @@ const PlanModal = ({
   endDate: propEndDate,
   isOpen,
   onOpenChange,
+  onSuccess,
   refetch,
   tbaAddress,
 }: {
@@ -37,6 +38,7 @@ const PlanModal = ({
   endDate?: number | null
   isOpen: boolean
   onOpenChange: () => void
+  onSuccess?: () => void
   refetch: () => Promise<unknown>
   tbaAddress: string
 }) => {
@@ -92,6 +94,7 @@ const PlanModal = ({
       if (response?.user) {
         toast.success('Successfully updated account')
 
+        onSuccess?.()
         refetch()
       }
     } catch (err) {
