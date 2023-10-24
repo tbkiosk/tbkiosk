@@ -1,5 +1,6 @@
 'use client'
 
+import { useRouter, useSearchParams } from 'next/navigation'
 import { Modal, ModalContent, ModalHeader, ModalBody, useDisclosure, ModalFooter } from '@nextui-org/modal'
 import { Button } from '@nextui-org/button'
 
@@ -9,19 +10,21 @@ import RobotSuccess from 'public/beep/robot-success.svg'
 import { maskAddress } from '@/utils/address'
 
 const DepositButton = ({ tokenId, tbaAddress }: { tokenId: string; tbaAddress: string }) => {
-  const { isOpen, onOpen, onOpenChange } = useDisclosure()
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const showDepositModal = searchParams.get('show-deposit-modal')
 
   return (
     <>
       <Button
         className="w-[172px] px-8 bg-white font-bold text-xl text-black rounded-full tracking-wider transition-colors hover:bg-[#e1e1e1]"
-        onClick={onOpen}
+        onClick={() => router.replace(`${location.pathname}?show-deposit-modal=true`)}
       >
         Deposit
       </Button>
       <Modal
-        isOpen={isOpen}
-        onOpenChange={onOpenChange}
+        isOpen={showDepositModal === 'true'}
+        onClose={() => router.replace(location.pathname)}
         size="2xl"
       >
         <ModalContent className="bg-black text-white">
