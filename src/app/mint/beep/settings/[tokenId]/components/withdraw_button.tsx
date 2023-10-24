@@ -174,7 +174,7 @@ const WithdrawButton = ({ tbaAddress }: { tbaAddress: string }) => {
                         </SelectItem>
                       ))}
                     </Select>
-                    <p className="text-center text-sm">
+                    <div className="text-center text-sm">
                       {balancesLoading ? (
                         <Spinner
                           color="default"
@@ -183,7 +183,7 @@ const WithdrawButton = ({ tbaAddress }: { tbaAddress: string }) => {
                       ) : (
                         `Balance: ${token === 'Ethereum' ? balances?.weth || '-' : balances?.usdc || '-'}`
                       )}
-                    </p>
+                    </div>
                   </div>
                   <div className="w-full flex flex-col items-center">
                     <Input
