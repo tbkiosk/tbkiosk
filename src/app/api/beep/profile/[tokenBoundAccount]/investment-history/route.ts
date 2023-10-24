@@ -4,8 +4,6 @@ import { decodeFunctionData } from 'viem'
 import { env } from 'env.mjs'
 import { utils } from 'ethers'
 
-export const runtime = 'edge'
-
 type Transaction = {
   blockNumber: string
   blockHash: string
