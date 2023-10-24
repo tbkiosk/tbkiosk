@@ -1,5 +1,6 @@
 'use client'
 
+import { useRouter } from 'next/navigation'
 import { useQuery } from '@tanstack/react-query'
 import { Spinner } from '@nextui-org/spinner'
 import { Button } from '@nextui-org/button'
@@ -14,6 +15,8 @@ import RobotSuccess from 'public/beep/robot-success.svg'
 import type { Profile } from '@/types/profile'
 
 const BeepDeployed = ({ tbaAddress }: { tokenId: string; tbaAddress: string }) => {
+  const router = useRouter()
+
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
 
   const {
@@ -71,6 +74,7 @@ const BeepDeployed = ({ tbaAddress }: { tokenId: string; tbaAddress: string }) =
         <PlanModal
           isOpen={isOpen}
           onOpenChange={onOpenChange}
+          onSuccess={() => router.replace(`${location.pathname}?show-deposit-modal=true`)}
           refetch={refetch}
           tbaAddress={tbaAddress}
         />
