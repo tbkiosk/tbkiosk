@@ -30,7 +30,7 @@ const DepositButton = ({ tokenId, tbaAddress }: { tokenId: string; tbaAddress: s
         <ModalContent className="bg-black text-white">
           {() => (
             <>
-              <ModalHeader className="justify-center text-2xl">Deposit to your Beep account</ModalHeader>
+              <ModalHeader className="justify-center text-2xl">Deposit USDC to your Beep account</ModalHeader>
               <ModalBody className="px-8 pb-8">
                 <div className="h-16 flex justify-center">
                   <RobotSuccess />
