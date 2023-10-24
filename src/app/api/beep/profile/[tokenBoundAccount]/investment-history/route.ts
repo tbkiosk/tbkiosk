@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { decodeFunctionData } from 'viem'
 
 import { env } from 'env.mjs'
+import { utils } from 'ethers'
 
 export const runtime = 'edge'
 
@@ -67,7 +68,8 @@ const getSwapValue = (data: `0x${string}`) => {
     ],
     data: data,
   })
-  return args[1].toString()
+  const usdcDecimal = 6
+  return utils.formatUnits(args[1].toString(), usdcDecimal)
 }
 
 export async function GET(request: Request, { params }: { params: { tokenBoundAccount: string } }) {
