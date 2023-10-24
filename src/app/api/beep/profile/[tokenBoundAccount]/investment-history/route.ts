@@ -42,19 +42,32 @@ const getSwapValue = (data: `0x${string}`) => {
         constant: false,
         inputs: [
           {
+            name: 'receiver',
+            type: 'address',
+          },
+          {
             name: 'amountIn',
+            type: 'uint256',
+          },
+          {
+            name: 'bizId',
+            type: 'uint256',
+          },
+          {
+            name: 'amountOutMinimum',
             type: 'uint256',
           },
         ],
         name: 'swapExactInputSingle',
         outputs: [],
+        payable: false,
         stateMutability: 'nonpayable',
         type: 'function',
       },
     ],
     data: data,
   })
-  return args[0].toString()
+  return args[1].toString()
 }
 
 export async function GET(request: Request, { params }: { params: { tokenBoundAccount: string } }) {
@@ -69,7 +82,9 @@ export async function GET(request: Request, { params }: { params: { tokenBoundAc
 
     const { result } = (await response.json()) as { result: Transaction[] }
 
-    const swapTransactions = result.filter(item => item.functionName === 'swapExactInputSingle(uint256 amountIn)')
+    const swapTransactions = result.filter(
+      item => item.functionName === 'swapExactInputSingle(address receiver,uint256 amountIn,uint256 bizId,uint256 amountOutMinimum)'
+    )
 
     const data = swapTransactions.map(item => {
       return {
