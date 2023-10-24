@@ -48,7 +48,7 @@ const SettingsBoard = ({ profile, refetch, tbaAddress }: { tbaAddress: string; r
       const response = await res.json()
       if (response?.user) {
         if (response.user.IS_ACTIVE) {
-          toast.success('Congrats! Your Beep Is Running Successfully And Has Made Its First Purchase')
+          toast.success('Your Beep is activated and the first transaction has been initiated')
         } else {
           toast.success('Your Beep is Deactivated')
         }
