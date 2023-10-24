@@ -69,7 +69,7 @@ const getSwapValue = (data: `0x${string}`) => {
     data: data,
   })
   const usdcDecimal = 6
-  return utils.formatUnits(args[1].toString(), usdcDecimal)
+  return parseInt(utils.formatUnits(args[1].toString(), usdcDecimal))
 }
 
 export async function GET(request: Request, { params }: { params: { tokenBoundAccount: string } }) {
