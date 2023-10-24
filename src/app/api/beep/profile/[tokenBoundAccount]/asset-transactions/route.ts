@@ -66,6 +66,7 @@ export async function GET(request: Request, { params }: { params: { tokenBoundAc
 
     const wethContract = '0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619'
     const feeWallet = '0x88f92ba0D9E7C91F5B67A9B31c4Fe917141447AF'
+    const usdcWethPoolContract = '0x0e44ceb592acfc5d3f09d996302eb4c499ff8c10'
 
     const [depositData, withdrawData] = await Promise.all([depositDataPromise, withdrawPromise])
 
@@ -86,9 +87,9 @@ export async function GET(request: Request, { params }: { params: { tokenBoundAc
 
     const usdcWithdraw = withdrawData.transfers
       .filter(transfer => {
-        if (transfer.to === feeWallet) return false
+        if (transfer.to?.toLowerCase() === feeWallet.toLowerCase()) return false
         else if (transfer.asset !== 'USDC') return false
-        else return transfer.to !== wethContract
+        else return transfer.to?.toLowerCase() !== usdcWethPoolContract.toLowerCase()
       })
       .map(item => {
         return {
