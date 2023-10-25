@@ -1,6 +1,7 @@
 import NextImage from 'next/image'
 import Link from 'next/link'
 import { Image } from '@nextui-org/image'
+import { Button } from '@nextui-org/button'
 
 import ConnectWalletButton from '@/components/connect_wallet_button'
 import CopyButton from '@/components/copy_button'
@@ -36,6 +37,18 @@ const Mint = () => (
           </div>
         </div>
         <div className="w-auto md:w-[180px] flex gap-4 items-center justify-end">
+          <a
+            href="/mint/beep/settings"
+            target="_blank"
+          >
+            <Button
+              className="hidden md:flex font-medium border-black rounded-lg hover:bg-[#e1e1e1]"
+              disableRipple
+              variant="bordered"
+            >
+              🤖️ Manage Beeps
+            </Button>
+          </a>
           <ConnectWalletButton />
         </div>
       </div>
