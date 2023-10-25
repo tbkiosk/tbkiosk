@@ -12,7 +12,7 @@ import FAQ from './components/faq'
 
 import LogoBlack from 'public/logo/logo-black.svg'
 import LogoText from 'public/logo/logo-text.svg'
-import Polygon from 'public/icons/tokens/polygon.svg'
+import Ethereum from 'public/icons/tokens/ethereum.svg'
 import ChevronRight from 'public/icons/chevron-right.svg'
 
 import type { Metadata } from 'next'
@@ -68,9 +68,9 @@ const Mint = () => (
                 <p className="font-bold text-5xl leading-snug md:leading-normal">BEEP BOT</p>
                 <div className="flex items-center gap-2">
                   <span className="h-6 w-6">
-                    <Polygon />
+                    <Ethereum />
                   </span>
-                  <span>On Polygon</span>
+                  <span>On Ethereum</span>
                 </div>
                 <div className="mt-8 font-medium text-sm">
                   <p className="mb-2">
@@ -95,7 +95,7 @@ const Mint = () => (
                 <p className="font-medium text-[#a6a9ae] leading-normal">Mint Price</p>
                 <div className="flex items-center gap-4">
                   <span className="h-6 w-6">
-                    <Polygon />
+                    <Ethereum />
                   </span>
                   <span className="font-medium text-3xl leading-normal">FREE</span>
                 </div>
@@ -124,7 +124,7 @@ const Mint = () => (
                 </div>
                 <div className="flex items-center justify-between md:justify-start gap-12 my-4 font-medium">
                   <span className="md:min-w-[130px] inline-block text-[#a6a9ae]">Blockchain</span>
-                  <span>Polygon</span>
+                  <span>Ethereum</span>
                 </div>
                 <div className="flex items-center justify-between md:justify-start gap-12 my-4 font-medium">
                   <span className="md:min-w-[130px] inline-block text-[#a6a9ae]">Token standard</span>
@@ -132,7 +132,7 @@ const Mint = () => (
                 </div>
                 <div className="flex items-center justify-between md:justify-start gap-12 my-4 font-medium">
                   <span className="md:min-w-[130px] inline-block text-[#a6a9ae]">Supply</span>
-                  <span>1,000</span>
+                  <span>100</span>
                 </div>
               </div>
               <div className="md:w-1/2">
