@@ -73,10 +73,10 @@ export async function GET(request: Request, { params }: { params: { tokenBoundAc
   const tokenBoundAccount = params.tokenBoundAccount
 
   try {
-    const key = env.POLYGONSCAN_KEY
+    const key = env.ETHERSCAN_KEY
 
     const response = await fetch(
-      `https://api.polygonscan.com/api?module=account&action=txlist&address=${tokenBoundAccount}&startblock=0&endblock=99999999&page=1&offset=100&sort=desc&apikey=${key}`
+      `https://api.etherscan.io/api?module=account&action=txlist&address=${tokenBoundAccount}&startblock=0&endblock=99999999&page=1&offset=100&sort=desc&apikey=${key}`
     )
 
     const { result } = (await response.json()) as { result: Transaction[] }
