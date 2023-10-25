@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server'
 import { Alchemy, Network } from 'alchemy-sdk'
 
+import { USDC_CONTRACT_ADDRESS, WETH_CONTRACT_ADDRESS } from '@/constants/token'
+
 import { env } from 'env.mjs'
 
 export async function GET(request: Request, { params }: { params: { tokenBoundAccount: string } }) {
@@ -8,16 +10,13 @@ export async function GET(request: Request, { params }: { params: { tokenBoundAc
 
   const config = {
     apiKey: env.ALCHEMY_KEY,
-    network: Network.MATIC_MAINNET,
+    network: Network.ETH_MAINNET,
   }
-
-  const usdcContract = '0x2791bca1f2de4661ed88a30c99a7a9449aa84174'
-  const wethContract = '0x7ceb23fd6bc0add59e62ac25578270cff1b9f619'
 
   try {
     const alchemy = new Alchemy(config)
 
-    const tokenBalances = await alchemy.core.getTokenBalances(tokenBoundAccount, [usdcContract, wethContract])
+    const tokenBalances = await alchemy.core.getTokenBalances(tokenBoundAccount, [USDC_CONTRACT_ADDRESS, WETH_CONTRACT_ADDRESS])
 
     const usdc = `${parseInt(tokenBalances.tokenBalances[0].tokenBalance?.toString() || '0') / 10 ** 6}`
     const weth = `${parseInt(tokenBalances.tokenBalances[1].tokenBalance?.toString() || '0') / 10 ** 18}`
