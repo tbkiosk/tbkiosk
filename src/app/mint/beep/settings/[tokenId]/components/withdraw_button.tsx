@@ -12,7 +12,7 @@ import { Spinner } from '@nextui-org/spinner'
 import { toast } from 'react-toastify'
 
 import { chain, explorer } from '@/constants/chain'
-import { USDC_DECIMAL } from '@/constants/token'
+import { USDC_CONTRACT_ADDRESS, WETH_CONTRACT_ADDRESS, USDC_DECIMAL } from '@/constants/token'
 
 import EthereumCircle from 'public/icons/tokens/ethereum-circle.svg'
 import USDC from 'public/icons/tokens/usdc.svg'
@@ -25,7 +25,7 @@ const WithdrawButton = ({ tbaAddress }: { tbaAddress: string }) => {
   const [token, setToken] = useState('Ethereum')
   const [amount, setAmount] = useState('0')
   const [amountError, setAmountError] = useState<null | string>(null)
-  const [address, setAddress] = useState('0x')
+  const [address, setAddress] = useState('')
   const [addressError, setAddressError] = useState<null | string>(null)
   const [withdrawing, setWithdrawing] = useState(false)
 
@@ -54,8 +54,13 @@ const WithdrawButton = ({ tbaAddress }: { tbaAddress: string }) => {
   }, [error])
 
   const onConfirmWithdrawal = async () => {
-    if (isNaN(+amount)) {
+    if (isNaN(+amount) || !+amount) {
       setAmountError('Invalid amount')
+      return
+    }
+
+    if (!/^0[xX][0-9a-fA-F]*$/.test(address)) {
+      setAddressError('Invalid address')
       return
     }
 
@@ -79,7 +84,7 @@ const WithdrawButton = ({ tbaAddress }: { tbaAddress: string }) => {
           account: tbaAddress as `0x${string}`,
           amount: +amount,
           recipientAddress: address as `0x${string}`,
-          erc20tokenAddress: '0x7ceb23fd6bc0add59e62ac25578270cff1b9f619',
+          erc20tokenAddress: USDC_CONTRACT_ADDRESS,
           erc20tokenDecimals: 18,
         })
 
@@ -104,7 +109,7 @@ const WithdrawButton = ({ tbaAddress }: { tbaAddress: string }) => {
           account: tbaAddress as `0x${string}`,
           amount: +amount,
           recipientAddress: address as `0x${string}`,
-          erc20tokenAddress: '0x2791bca1f2de4661ed88a30c99a7a9449aa84174',
+          erc20tokenAddress: WETH_CONTRACT_ADDRESS,
           erc20tokenDecimals: USDC_DECIMAL,
         })
 
@@ -220,10 +225,9 @@ const WithdrawButton = ({ tbaAddress }: { tbaAddress: string }) => {
                       maxLength={128}
                       onValueChange={value => {
                         setAddressError(null)
-                        if (/^0[xX][0-9a-fA-F]*$/.test(value)) {
-                          setAddress(value)
-                        }
+                        setAddress(value)
                       }}
+                      placeholder="0x"
                       value={address}
                     />
                     {addressError && <p className="text-sm text-center text-red-500">{addressError}</p>}
