@@ -40,7 +40,7 @@ export async function GET(request: Request, { params }: { params: { tokenBoundAc
 
   const config = {
     apiKey: env.ALCHEMY_KEY,
-    network: Network.MATIC_MAINNET,
+    network: Network.ETH_MAINNET,
   }
 
   try {
@@ -64,9 +64,9 @@ export async function GET(request: Request, { params }: { params: { tokenBoundAc
       excludeZeroValue: true,
     })
 
-    const wethContract = '0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619'
+    const wethContract = '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2'
     const feeWallet = '0x88f92ba0D9E7C91F5B67A9B31c4Fe917141447AF'
-    const usdcWethPoolContract = '0x0e44ceb592acfc5d3f09d996302eb4c499ff8c10'
+    const usdcWethPoolContract = '0x88e6A0c2dDD26FEEb64F039a2c41296FcB3f5640'
 
     const [depositData, withdrawData] = await Promise.all([depositDataPromise, withdrawPromise])
 
@@ -102,9 +102,9 @@ export async function GET(request: Request, { params }: { params: { tokenBoundAc
         }
       })
 
-    const key = env.POLYGONSCAN_KEY
+    const key = env.ETHERSCAN_KEY
     const wethTransactionResponse = await fetch(
-      `https://api.polygonscan.com/api?module=account&action=tokentx&contractaddress=${wethContract}&address=${tokenBoundAccount}&page=1&offset=500&startblock=0&endblock=99999999&sort=asc&apikey=${key}`
+      `https://api.etherscan.io/api?module=account&action=tokentx&contractaddress=${wethContract}&address=${tokenBoundAccount}&page=1&offset=500&startblock=0&endblock=99999999&sort=asc&apikey=${key}`
     )
     const wethTransactionData = await wethTransactionResponse.json()
     const wethWithdraw = wethTransactionData.result
