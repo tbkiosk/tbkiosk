@@ -59,8 +59,8 @@ const PlanModal = ({
   }
 
   const onSave = async () => {
-    if (isNaN(+amount) || +amount < 20) {
-      setAmountError('Amount should be no less than 20')
+    if (isNaN(+amount) || +amount < 60) {
+      setAmountError('Please DCA with a minimum of $60 to ensure profitability after accounting for gas fees.')
       return
     }
 
