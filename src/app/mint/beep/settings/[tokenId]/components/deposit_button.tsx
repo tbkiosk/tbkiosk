@@ -38,7 +38,7 @@ const DepositButton = ({ tokenId, tbaAddress }: { tokenId: string; tbaAddress: s
                 <p className="my-2 font-medium text-xl text-center">
                   The wallet address for Beep #{tokenId} is <span className="text-[#a6a9ae]">{maskAddress(tbaAddress)}</span>
                 </p>
-                <p className="font-medium text-xl text-center">Make sure you deposit USDC on Polygon network only</p>
+                <p className="font-medium text-xl text-center">Make sure you deposit USDC on Ethereum network only</p>
               </ModalBody>
               <ModalFooter className="justify-center mb-4">
                 <CopyButton

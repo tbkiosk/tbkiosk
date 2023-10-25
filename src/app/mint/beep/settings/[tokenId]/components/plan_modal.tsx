@@ -10,8 +10,8 @@ import DatePicker from 'react-datepicker'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
 
-import WETH from 'public/icons/tokens/weth.svg'
-import WUSDC from 'public/icons/tokens/wusdc.svg'
+import ETH from 'public/icons/tokens/ethereum-circle.svg'
+import USDC from 'public/icons/tokens/usdc.svg'
 
 import './plan_modal.css'
 import 'react-datepicker/dist/react-datepicker.css'
@@ -144,7 +144,7 @@ const PlanModal = ({
                       disableRipple
                       startContent={
                         <span className="h-6 w-6">
-                          <WETH />
+                          <ETH />
                         </span>
                       }
                     >
@@ -166,7 +166,7 @@ const PlanModal = ({
                           disableRipple
                           startContent={
                             <span className="h-6 w-6 shrink-0">
-                              <WUSDC />
+                              <USDC />
                             </span>
                           }
                         >
