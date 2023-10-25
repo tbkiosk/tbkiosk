@@ -1,8 +1,7 @@
 import { NextResponse } from 'next/server'
-import { decodeFunctionData } from 'viem'
+import { decodeFunctionData, formatUnits } from 'viem'
 
 import { env } from 'env.mjs'
-import { utils } from 'ethers'
 
 type Transaction = {
   blockNumber: string
@@ -67,7 +66,7 @@ const getSwapValue = (data: `0x${string}`) => {
     data: data,
   })
   const usdcDecimal = 6
-  return parseInt(utils.formatUnits(args[1].toString(), usdcDecimal))
+  return formatUnits(BigInt(args[1].toString()), usdcDecimal)
 }
 
 export async function GET(request: Request, { params }: { params: { tokenBoundAccount: string } }) {
