@@ -69,6 +69,9 @@ const getSwapValue = (data: `0x${string}`) => {
   return formatUnits(BigInt(args[1].toString()), usdcDecimal)
 }
 
+export const dynamic = 'force-dynamic'
+export const fetchCache = 'force-no-store'
+
 export async function GET(request: Request, { params }: { params: { tokenBoundAccount: string } }) {
   const tokenBoundAccount = params.tokenBoundAccount
 
