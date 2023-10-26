@@ -66,7 +66,7 @@ export async function GET(request: Request, { params }: { params: { tokenBoundAc
 
     const wethContract = '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2'
     const feeWallet = '0x88f92ba0D9E7C91F5B67A9B31c4Fe917141447AF'
-    const usdcWethPoolContract = '0x88e6A0c2dDD26FEEb64F039a2c41296FcB3f5640'
+    const usdcWethPoolContract = '0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8'
 
     const [depositData, withdrawData] = await Promise.all([depositDataPromise, withdrawPromise])
 
