@@ -69,8 +69,8 @@ dependencies:
     specifier: ^4.0.7
     version: 4.0.7(ethers@5.7.2)(typescript@5.2.2)
   '@tokenbound/sdk':
-    specifier: ^0.3.12
-    version: 0.3.12(typescript@5.2.2)(zod@3.22.4)
+    specifier: ^0.4.0
+    version: 0.4.2(typescript@5.2.2)(zod@3.22.4)
   alchemy-sdk:
     specifier: ^2.10.1
     version: 2.10.1
@@ -5116,7 +5116,7 @@ packages:
     resolution: {integrity: sha512-osvveYtyzdEVbt3OfwwXFr4P2iVBL5u1Q3q4ONBfDY/UpOuXmOlbgwc1xECEboY8wIays8Yt6onaWMUdUbfl0A==}
     dependencies:
       '@noble/curves': 1.1.0
-      '@noble/hashes': 1.3.1
+      '@noble/hashes': 1.3.2
       '@scure/base': 1.1.3
     dev: false
 
@@ -6094,10 +6094,10 @@ packages:
       - zksync-web3
     dev: false
 
-  /@tokenbound/sdk@0.3.12(typescript@5.2.2)(zod@3.22.4):
-    resolution: {integrity: sha512-q0t12HlMu0d+RuoIFAMN9G6CQCrlcPmuQwW4f6e8TmMADIyKfZoUaA7phE1muY4bRTSFeVmx2AmsZom+kb4MVA==}
+  /@tokenbound/sdk@0.4.2(typescript@5.2.2)(zod@3.22.4):
+    resolution: {integrity: sha512-lTiqpadTL2qA5YpPLx3aF04E50/lDgTF+73kOa+F5QSVtuMzwBxduJ+Ln20MRKMbitxZMrP9fopZA+L9jIGPQA==}
     dependencies:
-      viem: 1.16.6(typescript@5.2.2)(zod@3.22.4)
+      viem: 1.17.2(typescript@5.2.2)(zod@3.22.4)
     transitivePeerDependencies:
       - bufferutil
       - typescript
@@ -13130,6 +13130,29 @@ packages:
 
   /viem@1.16.6(typescript@5.2.2)(zod@3.22.4):
     resolution: {integrity: sha512-jcWcFQ+xzIfDwexwPJRvCuCRJKEkK9iHTStG7mpU5MmuSBpACs4nATBDyXNFtUiyYTFzLlVEwWkt68K0nCSImg==}
+    peerDependencies:
+      typescript: '>=5.0.4'
+    peerDependenciesMeta:
+      typescript:
+        optional: true
+    dependencies:
+      '@adraffy/ens-normalize': 1.9.4
+      '@noble/curves': 1.2.0
+      '@noble/hashes': 1.3.2
+      '@scure/bip32': 1.3.2
+      '@scure/bip39': 1.2.1
+      abitype: 0.9.8(typescript@5.2.2)(zod@3.22.4)
+      isows: 1.0.3(ws@8.13.0)
+      typescript: 5.2.2
+      ws: 8.13.0
+    transitivePeerDependencies:
+      - bufferutil
+      - utf-8-validate
+      - zod
+    dev: false
+
+  /viem@1.17.2(typescript@5.2.2)(zod@3.22.4):
+    resolution: {integrity: sha512-lsF4qqo5cu9llE9g3736MIY2Qzeb/V/BebB4f0DaVuujQVebA/myHaplZGLjAqjPqCf9iui1VRZ6YCQsQ1FIBw==}
     peerDependencies:
       typescript: '>=5.0.4'
     peerDependenciesMeta:
