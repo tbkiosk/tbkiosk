@@ -2,9 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import NextImage from 'next/image'
-import { Input } from '@nextui-org/input'
-import { Image } from '@nextui-org/image'
-import { Spinner } from '@nextui-org/spinner'
+import { Input, Image, Spinner } from '@nextui-org/react'
 import { useDebounce, useOnClickOutside } from 'usehooks-ts'
 import { useQuery } from '@tanstack/react-query'
 

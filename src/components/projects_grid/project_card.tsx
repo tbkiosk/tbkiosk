@@ -1,5 +1,5 @@
 import NextImage from 'next/image'
-import { Image } from '@nextui-org/image'
+import { Image } from '@nextui-org/react'
 import clsx from 'clsx'
 
 import ProjectLinks from '../project_link'

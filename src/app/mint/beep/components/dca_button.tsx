@@ -1,6 +1,6 @@
 'use client'
 
-import { Modal, ModalContent, ModalHeader, ModalBody, useDisclosure } from '@nextui-org/modal'
+import { Modal, ModalContent, ModalHeader, ModalBody, useDisclosure } from '@nextui-org/react'
 
 import ChevronRight from 'public/icons/chevron-right.svg'
 

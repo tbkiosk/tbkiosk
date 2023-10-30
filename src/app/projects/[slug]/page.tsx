@@ -1,5 +1,5 @@
 import NextImage from 'next/image'
-import { Image } from '@nextui-org/image'
+import { Image } from '@nextui-org/react'
 import dayjs from 'dayjs'
 
 import ProjectLinks from '@/components/project_link'

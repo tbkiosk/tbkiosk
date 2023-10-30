@@ -2,8 +2,7 @@
 
 import { useEffect } from 'react'
 import { useSearchParams } from 'next/navigation'
-import { Button } from '@nextui-org/button'
-import { Spinner } from '@nextui-org/spinner'
+import { Button, Spinner } from '@nextui-org/react'
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
 

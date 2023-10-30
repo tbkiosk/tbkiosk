@@ -1,6 +1,6 @@
 import Link from 'next/link'
 
-import { Button } from '@nextui-org/button'
+import { Button } from '@nextui-org/react'
 import Searchbox from './searchbox'
 import Logo from 'public/logo/logo-red.svg'
 import LogoText from 'public/logo/logo-text.svg'

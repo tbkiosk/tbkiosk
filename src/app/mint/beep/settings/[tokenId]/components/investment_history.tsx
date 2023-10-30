@@ -1,11 +1,12 @@
 'use client'
 
-import { Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from '@nextui-org/table'
-import ExplorerLink from '@/app/mint/beep/settings/[tokenId]/components/etherscan_link'
+import { Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, Spinner } from '@nextui-org/react'
 import { useQuery } from '@tanstack/react-query'
-import { Spinner } from '@nextui-org/spinner'
 import dayjs from 'dayjs'
-import { SwapTransaction } from '@/app/api/beep/profile/[tokenBoundAccount]/investment-history/route'
+
+import ExplorerLink from '@/app/mint/beep/settings/[tokenId]/components/etherscan_link'
+
+import type { SwapTransaction } from '@/app/api/beep/profile/[tokenBoundAccount]/investment-history/route'
 
 type Props = {
   tbaAddress: string

@@ -1,5 +1,6 @@
 'use client'
-import { Tabs, Tab } from '@nextui-org/tabs'
+import { Tabs, Tab } from '@nextui-org/react'
+
 import InvestmentHistory from '@/app/mint/beep/settings/[tokenId]/components/investment_history'
 import { DepositHistory } from '@/app/mint/beep/settings/[tokenId]/components/deposit_history'
 

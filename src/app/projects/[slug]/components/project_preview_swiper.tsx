@@ -3,7 +3,7 @@
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Pagination } from 'swiper/modules'
 import NextImage from 'next/image'
-import { Image } from '@nextui-org/image'
+import { Image } from '@nextui-org/react'
 import clsx from 'clsx'
 
 import type { Project } from '@prisma/client'

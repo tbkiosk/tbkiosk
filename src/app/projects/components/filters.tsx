@@ -1,6 +1,5 @@
 import { useRouter, usePathname, useSearchParams } from 'next/navigation'
-import { Button } from '@nextui-org/button'
-import { Select, SelectItem } from '@nextui-org/select'
+import { Button, Select, SelectItem } from '@nextui-org/react'
 import clsx from 'clsx'
 
 import { Category } from '@prisma/client'

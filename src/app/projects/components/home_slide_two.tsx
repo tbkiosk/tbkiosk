@@ -2,8 +2,7 @@
 
 import { useRef } from 'react'
 import NextImage from 'next/image'
-import { Image } from '@nextui-org/image'
-import { Button } from '@nextui-org/button'
+import { Image, Button } from '@nextui-org/react'
 import { useSwiper, useSwiperSlide } from 'swiper/react'
 import { useSwipeable } from 'react-swipeable'
 

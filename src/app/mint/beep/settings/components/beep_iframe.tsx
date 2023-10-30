@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import clsx from 'clsx'
 import { useChainId } from '@thirdweb-dev/react'
-import { Spinner } from '@nextui-org/spinner'
+import { Spinner } from '@nextui-org/react'
 
 import { BeepContractAddress } from '@/constants/beep'
 

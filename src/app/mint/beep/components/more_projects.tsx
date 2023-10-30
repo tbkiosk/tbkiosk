@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { match } from 'ts-pattern'
 import { useQuery } from '@tanstack/react-query'
-import { Spinner } from '@nextui-org/spinner'
+import { Spinner } from '@nextui-org/react'
 import { Swiper, SwiperSlide, useSwiper } from 'swiper/react'
 
 import ProjectCard from '@/components/projects_grid/project_card'
