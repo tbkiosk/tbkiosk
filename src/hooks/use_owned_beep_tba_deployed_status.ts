@@ -21,13 +21,12 @@ export const useOwnedBeepTbaDeployedStatus = ({ lastOwned, tokenId }: UseOwnedBe
 
   const [accountDeployedStatus, setAccountDeployedStatus] = useState<ButtonStatus>('Loading')
 
-  const tokenboundClient = new TokenboundClient({ signer: signer, chainId: chain.chainId })
+  const tokenboundClient = new TokenboundClient({ signer: signer, chainId: chain.chainId, implementationAddress: IMPLEMENTATION_ADDRESS })
 
   const checkAccountDeployment = async (tokenId: string) => {
     const tokenBoundAccount = tokenboundClient.getAccount({
       tokenContract: CONTRACT_ADDRESS,
       tokenId: tokenId,
-      implementationAddress: IMPLEMENTATION_ADDRESS,
     })
 
     if (signer?.provider) {
