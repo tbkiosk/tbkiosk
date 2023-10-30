@@ -27,7 +27,7 @@ const BeepDeployed = ({ tbaAddress }: { tokenId: string; tbaAddress: string }) =
     refetchInterval: 0,
     refetchOnMount: false,
     refetchOnWindowFocus: false,
-    queryKey: ['token-bound-account-profile'],
+    queryKey: ['token-bound-account-profile', tbaAddress],
     queryFn: async () => {
       const res = await fetch(`/api/beep/profile/${tbaAddress}`)
 

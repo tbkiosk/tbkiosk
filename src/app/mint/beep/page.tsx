@@ -15,9 +15,10 @@ import LogoText from 'public/logo/logo-text.svg'
 import Ethereum from 'public/icons/tokens/ethereum.svg'
 import ChevronRight from 'public/icons/chevron-right.svg'
 
-import type { Metadata } from 'next'
 import { maskAddress } from '@/utils/address'
 import { CONTRACT_ADDRESS } from '@/constants/beep'
+
+import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Kiosk - Mint Beep',

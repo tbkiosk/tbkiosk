@@ -5,6 +5,8 @@ import { USDC_DECIMAL } from '@/constants/token'
 import type { Profile } from '@/types/profile'
 
 export const runtime = 'edge'
+export const dynamic = 'force-dynamic'
+export const fetchCache = 'force-no-store'
 
 export async function GET(request: Request, { params }: { params: { tokenBoundAccount: string } }) {
   const tokenBoundAccount = params.tokenBoundAccount
@@ -15,9 +17,17 @@ export async function GET(request: Request, { params }: { params: { tokenBoundAc
     return NextResponse.json({ error: res.statusText }, { status: res.status })
   }
 
-  const profile: Profile = await res.json()
+  const profile: Profile | { status: number; message: string } = await res.json()
 
-  return NextResponse.json({ ...profile, user: { ...profile.user, AMOUNT: profile.user.AMOUNT / 10 ** USDC_DECIMAL } })
+  if ('status' in profile && profile.status >= 400) {
+    return NextResponse.json(profile)
+  }
+
+  if ('user' in profile && profile.user) {
+    return NextResponse.json({ ...profile, user: { ...profile.user, AMOUNT: profile.user.AMOUNT / 10 ** USDC_DECIMAL } })
+  }
+
+  return NextResponse.json(null, { status: 500 })
 }
 
 export async function POST(request: Request, { params }: { params: { tokenBoundAccount: string } }) {
