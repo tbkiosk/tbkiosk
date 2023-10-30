@@ -24,13 +24,12 @@ const TBAContainer = ({ tokenId }: { tokenId: string }) => {
   const { contract } = useContract(chainId ? BeepContractAddress[chainId] : null)
   const { data, isLoading, error } = useOwnedNFTs(contract, address)
 
-  const tokenboundClient = new TokenboundClient({ signer: signer, chainId: chain.chainId })
+  const tokenboundClient = new TokenboundClient({ signer: signer, chainId: chain.chainId, implementationAddress: IMPLEMENTATION_ADDRESS })
 
   const tbaAddress = useMemo(() => {
     return tokenboundClient.getAccount({
       tokenContract: CONTRACT_ADDRESS,
       tokenId: tokenId ?? '',
-      implementationAddress: IMPLEMENTATION_ADDRESS,
     })
   }, [tokenId])
 

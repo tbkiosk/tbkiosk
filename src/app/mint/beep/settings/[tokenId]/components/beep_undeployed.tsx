@@ -1,7 +1,7 @@
 'use client'
 
 import { Web3Button } from '@thirdweb-dev/react'
-import { erc6551RegistryAbi } from '@tokenbound/sdk'
+import { erc6551RegistryAbiV2 } from '@tokenbound/sdk'
 import { toast } from 'react-toastify'
 
 import { useOwnedBeepTbaDeployedStatus } from '@/hooks/use_owned_beep_tba_deployed_status'
@@ -41,7 +41,7 @@ const BeepUndeployed = ({ tokenId, tbaAddress }: { tokenId: string; tbaAddress: 
           await contract.call('createAccount', [IMPLEMENTATION_ADDRESS, chain.chainId, CONTRACT_ADDRESS, tokenId ?? '', 0, '0x'])
         }}
         className="!h-12 !w-full !bg-white !text-lg md:!text:xl !text-black !rounded-full !transition-colors hover:!bg-[#e1e1e1] [&>svg>circle]:!stroke-white"
-        contractAbi={erc6551RegistryAbi}
+        contractAbi={erc6551RegistryAbiV2}
         contractAddress={REGISTRY_ADDRESS}
         onError={error => {
           toast.error((error as unknown as { reason: string })?.reason || 'Failed to deploy')

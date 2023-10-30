@@ -12,11 +12,10 @@ type Props = {
 export const useGetTbaAccount = ({ tokenId, contractAddress, implementationAddress }: Props) => {
   const signer = useSigner()
 
-  const tokenboundClient = new TokenboundClient({ signer: signer, chainId: chain.chainId })
+  const tokenboundClient = new TokenboundClient({ signer: signer, chainId: chain.chainId, implementationAddress })
 
   return tokenboundClient.getAccount({
     tokenContract: contractAddress,
     tokenId: tokenId,
-    implementationAddress: implementationAddress,
   })
 }

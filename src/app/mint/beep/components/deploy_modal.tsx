@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalProps } from '@nextui-org/modal'
 import { Button } from '@nextui-org/button'
 import { Web3Button } from '@thirdweb-dev/react'
-import { erc6551RegistryAbi } from '@tokenbound/sdk'
+import { erc6551RegistryAbiV2 } from '@tokenbound/sdk'
 import { match } from 'ts-pattern'
 import { toast } from 'react-toastify'
 
@@ -80,7 +80,7 @@ const DeployModal = ({ isOpen, onOpenChange, tokenId }: Pick<ModalProps, 'isOpen
                         ])
                       }}
                       className="!h-[44px] !bg-black !text-white !text-xl !rounded-full !transition-colors hover:!bg-[#1F1F1F] [&>svg>circle]:!stroke-white"
-                      contractAbi={erc6551RegistryAbi}
+                      contractAbi={erc6551RegistryAbiV2}
                       contractAddress={REGISTRY_ADDRESS}
                       onError={error => {
                         toast.error((error as unknown as { reason: string })?.reason || 'Failed to deploy')
