@@ -2,12 +2,13 @@
 
 import { useState, useEffect } from 'react'
 import { useSigner } from '@thirdweb-dev/react'
-import { TokenboundClient } from '@tokenbound/sdk'
+import { TBVersion, TokenboundClient } from '@tokenbound/sdk'
 import { Button, Modal, ModalContent, ModalHeader, ModalBody, useDisclosure, Select, SelectItem, Input, Spinner } from '@nextui-org/react'
 import { useQuery } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
 
 import { chain, explorer } from '@/constants/chain'
+import { IMPLEMENTATION_ADDRESS } from '@/constants/beep'
 import { USDC_CONTRACT_ADDRESS, WETH_CONTRACT_ADDRESS, USDC_DECIMAL } from '@/constants/token'
 
 import EthereumCircle from 'public/icons/tokens/ethereum-circle.svg'
@@ -70,7 +71,12 @@ const WithdrawButton = ({ tbaAddress }: { tbaAddress: string }) => {
       return
     }
 
-    const tokenboundClient = new TokenboundClient({ signer: signer, chainId: chain.chainId })
+    const tokenboundClient = new TokenboundClient({
+      signer: signer,
+      chainId: chain.chainId,
+      implementationAddress: IMPLEMENTATION_ADDRESS,
+      version: TBVersion.V2,
+    })
 
     try {
       setWithdrawing(true)

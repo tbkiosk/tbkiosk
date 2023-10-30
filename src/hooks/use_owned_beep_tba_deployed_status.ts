@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useAddress, useSigner, useContract, useOwnedNFTs } from '@thirdweb-dev/react'
-import { TokenboundClient } from '@tokenbound/sdk'
+import { TBVersion, TokenboundClient } from '@tokenbound/sdk'
 
 import { CONTRACT_ADDRESS, IMPLEMENTATION_ADDRESS } from '@/constants/beep'
 import { chain } from '@/constants/chain'
@@ -21,7 +21,12 @@ export const useOwnedBeepTbaDeployedStatus = ({ lastOwned, tokenId }: UseOwnedBe
 
   const [accountDeployedStatus, setAccountDeployedStatus] = useState<ButtonStatus>('Loading')
 
-  const tokenboundClient = new TokenboundClient({ signer: signer, chainId: chain.chainId, implementationAddress: IMPLEMENTATION_ADDRESS })
+  const tokenboundClient = new TokenboundClient({
+    signer: signer,
+    chainId: chain.chainId,
+    implementationAddress: IMPLEMENTATION_ADDRESS,
+    version: TBVersion.V2,
+  })
 
   const checkAccountDeployment = async (tokenId: string) => {
     const tokenBoundAccount = tokenboundClient.getAccount({
