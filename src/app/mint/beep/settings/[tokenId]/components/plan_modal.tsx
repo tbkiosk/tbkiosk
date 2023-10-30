@@ -2,9 +2,7 @@
 
 import { useState, forwardRef } from 'react'
 import { useSigner } from '@thirdweb-dev/react'
-import { Modal, ModalContent, ModalHeader, ModalBody } from '@nextui-org/modal'
-import { Button } from '@nextui-org/button'
-import { Input, InputProps } from '@nextui-org/input'
+import { Modal, ModalContent, ModalHeader, ModalBody, Button, Input, InputProps } from '@nextui-org/react'
 import { toast } from 'react-toastify'
 import DatePicker from 'react-datepicker'
 import clsx from 'clsx'

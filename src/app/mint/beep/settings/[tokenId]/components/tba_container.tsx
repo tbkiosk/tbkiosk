@@ -3,7 +3,7 @@
 import { useMemo } from 'react'
 import { useSigner, useAddress, useChainId, useContract, useOwnedNFTs } from '@thirdweb-dev/react'
 import { TokenboundClient } from '@tokenbound/sdk'
-import { Spinner } from '@nextui-org/spinner'
+import { Spinner } from '@nextui-org/react'
 
 import BeepIframe from '../../components/beep_iframe'
 import CopyButton from '@/components/copy_button'

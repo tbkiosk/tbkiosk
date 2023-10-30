@@ -3,12 +3,8 @@
 import { useState, useEffect } from 'react'
 import { useSigner } from '@thirdweb-dev/react'
 import { TokenboundClient } from '@tokenbound/sdk'
-import { Button } from '@nextui-org/button'
+import { Button, Modal, ModalContent, ModalHeader, ModalBody, useDisclosure, Select, SelectItem, Input, Spinner } from '@nextui-org/react'
 import { useQuery } from '@tanstack/react-query'
-import { Modal, ModalContent, ModalHeader, ModalBody, useDisclosure } from '@nextui-org/modal'
-import { Select, SelectItem } from '@nextui-org/select'
-import { Input } from '@nextui-org/input'
-import { Spinner } from '@nextui-org/spinner'
 import { toast } from 'react-toastify'
 
 import { chain, explorer } from '@/constants/chain'

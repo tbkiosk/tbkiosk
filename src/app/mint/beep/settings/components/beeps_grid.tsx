@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { useConnectionStatus, useChainId, useAddress, useContract, useOwnedNFTs } from '@thirdweb-dev/react'
-import { Spinner } from '@nextui-org/spinner'
+import { Spinner } from '@nextui-org/react'
 
 import ConnectWalletButton from '@/components/connect_wallet_button'
 import BeepIframe from './beep_iframe'

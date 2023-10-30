@@ -1,7 +1,6 @@
 import NextImage from 'next/image'
 import Link from 'next/link'
-import { Image } from '@nextui-org/image'
-import { Button } from '@nextui-org/button'
+import { Image, Button } from '@nextui-org/react'
 
 import ConnectWalletButton from '@/components/connect_wallet_button'
 import CopyButton from '@/components/copy_button'

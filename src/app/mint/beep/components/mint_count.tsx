@@ -1,7 +1,7 @@
 'use client'
 
 import { useContract, useTotalCirculatingSupply } from '@thirdweb-dev/react'
-import { Spinner } from '@nextui-org/spinner'
+import { Spinner } from '@nextui-org/react'
 
 import { CONTRACT_ADDRESS } from '@/constants/beep'
 

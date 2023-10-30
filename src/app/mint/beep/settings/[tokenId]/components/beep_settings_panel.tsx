@@ -1,6 +1,6 @@
 'use client'
 
-import { Spinner } from '@nextui-org/spinner'
+import { Spinner } from '@nextui-org/react'
 import { match } from 'ts-pattern'
 
 import BeepUndeployed from './beep_undeployed'

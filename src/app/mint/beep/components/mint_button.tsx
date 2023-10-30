@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useConnectionStatus, Web3Button } from '@thirdweb-dev/react'
 import { toast } from 'react-toastify'
 import { match } from 'ts-pattern'
-import { useDisclosure } from '@nextui-org/modal'
+import { useDisclosure } from '@nextui-org/react'
 
 import ConnectWalletButton from '@/components/connect_wallet_button'
 import DeployModal from './deploy_modal'

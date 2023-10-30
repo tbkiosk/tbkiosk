@@ -1,8 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Modal, ModalContent, ModalHeader, ModalBody, ModalProps } from '@nextui-org/modal'
-import { Button } from '@nextui-org/button'
+import { Modal, ModalContent, ModalHeader, ModalBody, ModalProps, Button } from '@nextui-org/react'
 import { Web3Button } from '@thirdweb-dev/react'
 import { erc6551RegistryAbiV2 } from '@tokenbound/sdk'
 import { match } from 'ts-pattern'

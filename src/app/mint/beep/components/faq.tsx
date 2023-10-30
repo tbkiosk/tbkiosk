@@ -1,6 +1,6 @@
 'use client'
 
-import { Accordion, AccordionItem } from '@nextui-org/accordion'
+import { Accordion, AccordionItem } from '@nextui-org/react'
 import clsx from 'clsx'
 
 import Plus from 'public/icons/plus.svg'

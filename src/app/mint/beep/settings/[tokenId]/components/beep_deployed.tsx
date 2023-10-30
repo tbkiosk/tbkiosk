@@ -2,9 +2,7 @@
 
 import { useRouter } from 'next/navigation'
 import { useQuery } from '@tanstack/react-query'
-import { Spinner } from '@nextui-org/spinner'
-import { Button } from '@nextui-org/button'
-import { useDisclosure } from '@nextui-org/modal'
+import { Spinner, Button, useDisclosure } from '@nextui-org/react'
 
 import BeepAccountNotCreated from './beep_account_not_created'
 import PlanModal from './plan_modal'

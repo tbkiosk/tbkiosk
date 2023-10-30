@@ -3,9 +3,7 @@
 import { useState } from 'react'
 import { useSigner } from '@thirdweb-dev/react'
 import { toast } from 'react-toastify'
-import { Switch } from '@nextui-org/switch'
-import { Spinner } from '@nextui-org/spinner'
-import { useDisclosure } from '@nextui-org/modal'
+import { Switch, Spinner, useDisclosure } from '@nextui-org/react'
 import dayjs from 'dayjs'
 
 import PlanModal, { FREQUENCY_OPTIONS } from './plan_modal'
