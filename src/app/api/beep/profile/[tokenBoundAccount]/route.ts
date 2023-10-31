@@ -45,6 +45,18 @@ export async function POST(request: Request, { params }: { params: { tokenBoundA
   const now = dayjs()
 
   try {
+    const tbaUser = await prismaClient.tBAUser.findFirst({
+      where: {
+        address: {
+          equals: tokenBoundAccount,
+        },
+      },
+    })
+
+    if (tbaUser) {
+      return NextResponse.json({ error: 'User already exists' }, { status: 400 })
+    }
+
     const newTbaUser = await prismaClient.tBAUser.create({
       data: {
         address: tokenBoundAccount,
