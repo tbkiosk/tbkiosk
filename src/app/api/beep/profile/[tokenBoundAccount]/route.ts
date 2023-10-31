@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { z } from 'zod'
+import { fromZodError } from 'zod-validation-error'
 import dayjs from 'dayjs'
 
 import { prismaClient } from '@/lib/prisma'
@@ -38,7 +39,7 @@ export async function POST(request: Request, { params }: { params: { tokenBoundA
 
   const validation = TBA_USER_SCHEMA.safeParse(body)
   if (!validation.success) {
-    return NextResponse.json({ error: validation.error.message }, { status: 400 })
+    return NextResponse.json({ error: fromZodError(validation.error).details }, { status: 400 })
   }
 
   const now = dayjs()
@@ -85,7 +86,7 @@ export async function PUT(request: Request, { params }: { params: { tokenBoundAc
     const body = await request.json()
     const validation = TBA_USER_SCHEMA.safeParse(body)
     if (!validation.success) {
-      return NextResponse.json({ error: validation.error.message }, { status: 400 })
+      return NextResponse.json({ error: fromZodError(validation.error).details }, { status: 400 })
     }
 
     const now = dayjs()

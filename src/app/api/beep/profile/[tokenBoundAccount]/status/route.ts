@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { z } from 'zod'
+import { fromZodError } from 'zod-validation-error'
 import dayjs from 'dayjs'
 
 import { prismaClient } from '@/lib/prisma'
@@ -16,7 +17,7 @@ export async function PUT(request: Request, { params }: { params: { tokenBoundAc
 
   const validation = schema.safeParse(body)
   if (!validation.success) {
-    return NextResponse.json({ error: validation.error.message }, { status: 400 })
+    return NextResponse.json({ error: fromZodError(validation.error).details }, { status: 400 })
   }
 
   try {
