@@ -1,35 +1,37 @@
 import { NextResponse } from 'next/server'
+import { z } from 'zod'
+import dayjs from 'dayjs'
 
-export const runtime = 'edge'
+import { prismaClient } from '@/lib/prisma'
 
-export type UpdateStatusPayload = {
-  ID: string
-  SIGNATURE?: string
-  OWNER_ADDRESS?: string
-  IS_ACTIVE: boolean
-}
+export const runtime = 'nodejs'
 
 export async function PUT(request: Request, { params }: { params: { tokenBoundAccount: string } }) {
   const tokenBoundAccount = params.tokenBoundAccount
-  const { IS_ACTIVE } = (await request.json()) as UpdateStatusPayload
+  const body = await request.json()
 
-  const res = await fetch(`https://ceqrnop0wl.execute-api.us-east-1.amazonaws.com/default/aws-serverless-typescript-api-dev-updateStatus`, {
-    method: 'POST',
-    body: JSON.stringify({
-      ID: tokenBoundAccount,
-      IS_ACTIVE,
-    }),
+  const schema = z.object({
+    isActive: z.boolean(),
   })
 
-  if (!res.ok) {
-    return NextResponse.json({ error: res.statusText }, { status: res.status })
+  const validation = schema.safeParse(body)
+  if (!validation.success) {
+    return NextResponse.json({ error: validation.error.message }, { status: 400 })
   }
 
-  const response = await res.json()
+  try {
+    const updatedTbaUser = await prismaClient.tBAUser.update({
+      where: {
+        address: tokenBoundAccount,
+      },
+      data: {
+        is_active: validation.data.isActive,
+        updated_at: dayjs().toISOString(),
+      },
+    })
 
-  if (!response?.user) {
-    return NextResponse.json({ error: response.statusText || response.message }, { status: response.status || 400 })
+    return NextResponse.json(updatedTbaUser)
+  } catch (error) {
+    return NextResponse.json({ error: (error as Error)?.message }, { status: 500 })
   }
-
-  return NextResponse.json(response)
 }
