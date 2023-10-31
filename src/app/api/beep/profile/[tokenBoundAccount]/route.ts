@@ -1,84 +1,112 @@
 import { NextResponse } from 'next/server'
+import { z } from 'zod'
+import dayjs from 'dayjs'
 
-import { USDC_DECIMAL } from '@/constants/token'
+import { prismaClient } from '@/lib/prisma'
 
-import type { Profile } from '@/types/profile'
+const TBA_USER_SCHEMA = z.object({
+  frequency: z.number().int().positive(),
+  amount: z.number().int().positive(),
+  tokenAddressFrom: z.string().startsWith('0x'),
+  tokenAddressTo: z.string().startsWith('0x'),
+  endDate: z.string().datetime().nullable(),
+})
 
-export const runtime = 'edge'
-export const dynamic = 'force-dynamic'
-export const fetchCache = 'force-no-store'
+export const runtime = 'nodejs'
 
 export async function GET(request: Request, { params }: { params: { tokenBoundAccount: string } }) {
   const tokenBoundAccount = params.tokenBoundAccount
 
-  const res = await fetch(`https://kiwr7bffu9.execute-api.us-east-1.amazonaws.com/dev/profile/${tokenBoundAccount}`)
+  try {
+    const tbaUser = await prismaClient.tBAUser.findFirst({
+      where: {
+        address: {
+          equals: tokenBoundAccount,
+        },
+      },
+    })
 
-  if (!res.ok) {
-    return NextResponse.json({ error: res.statusText }, { status: res.status })
+    return NextResponse.json(tbaUser)
+  } catch (error) {
+    return NextResponse.json({ error: (error as Error)?.message }, { status: 500 })
   }
-
-  const profile: Profile | { status: number; message: string } = await res.json()
-
-  if ('status' in profile && profile.status >= 400) {
-    return NextResponse.json(profile)
-  }
-
-  if ('user' in profile && profile.user) {
-    return NextResponse.json({ ...profile, user: { ...profile.user, AMOUNT: profile.user.AMOUNT / 10 ** USDC_DECIMAL } })
-  }
-
-  return NextResponse.json(null, { status: 500 })
 }
 
 export async function POST(request: Request, { params }: { params: { tokenBoundAccount: string } }) {
   const tokenBoundAccount = params.tokenBoundAccount
+  const body = await request.json()
 
-  const res = await fetch(`https://ihmfatm2df.execute-api.us-east-1.amazonaws.com/default/aws-serverless-typescript-api-dev-createUser`, {
-    method: 'POST',
-    body: JSON.stringify({
-      ID: tokenBoundAccount,
-    }),
-  })
-
-  if (!res.ok) {
-    return NextResponse.json({ error: res.statusText }, { status: res.status })
+  const validation = TBA_USER_SCHEMA.safeParse(body)
+  if (!validation.success) {
+    return NextResponse.json({ error: validation.error.message }, { status: 400 })
   }
 
-  const response = await res.json()
+  const now = dayjs()
 
-  if (response.status >= 400) {
-    return NextResponse.json({ error: response.statusText }, { status: response.status })
+  try {
+    const newTbaUser = await prismaClient.tBAUser.create({
+      data: {
+        address: tokenBoundAccount,
+        amount: validation.data.amount,
+        token_address_from: validation.data.tokenAddressFrom,
+        token_address_to: validation.data.tokenAddressTo,
+        frequency: validation.data.frequency,
+        end_date: validation.data.endDate,
+        created_at: now.toISOString(),
+        updated_at: now.toISOString(),
+        is_active: true,
+        last_swap: null,
+        next_update: now.add(validation.data.frequency, 'day').toISOString(),
+      },
+    })
+
+    return NextResponse.json(newTbaUser)
+  } catch (error) {
+    return NextResponse.json({ error: (error as Error)?.message }, { status: 500 })
   }
-
-  return NextResponse.json(response)
 }
 
 export async function PUT(request: Request, { params }: { params: { tokenBoundAccount: string } }) {
   const tokenBoundAccount = params.tokenBoundAccount
-  const { FREQUENCY, AMOUNT, END_DATE } = await request.json()
 
-  const res = await fetch(
-    `https://x7xo5ntbj4.execute-api.us-east-1.amazonaws.com/default/aws-serverless-typescript-api-dev-updateSettings`,
-    {
-      method: 'POST',
-      body: JSON.stringify({
-        ID: tokenBoundAccount,
-        FREQUENCY: +FREQUENCY,
-        AMOUNT: +AMOUNT * 10 ** USDC_DECIMAL,
-        END_DATE: +END_DATE,
-      }),
+  try {
+    const tbaUser = await prismaClient.tBAUser.findFirst({
+      where: {
+        address: {
+          equals: tokenBoundAccount,
+        },
+      },
+    })
+
+    if (!tbaUser) {
+      return NextResponse.json({ error: 'User not found' }, { status: 400 })
     }
-  )
 
-  if (!res.ok) {
-    return NextResponse.json({ error: res.statusText }, { status: res.status })
+    const body = await request.json()
+    const validation = TBA_USER_SCHEMA.safeParse(body)
+    if (!validation.success) {
+      return NextResponse.json({ error: validation.error.message }, { status: 400 })
+    }
+
+    const now = dayjs()
+
+    const updatedTbaUser = await prismaClient.tBAUser.update({
+      where: {
+        address: tokenBoundAccount,
+      },
+      data: {
+        amount: validation.data.amount,
+        token_address_from: validation.data.tokenAddressFrom,
+        token_address_to: validation.data.tokenAddressTo,
+        frequency: validation.data.frequency,
+        end_date: validation.data.endDate,
+        updated_at: now.toISOString(),
+        next_update: now.add(validation.data.frequency, 'day').toISOString(),
+      },
+    })
+
+    return NextResponse.json(updatedTbaUser)
+  } catch (error) {
+    return NextResponse.json({ error: (error as Error)?.message }, { status: 500 })
   }
-
-  const response = await res.json()
-
-  if (!response?.user) {
-    return NextResponse.json({ error: response.statusText || response.message }, { status: response.status || 400 })
-  }
-
-  return NextResponse.json(response)
 }
