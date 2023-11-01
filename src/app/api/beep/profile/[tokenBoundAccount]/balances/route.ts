@@ -16,7 +16,10 @@ export async function GET(request: Request, { params }: { params: { tokenBoundAc
   try {
     const alchemy = new Alchemy(config)
 
-    const tokenBalances = await alchemy.core.getTokenBalances(tokenBoundAccount, [USDC_CONTRACT_ADDRESS, WETH_CONTRACT_ADDRESS])
+    const tokenBalances = await alchemy.core.getTokenBalances(tokenBoundAccount, [
+      USDC_CONTRACT_ADDRESS[+env.NEXT_PUBLIC_CHAIN_ID as 1 | 5 | 137],
+      WETH_CONTRACT_ADDRESS[+env.NEXT_PUBLIC_CHAIN_ID as 1 | 5 | 137],
+    ])
 
     const usdc = `${parseInt(tokenBalances.tokenBalances[0].tokenBalance?.toString() || '0') / 10 ** 6}`
     const weth = `${parseInt(tokenBalances.tokenBalances[1].tokenBalance?.toString() || '0') / 10 ** 18}`
