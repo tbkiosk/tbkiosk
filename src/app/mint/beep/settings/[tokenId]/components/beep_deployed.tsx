@@ -5,12 +5,9 @@ import { useQuery } from '@tanstack/react-query'
 import { Spinner, Button, useDisclosure } from '@nextui-org/react'
 
 import BeepAccountNotCreated from './beep_account_not_created'
-import PlanModal from './plan_modal'
 import SettingsBoard from './settings_board'
 
-import RobotSuccess from 'public/beep/robot-success.svg'
-
-import type { Profile } from '@/types/profile'
+import type { TBAUser } from '@prisma/client'
 
 const BeepDeployed = ({ tbaAddress }: { tokenId: string; tbaAddress: string }) => {
   const router = useRouter()
@@ -18,16 +15,16 @@ const BeepDeployed = ({ tbaAddress }: { tokenId: string; tbaAddress: string }) =
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
 
   const {
-    data: profile,
-    isFetching: isProfileLoading,
-    error: profileError,
+    data: tbaUser,
+    isFetching: tbaUserLoading,
+    error: tbaUserError,
     refetch,
-  } = useQuery<Profile | { status: number; message: string }>({
+  } = useQuery<TBAUser | undefined>({
     enabled: !!tbaAddress,
     refetchInterval: 0,
     refetchOnMount: false,
     refetchOnWindowFocus: false,
-    queryKey: ['token-bound-account-profile', tbaAddress],
+    queryKey: ['token-bound-account-tbaUser', tbaAddress],
     queryFn: async () => {
       const res = await fetch(`/api/beep/profile/${tbaAddress}`)
 
@@ -35,13 +32,13 @@ const BeepDeployed = ({ tbaAddress }: { tokenId: string; tbaAddress: string }) =
         throw new Error(res.statusText)
       }
 
-      const profile = await res.json()
+      const tbaUser = await res.json()
 
-      return profile
+      return tbaUser
     },
   })
 
-  if (isProfileLoading) {
+  if (tbaUserLoading) {
     return (
       <div className="min-h-[240px] flex items-center justify-center">
         <Spinner color="default" />
@@ -49,13 +46,11 @@ const BeepDeployed = ({ tbaAddress }: { tokenId: string; tbaAddress: string }) =
     )
   }
 
-  if (profileError) {
-    return <p>{(profileError as Error)?.message || 'Failed to load profile'}</p>
+  if (tbaUserError) {
+    return <p>{(tbaUserError as Error)?.message || 'Failed to load profile'}</p>
   }
 
-  if (!profile) return null
-
-  if ('message' in profile && profile.message === 'USER_NOT_FOUND') {
+  if (!tbaUser) {
     return (
       <BeepAccountNotCreated
         refetch={refetch}
@@ -64,35 +59,9 @@ const BeepDeployed = ({ tbaAddress }: { tokenId: string; tbaAddress: string }) =
     )
   }
 
-  if (!('user' in profile)) return null
-
-  if (!profile.user.SETTINGS_COMPLETE) {
-    return (
-      <div className="flex flex-col items-center grow">
-        <PlanModal
-          isOpen={isOpen}
-          onOpenChange={onOpenChange}
-          onSuccess={() => router.replace(`${location.pathname}?show-deposit-modal=true`)}
-          refetch={refetch}
-          tbaAddress={tbaAddress}
-        />
-        <div className="grow h-16 mb-4">
-          <RobotSuccess />
-        </div>
-        <p className="mb-4">Your Beep does not have any plan yet</p>
-        <Button
-          className="bg-white font-bold text-sm text-black tracking-wide rounded-full transition-colors hover:bg-[#e1e1e1]"
-          onClick={onOpen}
-        >
-          Create a plan now
-        </Button>
-      </div>
-    )
-  }
-
   return (
     <SettingsBoard
-      profile={profile}
+      tbaUser={tbaUser}
       refetch={refetch}
       tbaAddress={tbaAddress}
     />
