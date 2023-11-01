@@ -13,7 +13,8 @@ import { useOwnedBeepTbaDeployedStatus } from '@/hooks/use_owned_beep_tba_deploy
 
 import { env } from 'env.mjs'
 
-import ETH from 'public/icons/tokens/ethereum.svg'
+import Ethereum from 'public/icons/tokens/ethereum.svg'
+import Polygon from 'public/icons/tokens/polygon.svg'
 
 const MintButton = () => {
   const connectionStatus = useConnectionStatus()
@@ -46,8 +47,12 @@ const MintButton = () => {
       }}
       theme="light"
     >
-      <div className="h-6 w-6 block mr-4">
-        <ETH />
+      <div className="h-6 w-6 block mr-4 text-white">
+        {match(env.NEXT_PUBLIC_CHAIN_ID)
+          .with('1', () => <Ethereum />)
+          .with('5', () => <Ethereum />)
+          .with('137', () => <Polygon />)
+          .exhaustive()}
       </div>
       Mint now
     </Web3Button>

@@ -1,6 +1,7 @@
 import NextImage from 'next/image'
 import Link from 'next/link'
 import { Image, Button } from '@nextui-org/react'
+import { match } from 'ts-pattern'
 
 import ConnectWalletButton from '@/components/connect_wallet_button'
 import CopyButton from '@/components/copy_button'
@@ -12,7 +13,8 @@ import FAQ from './components/faq'
 
 import LogoBlack from 'public/logo/logo-black.svg'
 import LogoText from 'public/logo/logo-text.svg'
-import Ethereum from 'public/icons/tokens/ethereum.svg'
+import EthereumCircle from 'public/icons/tokens/ethereum-circle.svg'
+import PolygonCircle from 'public/icons/tokens/polygon-circle.svg'
 import ChevronRight from 'public/icons/chevron-right.svg'
 
 import { maskAddress } from '@/utils/address'
@@ -82,9 +84,19 @@ const Mint = () => (
                 <p className="font-bold text-5xl leading-snug md:leading-normal">BEEP BOT</p>
                 <div className="flex items-center gap-2">
                   <span className="h-6 w-6">
-                    <Ethereum />
+                    {match(env.NEXT_PUBLIC_CHAIN_ID)
+                      .with('1', () => <EthereumCircle />)
+                      .with('5', () => <EthereumCircle />)
+                      .with('137', () => <PolygonCircle />)
+                      .exhaustive()}
                   </span>
-                  <span>On Ethereum</span>
+                  <span>
+                    {match(env.NEXT_PUBLIC_CHAIN_ID)
+                      .with('1', () => 'On Ethereum')
+                      .with('5', () => 'On Goerli')
+                      .with('137', () => 'On Polygon')
+                      .exhaustive()}
+                  </span>
                 </div>
                 <div className="mt-8 font-medium text-sm">
                   <p className="mb-2">
@@ -109,7 +121,7 @@ const Mint = () => (
                 <p className="font-medium text-[#a6a9ae] leading-normal">Mint Price</p>
                 <div className="flex items-center gap-4">
                   <span className="h-6 w-6">
-                    <Ethereum />
+                    <EthereumCircle />
                   </span>
                   <span className="font-medium text-3xl leading-normal">FREE</span>
                 </div>
@@ -140,7 +152,13 @@ const Mint = () => (
                 </div>
                 <div className="flex items-center justify-between md:justify-start gap-12 my-4 font-medium">
                   <span className="md:min-w-[130px] inline-block text-[#a6a9ae]">Blockchain</span>
-                  <span>Ethereum</span>
+                  <span>
+                    {match(env.NEXT_PUBLIC_CHAIN_ID)
+                      .with('1', () => 'Ethereum')
+                      .with('5', () => 'Goerli')
+                      .with('137', () => 'Polygon')
+                      .exhaustive()}
+                  </span>
                 </div>
                 <div className="flex items-center justify-between md:justify-start gap-12 my-4 font-medium">
                   <span className="md:min-w-[130px] inline-block text-[#a6a9ae]">Token standard</span>
