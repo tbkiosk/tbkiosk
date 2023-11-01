@@ -8,7 +8,7 @@ import { useQuery } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
 
 import { explorer } from '@/constants/explorer'
-import { USDC_CONTRACT_ADDRESS, WETH_CONTRACT_ADDRESS, USDC_DECIMAL } from '@/constants/token'
+import { USDC_CONTRACT_ADDRESS, WETH_CONTRACT_ADDRESS, USDC_DECIMAL, WETH_DECIMAL } from '@/constants/token'
 
 import EthereumCircle from 'public/icons/tokens/ethereum-circle.svg'
 import USDC from 'public/icons/tokens/usdc.svg'
@@ -87,8 +87,8 @@ const WithdrawButton = ({ tbaAddress }: { tbaAddress: string }) => {
           account: tbaAddress as `0x${string}`,
           amount: +amount,
           recipientAddress: address as `0x${string}`,
-          erc20tokenAddress: USDC_CONTRACT_ADDRESS,
-          erc20tokenDecimals: 18,
+          erc20tokenAddress: WETH_CONTRACT_ADDRESS[+env.NEXT_PUBLIC_CHAIN_ID as 1 | 5 | 137] as `0x${string}`,
+          erc20tokenDecimals: WETH_DECIMAL,
         })
 
         toast.success(
@@ -112,7 +112,7 @@ const WithdrawButton = ({ tbaAddress }: { tbaAddress: string }) => {
           account: tbaAddress as `0x${string}`,
           amount: +amount,
           recipientAddress: address as `0x${string}`,
-          erc20tokenAddress: WETH_CONTRACT_ADDRESS,
+          erc20tokenAddress: USDC_CONTRACT_ADDRESS[+env.NEXT_PUBLIC_CHAIN_ID as 1 | 5 | 137] as `0x${string}`,
           erc20tokenDecimals: USDC_DECIMAL,
         })
 
