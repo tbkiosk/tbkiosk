@@ -38,7 +38,7 @@ const TBAContainer = ({ tokenId }: { tokenId: string }) => {
   }, [tokenId])
 
   if (!chainId || +chainId !== +env.NEXT_PUBLIC_CHAIN_ID) {
-    return <p className="text-center">Wrong chain</p>
+    return null
   }
 
   if (error) {
