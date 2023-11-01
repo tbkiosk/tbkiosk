@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Link from 'next/link'
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalProps, Button } from '@nextui-org/react'
 import { Web3Button } from '@thirdweb-dev/react'
 import { erc6551RegistryAbiV2 } from '@tokenbound/sdk'
@@ -99,16 +100,14 @@ const DeployModal = ({ isOpen, onOpenChange, tokenId }: Pick<ModalProps, 'isOpen
                     <p className="mt-4 font-medium text-xl text-center">Congrats, Your Beep&apos;s Wallet is live and ready to use!</p>
                     <p className="font-medium text-xl text-center text-[#a6a9ae]">{maskAddress(tbaAddress)}</p>
                     <p className="my-4 font-medium text-xl text-center">Send USDC into your Beep&apos;s wallet to get started.</p>
-                    <a
+                    <Link
                       className="block"
                       href={`/mint/beep/settings/${tokenId}`}
-                      rel="noreferrer"
-                      target="_blank"
                     >
                       <Button className="h-[44px] w-full bg-black text-xl text-white rounded-full transition-colors hover:bg-[#1F1F1F]">
                         Set Up Your Beep Now
                       </Button>
-                    </a>
+                    </Link>
                   </>
                 ))
                 .exhaustive()}
