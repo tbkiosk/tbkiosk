@@ -69,7 +69,7 @@ export async function POST(request: Request, { params }: { params: { tokenBoundA
         updated_at: now.toISOString(),
         is_active: true,
         last_swap: null,
-        next_update: now.add(validation.data.frequency, 'day').toISOString(),
+        next_swap: now.add(validation.data.frequency, 'day').toISOString(),
       },
     })
 
@@ -114,7 +114,7 @@ export async function PUT(request: Request, { params }: { params: { tokenBoundAc
         frequency: validation.data.frequency,
         end_date: validation.data.endDate,
         updated_at: now.toISOString(),
-        next_update: now.add(validation.data.frequency, 'day').toISOString(),
+        next_swap: now.add(validation.data.frequency, 'day').toISOString(),
       },
     })
 

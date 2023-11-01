@@ -129,7 +129,7 @@ const SettingsBoard = ({ tbaUser, refetch, tbaAddress }: { tbaAddress: string; r
       <div className="w-full flex flex-col md:flex-row justify-between tracking-wide">
         <div>
           <div className="text-sm text-[#a6a9ae] ">Next Auto-Invest Date</div>
-          <div className="font-bold text-lg truncate">{tbaUser.next_update ? dayjs(tbaUser.next_update).format('DD MMM YY') : '-'}</div>
+          <div className="font-bold text-lg truncate">{tbaUser.next_swap ? dayjs(tbaUser.next_swap).format('DD MMM YY') : '-'}</div>
         </div>
         <div>
           <div className="text-sm text-[#a6a9ae] text-start md:text-end">Unrealised PnL</div>

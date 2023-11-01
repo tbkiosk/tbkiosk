@@ -208,7 +208,7 @@ model TBAUser {
   updated_at            DateTime        @updatedAt
   is_active             Boolean
   last_swap             DateTime?
-  next_update           DateTime
+  next_swap             DateTime
 
   @@map("tba_user")
 }
