@@ -14,15 +14,14 @@ import { useGetTbaAccount } from '@/hooks/use_get_tba_account'
 
 import { maskAddress } from '@/utils/address'
 
-import { chain } from '@/constants/chain'
-import { IMPLEMENTATION_ADDRESS, CONTRACT_ADDRESS, REGISTRY_ADDRESS } from '@/constants/beep'
+import { env } from 'env.mjs'
 
 const DeployModal = ({ isOpen, onOpenChange, tokenId }: Pick<ModalProps, 'isOpen' | 'onOpenChange'> & { tokenId: string | null }) => {
   const { nft: lastOwnedNFT, setAccountDeployedStatus } = useOwnedBeepTbaDeployedStatus({ lastOwned: true })
   const tbaAddress = useGetTbaAccount({
     tokenId: tokenId ?? '',
-    implementationAddress: IMPLEMENTATION_ADDRESS,
-    contractAddress: CONTRACT_ADDRESS,
+    implementationAddress: env.NEXT_PUBLIC_BEEP_TBA_IMPLEMENTATION_ADDRESS as `0x${string}`,
+    contractAddress: env.NEXT_PUBLIC_BEEP_CONTRACT_ADDRESS as `0x${string}`,
   })
 
   const [isDeployed, setIsDeployed] = useState(false)
@@ -70,9 +69,9 @@ const DeployModal = ({ isOpen, onOpenChange, tokenId }: Pick<ModalProps, 'isOpen
                       action={async contract => {
                         const tokenID = tokenId ?? lastOwnedNFT
                         await contract.call('createAccount', [
-                          IMPLEMENTATION_ADDRESS,
-                          chain.chainId,
-                          CONTRACT_ADDRESS,
+                          env.NEXT_PUBLIC_BEEP_TBA_IMPLEMENTATION_ADDRESS,
+                          env.NEXT_PUBLIC_CHAIN_ID,
+                          env.NEXT_PUBLIC_BEEP_CONTRACT_ADDRESS,
                           tokenID ?? '',
                           0,
                           '0x',
@@ -80,7 +79,7 @@ const DeployModal = ({ isOpen, onOpenChange, tokenId }: Pick<ModalProps, 'isOpen
                       }}
                       className="!h-[44px] !bg-black !text-white !text-xl !rounded-full !transition-colors hover:!bg-[#1F1F1F] [&>svg>circle]:!stroke-white"
                       contractAbi={erc6551RegistryAbiV2}
-                      contractAddress={REGISTRY_ADDRESS}
+                      contractAddress={env.NEXT_PUBLIC_REGISTRY_ADDRESS}
                       onError={error => {
                         toast.error((error as unknown as { reason: string })?.reason || 'Failed to deploy')
                       }}

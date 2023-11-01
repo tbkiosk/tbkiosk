@@ -1,7 +1,7 @@
 import { useSigner } from '@thirdweb-dev/react'
 import { TokenboundClient } from '@tokenbound/sdk'
 
-import { chain } from '../constants/chain'
+import { env } from 'env.mjs'
 
 type Props = {
   tokenId: string
@@ -12,7 +12,7 @@ type Props = {
 export const useGetTbaAccount = ({ tokenId, contractAddress, implementationAddress }: Props) => {
   const signer = useSigner()
 
-  const tokenboundClient = new TokenboundClient({ signer: signer, chainId: chain.chainId, implementationAddress })
+  const tokenboundClient = new TokenboundClient({ signer: signer, chainId: +env.NEXT_PUBLIC_CHAIN_ID, implementationAddress })
 
   return tokenboundClient.getAccount({
     tokenContract: contractAddress,

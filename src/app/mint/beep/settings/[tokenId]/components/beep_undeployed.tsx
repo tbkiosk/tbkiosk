@@ -8,8 +8,7 @@ import { useOwnedBeepTbaDeployedStatus } from '@/hooks/use_owned_beep_tba_deploy
 
 import Note from 'public/beep/note.svg'
 
-import { CONTRACT_ADDRESS, IMPLEMENTATION_ADDRESS, REGISTRY_ADDRESS } from '@/constants/beep'
-import { chain } from '@/constants/chain'
+import { env } from 'env.mjs'
 
 const BeepUndeployed = ({ tokenId, tbaAddress }: { tokenId: string; tbaAddress: string }) => {
   const { setAccountDeployedStatus } = useOwnedBeepTbaDeployedStatus({ tokenId })
@@ -38,11 +37,18 @@ const BeepUndeployed = ({ tokenId, tbaAddress }: { tokenId: string; tbaAddress: 
       </p>
       <Web3Button
         action={async contract => {
-          await contract.call('createAccount', [IMPLEMENTATION_ADDRESS, chain.chainId, CONTRACT_ADDRESS, tokenId ?? '', 0, '0x'])
+          await contract.call('createAccount', [
+            env.NEXT_PUBLIC_BEEP_TBA_IMPLEMENTATION_ADDRESS,
+            env.NEXT_PUBLIC_CHAIN_ID,
+            env.NEXT_PUBLIC_BEEP_CONTRACT_ADDRESS,
+            tokenId ?? '',
+            0,
+            '0x',
+          ])
         }}
         className="!h-12 !w-full !bg-white !text-lg md:!text:xl !text-black !rounded-full !transition-colors hover:!bg-[#e1e1e1] [&>svg>circle]:!stroke-white"
         contractAbi={erc6551RegistryAbiV2}
-        contractAddress={REGISTRY_ADDRESS}
+        contractAddress={env.NEXT_PUBLIC_REGISTRY_ADDRESS}
         onError={error => {
           toast.error((error as unknown as { reason: string })?.reason || 'Failed to deploy')
         }}

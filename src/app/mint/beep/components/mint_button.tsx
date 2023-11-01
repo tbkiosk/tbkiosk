@@ -11,7 +11,7 @@ import DeployModal from './deploy_modal'
 
 import { useOwnedBeepTbaDeployedStatus } from '@/hooks/use_owned_beep_tba_deployed_status'
 
-import { CONTRACT_ADDRESS } from '@/constants/beep'
+import { env } from 'env.mjs'
 
 import ETH from 'public/icons/tokens/ethereum.svg'
 
@@ -35,7 +35,7 @@ const MintButton = () => {
     <Web3Button
       action={contract => contract.erc721.claim(1)}
       className="!h-12 !w-full !bg-black !text-xl !rounded-full !transition-colors hover:!bg-[#1F1F1F] [&>svg>circle]:!stroke-white"
-      contractAddress={CONTRACT_ADDRESS}
+      contractAddress={env.NEXT_PUBLIC_BEEP_CONTRACT_ADDRESS}
       onError={error => {
         toast.error((error as unknown as { reason: string })?.reason || 'Failed to claim NFT')
       }}

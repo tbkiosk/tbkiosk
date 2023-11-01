@@ -3,10 +3,10 @@
 import { useContract, useTotalCirculatingSupply } from '@thirdweb-dev/react'
 import { Spinner } from '@nextui-org/react'
 
-import { CONTRACT_ADDRESS } from '@/constants/beep'
+import { env } from 'env.mjs'
 
 const MintedCount = () => {
-  const { contract } = useContract(CONTRACT_ADDRESS)
+  const { contract } = useContract(env.NEXT_PUBLIC_BEEP_CONTRACT_ADDRESS)
   const { data, isLoading } = useTotalCirculatingSupply(contract)
 
   return (

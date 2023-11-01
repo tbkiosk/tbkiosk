@@ -16,7 +16,8 @@ import Ethereum from 'public/icons/tokens/ethereum.svg'
 import ChevronRight from 'public/icons/chevron-right.svg'
 
 import { maskAddress } from '@/utils/address'
-import { CONTRACT_ADDRESS } from '@/constants/beep'
+
+import { env } from 'env.mjs'
 
 import type { Metadata } from 'next'
 
@@ -133,7 +134,9 @@ const Mint = () => (
                 </div>
                 <div className="flex items-center justify-between md:justify-start gap-12 my-4 font-medium">
                   <span className="md:min-w-[130px] inline-block text-[#a6a9ae]">Contract address</span>
-                  <CopyButton copyText={CONTRACT_ADDRESS}>{maskAddress(CONTRACT_ADDRESS)}</CopyButton>
+                  <CopyButton copyText={env.NEXT_PUBLIC_BEEP_CONTRACT_ADDRESS}>
+                    {maskAddress(env.NEXT_PUBLIC_BEEP_CONTRACT_ADDRESS)}
+                  </CopyButton>
                 </div>
                 <div className="flex items-center justify-between md:justify-start gap-12 my-4 font-medium">
                   <span className="md:min-w-[130px] inline-block text-[#a6a9ae]">Blockchain</span>
