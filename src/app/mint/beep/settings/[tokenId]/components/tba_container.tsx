@@ -11,8 +11,7 @@ import DepositButton from './deposit_button'
 import WithdrawButton from './withdraw_button'
 import BeepSettingsPanel from './beep_settings_panel'
 
-import { CONTRACT_ADDRESS, IMPLEMENTATION_ADDRESS, BeepContractAddress } from '@/constants/beep'
-import { chain } from '@/constants/chain'
+import { env } from 'env.mjs'
 
 import { maskAddress } from '@/utils/address'
 import TbaRecord from '@/app/mint/beep/settings/[tokenId]/components/tba_record'
@@ -21,24 +20,26 @@ const TBAContainer = ({ tokenId }: { tokenId: string }) => {
   const address = useAddress()
   const signer = useSigner()
   const chainId = useChainId()
-  const { contract } = useContract(chainId ? BeepContractAddress[chainId] : null)
+  const { contract } = useContract(chainId ? env.NEXT_PUBLIC_BEEP_CONTRACT_ADDRESS : null)
   const { data, isLoading, error } = useOwnedNFTs(contract, address)
 
   const tokenboundClient = new TokenboundClient({
     signer: signer,
-    chainId: chain.chainId,
-    implementationAddress: IMPLEMENTATION_ADDRESS,
+    chainId: +env.NEXT_PUBLIC_CHAIN_ID,
+    implementationAddress: env.NEXT_PUBLIC_BEEP_TBA_IMPLEMENTATION_ADDRESS as `0x${string}`,
     version: TBVersion.V2,
   })
 
   const tbaAddress = useMemo(() => {
     return tokenboundClient.getAccount({
-      tokenContract: CONTRACT_ADDRESS,
+      tokenContract: env.NEXT_PUBLIC_BEEP_CONTRACT_ADDRESS as `0x${string}`,
       tokenId: tokenId ?? '',
     })
   }, [tokenId])
 
-  if (!chainId) return null
+  if (!chainId || +chainId !== +env.NEXT_PUBLIC_CHAIN_ID) {
+    return <p className="text-center">Wrong chain</p>
+  }
 
   if (error) {
     return <p className="text-center">{(error as Error)?.message || 'Failed to load NFT'}</p>

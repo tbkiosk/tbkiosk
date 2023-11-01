@@ -7,13 +7,13 @@ import { Spinner } from '@nextui-org/react'
 import ConnectWalletButton from '@/components/connect_wallet_button'
 import BeepIframe from './beep_iframe'
 
-import { BeepContractAddress } from '@/constants/beep'
+import { env } from 'env.mjs'
 
 const BeepsGrid = () => {
   const connectionStatus = useConnectionStatus()
   const chainId = useChainId()
   const address = useAddress()
-  const { contract } = useContract(chainId ? BeepContractAddress[chainId] : null)
+  const { contract } = useContract(chainId ? env.NEXT_PUBLIC_BEEP_CONTRACT_ADDRESS : null)
   const { data, isLoading, error } = useOwnedNFTs(contract, address)
 
   if (connectionStatus === 'disconnected') {

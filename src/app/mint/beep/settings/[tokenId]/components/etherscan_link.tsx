@@ -1,7 +1,9 @@
-import { chain, explorer } from '@/constants/chain'
+import { explorer } from '@/constants/explorer'
+
+import { env } from 'env.mjs'
 
 const ExplorerLink = ({ txhash, isSuccessful }: { txhash: string; isSuccessful: boolean }) => {
-  const explorerBase = explorer[chain.chainId]
+  const explorerBase = explorer[+env.NEXT_PUBLIC_CHAIN_ID as 1 | 5 | 137]
   return (
     <a
       href={`${explorerBase}/tx/${txhash}`}

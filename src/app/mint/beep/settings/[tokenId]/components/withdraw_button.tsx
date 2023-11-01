@@ -7,12 +7,13 @@ import { Button, Modal, ModalContent, ModalHeader, ModalBody, useDisclosure, Sel
 import { useQuery } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
 
-import { chain, explorer } from '@/constants/chain'
-import { IMPLEMENTATION_ADDRESS } from '@/constants/beep'
+import { explorer } from '@/constants/explorer'
 import { USDC_CONTRACT_ADDRESS, WETH_CONTRACT_ADDRESS, USDC_DECIMAL } from '@/constants/token'
 
 import EthereumCircle from 'public/icons/tokens/ethereum-circle.svg'
 import USDC from 'public/icons/tokens/usdc.svg'
+
+import { env } from 'env.mjs'
 
 const WithdrawButton = ({ tbaAddress }: { tbaAddress: string }) => {
   const signer = useSigner()
@@ -73,8 +74,8 @@ const WithdrawButton = ({ tbaAddress }: { tbaAddress: string }) => {
 
     const tokenboundClient = new TokenboundClient({
       signer: signer,
-      chainId: chain.chainId,
-      implementationAddress: IMPLEMENTATION_ADDRESS,
+      chainId: +env.NEXT_PUBLIC_CHAIN_ID,
+      implementationAddress: env.NEXT_PUBLIC_BEEP_TBA_IMPLEMENTATION_ADDRESS as `0x${string}`,
       version: TBVersion.V2,
     })
 
@@ -95,7 +96,7 @@ const WithdrawButton = ({ tbaAddress }: { tbaAddress: string }) => {
             Successfully transferred WETH.&nbsp;
             <a
               className="underline"
-              href={`${explorer[chain.chainId]}/tx/${txHash}`}
+              href={`${explorer[+env.NEXT_PUBLIC_CHAIN_ID as 1 | 5 | 137]}/tx/${txHash}`}
               rel="noreferrer"
               target="_blank"
             >
@@ -120,7 +121,7 @@ const WithdrawButton = ({ tbaAddress }: { tbaAddress: string }) => {
             Successfully transferred USDC.&nbsp;
             <a
               className="underline"
-              href={`${explorer[chain.chainId]}/tx/${txHash}`}
+              href={`${explorer[+env.NEXT_PUBLIC_CHAIN_ID as 1 | 5 | 137]}/tx/${txHash}`}
               rel="noreferrer"
               target="_blank"
             >
