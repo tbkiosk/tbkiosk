@@ -1,7 +1,7 @@
 import { Ethereum, Goerli, Polygon } from '@thirdweb-dev/chains'
 
 //TODO: switch to ethereum for production
-export const chain = Ethereum
+export const chain = Goerli
 
 export const explorer = {
   [Goerli.chainId]: 'https://goerli.etherscan.io',
