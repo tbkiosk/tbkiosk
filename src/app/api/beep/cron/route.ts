@@ -2,22 +2,22 @@
 
 import { NextResponse } from 'next/server'
 import dayjs from 'dayjs'
-import { ethers } from 'ethers'
+// import { ethers } from 'ethers'
 
 import { prismaClient } from '@/lib/prisma'
-import { BEEP_API } from '@/lib/abi'
+// import { BEEP_API } from '@/lib/abi'
 
-import { env } from 'env.mjs'
+// import { env } from 'env.mjs'
 
 import type { TBAUser } from '@prisma/client'
 
 const MAX_USER_CONCURRENCY = 2
 
-const ALCHEMY_PROVIDER_API_URL_MAP = {
-  '1': 'https://eth-mainnet.g.alchemy.com/v2/',
-  '5': 'https://eth-goerli.g.alchemy.com/v2/',
-  '137': 'https://polygon-mainnet.g.alchemy.com/v2/',
-} as { [key in typeof env.NEXT_PUBLIC_CHAIN_ID]: string }
+// const ALCHEMY_PROVIDER_API_URL_MAP = {
+//   '1': 'https://eth-mainnet.g.alchemy.com/v2/',
+//   '5': 'https://eth-goerli.g.alchemy.com/v2/',
+//   '137': 'https://polygon-mainnet.g.alchemy.com/v2/',
+// } as { [key in typeof env.NEXT_PUBLIC_CHAIN_ID]: string }
 
 export const runtime = 'nodejs'
 
@@ -65,25 +65,26 @@ export const swapSingleUser = async (user: TBAUser) => {
     throw new Error('User not found')
   }
 
-  const alchemyProvider = new ethers.providers.JsonRpcProvider(ALCHEMY_PROVIDER_API_URL_MAP[env.NEXT_PUBLIC_CHAIN_ID])
-  const signer = new ethers.Wallet(env.PRIVATE_KEY, alchemyProvider)
-  const beepContract = new ethers.Contract(env.NEXT_PUBLIC_BEEP_CONTRACT_ADDRESS, BEEP_API, signer)
+  // TODO: swap logic
+  // const alchemyProvider = new ethers.providers.JsonRpcProvider(ALCHEMY_PROVIDER_API_URL_MAP[env.NEXT_PUBLIC_CHAIN_ID])
+  // const signer = new ethers.Wallet(env.PRIVATE_KEY, alchemyProvider)
+  // const beepContract = new ethers.Contract(env.NEXT_PUBLIC_BEEP_CONTRACT_ADDRESS, BEEP_API, signer)
 
-  const gasPrice = await alchemyProvider.getGasPrice()
+  // const gasPrice = await alchemyProvider.getGasPrice()
 
-  const tx = await beepContract.swapExactInputSingle(
-    user.token_address_from, //tokenIn
-    user.token_address_to, //tokenOut
-    user.amount,
-    4000000, //gasFee
-    1000000, //beepFee
-    {
-      gasPrice: gasPrice,
-      gasLimit: 500000,
-    }
-  )
+  // const tx = await beepContract.swapExactInputSingle(
+  //   user.token_address_from, //tokenIn
+  //   user.token_address_to, //tokenOut
+  //   user.amount,
+  //   4000000, //gasFee
+  //   1000000, //beepFee
+  //   {
+  //     gasPrice: gasPrice,
+  //     gasLimit: 500000,
+  //   }
+  // )
 
-  console.log(tx)
+  // console.log(tx)
 
   const updatedTbaUser = await prismaClient.tBAUser.update({
     where: {
