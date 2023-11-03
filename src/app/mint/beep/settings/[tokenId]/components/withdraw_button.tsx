@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useSigner } from '@thirdweb-dev/react'
-import { TBVersion, TokenboundClient } from '@tokenbound/sdk'
+import { TokenboundClient } from '@tokenbound/sdk'
 import { Button, Modal, ModalContent, ModalHeader, ModalBody, useDisclosure, Select, SelectItem, Input, Spinner } from '@nextui-org/react'
 import { useQuery } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
@@ -76,7 +76,6 @@ const WithdrawButton = ({ tbaAddress }: { tbaAddress: string }) => {
       signer: signer,
       chainId: +env.NEXT_PUBLIC_CHAIN_ID,
       implementationAddress: env.NEXT_PUBLIC_BEEP_TBA_IMPLEMENTATION_ADDRESS as `0x${string}`,
-      version: TBVersion.V2,
     })
 
     try {

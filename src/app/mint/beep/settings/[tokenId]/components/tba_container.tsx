@@ -2,7 +2,7 @@
 
 import { useMemo } from 'react'
 import { useSigner, useAddress, useChainId, useContract, useOwnedNFTs } from '@thirdweb-dev/react'
-import { TBVersion, TokenboundClient } from '@tokenbound/sdk'
+import { TokenboundClient } from '@tokenbound/sdk'
 import { Spinner } from '@nextui-org/react'
 
 import BeepIframe from '../../components/beep_iframe'
@@ -27,7 +27,6 @@ const TBAContainer = ({ tokenId }: { tokenId: string }) => {
     signer: signer,
     chainId: +env.NEXT_PUBLIC_CHAIN_ID,
     implementationAddress: env.NEXT_PUBLIC_BEEP_TBA_IMPLEMENTATION_ADDRESS as `0x${string}`,
-    version: TBVersion.V2,
   })
 
   const tbaAddress = useMemo(() => {

@@ -1,5 +1,5 @@
 import { useSigner } from '@thirdweb-dev/react'
-import { TBVersion, TokenboundClient } from '@tokenbound/sdk'
+import { TokenboundClient } from '@tokenbound/sdk'
 
 import { env } from 'env.mjs'
 
@@ -16,7 +16,6 @@ export const useGetTbaAccount = ({ tokenId, contractAddress, implementationAddre
     signer: signer,
     chainId: +env.NEXT_PUBLIC_CHAIN_ID,
     implementationAddress,
-    version: TBVersion.V2,
   })
 
   return tokenboundClient.getAccount({

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useAddress, useSigner, useContract, useOwnedNFTs } from '@thirdweb-dev/react'
-import { TBVersion, TokenboundClient } from '@tokenbound/sdk'
+import { TokenboundClient } from '@tokenbound/sdk'
 
 import { env } from 'env.mjs'
 
@@ -24,7 +24,6 @@ export const useOwnedBeepTbaDeployedStatus = ({ lastOwned, tokenId }: UseOwnedBe
     signer: signer,
     chainId: +env.NEXT_PUBLIC_CHAIN_ID,
     implementationAddress: env.NEXT_PUBLIC_BEEP_TBA_IMPLEMENTATION_ADDRESS as `0x${string}`,
-    version: TBVersion.V2,
   })
 
   const checkAccountDeployment = async (tokenId: string) => {
