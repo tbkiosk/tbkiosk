@@ -30,7 +30,7 @@ export async function POST(request: Request, { params }: { params: { tokenBoundA
   const tokenBoundAccount = params.tokenBoundAccount
   const body = await request.json()
 
-  const validation = TBA_USER_SCHEMA.safeParse(body)
+  const validation = TBA_USER_SCHEMA.safeParse({ ...body, amount: +body.amount, frequency: +body.frequency })
   if (!validation.success) {
     return NextResponse.json({ error: fromZodError(validation.error).details }, { status: 400 })
   }
@@ -89,7 +89,7 @@ export async function PUT(request: Request, { params }: { params: { tokenBoundAc
     }
 
     const body = await request.json()
-    const validation = TBA_USER_SCHEMA.safeParse(body)
+    const validation = TBA_USER_SCHEMA.safeParse({ ...body, amount: +body.amount, frequency: +body.frequency })
     if (!validation.success) {
       return NextResponse.json({ error: fromZodError(validation.error).details }, { status: 400 })
     }
