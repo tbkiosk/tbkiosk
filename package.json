@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.2",
-    "@nextui-org/react": "^2.1.13",
+    "@nextui-org/react": "^2.2.5",
     "@prisma/client": "^5.5.2",
     "@sentry/cli": "^2.21.2",
     "@sentry/nextjs": "^7.76.0",
