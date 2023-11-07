@@ -1,7 +1,20 @@
 'use client'
 
 import { useEffect, useState, forwardRef } from 'react'
-import { Modal, ModalContent, ModalHeader, ModalBody, ModalProps, Select, SelectItem, Input, InputProps, Checkbox } from '@nextui-org/react'
+import {
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalProps,
+  Select,
+  SelectItem,
+  Input,
+  InputProps,
+  Checkbox,
+  Button,
+  Tooltip,
+} from '@nextui-org/react'
 import { useForm, Controller } from 'react-hook-form'
 import DatePicker from 'react-datepicker'
 import { match } from 'ts-pattern'
@@ -32,6 +45,7 @@ import {
 import { env } from 'env.mjs'
 
 import ArrowIcon from 'public/icons/arrow.svg'
+import CalendarIcon from 'public/icons/calendar.svg'
 import USDC from 'public/icons/tokens/usdc.svg'
 import USDT from 'public/icons/tokens/usdt.svg'
 import Ethereum from 'public/icons/tokens/ethereum-circle.svg'
@@ -44,7 +58,7 @@ const defaultValues = {
   tokenAddressTo: WETH_CONTRACT_ADDRESS[+env.NEXT_PUBLIC_CHAIN_ID as 1 | 5 | 137],
   amount: 60,
   frequency: 7,
-  endDate: dayjs().add(7, 'days').toISOString(),
+  endDate: dayjs().add(8, 'days').toISOString(),
   mintAmount: 1,
 }
 
@@ -86,7 +100,7 @@ const DeployModal = ({ isOpen, onOpenChange }: Pick<ModalProps, 'isOpen' | 'onOp
   const [step, setStep] = useState<1 | 2 | 3>(1)
   const [noEndDate, setNoEndDate] = useState(false)
 
-  const { control, watch, handleSubmit, reset } = useForm<ConfigForm>({
+  const { control, watch, handleSubmit, reset, getValues } = useForm<ConfigForm>({
     defaultValues,
     resolver: zodResolver(TBA_USER_SCHEMA),
   })
@@ -99,13 +113,18 @@ const DeployModal = ({ isOpen, onOpenChange }: Pick<ModalProps, 'isOpen' | 'onOp
   const EndDateInput = forwardRef<HTMLInputElement>(({ value, onClick }: InputProps, ref) => (
     <Input
       classNames={{
-        base: 'h-[48px] px-8',
+        base: 'h-[48px] pl-8',
         label: 'hidden',
         innerWrapper: 'bg-transparent',
         input: 'pt-0 bg-transparent font-bold text-lg',
         inputWrapper: '!bg-transparent shadow-none',
       }}
       disabled={noEndDate}
+      endContent={
+        <div className="h-3 w-3 self-center">
+          <CalendarIcon />
+        </div>
+      }
       label="End date"
       onClick={onClick}
       ref={ref}
@@ -129,9 +148,8 @@ const DeployModal = ({ isOpen, onOpenChange }: Pick<ModalProps, 'isOpen' | 'onOp
                   <div className="flex items-center justify-center p-8 rounded bg-[#efefef]">
                     <Select
                       classNames={{
-                        base: '',
+                        base: '!mt-0',
                         label: 'hidden',
-                        popover: '',
                         selectorIcon: 'top-0',
                         trigger: 'h-[44px] w-[full] p-0 !bg-transparent !shadow-none',
                         value: 'font-bold text-lg text-center',
@@ -190,9 +208,8 @@ const DeployModal = ({ isOpen, onOpenChange }: Pick<ModalProps, 'isOpen' | 'onOp
                   <div className="flex items-center justify-center p-8 rounded bg-[#efefef]">
                     <Select
                       classNames={{
-                        base: '',
+                        base: '!mt-0',
                         label: 'hidden',
-                        popover: '',
                         selectorIcon: 'top-0',
                         trigger: 'h-[44px] w-[full] p-0 !bg-transparent !shadow-none',
                         value: 'font-bold text-lg text-center',
@@ -245,16 +262,18 @@ const DeployModal = ({ isOpen, onOpenChange }: Pick<ModalProps, 'isOpen' | 'onOp
             <Controller
               control={control}
               name="amount"
-              render={({ field }) => (
+              render={({ field, fieldState }) => (
                 <Input
                   classNames={{
-                    base: 'w-full md:w-[240px]',
-                    label: 'hidden',
-                    innerWrapper: 'bg-transparent',
-                    input: 'pt-0 bg-transparent font-bold text-4xl',
+                    base: 'w-full md:w-[320px]',
+                    innerWrapper: '!items-center bg-transparent',
+                    input: 'w-full md:w-[180px] pt-0 bg-transparent font-bold text-4xl',
                     inputWrapper: '!bg-transparent shadow-none',
+                    label: 'hidden',
                   }}
+                  color={fieldState.error ? 'danger' : 'default'}
                   endContent={TOKENS_FROM[tokenFrom].name}
+                  errorMessage={fieldState.error?.message}
                   label="Amount Per Period"
                   onValueChange={value => /(^[0-9]+$|^$)/.test(value) && field.onChange(+value)}
                   value={String(field.value)}
@@ -272,9 +291,8 @@ const DeployModal = ({ isOpen, onOpenChange }: Pick<ModalProps, 'isOpen' | 'onOp
                   <div className="flex items-center justify-center px-8 py-2 rounded bg-[#efefef]">
                     <Select
                       classNames={{
-                        base: '',
+                        base: '!mt-0',
                         label: 'hidden',
-                        popover: '',
                         selectorIcon: '',
                         trigger: 'w-[full] p-0 !bg-transparent shadow-none',
                         value: 'font-bold text-lg',
@@ -337,7 +355,7 @@ const DeployModal = ({ isOpen, onOpenChange }: Pick<ModalProps, 'isOpen' | 'onOp
                     <div className="flex justify-between wrap">
                       <span className="text-[#808080]">Investment total</span>
                       <span>
-                        {noEndDate ? '∞' : Math.floor(dayjs(field.value).diff(dayjs()) / (frequency * 86400000) + 1) * amount}{' '}
+                        {noEndDate ? 'N/A' : Math.floor(dayjs(field.value).diff(dayjs()) / (frequency * 86400000) + 1) * amount}{' '}
                         {TOKENS_FROM[tokenFrom].name}
                       </span>
                     </div>
@@ -346,13 +364,113 @@ const DeployModal = ({ isOpen, onOpenChange }: Pick<ModalProps, 'isOpen' | 'onOp
               />
             </div>
           </div>
+          <Button
+            className="h-14 w-full bg-black text-2xl text-white rounded-full"
+            type="submit"
+          >
+            Continue to review
+          </Button>
+        </div>
+      )
+    }
+
+    if (step === 2) {
+      const { frequency, amount, tokenAddressFrom, tokenAddressTo, endDate } = getValues()
+
+      return (
+        <div className="flex flex-col items-center gap-10 font-medium">
+          <div className="w-[90%] font-bold text-2xl text-center">
+            On a <span className="text-[#0062ff]">{FREQUENCY_OPTIONS.find(_freq => +_freq.frequency === +frequency)?.name}</span> basis, you
+            will be swapping <span className="text-[#0062ff]">{amount}</span>{' '}
+            <span className="text-[#0062ff]">{TOKENS_FROM[tokenAddressFrom].name}</span> to{' '}
+            <span className="text-[#0062ff]">{TOKENS_TO[tokenAddressTo].name}</span>
+          </div>
+          <div className="flex items-center">
+            <div className="text-center">
+              <div className="font-normal">Start date</div>
+              <div className="text-2xl">{dayjs().format('DD MMM YYYY')}</div>
+            </div>
+            <div className="h-8 w-8 flex justify-center items-center m-4">
+              <div className="w-3">
+                <ArrowIcon />
+              </div>
+            </div>
+            <div className="text-center">
+              <div className="font-normal">End date</div>
+              <div className="text-2xl">{noEndDate ? 'N/A' : dayjs(endDate).format('DD MMM YYYY')}</div>
+            </div>
+          </div>
+          <div>
+            <div className="flex items-center">
+              Deposit Amount{' '}
+              <Tooltip
+                classNames={{
+                  content: 'before:bg-blue',
+                }}
+                content={<div className="w-[160px]">This amount will be stored in your Beep DCA bot. You can withdraw any time.</div>}
+              >
+                <span className="h-4 w-4 flex items-center justify-center ml-2 bg-[#babdcc] rounded-full cursor-pointer">?</span>
+              </Tooltip>
+            </div>
+            <div className="flex items-center text-4xl">
+              {noEndDate ? 'N/A' : Math.floor(dayjs(endDate).diff(dayjs()) / (frequency * 86400000) + 1) * amount}{' '}
+              {TOKENS_FROM[tokenFrom].name}
+            </div>
+          </div>
+          <div className="w-[90%] flex items-center gap-4">
+            <Button
+              className="h-12 w-12 min-w-12 shrink-0 p-0 bg-[#efefef] rounded-[10px]"
+              onClick={() => setStep(1)}
+            >
+              <div className="w-3 rotate-180">
+                <ArrowIcon />
+              </div>
+            </Button>
+            <Button
+              className="h-14 w-full bg-black text-2xl text-white rounded-full"
+              type="submit"
+            >
+              Mint
+            </Button>
+          </div>
+        </div>
+      )
+    }
+
+    if (step === 3) {
+      return (
+        <div className="flex flex-col items-center gap-10 font-medium">
+          <div className="w-[90%] flex items-center gap-4">
+            <Button
+              className="h-12 w-12 min-w-12 shrink-0 p-0 bg-[#efefef] rounded-[10px]"
+              onClick={() => setStep(2)}
+            >
+              <div className="w-3 rotate-180">
+                <ArrowIcon />
+              </div>
+            </Button>
+            <Button
+              className="h-14 w-full bg-black text-2xl text-white rounded-full"
+              type="submit"
+            >
+              Mint
+            </Button>
+          </div>
         </div>
       )
     }
   }
 
   const onSubmit = async (data: ConfigForm) => {
-    // console.log(data)
+    if (step === 1) {
+      setStep(2)
+      return
+    }
+
+    if (step === 2) {
+      setStep(3)
+      return
+    }
   }
 
   useEffect(() => {
