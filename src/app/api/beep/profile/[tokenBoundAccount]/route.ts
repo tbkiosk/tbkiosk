@@ -1,17 +1,10 @@
 import { NextResponse } from 'next/server'
-import { z } from 'zod'
 import { fromZodError } from 'zod-validation-error'
 import dayjs from 'dayjs'
 
 import { prismaClient } from '@/lib/prisma'
 
-const TBA_USER_SCHEMA = z.object({
-  frequency: z.number().int().positive(),
-  amount: z.number().int().positive(),
-  tokenAddressFrom: z.string().startsWith('0x'),
-  tokenAddressTo: z.string().startsWith('0x'),
-  endDate: z.string().datetime().nullable(),
-})
+import { TBA_USER_SCHEMA } from '@/types/schema'
 
 export const runtime = 'nodejs'
 
