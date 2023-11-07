@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState, forwardRef } from 'react'
+import NextImage from 'next/image'
 import {
   Modal,
   ModalContent,
@@ -14,6 +15,7 @@ import {
   Checkbox,
   Button,
   Tooltip,
+  Image,
 } from '@nextui-org/react'
 import { useForm, Controller } from 'react-hook-form'
 import DatePicker from 'react-datepicker'
@@ -21,6 +23,7 @@ import { match } from 'ts-pattern'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import dayjs from 'dayjs'
+import clsx from 'clsx'
 
 import { TBA_USER_SCHEMA } from '@/types/schema'
 
@@ -95,6 +98,9 @@ const TOKENS_TO = {
     icon: () => <STEthereum />,
   },
 }
+
+const SUGGESTED_DEPOSIT_MULTIPLIER = 10
+const MAX_MINT_AMOUNT = 5
 
 const DeployModal = ({ isOpen, onOpenChange }: Pick<ModalProps, 'isOpen' | 'onOpenChange'>) => {
   const [step, setStep] = useState<1 | 2 | 3>(1)
@@ -352,13 +358,16 @@ const DeployModal = ({ isOpen, onOpenChange }: Pick<ModalProps, 'isOpen' | 'onOp
                         selected={dayjs(field.value).toDate()}
                       />
                     </div>
-                    <div className="flex justify-between wrap">
-                      <span className="text-[#808080]">Investment total</span>
+                    <div className="flex justify-between flex-wrap">
+                      <span className="text-[#808080]">{noEndDate ? 'Suggested investment' : 'Investment total'}</span>
                       <span>
-                        {noEndDate ? 'N/A' : Math.floor(dayjs(field.value).diff(dayjs()) / (frequency * 86400000) + 1) * amount}{' '}
+                        {noEndDate
+                          ? amount * SUGGESTED_DEPOSIT_MULTIPLIER
+                          : Math.floor(dayjs(field.value).diff(dayjs()) / (frequency * 86400000) + 1) * amount}{' '}
                         {TOKENS_FROM[tokenFrom].name}
                       </span>
                     </div>
+                    {noEndDate && <div className="text-xs text-[#808080]">{TOKENS_FROM[tokenFrom].name} amount for 10x DCAs from now</div>}
                   </>
                 )}
               />
@@ -413,7 +422,9 @@ const DeployModal = ({ isOpen, onOpenChange }: Pick<ModalProps, 'isOpen' | 'onOp
               </Tooltip>
             </div>
             <div className="flex items-center text-4xl">
-              {noEndDate ? 'N/A' : Math.floor(dayjs(endDate).diff(dayjs()) / (frequency * 86400000) + 1) * amount}{' '}
+              {noEndDate
+                ? amount * SUGGESTED_DEPOSIT_MULTIPLIER
+                : Math.floor(dayjs(endDate).diff(dayjs()) / (frequency * 86400000) + 1) * amount}{' '}
               {TOKENS_FROM[tokenFrom].name}
             </div>
           </div>
@@ -438,24 +449,99 @@ const DeployModal = ({ isOpen, onOpenChange }: Pick<ModalProps, 'isOpen' | 'onOp
     }
 
     if (step === 3) {
+      const { frequency, amount, tokenAddressFrom, tokenAddressTo, endDate } = getValues()
+
       return (
         <div className="flex flex-col items-center gap-10 font-medium">
-          <div className="w-[90%] flex items-center gap-4">
-            <Button
-              className="h-12 w-12 min-w-12 shrink-0 p-0 bg-[#efefef] rounded-[10px]"
-              onClick={() => setStep(2)}
-            >
-              <div className="w-3 rotate-180">
-                <ArrowIcon />
-              </div>
-            </Button>
-            <Button
-              className="h-14 w-full bg-black text-2xl text-white rounded-full"
-              type="submit"
-            >
-              Mint
-            </Button>
+          <div>
+            <Image
+              alt="beep"
+              as={NextImage}
+              classNames={{
+                wrapper: 'w-full max-w-[92px]',
+                img: 'aspect-square object-cover',
+              }}
+              height={92}
+              loading="eager"
+              priority
+              src="/beep/beep.png"
+              width={92}
+            />
           </div>
+          <Controller
+            control={control}
+            name="mintAmount"
+            render={({ field }) => (
+              <>
+                <div className="flex items-center gap-4">
+                  <Button
+                    className={clsx(
+                      'h-12 w-12 min-w-12 bg-white text-black border border-black',
+                      field.value <= 1 && '!bg-[#efefef] border-none'
+                    )}
+                    disabled={field.value <= 1}
+                    onClick={() => field.onChange(field.value - 1)}
+                  >
+                    -
+                  </Button>
+                  <div className="px-16 py-6 text-2xl bg-[#efefef] rounded">{field.value}</div>
+                  <Button
+                    className={clsx(
+                      'h-12 w-12 min-w-12 bg-white text-black border border-black',
+                      field.value >= MAX_MINT_AMOUNT && '!bg-[#efefef] border-none'
+                    )}
+                    disabled={field.value >= MAX_MINT_AMOUNT}
+                    onClick={() => field.onChange(field.value + 1)}
+                  >
+                    +
+                  </Button>
+                </div>
+                <div className="w-[90%]">
+                  <div className="mb-4">Summary</div>
+                  <div className="px-8">
+                    <div className="flex justify-between mb-4">
+                      <div className="font-normal">Deposit amount</div>
+                      <div>
+                        {noEndDate
+                          ? amount * SUGGESTED_DEPOSIT_MULTIPLIER
+                          : Math.floor(dayjs(endDate).diff(dayjs()) / (frequency * 86400000) + 1) * amount * field.value}{' '}
+                        {TOKENS_FROM[tokenFrom].name}
+                      </div>
+                    </div>
+                    <div className="flex justify-between mb-4">
+                      <div className="font-normal">Mint fee</div>
+                      <div>0.00</div>
+                    </div>
+                    <div className="flex justify-between mb-4">
+                      <div className="font-normal">Total</div>
+                      <div>
+                        {noEndDate
+                          ? amount * SUGGESTED_DEPOSIT_MULTIPLIER
+                          : Math.floor(dayjs(endDate).diff(dayjs()) / (frequency * 86400000) + 1) * amount * field.value}{' '}
+                        {TOKENS_FROM[tokenFrom].name}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="w-[90%] flex items-center gap-4">
+                  <Button
+                    className="h-12 w-12 min-w-12 shrink-0 p-0 bg-[#efefef] rounded-[10px]"
+                    onClick={() => setStep(2)}
+                  >
+                    <div className="w-3 rotate-180">
+                      <ArrowIcon />
+                    </div>
+                  </Button>
+                  <Button
+                    className="h-14 w-full bg-black text-2xl text-white rounded-full"
+                    type="submit"
+                  >
+                    Mint
+                  </Button>
+                </div>
+              </>
+            )}
+          />
         </div>
       )
     }
