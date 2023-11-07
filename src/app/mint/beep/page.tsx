@@ -2,6 +2,7 @@ import NextImage from 'next/image'
 import Link from 'next/link'
 import { Image, Button } from '@nextui-org/react'
 import { match } from 'ts-pattern'
+import { Ethereum, Goerli, Polygon } from '@thirdweb-dev/chains'
 
 import ConnectWalletButton from '@/components/connect_wallet_button'
 import CopyButton from '@/components/copy_button'
@@ -24,7 +25,13 @@ import { env } from 'env.mjs'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Kiosk - Mint Beep',
+  title: `Kiosk - Mint Beep on ${
+    {
+      [Goerli.chainId]: Goerli.name,
+      [Ethereum.chainId]: Ethereum.name,
+      [Polygon.chainId]: Polygon.name,
+    }[+env.NEXT_PUBLIC_CHAIN_ID]
+  }`,
 }
 
 const Mint = () => (

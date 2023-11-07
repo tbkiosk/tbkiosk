@@ -12,7 +12,6 @@ import ETH from 'public/icons/tokens/ethereum-circle.svg'
 import USDC from 'public/icons/tokens/usdc.svg'
 
 import './plan_modal.css'
-import 'react-datepicker/dist/react-datepicker.css'
 
 export const FREQUENCY_OPTIONS = [
   { frequency: '1', name: 'Daily' },
