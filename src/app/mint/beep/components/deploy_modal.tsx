@@ -16,7 +16,9 @@ import {
   Button,
   Tooltip,
   Image,
+  Chip,
 } from '@nextui-org/react'
+import { useBalance } from '@thirdweb-dev/react'
 import { useForm, Controller } from 'react-hook-form'
 import DatePicker from 'react-datepicker'
 import { match } from 'ts-pattern'
@@ -25,7 +27,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import dayjs from 'dayjs'
 import clsx from 'clsx'
 
-import { TBA_USER_SCHEMA } from '@/types/schema'
+import { TBA_USER_CONFIG_SCHEMA } from '@/types/schema'
 
 import { FREQUENCY_OPTIONS } from '../settings/[tokenId]/components/plan_modal'
 import {
@@ -54,7 +56,7 @@ import USDT from 'public/icons/tokens/usdt.svg'
 import Ethereum from 'public/icons/tokens/ethereum-circle.svg'
 import STEthereum from 'public/icons/tokens/steth.svg'
 
-type ConfigForm = z.infer<typeof TBA_USER_SCHEMA> & { mintAmount: number }
+type ConfigForm = z.infer<typeof TBA_USER_CONFIG_SCHEMA>
 
 const defaultValues = {
   tokenAddressFrom: USDC_CONTRACT_ADDRESS[+env.NEXT_PUBLIC_CHAIN_ID as 1 | 5 | 137],
@@ -63,6 +65,7 @@ const defaultValues = {
   frequency: 7,
   endDate: dayjs().add(8, 'days').toISOString(),
   mintAmount: 1,
+  depositAmount: 120,
 }
 
 const TOKENS_FROM = {
@@ -106,14 +109,16 @@ const DeployModal = ({ isOpen, onOpenChange }: Pick<ModalProps, 'isOpen' | 'onOp
   const [step, setStep] = useState<1 | 2 | 3>(1)
   const [noEndDate, setNoEndDate] = useState(false)
 
-  const { control, watch, handleSubmit, reset, getValues } = useForm<ConfigForm>({
+  const { control, watch, handleSubmit, reset, getValues, setValue, setError, formState } = useForm<ConfigForm>({
     defaultValues,
-    resolver: zodResolver(TBA_USER_SCHEMA),
+    resolver: zodResolver(TBA_USER_CONFIG_SCHEMA),
   })
 
   const tokenFrom = watch('tokenAddressFrom')
   const frequency = watch('frequency')
   const amount = watch('amount')
+
+  const balance = useBalance(tokenFrom)
 
   // eslint-disable-next-line
   const EndDateInput = forwardRef<HTMLInputElement>(({ value, onClick }: InputProps, ref) => (
@@ -361,13 +366,10 @@ const DeployModal = ({ isOpen, onOpenChange }: Pick<ModalProps, 'isOpen' | 'onOp
                     <div className="flex justify-between flex-wrap">
                       <span className="text-[#808080]">{noEndDate ? 'Suggested investment' : 'Investment total'}</span>
                       <span>
-                        {noEndDate
-                          ? amount * SUGGESTED_DEPOSIT_MULTIPLIER
-                          : Math.floor(dayjs(field.value).diff(dayjs()) / (frequency * 86400000) + 1) * amount}{' '}
+                        {noEndDate ? 'N/A' : Math.floor(dayjs(field.value).diff(dayjs()) / (frequency * 86400000) + 1) * amount}{' '}
                         {TOKENS_FROM[tokenFrom].name}
                       </span>
                     </div>
-                    {noEndDate && <div className="text-xs text-[#808080]">{TOKENS_FROM[tokenFrom].name} amount for 10x DCAs from now</div>}
                   </>
                 )}
               />
@@ -409,7 +411,7 @@ const DeployModal = ({ isOpen, onOpenChange }: Pick<ModalProps, 'isOpen' | 'onOp
               <div className="text-2xl">{noEndDate ? 'N/A' : dayjs(endDate).format('DD MMM YYYY')}</div>
             </div>
           </div>
-          <div>
+          <div className="w-[90%]">
             <div className="flex items-center">
               Deposit Amount{' '}
               <Tooltip
@@ -417,15 +419,104 @@ const DeployModal = ({ isOpen, onOpenChange }: Pick<ModalProps, 'isOpen' | 'onOp
                   content: 'before:bg-blue',
                 }}
                 content={<div className="w-[160px]">This amount will be stored in your Beep DCA bot. You can withdraw any time.</div>}
+                placement="right"
               >
                 <span className="h-4 w-4 flex items-center justify-center ml-2 bg-[#babdcc] rounded-full cursor-pointer">?</span>
               </Tooltip>
             </div>
-            <div className="flex items-center text-4xl">
-              {noEndDate
-                ? amount * SUGGESTED_DEPOSIT_MULTIPLIER
-                : Math.floor(dayjs(endDate).diff(dayjs()) / (frequency * 86400000) + 1) * amount}{' '}
-              {TOKENS_FROM[tokenFrom].name}
+            <Controller
+              control={control}
+              name="depositAmount"
+              render={({ field, fieldState }) => (
+                <Input
+                  classNames={{
+                    base: 'w-full md:w-[320px]',
+                    innerWrapper: '!items-center bg-transparent',
+                    input: 'w-full pt-0 bg-transparent font-bold text-4xl text-left',
+                    inputWrapper: '!bg-transparent shadow-none',
+                    label: 'hidden',
+                  }}
+                  color={fieldState.error ? 'danger' : 'default'}
+                  errorMessage={fieldState.error?.message}
+                  label="Deposit Amount"
+                  onValueChange={value => /(^[0-9]+$|^$)/.test(value) && field.onChange(+value)}
+                  value={String(field.value)}
+                />
+              )}
+            />
+            <div className="w-[90%] flex items-center flex-wrap">
+              <div>
+                <span className="mr-4 text-[#808080]">Balance:</span>
+                <span>
+                  {TOKENS_FROM[tokenAddressFrom].name} {balance.data?.displayValue}
+                </span>
+              </div>
+              <div className="flex gap-2 ml-8">
+                <Chip
+                  className="text-[#0062ff] cursor-pointer"
+                  onClick={() =>
+                    balance.data &&
+                    setValue(
+                      'depositAmount',
+                      Math.floor(
+                        balance.data.value
+                          .div(4)
+                          .div(10 ** balance.data.decimals)
+                          .toNumber()
+                      )
+                    )
+                  }
+                  size="sm"
+                >
+                  25%
+                </Chip>
+                <Chip
+                  className="text-[#0062ff] cursor-pointer"
+                  onClick={() =>
+                    balance.data &&
+                    setValue(
+                      'depositAmount',
+                      Math.floor(
+                        balance.data.value
+                          .div(2)
+                          .div(10 ** balance.data.decimals)
+                          .toNumber()
+                      )
+                    )
+                  }
+                  size="sm"
+                >
+                  50%
+                </Chip>
+                <Chip
+                  className="text-[#0062ff] cursor-pointer"
+                  onClick={() =>
+                    balance.data &&
+                    setValue(
+                      'depositAmount',
+                      Math.floor(
+                        balance.data.value
+                          .mul(3)
+                          .div(4)
+                          .div(10 ** balance.data.decimals)
+                          .toNumber()
+                      )
+                    )
+                  }
+                  size="sm"
+                >
+                  75%
+                </Chip>
+                <Chip
+                  className="text-[#0062ff] cursor-pointer"
+                  onClick={() =>
+                    balance.data && setValue('depositAmount', Math.floor(balance.data.value.div(10 ** balance.data.decimals).toNumber()))
+                  }
+                  size="sm"
+                >
+                  Max
+                </Chip>
+              </div>
             </div>
           </div>
           <div className="w-[90%] flex items-center gap-4">
@@ -449,7 +540,7 @@ const DeployModal = ({ isOpen, onOpenChange }: Pick<ModalProps, 'isOpen' | 'onOp
     }
 
     if (step === 3) {
-      const { frequency, amount, tokenAddressFrom, tokenAddressTo, endDate } = getValues()
+      const { depositAmount } = getValues()
 
       return (
         <div className="flex flex-col items-center gap-10 font-medium">
@@ -502,10 +593,7 @@ const DeployModal = ({ isOpen, onOpenChange }: Pick<ModalProps, 'isOpen' | 'onOp
                     <div className="flex justify-between mb-4">
                       <div className="font-normal">Deposit amount</div>
                       <div>
-                        {noEndDate
-                          ? amount * SUGGESTED_DEPOSIT_MULTIPLIER
-                          : Math.floor(dayjs(endDate).diff(dayjs()) / (frequency * 86400000) + 1) * amount * field.value}{' '}
-                        {TOKENS_FROM[tokenFrom].name}
+                        {depositAmount} {TOKENS_FROM[tokenFrom].name}
                       </div>
                     </div>
                     <div className="flex justify-between mb-4">
@@ -515,10 +603,7 @@ const DeployModal = ({ isOpen, onOpenChange }: Pick<ModalProps, 'isOpen' | 'onOp
                     <div className="flex justify-between mb-4">
                       <div className="font-normal">Total</div>
                       <div>
-                        {noEndDate
-                          ? amount * SUGGESTED_DEPOSIT_MULTIPLIER
-                          : Math.floor(dayjs(endDate).diff(dayjs()) / (frequency * 86400000) + 1) * amount * field.value}{' '}
-                        {TOKENS_FROM[tokenFrom].name}
+                        {depositAmount} {TOKENS_FROM[tokenFrom].name}
                       </div>
                     </div>
                   </div>
@@ -549,11 +634,26 @@ const DeployModal = ({ isOpen, onOpenChange }: Pick<ModalProps, 'isOpen' | 'onOp
 
   const onSubmit = async (data: ConfigForm) => {
     if (step === 1) {
+      const { frequency, amount, endDate } = getValues()
+      setValue(
+        'depositAmount',
+        noEndDate ? amount * SUGGESTED_DEPOSIT_MULTIPLIER : Math.floor(dayjs(endDate).diff(dayjs()) / (frequency * 86400000) + 1) * amount
+      )
       setStep(2)
       return
     }
 
     if (step === 2) {
+      if (!balance.data) {
+        setError('depositAmount', { type: 'custom', message: 'Failed to get balance' })
+        return
+      }
+
+      if (balance.data.value.div(balance.data.decimals).lt(data.depositAmount)) {
+        setError('depositAmount', { type: 'custom', message: 'Not enough balance' })
+        return
+      }
+
       setStep(3)
       return
     }
