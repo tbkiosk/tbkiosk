@@ -182,6 +182,11 @@ const BeepPreview = ({ control, getValues, setValue, setStep, setError, clearErr
           action={async contract => {
             const { depositAmount } = getValues()
 
+            if (depositAmount <= 0) {
+              setStep(3)
+              return
+            }
+
             if (!balance.data) {
               setError('depositAmount', { type: 'custom', message: 'Failed to get balance' })
               return
@@ -196,6 +201,9 @@ const BeepPreview = ({ control, getValues, setValue, setStep, setError, clearErr
               env.NEXT_PUBLIC_BEEP_CONTRACT_ADDRESS,
               ethers.utils.parseUnits(String(depositAmount), TOKENS_FROM[tokenAddressFrom].decimal),
             ])
+
+            toast.success(`Successfully deposit ${depositAmount} ${TOKENS_FROM[tokenAddressFrom].name}`)
+            setStep(3)
           }}
           contractAbi={erc20ABI}
           contractAddress={TOKENS_FROM[tokenAddressFrom].address}
