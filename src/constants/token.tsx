@@ -1,5 +1,12 @@
 import { Ethereum, Goerli, Polygon } from '@thirdweb-dev/chains'
 
+import { env } from 'env.mjs'
+
+import USDC from 'public/icons/tokens/usdc.svg'
+import USDT from 'public/icons/tokens/usdt.svg'
+import EthereumCircle from 'public/icons/tokens/ethereum-circle.svg'
+import STEthereum from 'public/icons/tokens/steth.svg'
+
 export const USDC_CONTRACT_ADDRESS = {
   [Ethereum.chainId]: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
   [Goerli.chainId]: '0x07865c6E87B9F70255377e024ace6630C1Eaa37F',
@@ -49,3 +56,37 @@ export const WSTETH_DECIMAL = 18
 export const WBTC_DECIMAL = 8
 export const UNI_DECIMAL = 18
 export const LINK_DECIMAL = 18
+
+export const TOKENS_FROM = {
+  [USDC_CONTRACT_ADDRESS[+env.NEXT_PUBLIC_CHAIN_ID as 1 | 5 | 137]]: {
+    name: 'USDC',
+    fullName: 'USD Coin',
+    address: USDC_CONTRACT_ADDRESS[+env.NEXT_PUBLIC_CHAIN_ID as 1 | 5 | 137],
+    decimal: USDC_DECIMAL,
+    icon: () => <USDC />,
+  },
+  [USDT_CONTRACT_ADDRESS[+env.NEXT_PUBLIC_CHAIN_ID as 1 | 5 | 137]]: {
+    name: 'USDT',
+    fullName: 'Tether USD',
+    address: USDT_CONTRACT_ADDRESS[+env.NEXT_PUBLIC_CHAIN_ID as 1 | 5 | 137],
+    decimal: USDT_DECIMAL,
+    icon: () => <USDT />,
+  },
+}
+
+export const TOKENS_TO = {
+  [WETH_CONTRACT_ADDRESS[+env.NEXT_PUBLIC_CHAIN_ID as 1 | 5 | 137]]: {
+    name: 'WETH',
+    fullName: 'Wrapped Ethereum',
+    address: WETH_CONTRACT_ADDRESS[+env.NEXT_PUBLIC_CHAIN_ID as 1 | 5 | 137],
+    decimal: WETH_DECIMAL,
+    icon: () => <EthereumCircle />,
+  },
+  [WSTETH_CONTRACT_ADDRESS[+env.NEXT_PUBLIC_CHAIN_ID as 1 | 5 | 137]]: {
+    name: 'wstETH',
+    fullName: "Lido's wrapped stETH",
+    address: WSTETH_CONTRACT_ADDRESS[+env.NEXT_PUBLIC_CHAIN_ID as 1 | 5 | 137],
+    decimal: WSTETH_DECIMAL,
+    icon: () => <STEthereum />,
+  },
+}
