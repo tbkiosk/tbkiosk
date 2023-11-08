@@ -23,7 +23,7 @@ interface IBeepConfigProps extends UseFormReturn<ConfigForm> {
 
 const SUGGESTED_DEPOSIT_MULTIPLIER = 10
 
-const BeepConfig = ({ control, watch, setValue, trigger, clearErrors, formState: { isValid }, setStep }: IBeepConfigProps) => {
+const BeepConfig = ({ control, watch, setValue, trigger, clearErrors, formState, setStep }: IBeepConfigProps) => {
   const tokenAddressFrom = watch('tokenAddressFrom')
   const frequency = watch('frequency')
   const amount = watch('amount')
@@ -55,7 +55,7 @@ const BeepConfig = ({ control, watch, setValue, trigger, clearErrors, formState:
   const onSubmit = () => {
     trigger()
 
-    if (isValid) {
+    if (formState.isValid) {
       setValue(
         'depositAmount',
         !endDate ? amount * SUGGESTED_DEPOSIT_MULTIPLIER : Math.floor(dayjs(endDate).diff(dayjs()) / (frequency * 86400000) + 1) * amount
@@ -230,7 +230,7 @@ const BeepConfig = ({ control, watch, setValue, trigger, clearErrors, formState:
                   label="Select interval"
                   labelPlacement="outside"
                   onSelectionChange={keys => {
-                    Array.from(keys)[0] && +field.onChange(Array.from(keys)[0])
+                    Array.from(keys)[0] && field.onChange(+(Array.from(keys)[0] as string))
                   }}
                   selectedKeys={[String(field.value)]}
                   size="sm"
@@ -279,7 +279,7 @@ const BeepConfig = ({ control, watch, setValue, trigger, clearErrors, formState:
                   />
                 </div>
                 <div className="flex justify-between flex-wrap">
-                  <span className="text-[#808080]">{!endDate ? 'Suggested investment' : 'Investment total'}</span>
+                  <span className="text-[#808080]">Investment total</span>
                   <span>
                     {!endDate ? 'N/A' : Math.floor(dayjs(field.value).diff(dayjs()) / (frequency * 86400000) + 1) * amount}{' '}
                     {TOKENS_FROM[tokenAddressFrom].name}

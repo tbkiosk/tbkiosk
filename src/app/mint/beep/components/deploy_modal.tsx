@@ -31,7 +31,7 @@ const defaultValues = {
 }
 
 const DeployModal = ({ isOpen, onOpenChange }: Pick<ModalProps, 'isOpen' | 'onOpenChange'>) => {
-  const [step, setStep] = useState<1 | 2 | 3>(1)
+  const [step, setStep] = useState<1 | 2 | 3 | 4>(1)
 
   const form = useForm<ConfigForm>({
     defaultValues,
@@ -61,6 +61,7 @@ const DeployModal = ({ isOpen, onOpenChange }: Pick<ModalProps, 'isOpen' | 'onOp
                   .with(1, () => 'Configure your Beep DCA')
                   .with(2, () => 'Review your Beep')
                   .with(3, () => 'Confirm')
+                  .with(4, () => null)
                   .exhaustive()}
               </ModalHeader>
               <ModalBody className="px-8 pb-8">
@@ -83,6 +84,7 @@ const DeployModal = ({ isOpen, onOpenChange }: Pick<ModalProps, 'isOpen' | 'onOp
                       setStep={setStep}
                     />
                   ))
+                  .with(4, () => null)
                   .exhaustive()}
               </ModalBody>
             </>

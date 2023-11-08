@@ -2,10 +2,8 @@
 
 import { Button, Tooltip, Chip, Input } from '@nextui-org/react'
 import { Controller, type UseFormReturn } from 'react-hook-form'
-import { useBalance, Web3Button } from '@thirdweb-dev/react'
-import { erc20ABI } from 'wagmi'
-import { ethers } from 'ethers'
-import { toast } from 'react-toastify'
+import { useBalance } from '@thirdweb-dev/react'
+
 import { z } from 'zod'
 import dayjs from 'dayjs'
 
@@ -13,8 +11,6 @@ import { TOKENS_FROM, TOKENS_TO } from '@/constants/token'
 import { FREQUENCY_OPTIONS } from '../settings/[tokenId]/components/plan_modal'
 
 import { TBA_USER_CONFIG_SCHEMA } from '@/types/schema'
-
-import { env } from 'env.mjs'
 
 import ArrowIcon from 'public/icons/arrow.svg'
 
@@ -28,6 +24,22 @@ const BeepPreview = ({ control, getValues, setValue, setStep, setError, clearErr
   const { frequency, amount, tokenAddressFrom, tokenAddressTo, endDate } = getValues()
 
   const balance = useBalance(tokenAddressFrom)
+
+  const onSubmit = () => {
+    const { depositAmount } = getValues()
+
+    if (!balance.data) {
+      setError('depositAmount', { type: 'custom', message: 'Failed to get balance' })
+      return
+    }
+
+    if (balance.data.value.div(10 ** balance.data.decimals).lt(depositAmount)) {
+      setError('depositAmount', { type: 'custom', message: 'Not enough balance' })
+      return
+    }
+
+    setStep(3)
+  }
 
   return (
     <div className="flex flex-col items-center gap-10 font-medium">
@@ -178,43 +190,12 @@ const BeepPreview = ({ control, getValues, setValue, setStep, setError, clearErr
             <ArrowIcon />
           </div>
         </Button>
-        <Web3Button
-          action={async contract => {
-            const { depositAmount } = getValues()
-
-            if (depositAmount <= 0) {
-              setStep(3)
-              return
-            }
-
-            if (!balance.data) {
-              setError('depositAmount', { type: 'custom', message: 'Failed to get balance' })
-              return
-            }
-
-            if (balance.data.value.div(10 ** balance.data.decimals).lt(depositAmount)) {
-              setError('depositAmount', { type: 'custom', message: 'Not enough balance' })
-              return
-            }
-
-            await contract.call('approve', [
-              env.NEXT_PUBLIC_BEEP_CONTRACT_ADDRESS,
-              ethers.utils.parseUnits(String(depositAmount), TOKENS_FROM[tokenAddressFrom].decimal),
-            ])
-
-            toast.success(`Successfully deposit ${depositAmount} ${TOKENS_FROM[tokenAddressFrom].name}`)
-            setStep(3)
-          }}
-          contractAbi={erc20ABI}
-          contractAddress={TOKENS_FROM[tokenAddressFrom].address}
-          className="!h-14 !grow !bg-black !text-2xl !text-white !rounded-full [&>svg>circle]:!stroke-white"
-          onError={error => {
-            toast.error((error as unknown as { reason: string })?.reason || 'Failed to approve')
-          }}
-          theme="dark"
+        <Button
+          className="h-14 w-full bg-black text-2xl text-white rounded-full"
+          onClick={onSubmit}
         >
-          Deposit
-        </Web3Button>
+          Mint
+        </Button>
       </div>
     </div>
   )
