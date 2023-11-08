@@ -137,7 +137,7 @@ const BeepConfirm = ({ control, getValues, watch, setStep }: IBeepConfirmProps) 
                   const sdk = ThirdwebSDK.fromSigner(signer, env.NEXT_PUBLIC_CHAIN_ID, {
                     clientId: env.NEXT_PUBLIC_THIRDWEB_CLIENT_ID,
                   })
-                  const nftContract = await sdk.getContract(env.NEXT_PUBLIC_BEEP_CONTRACT_ADDRESS, 'nft-drop')
+                  const nftContract = await sdk.getContract(env.NEXT_PUBLIC_BEEP_CONTRACT_ADDRESS)
                   const prepareTx = await nftContract.erc721.claim.prepare(mintAmount)
                   const claimArgs = prepareTx.getArgs()
                   const salt = bytesToHex(numberToBytes(0, { size: 32 }))
@@ -159,7 +159,7 @@ const BeepConfirm = ({ control, getValues, watch, setStep }: IBeepConfirmProps) 
                       TOKENS_FROM[tokenAddressFrom].decimal
                     ),
                   }
-                  await contract.call('claimAndCreateTba', [claimAndCreateArgs])
+                  await nftContract.call('claimAndCreateTba', [claimAndCreateArgs])
 
                   setStep(4)
                   toast.success(`Successfully deposit deposit and mint`)
