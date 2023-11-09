@@ -2,22 +2,10 @@
 
 import { NextResponse } from 'next/server'
 import dayjs from 'dayjs'
-// import { ethers } from 'ethers'
+
+// import { batchSwap } from '@/utils/adminSwap'
 
 import { prismaClient } from '@/lib/prisma'
-// import { BEEP_API } from '@/lib/abi'
-
-import { swapSingleUser } from '@/utils/swap'
-
-// import { env } from 'env.mjs'
-
-const MAX_USER_CONCURRENCY = 2
-
-// const ALCHEMY_PROVIDER_API_URL_MAP = {
-//   '1': 'https://eth-mainnet.g.alchemy.com/v2/',
-//   '5': 'https://eth-goerli.g.alchemy.com/v2/',
-//   '137': 'https://polygon-mainnet.g.alchemy.com/v2/',
-// } as { [key in typeof env.NEXT_PUBLIC_CHAIN_ID]: string }
 
 export const runtime = 'nodejs'
 
@@ -44,7 +32,7 @@ export async function GET() {
       },
     })
 
-    const results = await Promise.allSettled(usersToSwap.slice(0, MAX_USER_CONCURRENCY).map(_userToUpdate => swapSingleUser(_userToUpdate)))
+    const results = usersToSwap
 
     console.log(results)
     return NextResponse.json(results)
