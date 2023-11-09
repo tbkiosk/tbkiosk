@@ -49,6 +49,8 @@ const DeployModal = ({ isOpen, onOpenChange }: Pick<ModalProps, 'isOpen' | 'onOp
 
   return (
     <Modal
+      hideCloseButton={step === 2 || step === 3}
+      isDismissable={step === 1 || step === 4}
       isOpen={isOpen}
       onOpenChange={onOpenChange}
       size="2xl"

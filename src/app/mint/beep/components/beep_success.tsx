@@ -46,7 +46,7 @@ const BeepSuccess = ({ getValues }: UseFormReturn<ConfigForm>) => {
           <RobotSuccess />
         </div>
         <div>Congrats, Your Beep&apos;s Wallet is live and ready to use!</div>
-        <div className="font-normal text-[#a6a9ae]">
+        <div className="text-xl text-[#a6a9ae]">
           {mintedNFTs?.map(_nft => (
             <div key={_nft}>
               {maskAddress(
