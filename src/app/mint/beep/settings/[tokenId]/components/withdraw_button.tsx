@@ -155,7 +155,7 @@ const WithdrawButton = ({ tbaAddress }: { tbaAddress: string }) => {
                       classNames={{
                         base: 'w-full max-w-[320px] border border-[#808080] rounded-full',
                         label: 'hidden',
-                        popover: 'bg-[#0f0f0f]',
+                        popoverContent: 'bg-[#0f0f0f]',
                         trigger: 'h-[56px] bg-black hover:!bg-[#0f0f0f]',
                         value: 'font-bold text-lg text-center',
                       }}

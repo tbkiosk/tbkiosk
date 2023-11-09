@@ -111,7 +111,8 @@ const Searchbox = () => {
         <Input
           classNames={{
             base: 'bg-[#25262b] text-[#c1c2c5] rounded-xl',
-            inputWrapper: '!bg-transparent',
+            inputWrapper: 'h-8 !bg-transparent',
+            input: '!text-white',
           }}
           endContent={
             isFetching ? (
