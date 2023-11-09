@@ -11,6 +11,7 @@ import dayjs from 'dayjs'
 import BeepConfig from './beep_config'
 import BeepPreview from './beep_preview'
 import BeepConfirm from './beep_confirm'
+import BeepSuccess from './beep_success'
 
 import { TBA_USER_CONFIG_SCHEMA } from '@/types/schema'
 
@@ -31,7 +32,7 @@ const defaultValues = {
 }
 
 const DeployModal = ({ isOpen, onOpenChange }: Pick<ModalProps, 'isOpen' | 'onOpenChange'>) => {
-  const [step, setStep] = useState<1 | 2 | 3 | 4>(1)
+  const [step, setStep] = useState<1 | 2 | 3 | 4>(4)
 
   const form = useForm<ConfigForm>({
     defaultValues,
@@ -84,7 +85,7 @@ const DeployModal = ({ isOpen, onOpenChange }: Pick<ModalProps, 'isOpen' | 'onOp
                       setStep={setStep}
                     />
                   ))
-                  .with(4, () => null)
+                  .with(4, () => <BeepSuccess {...form} />)
                   .exhaustive()}
               </ModalBody>
             </>
