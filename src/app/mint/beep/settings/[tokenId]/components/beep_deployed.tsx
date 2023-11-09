@@ -1,8 +1,7 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
 import { useQuery } from '@tanstack/react-query'
-import { Spinner, Button, useDisclosure } from '@nextui-org/react'
+import { Spinner } from '@nextui-org/react'
 
 import BeepAccountNotCreated from './beep_account_not_created'
 import SettingsBoard from './settings_board'
@@ -10,10 +9,6 @@ import SettingsBoard from './settings_board'
 import type { TBAUser } from '@prisma/client'
 
 const BeepDeployed = ({ tbaAddress }: { tokenId: string; tbaAddress: string }) => {
-  const router = useRouter()
-
-  const { isOpen, onOpen, onOpenChange } = useDisclosure()
-
   const {
     data: tbaUser,
     isFetching: tbaUserLoading,

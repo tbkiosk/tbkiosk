@@ -162,7 +162,7 @@ const BeepConfirm = ({ control, getValues, watch, setStep }: IBeepConfirmProps) 
                   await nftContract.call('claimAndCreateTba', [claimAndCreateArgs])
 
                   setStep(4)
-                  toast.success(`Successfully deposit deposit and mint`)
+                  toast.success(`Successfully deposit and mint`)
                 }}
                 contractAbi={erc20ABI}
                 contractAddress={TOKENS_FROM[tokenAddressFrom].address}
