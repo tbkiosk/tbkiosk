@@ -3,6 +3,7 @@ import { Alchemy, AssetTransfersCategory, Network, SortingOrder } from 'alchemy-
 import { utils, BigNumber } from 'ethers'
 
 import { env } from 'env.mjs'
+import { USDC_CONTRACT_ADDRESS, USDT_CONTRACT_ADDRESS } from '@/constants/token'
 
 export type TransferTransaction = {
   isSuccess: boolean
@@ -73,9 +74,11 @@ export async function GET(request: Request, { params }: { params: { tokenBoundAc
 
     const [depositData, withdrawData] = await Promise.all([depositDataPromise, withdrawPromise])
 
-    const usdcDeposit = depositData.transfers
+    const stableCoinDeposit = depositData.transfers
       .filter(transfer => {
-        return transfer.asset === 'USDC'
+        const usdcContract = USDC_CONTRACT_ADDRESS[+env.NEXT_PUBLIC_CHAIN_ID as 1 | 5 | 137] as `0x${string}`
+        const usdtContract = USDT_CONTRACT_ADDRESS[+env.NEXT_PUBLIC_CHAIN_ID as 1 | 5 | 137] as `0x${string}`
+        return transfer.rawContract.address === usdcContract || transfer.rawContract.address === usdtContract
       })
       .map(item => {
         return {
@@ -84,7 +87,7 @@ export async function GET(request: Request, { params }: { params: { tokenBoundAc
           value: item.value,
           timestamp: item.metadata.blockTimestamp,
           type: 'Deposit',
-          currency: 'USDC',
+          currency: item.asset,
         }
       })
 
@@ -125,7 +128,7 @@ export async function GET(request: Request, { params }: { params: { tokenBoundAc
         }
       })
 
-    const result = [...usdcDeposit, ...usdcWithdraw, ...wethWithdraw].sort(
+    const result = [...stableCoinDeposit, ...usdcWithdraw, ...wethWithdraw].sort(
       (a, b) => new Date(b.timestamp).valueOf() - new Date(a.timestamp).valueOf()
     )
 
