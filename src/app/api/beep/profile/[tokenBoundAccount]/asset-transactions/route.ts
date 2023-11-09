@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server'
 import { Alchemy, AssetTransfersCategory, Network, SortingOrder } from 'alchemy-sdk'
+import { utils, BigNumber } from 'ethers'
 
 import { env } from 'env.mjs'
-import { utils, BigNumber } from 'ethers'
 
 export type TransferTransaction = {
   isSuccess: boolean

@@ -1,119 +1,96 @@
 'use client'
 
-import { useState } from 'react'
-import Link from 'next/link'
-import { Modal, ModalContent, ModalHeader, ModalBody, ModalProps, Button } from '@nextui-org/react'
-import { Web3Button } from '@thirdweb-dev/react'
-import { erc6551RegistryAbiV2 } from '@tokenbound/sdk'
+import { useEffect, useState } from 'react'
+import { Modal, ModalContent, ModalHeader, ModalBody, ModalProps } from '@nextui-org/react'
+import { useForm } from 'react-hook-form'
 import { match } from 'ts-pattern'
-import { toast } from 'react-toastify'
+import { z } from 'zod'
+import { zodResolver } from '@hookform/resolvers/zod'
+import dayjs from 'dayjs'
 
-import RobotSuccess from 'public/beep/robot-success.svg'
+import BeepConfig from './beep_config'
+import BeepPreview from './beep_preview'
+import BeepConfirm from './beep_confirm'
+import BeepSuccess from './beep_success'
 
-import { useOwnedBeepTbaDeployedStatus } from '@/hooks/use_owned_beep_tba_deployed_status'
-import { useGetTbaAccount } from '@/hooks/use_get_tba_account'
+import { TBA_USER_CONFIG_SCHEMA } from '@/types/schema'
 
-import { maskAddress } from '@/utils/address'
+import { USDC_CONTRACT_ADDRESS, WETH_CONTRACT_ADDRESS } from '@/constants/token'
 
 import { env } from 'env.mjs'
 
-const DeployModal = ({ isOpen, onOpenChange, tokenId }: Pick<ModalProps, 'isOpen' | 'onOpenChange'> & { tokenId: string | null }) => {
-  const { nft: lastOwnedNFT, setAccountDeployedStatus } = useOwnedBeepTbaDeployedStatus({ lastOwned: true })
-  const tbaAddress = useGetTbaAccount({
-    tokenId: tokenId ?? '',
-    implementationAddress: env.NEXT_PUBLIC_BEEP_TBA_IMPLEMENTATION_ADDRESS as `0x${string}`,
-    contractAddress: env.NEXT_PUBLIC_BEEP_CONTRACT_ADDRESS as `0x${string}`,
+type ConfigForm = z.infer<typeof TBA_USER_CONFIG_SCHEMA>
+
+const defaultValues = {
+  tokenAddressFrom: USDC_CONTRACT_ADDRESS[+env.NEXT_PUBLIC_CHAIN_ID as 1 | 5 | 137],
+  tokenAddressTo: WETH_CONTRACT_ADDRESS[+env.NEXT_PUBLIC_CHAIN_ID as 1 | 5 | 137],
+  amount: 60,
+  frequency: 7,
+  endDate: dayjs().add(8, 'days').toISOString(),
+  mintAmount: 1,
+  depositAmount: 120,
+}
+
+const DeployModal = ({ isOpen, onOpenChange }: Pick<ModalProps, 'isOpen' | 'onOpenChange'>) => {
+  const [step, setStep] = useState<1 | 2 | 3 | 4>(4)
+
+  const form = useForm<ConfigForm>({
+    defaultValues,
+    resolver: zodResolver(TBA_USER_CONFIG_SCHEMA),
   })
 
-  const [isDeployed, setIsDeployed] = useState(false)
+  useEffect(() => {
+    setStep(1)
 
-  const createAccount = async () => {
-    try {
-      const res = await fetch(`/api/beep/profile/${tbaAddress}`, {
-        method: 'POST',
-      })
-
-      if (!res.ok) {
-        throw new Error(res.statusText)
-      }
-    } catch (error) {
-      toast.error((error as Error)?.message || 'Failed to create user account')
+    if (isOpen) {
+      form.reset(defaultValues)
     }
-  }
+  }, [isOpen])
 
   return (
     <Modal
-      hideCloseButton={!isDeployed}
-      isDismissable={!isDeployed}
       isOpen={isOpen}
       onOpenChange={onOpenChange}
       size="2xl"
     >
       <ModalContent>
-        {() => (
-          <>
-            <ModalHeader />
-            <ModalBody className="px-8 pb-8">
-              <div className="flex justify-center">
-                <span className="h-24 w-24">
-                  <RobotSuccess />
-                </span>
-              </div>
-              {match(isDeployed)
-                .with(false, () => (
-                  <>
-                    <p className="my-4 font-medium text-xl text-center">
-                      <p className="mb-2">Congratulations! Your Beep has minted.</p>
-                      <p className="mb-2">Now let us deploy your Beep&apos;s wallet!</p>
-                    </p>
-                    <Web3Button
-                      action={async contract => {
-                        const tokenID = tokenId ?? lastOwnedNFT
-                        await contract.call('createAccount', [
-                          env.NEXT_PUBLIC_BEEP_TBA_IMPLEMENTATION_ADDRESS,
-                          env.NEXT_PUBLIC_CHAIN_ID,
-                          env.NEXT_PUBLIC_BEEP_CONTRACT_ADDRESS,
-                          tokenID ?? '',
-                          0,
-                          '0x',
-                        ])
-                      }}
-                      className="!h-[44px] !bg-black !text-white !text-xl !rounded-full !transition-colors hover:!bg-[#1F1F1F] [&>svg>circle]:!stroke-white"
-                      contractAbi={erc6551RegistryAbiV2}
-                      contractAddress={env.NEXT_PUBLIC_REGISTRY_ADDRESS}
-                      onError={error => {
-                        toast.error((error as unknown as { reason: string })?.reason || 'Failed to deploy')
-                      }}
-                      onSuccess={() => {
-                        setIsDeployed(true)
-                        setAccountDeployedStatus('Deployed')
-                        createAccount()
-                      }}
-                      theme="dark"
-                    >
-                      Deploy Beep&apos;s Wallet
-                    </Web3Button>
-                  </>
-                ))
-                .with(true, () => (
-                  <>
-                    <p className="mt-4 font-medium text-xl text-center">Congrats, Your Beep&apos;s Wallet is live and ready to use!</p>
-                    <p className="font-medium text-xl text-center text-[#a6a9ae]">{maskAddress(tbaAddress)}</p>
-                    <p className="my-4 font-medium text-xl text-center">Send USDC into your Beep&apos;s wallet to get started.</p>
-                    <Link
-                      className="block"
-                      href={`/mint/beep/settings/${tokenId}`}
-                    >
-                      <Button className="h-[44px] w-full bg-black text-xl text-white rounded-full transition-colors hover:bg-[#1F1F1F]">
-                        Set Up Your Beep Now
-                      </Button>
-                    </Link>
-                  </>
-                ))
-                .exhaustive()}
-            </ModalBody>
-          </>
-        )}
+        {() =>
+          isOpen && (
+            <>
+              <ModalHeader className="justify-center">
+                {match(step)
+                  .with(1, () => 'Configure your Beep DCA')
+                  .with(2, () => 'Review your Beep')
+                  .with(3, () => 'Confirm')
+                  .with(4, () => null)
+                  .exhaustive()}
+              </ModalHeader>
+              <ModalBody className="px-8 pb-8">
+                {match(step)
+                  .with(1, () => (
+                    <BeepConfig
+                      {...form}
+                      setStep={setStep}
+                    />
+                  ))
+                  .with(2, () => (
+                    <BeepPreview
+                      {...form}
+                      setStep={setStep}
+                    />
+                  ))
+                  .with(3, () => (
+                    <BeepConfirm
+                      {...form}
+                      setStep={setStep}
+                    />
+                  ))
+                  .with(4, () => <BeepSuccess {...form} />)
+                  .exhaustive()}
+              </ModalBody>
+            </>
+          )
+        }
       </ModalContent>
     </Modal>
   )

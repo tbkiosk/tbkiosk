@@ -5,6 +5,7 @@ import Toastify from '@/providers/toastify'
 import 'swiper/css'
 import 'swiper/css/pagination'
 import 'react-toastify/dist/ReactToastify.css'
+import 'react-datepicker/dist/react-datepicker.css'
 import './globals.css'
 
 import type { Metadata } from 'next'

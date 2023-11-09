@@ -6,14 +6,14 @@ import { toast } from 'react-toastify'
 import { Switch, Spinner, useDisclosure } from '@nextui-org/react'
 import dayjs from 'dayjs'
 
-import PlanModal, { FREQUENCY_OPTIONS } from './plan_modal'
+import PlanModal from './plan_modal'
 
 import EthereumCircle from 'public/icons/tokens/ethereum-circle.svg'
 import GearIcon from 'public/icons/gear.svg'
 
-import type { Profile } from '@/types/profile'
+import type { TBAUser } from '@prisma/client'
 
-const SettingsBoard = ({ profile, refetch, tbaAddress }: { tbaAddress: string; refetch: () => Promise<unknown>; profile: Profile }) => {
+const SettingsBoard = ({ tbaUser, refetch, tbaAddress }: { tbaAddress: string; refetch: () => Promise<unknown>; tbaUser: TBAUser }) => {
   const signer = useSigner()
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
@@ -26,16 +26,16 @@ const SettingsBoard = ({ profile, refetch, tbaAddress }: { tbaAddress: string; r
     try {
       await signer?.signMessage(
         JSON.stringify({
-          ID: tbaAddress,
-          IS_ACTIVE: !profile?.user.IS_ACTIVE,
+          address: tbaAddress,
+          isActive: !tbaUser.is_active,
         })
       )
 
       const res = await fetch(`/api/beep/profile/${tbaAddress}/status`, {
         method: 'PUT',
         body: JSON.stringify({
-          ID: tbaAddress,
-          IS_ACTIVE: !profile?.user.IS_ACTIVE,
+          address: tbaAddress,
+          isActive: !tbaUser.is_active,
         }),
       })
 
@@ -43,9 +43,9 @@ const SettingsBoard = ({ profile, refetch, tbaAddress }: { tbaAddress: string; r
         throw new Error(res.statusText)
       }
 
-      const response = await res.json()
-      if (response?.user) {
-        if (response.user.IS_ACTIVE) {
+      const response: TBAUser = await res.json()
+      if (response) {
+        if (response.is_active) {
           toast.success('Your Beep is activated and the first transaction has been initiated')
         } else {
           toast.success('Your Beep is Deactivated')
@@ -67,20 +67,20 @@ const SettingsBoard = ({ profile, refetch, tbaAddress }: { tbaAddress: string; r
           <EthereumCircle />
         </span>
         <div className="grow">
-          <div className="font-bold text-lg leading-normal">WETH</div>
+          {/* <div className="font-bold text-lg leading-normal">WETH</div>
           <div className="text-sm text-[#a6a9ae] tracking-wide leading-normal">
-            Invest {profile.user.AMOUNT || '-'} USDC&nbsp;
+            Invest {tbaUser.user.AMOUNT || '-'} USDC&nbsp;
             {FREQUENCY_OPTIONS.find(_option => +_option.frequency === +profile.user.FREQUENCY)?.name}
-          </div>
+          </div> */}
         </div>
         <div
           className="h-6 w-6 flex justify-center items-center bg-white text-black rounded-full cursor-pointer transition-colors hover:bg-[#e1e1e1]"
           onClick={onOpen}
         >
           <PlanModal
-            amount={String(profile.user.AMOUNT)}
-            endDate={profile.user.END_DATE}
-            frequncy={String(profile.user.FREQUENCY)}
+            amount={String(tbaUser.amount)}
+            endDate={tbaUser.end_date ? +dayjs(tbaUser.end_date) : null}
+            frequncy={String(tbaUser.frequency)}
             isOpen={isOpen}
             onOpenChange={onOpenChange}
             refetch={refetch}
@@ -115,9 +115,9 @@ const SettingsBoard = ({ profile, refetch, tbaAddress }: { tbaAddress: string; r
                   />
                 )
               }
-              isSelected={profile.user.IS_ACTIVE}
+              isSelected={tbaUser.is_active}
             >
-              {profile.user.IS_ACTIVE ? (
+              {tbaUser.is_active ? (
                 <span className="font-bold text-sm text-[#07ea7d] tracking-wide">Active</span>
               ) : (
                 <span className="font-bold text-sm text-[#a6a9ae] tracking-wide">Inactive</span>
@@ -129,9 +129,7 @@ const SettingsBoard = ({ profile, refetch, tbaAddress }: { tbaAddress: string; r
       <div className="w-full flex flex-col md:flex-row justify-between tracking-wide">
         <div>
           <div className="text-sm text-[#a6a9ae] ">Next Auto-Invest Date</div>
-          <div className="font-bold text-lg truncate">
-            {profile.user.NEXT_UPDATE ? dayjs(profile.user.NEXT_UPDATE * 1000).format('DD MMM YY') : '-'}
-          </div>
+          <div className="font-bold text-lg truncate">{tbaUser.next_swap ? dayjs(tbaUser.next_swap).format('DD MMM YY') : '-'}</div>
         </div>
         <div>
           <div className="text-sm text-[#a6a9ae] text-start md:text-end">Unrealised PnL</div>

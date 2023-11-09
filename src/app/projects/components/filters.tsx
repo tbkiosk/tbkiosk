@@ -32,7 +32,7 @@ const Filters = () => {
       </div>
       <div className="w-full md:hidden mb-8">
         <Select
-          classNames={{ popover: 'bg-white' }}
+          classNames={{ popoverContent: 'bg-white' }}
           label="Filter by categories"
           onSelectionChange={keys => Array.from(keys)[0] && router.replace(`${pathname}?categories=${Array.from(keys)[0]}`)}
           selectedKeys={[categories]}

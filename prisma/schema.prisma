@@ -193,3 +193,22 @@ enum ProjectBlockchain {
   Sui
   BSC
 }
+
+// ----------------------------------------------------------------
+
+model TBAUser {
+  id                    String          @id @default(auto()) @map("_id") @db.ObjectId
+  address               String          @unique
+  amount                Int
+  token_address_from    String
+  token_address_to      String
+  frequency             Int
+  end_date              DateTime?
+  created_at            DateTime        @default(now())
+  updated_at            DateTime        @updatedAt
+  is_active             Boolean
+  last_swap             DateTime?
+  next_swap             DateTime
+
+  @@map("tba_user")
+}
