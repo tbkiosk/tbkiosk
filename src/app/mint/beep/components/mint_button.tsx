@@ -1,6 +1,6 @@
 'use client'
 
-import { useConnectionStatus } from '@thirdweb-dev/react'
+import { useConnectionStatus, useSwitchChain } from '@thirdweb-dev/react'
 import { match } from 'ts-pattern'
 import { useDisclosure, Button } from '@nextui-org/react'
 
@@ -13,6 +13,7 @@ import Ethereum from 'public/icons/tokens/ethereum.svg'
 import Polygon from 'public/icons/tokens/polygon.svg'
 
 const MintButton = () => {
+  const switchChain = useSwitchChain()
   const connectionStatus = useConnectionStatus()
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
@@ -34,7 +35,10 @@ const MintButton = () => {
       <Button
         className="h-12 w-full text-xl text-white bg-black rounded-full hover:bg-[#0f0f0f]"
         disableRipple
-        onClick={onOpen}
+        onClick={async () => {
+          await switchChain(+env.NEXT_PUBLIC_CHAIN_ID)
+          onOpen()
+        }}
         startContent={
           <div className="h-6 w-6 block text-white">
             {match(env.NEXT_PUBLIC_CHAIN_ID)
