@@ -1,20 +1,16 @@
 import { NextResponse } from 'next/server'
-import { Alchemy, Network } from 'alchemy-sdk'
+import { Alchemy } from 'alchemy-sdk'
 
 import { USDC_CONTRACT_ADDRESS, WETH_CONTRACT_ADDRESS } from '@/constants/token'
+import { ALCHEMY_CONFIG } from '@/constants/alchemy'
 
 import { env } from 'env.mjs'
 
 export async function GET(request: Request, { params }: { params: { tokenBoundAccount: string } }) {
   const tokenBoundAccount = params.tokenBoundAccount
 
-  const config = {
-    apiKey: env.ALCHEMY_KEY,
-    network: Network.ETH_MAINNET,
-  }
-
   try {
-    const alchemy = new Alchemy(config)
+    const alchemy = new Alchemy(ALCHEMY_CONFIG)
 
     const tokenBalances = await alchemy.core.getTokenBalances(tokenBoundAccount, [
       USDC_CONTRACT_ADDRESS[+env.NEXT_PUBLIC_CHAIN_ID as 1 | 5 | 137],

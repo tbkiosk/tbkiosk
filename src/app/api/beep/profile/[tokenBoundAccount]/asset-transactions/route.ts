@@ -1,6 +1,9 @@
 import { NextResponse } from 'next/server'
-import { Alchemy, AssetTransfersCategory, Network, SortingOrder } from 'alchemy-sdk'
+import { Alchemy, AssetTransfersCategory, SortingOrder } from 'alchemy-sdk'
 import { utils, BigNumber } from 'ethers'
+
+import { ALCHEMY_CONFIG } from '@/constants/alchemy'
+import { explorer } from '@/constants/explorer'
 
 import { env } from 'env.mjs'
 
@@ -41,13 +44,8 @@ export const fetchCache = 'force-no-store'
 export async function GET(request: Request, { params }: { params: { tokenBoundAccount: string } }) {
   const tokenBoundAccount = params.tokenBoundAccount
 
-  const config = {
-    apiKey: env.ALCHEMY_KEY,
-    network: Network.ETH_MAINNET,
-  }
-
   try {
-    const alchemy = new Alchemy(config)
+    const alchemy = new Alchemy(ALCHEMY_CONFIG)
 
     const depositDataPromise = alchemy.core.getAssetTransfers({
       fromBlock: '0x0',
@@ -107,7 +105,9 @@ export async function GET(request: Request, { params }: { params: { tokenBoundAc
 
     const key = env.ETHERSCAN_KEY
     const wethTransactionResponse = await fetch(
-      `https://api.etherscan.io/api?module=account&action=tokentx&contractaddress=${wethContract}&address=${tokenBoundAccount}&page=1&offset=500&startblock=0&endblock=99999999&sort=asc&apikey=${key}`
+      `${
+        explorer[env.NEXT_PUBLIC_CHAIN_ID]
+      }/api?module=account&action=tokentx&contractaddress=${wethContract}&address=${tokenBoundAccount}&page=1&offset=500&startblock=0&endblock=99999999&sort=asc&apikey=${key}`
     )
     const wethTransactionData = await wethTransactionResponse.json()
     const wethWithdraw = wethTransactionData.result
