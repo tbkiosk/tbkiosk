@@ -1,6 +1,7 @@
 import { z } from 'zod'
 
 export const TBA_USER_SCHEMA = z.object({
+  ownerAddress: z.string().startsWith('0x'),
   frequency: z.number().int().positive(),
   amount: z.number().int().min(60),
   tokenAddressFrom: z.string().startsWith('0x'),

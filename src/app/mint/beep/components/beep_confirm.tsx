@@ -238,6 +238,7 @@ const CreateAccountsButton = ({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           addresses: tokenIds,
+          ownerAddress: address,
           frequency,
           amount,
           tokenAddressFrom,

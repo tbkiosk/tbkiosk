@@ -53,6 +53,7 @@ export async function POST(request: Request, { params }: { params: { tokenBoundA
     const newTbaUser = await prismaClient.tBAUser.create({
       data: {
         address: tokenBoundAccount,
+        owner_address: validation.data.ownerAddress,
         amount: validation.data.amount,
         token_address_from: validation.data.tokenAddressFrom,
         token_address_to: validation.data.tokenAddressTo,
@@ -61,7 +62,6 @@ export async function POST(request: Request, { params }: { params: { tokenBoundA
         created_at: now.toISOString(),
         updated_at: now.toISOString(),
         is_active: true,
-        last_swap: null,
         next_swap: now.add(validation.data.frequency, 'day').toISOString(),
       },
     })
