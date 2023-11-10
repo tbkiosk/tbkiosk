@@ -11,12 +11,7 @@ import dayjs from 'dayjs'
 import ETH from 'public/icons/tokens/ethereum-circle.svg'
 import USDC from 'public/icons/tokens/usdc.svg'
 
-export const FREQUENCY_OPTIONS = [
-  { frequency: '1', name: 'Daily' },
-  { frequency: '7', name: 'Weekly' },
-  { frequency: '14', name: 'Bi-Weekly' },
-  { frequency: '30', name: 'Monthly' },
-]
+import { FREQUENCY_OPTIONS } from '@/constants/beep'
 
 const PlanModal = ({
   amount: propAmount,
