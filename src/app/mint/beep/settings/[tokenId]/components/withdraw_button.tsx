@@ -76,6 +76,7 @@ const WithdrawButton = ({ tbaAddress }: { tbaAddress: string }) => {
       signer: signer,
       chainId: +env.NEXT_PUBLIC_CHAIN_ID,
       implementationAddress: env.NEXT_PUBLIC_BEEP_TBA_IMPLEMENTATION_ADDRESS as `0x${string}`,
+      registryAddress: env.NEXT_PUBLIC_REGISTRY_ADDRESS as `0x${string}`,
     })
 
     try {

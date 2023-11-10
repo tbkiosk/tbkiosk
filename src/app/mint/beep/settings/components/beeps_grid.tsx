@@ -44,7 +44,13 @@ const BeepsGrid = () => {
     )
   }
 
-  if (!chainId) return null
+  if (!chainId) {
+    return (
+      <div className="min-h-[540px] flex items-center justify-center">
+        <p className="text-center">Error chain</p>
+      </div>
+    )
+  }
 
   if (!data?.length) {
     return (
