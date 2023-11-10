@@ -1,9 +1,9 @@
 'use client'
 
 import { useState } from 'react'
-import clsx from 'clsx'
 import { useChainId } from '@thirdweb-dev/react'
 import { Spinner } from '@nextui-org/react'
+import clsx from 'clsx'
 
 import { env } from 'env.mjs'
 
