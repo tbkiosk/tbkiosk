@@ -1,8 +1,6 @@
 'use client'
 
-import { useMemo } from 'react'
-import { useSigner, useAddress, useChainId, useContract, useOwnedNFTs } from '@thirdweb-dev/react'
-import { TokenboundClient } from '@tokenbound/sdk'
+import { useAddress, useChainId, useContract, useOwnedNFTs } from '@thirdweb-dev/react'
 import { Spinner } from '@nextui-org/react'
 
 import BeepIframe from '../../components/beep_iframe'
@@ -11,6 +9,8 @@ import DepositButton from './deposit_button'
 import WithdrawButton from './withdraw_button'
 import BeepSettingsPanel from './beep_settings_panel'
 
+import useTbaAddress from '@/hooks/useTbaAddress'
+
 import { env } from 'env.mjs'
 
 import { maskAddress } from '@/utils/address'
@@ -18,24 +18,10 @@ import TbaRecord from '@/app/mint/beep/settings/[tokenId]/components/tba_record'
 
 const TBAContainer = ({ tokenId }: { tokenId: string }) => {
   const address = useAddress()
-  const signer = useSigner()
   const chainId = useChainId()
   const { contract } = useContract(chainId ? env.NEXT_PUBLIC_BEEP_CONTRACT_ADDRESS : null)
   const { data, isLoading, error } = useOwnedNFTs(contract, address)
-
-  const tbaAddress = useMemo(() => {
-    const tokenboundClient = new TokenboundClient({
-      signer: signer,
-      chainId: +env.NEXT_PUBLIC_CHAIN_ID,
-      implementationAddress: env.NEXT_PUBLIC_BEEP_TBA_IMPLEMENTATION_ADDRESS as `0x${string}`,
-      registryAddress: env.NEXT_PUBLIC_REGISTRY_ADDRESS as `0x${string}`,
-    })
-
-    return tokenboundClient.getAccount({
-      tokenContract: env.NEXT_PUBLIC_BEEP_CONTRACT_ADDRESS as `0x${string}`,
-      tokenId: tokenId ?? '',
-    })
-  }, [tokenId])
+  const tbaAddress = useTbaAddress(tokenId)
 
   if (!chainId || +chainId !== +env.NEXT_PUBLIC_CHAIN_ID) {
     return null
@@ -83,10 +69,7 @@ const TBAContainer = ({ tokenId }: { tokenId: string }) => {
             />
             <WithdrawButton tbaAddress={tbaAddress} />
           </div>
-          <BeepSettingsPanel
-            tbaAddress={tbaAddress}
-            tokenId={tokenId}
-          />
+          <BeepSettingsPanel tbaAddress={tbaAddress} />
         </div>
       </div>
       <div className="my-10 md:my-20 max-w-[900px] mx-auto">

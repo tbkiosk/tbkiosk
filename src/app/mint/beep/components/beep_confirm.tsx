@@ -264,7 +264,8 @@ const CreateAccountsButton = ({
   return (
     <Button
       className="h-14 w-full bg-black text-2xl text-white rounded-full"
-      isLoading={isLoading || creating}
+      disabled={isLoading}
+      isLoading={creating}
       onClick={() => createAccounts()}
     >
       Create DCA Accounts
