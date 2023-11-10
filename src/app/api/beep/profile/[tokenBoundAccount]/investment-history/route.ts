@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server'
 import { decodeFunctionData, formatUnits } from 'viem'
 
+import { explorer } from '@/constants/explorer'
+
 import { env } from 'env.mjs'
 
 type Transaction = {
@@ -76,10 +78,12 @@ export async function GET(request: Request, { params }: { params: { tokenBoundAc
   const tokenBoundAccount = params.tokenBoundAccount
 
   try {
-    const key = env.ETHERSCAN_KEY
+    const key = ['1', '5'].includes(env.NEXT_PUBLIC_CHAIN_ID) ? env.ETHERSCAN_KEY : env.POLYGONSCAN_KEY
 
     const response = await fetch(
-      `https://api.etherscan.io/api?module=account&action=txlist&address=${tokenBoundAccount}&startblock=0&endblock=99999999&page=1&offset=100&sort=desc&apikey=${key}`
+      `${
+        explorer[env.NEXT_PUBLIC_CHAIN_ID]
+      }/api?module=account&action=txlist&address=${tokenBoundAccount}&startblock=0&endblock=99999999&page=1&offset=100&sort=desc&apikey=${key}`
     )
 
     const { result } = (await response.json()) as { result: Transaction[] }
