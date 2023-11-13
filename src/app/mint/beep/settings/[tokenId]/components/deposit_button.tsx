@@ -77,15 +77,12 @@ const DepositButton = ({ tbaAddress }: { tokenId: string; tbaAddress: string }) 
     }
 
     if (!contract) {
-      toast.error('Failed to collect contract informat')
+      toast.error('Failed to collect contract information')
       return
     }
 
     try {
-      await contract.call('approve', [
-        env.NEXT_PUBLIC_BEEP_CONTRACT_ADDRESS,
-        ethers.utils.parseUnits(String(amount), TOKENS_FROM[token].decimal),
-      ])
+      await contract.call('approve', [tbaAddress, ethers.utils.parseUnits(String(amount), TOKENS_FROM[token].decimal)])
     } catch (error) {
       toast.error((error as Error)?.message)
     }
