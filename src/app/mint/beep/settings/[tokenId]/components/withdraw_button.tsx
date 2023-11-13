@@ -175,7 +175,7 @@ const WithdrawButton = ({ tbaAddress }: { tbaAddress: string }) => {
                                 size="sm"
                               />
                             ) : (
-                              `Balance: ${TOKENS[field.value].name} ${balances?.[field.value as `0x${string}`] || '-'}`
+                              `Balance: ${balances?.[field.value as `0x${string}`] || '-'}`
                             )}
                           </div>
                         </>
