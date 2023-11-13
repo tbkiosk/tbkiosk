@@ -62,7 +62,7 @@ const TBAContainer = ({ tokenId }: { tokenId: string }) => {
               {maskAddress(tbaAddress)}
             </CopyButton>
           </div>
-          <div className="flex gap-4">
+          <div className="flex gap-4 mb-8">
             <DepositButton
               tbaAddress={tbaAddress}
               tokenId={tokenId}

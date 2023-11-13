@@ -66,21 +66,14 @@ const SettingsBoard = ({ tbaUser, refetch, tbaAddress }: { tbaAddress: string; r
         <span className="h-10 w-10">
           <EthereumCircle />
         </span>
-        <div className="grow">
-          {/* <div className="font-bold text-lg leading-normal">WETH</div>
-          <div className="text-sm text-[#a6a9ae] tracking-wide leading-normal">
-            Invest {tbaUser.user.AMOUNT || '-'} USDC&nbsp;
-            {FREQUENCY_OPTIONS.find(_option => +_option.frequency === +profile.user.FREQUENCY)?.name}
-          </div> */}
-        </div>
         <div
           className="h-6 w-6 flex justify-center items-center bg-white text-black rounded-full cursor-pointer transition-colors hover:bg-[#e1e1e1]"
           onClick={onOpen}
         >
           <PlanModal
-            amount={String(tbaUser.amount)}
-            endDate={tbaUser.end_date ? +dayjs(tbaUser.end_date) : null}
-            frequncy={String(tbaUser.frequency)}
+            amount={tbaUser.amount}
+            endDate={tbaUser.end_date ? dayjs(tbaUser.end_date).toISOString() : null}
+            frequncy={tbaUser.frequency}
             isOpen={isOpen}
             onOpenChange={onOpenChange}
             refetch={refetch}
