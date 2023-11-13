@@ -8,7 +8,7 @@ import { z } from 'zod'
 import dayjs from 'dayjs'
 
 import { TOKENS_FROM, TOKENS_TO } from '@/constants/token'
-import { FREQUENCY_OPTIONS } from '../settings/[tokenId]/components/plan_modal'
+import { FREQUENCY_OPTIONS } from '@/constants/beep'
 
 import { TBA_USER_CONFIG_SCHEMA } from '@/types/schema'
 

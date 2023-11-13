@@ -1,37 +1,52 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 import { useSigner } from '@thirdweb-dev/react'
 import { TokenboundClient } from '@tokenbound/sdk'
 import { Button, Modal, ModalContent, ModalHeader, ModalBody, useDisclosure, Select, SelectItem, Input, Spinner } from '@nextui-org/react'
 import { useQuery } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
+import { useForm, Controller } from 'react-hook-form'
+import { z } from 'zod'
+import { zodResolver } from '@hookform/resolvers/zod'
+import clsx from 'clsx'
 
 import { explorer } from '@/constants/explorer'
-import { USDC_CONTRACT_ADDRESS, WETH_CONTRACT_ADDRESS, USDC_DECIMAL, WETH_DECIMAL } from '@/constants/token'
-
-import EthereumCircle from 'public/icons/tokens/ethereum-circle.svg'
-import USDC from 'public/icons/tokens/usdc.svg'
+import { TOKENS_FROM, TOKENS_TO, USDC_CONTRACT_ADDRESS } from '@/constants/token'
 
 import { env } from 'env.mjs'
+
+const schema = z.object({
+  token: z.string().startsWith('0x'),
+  amount: z.string(),
+  toAddress: z.string().startsWith('0x'),
+})
+
+type WithdrawForm = z.infer<typeof schema>
+
+const defaultValues: WithdrawForm = {
+  token: USDC_CONTRACT_ADDRESS[+env.NEXT_PUBLIC_CHAIN_ID as 1 | 5 | 137],
+  amount: '',
+  toAddress: '',
+}
+
+const TOKENS = { ...TOKENS_FROM, ...TOKENS_TO }
 
 const WithdrawButton = ({ tbaAddress }: { tbaAddress: string }) => {
   const signer = useSigner()
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
 
-  const [token, setToken] = useState('Ethereum')
-  const [amount, setAmount] = useState('0')
-  const [amountError, setAmountError] = useState<null | string>(null)
-  const [address, setAddress] = useState('')
-  const [addressError, setAddressError] = useState<null | string>(null)
-  const [withdrawing, setWithdrawing] = useState(false)
+  const { control, handleSubmit, reset, setError, clearErrors } = useForm<WithdrawForm>({
+    defaultValues,
+    resolver: zodResolver(schema),
+  })
 
   const {
     data: balances,
     isLoading: balancesLoading,
     error,
-  } = useQuery<{ usdc: string; weth: string }>({
+  } = useQuery<{ [address: `0x${string}`]: string }>({
     queryKey: ['tba-balances', tbaAddress],
     queryFn: async () => {
       const res = await fetch(`/api/beep/profile/${tbaAddress}/balances`)
@@ -45,30 +60,9 @@ const WithdrawButton = ({ tbaAddress }: { tbaAddress: string }) => {
     enabled: isOpen,
   })
 
-  useEffect(() => {
-    if (error) {
-      toast.error((error as Error)?.message || 'Failed to load balances')
-    }
-  }, [error])
-
-  const onConfirmWithdrawal = async () => {
-    if (isNaN(+amount) || !+amount) {
-      setAmountError('Invalid amount')
-      return
-    }
-
-    if (!/^0[xX][0-9a-fA-F]*$/.test(address)) {
-      setAddressError('Invalid address')
-      return
-    }
-
-    if (token === 'Ethereum' && +amount > +(balances?.weth ?? 0)) {
-      setAmountError('Not enough Ethereum balance')
-      return
-    }
-
-    if (token === 'USDC' && +amount > +(balances?.usdc ?? 0)) {
-      setAmountError('Not enough USDC balance')
+  const onSubmit = async (data: WithdrawForm) => {
+    if (BigInt(+data.amount * 10 ** TOKENS[data.token].decimal) > BigInt(balances?.[data.token as `0x${string}`] || 0)) {
+      setError('amount', { type: 'custom', message: 'Not enough balance' })
       return
     }
 
@@ -80,63 +74,43 @@ const WithdrawButton = ({ tbaAddress }: { tbaAddress: string }) => {
     })
 
     try {
-      setWithdrawing(true)
+      const txHash = await tokenboundClient.transferERC20({
+        account: tbaAddress as `0x${string}`,
+        amount: +data.amount,
+        recipientAddress: data.toAddress as `0x${string}`,
+        erc20tokenAddress: data.token as `0x${string}`,
+        erc20tokenDecimals: TOKENS[data.token].decimal,
+      })
 
-      if (token === 'Ethereum') {
-        const txHash = await tokenboundClient.transferERC20({
-          account: tbaAddress as `0x${string}`,
-          amount: +amount,
-          recipientAddress: address as `0x${string}`,
-          erc20tokenAddress: WETH_CONTRACT_ADDRESS[+env.NEXT_PUBLIC_CHAIN_ID as 1 | 5 | 137] as `0x${string}`,
-          erc20tokenDecimals: WETH_DECIMAL,
-        })
-
-        toast.success(
-          <p>
-            Successfully transferred WETH.&nbsp;
-            <a
-              className="underline"
-              href={`${explorer[+env.NEXT_PUBLIC_CHAIN_ID as 1 | 5 | 137]}/tx/${txHash}`}
-              rel="noreferrer"
-              target="_blank"
-            >
-              {txHash}
-            </a>
-          </p>
-        )
-        return
-      }
-
-      if (token === 'USDC') {
-        const txHash = await tokenboundClient.transferERC20({
-          account: tbaAddress as `0x${string}`,
-          amount: +amount,
-          recipientAddress: address as `0x${string}`,
-          erc20tokenAddress: USDC_CONTRACT_ADDRESS[+env.NEXT_PUBLIC_CHAIN_ID as 1 | 5 | 137] as `0x${string}`,
-          erc20tokenDecimals: USDC_DECIMAL,
-        })
-
-        toast.success(
-          <p>
-            Successfully transferred USDC.&nbsp;
-            <a
-              className="underline"
-              href={`${explorer[+env.NEXT_PUBLIC_CHAIN_ID as 1 | 5 | 137]}/tx/${txHash}`}
-              rel="noreferrer"
-              target="_blank"
-            >
-              {txHash}
-            </a>
-          </p>
-        )
-        return
-      }
+      toast.success(
+        <p>
+          Successfully transferred {TOKENS[data.token].name}.&nbsp;
+          <a
+            className="underline"
+            href={`${explorer[+env.NEXT_PUBLIC_CHAIN_ID as 1 | 5 | 137]}/tx/${txHash}`}
+            rel="noreferrer"
+            target="_blank"
+          >
+            {txHash}
+          </a>
+        </p>
+      )
     } catch (error) {
       toast.error((error as Error)?.message || 'Failed to withdraw')
-    } finally {
-      setWithdrawing(false)
     }
   }
+
+  useEffect(() => {
+    if (error) {
+      toast.error((error as Error)?.message || 'Failed to load balances')
+    }
+  }, [error])
+
+  useEffect(() => {
+    if (isOpen) {
+      reset(defaultValues)
+    }
+  }, [isOpen])
 
   return (
     <>
@@ -150,100 +124,128 @@ const WithdrawButton = ({ tbaAddress }: { tbaAddress: string }) => {
             <>
               <ModalHeader className="justify-center font-bold text-2xl">Withdraw from Beep</ModalHeader>
               <ModalBody className="px-8 pb-8 tracking-wide">
-                <div className="flex flex-col items-center gap-4">
+                <form
+                  className="flex flex-col items-center gap-4"
+                  onSubmit={handleSubmit(onSubmit)}
+                >
                   <div className="w-full flex flex-col items-center gap-2">
-                    <Select
-                      classNames={{
-                        base: 'w-full max-w-[320px] border border-[#808080] rounded-full',
-                        label: 'hidden',
-                        popoverContent: 'bg-[#0f0f0f]',
-                        trigger: 'h-[56px] bg-black hover:!bg-[#0f0f0f]',
-                        value: 'font-bold text-lg text-center',
-                      }}
-                      label="Select token"
-                      labelPlacement="outside"
-                      onSelectionChange={keys => {
-                        setAmountError(null)
-                        Array.from(keys)[0] && setToken(Array.from(keys)[0].toString())
-                      }}
-                      radius="full"
-                      selectedKeys={[token]}
-                      selectorIcon={<></>}
-                      size="sm"
-                      startContent={<span className="h-10 w-10">{token === 'Ethereum' ? <EthereumCircle /> : <USDC />}</span>}
-                    >
-                      {['Ethereum', 'USDC'].map(_token => (
-                        <SelectItem
-                          classNames={{ base: '!bg-[#0f0f0f] !text-white hover:!bg-[#1f1f1f] [&[data-selected]]:!bg-[#1f1f1f]' }}
-                          key={_token}
-                          value={_token}
-                        >
-                          {_token}
-                        </SelectItem>
-                      ))}
-                    </Select>
-                    <div className="text-center text-sm">
-                      {balancesLoading ? (
-                        <Spinner
-                          color="default"
-                          size="sm"
-                        />
-                      ) : (
-                        `Balance: ${token === 'Ethereum' ? balances?.weth || '-' : balances?.usdc || '-'}`
+                    <Controller
+                      control={control}
+                      name="token"
+                      render={({ field }) => (
+                        <>
+                          <Select
+                            classNames={{
+                              base: 'w-full max-w-[320px] border border-[#808080] rounded-full',
+                              label: 'hidden',
+                              popoverContent: 'bg-[#1f1f1f]',
+                              trigger: 'h-[56px] bg-black hover:!bg-[#0f0f0f]',
+                              value: 'font-bold text-lg text-center !text-white',
+                            }}
+                            items={Object.values(TOKENS)}
+                            label="Select token"
+                            labelPlacement="outside"
+                            listboxProps={{
+                              itemClasses: {
+                                base: 'text-white',
+                              },
+                            }}
+                            onSelectionChange={keys => {
+                              Array.from(keys)[0] && field.onChange(Array.from(keys)[0].toString())
+                            }}
+                            radius="full"
+                            renderValue={items => items.map(_item => _item.data && <div key={_item.data.name}>{_item.data.name}</div>)}
+                            selectedKeys={[field.value]}
+                            size="sm"
+                            startContent={<div className="h-6 w-6 shrink-0">{TOKENS[field.value].icon && TOKENS[field.value].icon()}</div>}
+                          >
+                            {_token => (
+                              <SelectItem
+                                key={_token.address}
+                                value={_token.address}
+                              >
+                                {_token.name}
+                              </SelectItem>
+                            )}
+                          </Select>
+                          <div className="text-center text-sm">
+                            {balancesLoading ? (
+                              <Spinner
+                                color="default"
+                                size="sm"
+                              />
+                            ) : (
+                              `Balance: ${balances?.[field.value as `0x${string}`] || '-'}`
+                            )}
+                          </div>
+                        </>
                       )}
-                    </div>
+                    />
                   </div>
                   <div className="w-full flex flex-col items-center">
-                    <Input
-                      className="w-full max-w-[320px]"
-                      classNames={{
-                        base: 'px-4 rounded-full border border-[#808080]',
-                        label: '!font-normal text-white',
-                        innerWrapper: 'bg-transparent',
-                        input: 'bg-transparent font-bold text-lg text-end',
-                        inputWrapper: '!bg-transparent',
-                      }}
-                      label="Amount"
-                      onValueChange={value => {
-                        setAmountError(null)
-                        if (/^\d*(\.\d*)?$/.test(value)) {
-                          setAmount(value)
-                        }
-                      }}
-                      value={amount}
+                    <Controller
+                      control={control}
+                      name="amount"
+                      render={({ field, fieldState }) => (
+                        <Input
+                          classNames={{
+                            base: clsx('max-w-[320px] px-4 rounded-full border border-[#808080]', fieldState.error && 'border-red-500'),
+                            label: clsx(
+                              'font-normal text-white group-data-[has-value=true]:text-white',
+                              fieldState.error && 'text-red-500 group-data-[has-value=true]:text-red-500'
+                            ),
+                            input: 'font-bold text-lg text-end group-data-[has-value=true]:text-white',
+                            inputWrapper: '!bg-transparent',
+                          }}
+                          color={fieldState.error ? 'danger' : 'default'}
+                          // errorMessage={fieldState.error?.message}
+                          label="amount"
+                          onValueChange={value => {
+                            if (/^(\d+(\.\d*)?|\.\d+)?$/.test(value)) {
+                              field.onChange(value)
+                              clearErrors('amount')
+                            }
+                          }}
+                          value={String(field.value)}
+                        />
+                      )}
                     />
-                    {amountError && <p className="text-sm text-center text-red-500">{amountError}</p>}
                   </div>
                   <div className="w-full flex flex-col items-center">
-                    <Input
-                      className="w-full max-w-[320px]"
-                      classNames={{
-                        base: 'px-4 rounded-full border border-[#808080]',
-                        label: '!font-normal text-white',
-                        innerWrapper: 'bg-transparent',
-                        input: 'bg-transparent font-bold text-lg text-end',
-                        inputWrapper: '!bg-transparent',
-                      }}
-                      label="Withdrawal address"
-                      maxLength={128}
-                      onValueChange={value => {
-                        setAddressError(null)
-                        setAddress(value)
-                      }}
-                      placeholder="0x"
-                      value={address}
+                    <Controller
+                      control={control}
+                      name="toAddress"
+                      render={({ field, fieldState }) => (
+                        <Input
+                          classNames={{
+                            base: clsx('max-w-[320px] px-4 rounded-full border border-[#808080]', fieldState.error && 'border-red-500'),
+                            label: clsx(
+                              'font-normal text-white group-data-[has-value=true]:text-white',
+                              fieldState.error && 'text-red-500 group-data-[has-value=true]:text-red-500'
+                            ),
+                            input: 'font-bold text-lg text-end group-data-[has-value=true]:text-white placeholder:text-[#7f7f7f]',
+                            inputWrapper: '!bg-transparent',
+                          }}
+                          color={fieldState.error ? 'danger' : 'default'}
+                          // errorMessage={fieldState.error?.message}
+                          label="toAddress"
+                          onValueChange={value => {
+                            field.onChange(value)
+                            clearErrors('toAddress')
+                          }}
+                          placeholder="0x"
+                          value={field.value}
+                        />
+                      )}
                     />
-                    {addressError && <p className="text-sm text-center text-red-500">{addressError}</p>}
                   </div>
                   <Button
                     className="h-12 w-full max-w-[320px] mt-8 px-8 bg-white font-bold text-xl text-black rounded-full tracking-wider transition-colors hover:bg-[#e1e1e1]"
-                    disabled={balancesLoading}
-                    isLoading={withdrawing}
-                    onClick={onConfirmWithdrawal}
+                    type="submit"
                   >
                     Confirm withdrawal
                   </Button>
-                </div>
+                </form>
               </ModalBody>
             </>
           )}

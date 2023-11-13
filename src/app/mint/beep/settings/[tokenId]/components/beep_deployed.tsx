@@ -14,7 +14,7 @@ const BeepDeployed = ({ tbaAddress }: { tokenId: string; tbaAddress: string }) =
     isFetching: tbaUserLoading,
     error: tbaUserError,
     refetch,
-  } = useQuery<TBAUser | undefined>({
+  } = useQuery<TBAUser | null>({
     enabled: !!tbaAddress,
     refetchInterval: 0,
     refetchOnMount: false,
@@ -27,7 +27,7 @@ const BeepDeployed = ({ tbaAddress }: { tokenId: string; tbaAddress: string }) =
         throw new Error(res.statusText)
       }
 
-      const tbaUser = await res.json()
+      const tbaUser: TBAUser | null = await res.json()
 
       return tbaUser
     },

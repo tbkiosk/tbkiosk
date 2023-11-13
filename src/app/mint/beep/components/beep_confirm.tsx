@@ -1,10 +1,9 @@
 'use client'
 
-import { useState, useMemo } from 'react'
 import NextImage from 'next/image'
 import { Image, Button } from '@nextui-org/react'
-import { Controller, type UseFormReturn, type UseFormGetValues } from 'react-hook-form'
-import { useBalance, useSigner, Web3Button, ThirdwebSDK, useAddress, useContract, useOwnedNFTs } from '@thirdweb-dev/react'
+import { Controller, type UseFormReturn } from 'react-hook-form'
+import { useSigner, ThirdwebSDK, useAddress, useContract, useOwnedNFTs } from '@thirdweb-dev/react'
 import { TokenboundClient } from '@tokenbound/sdk'
 import { erc20ABI } from 'wagmi'
 import { ethers } from 'ethers'
@@ -29,18 +28,124 @@ interface IBeepConfirmProps extends UseFormReturn<ConfigForm> {
 
 const MAX_MINT_AMOUNT = 5
 
-const BeepConfirm = ({ control, getValues, watch, setStep }: IBeepConfirmProps) => {
-  const { depositAmount, tokenAddressFrom } = getValues()
+const BeepConfirm = ({ control, getValues, watch, handleSubmit, formState: { isSubmitting }, setStep }: IBeepConfirmProps) => {
+  const { depositAmount, tokenAddressFrom, tokenAddressTo, amount, frequency, endDate } = getValues()
 
-  const [deployed, setDeployed] = useState(false)
-
+  const address = useAddress()
   const signer = useSigner()
-  const balance = useBalance(tokenAddressFrom)
+  const { contract: tokenContract } = useContract(tokenAddressFrom, erc20ABI)
+  const { contract: beepContract } = useContract(env.NEXT_PUBLIC_BEEP_CONTRACT_ADDRESS)
+  const { refetch } = useOwnedNFTs(beepContract, address)
 
   const mintAmount = watch('mintAmount')
 
+  const onSubmit = async () => {
+    if (!signer) {
+      toast.error('Signer not defined')
+      return
+    }
+
+    if (!tokenContract || !beepContract) {
+      toast.error('Failed to collect contract information')
+      return
+    }
+
+    try {
+      const totalDepositAmount = depositAmount * mintAmount
+
+      if (totalDepositAmount > 0) {
+        await tokenContract.call('approve', [
+          env.NEXT_PUBLIC_BEEP_CONTRACT_ADDRESS,
+          ethers.utils.parseUnits(String(totalDepositAmount), TOKENS_FROM[tokenAddressFrom].decimal),
+        ])
+      }
+
+      const sdk = ThirdwebSDK.fromSigner(signer, env.NEXT_PUBLIC_CHAIN_ID, {
+        clientId: env.NEXT_PUBLIC_THIRDWEB_CLIENT_ID,
+      })
+      const nftContract = await sdk.getContract(env.NEXT_PUBLIC_BEEP_CONTRACT_ADDRESS)
+      const prepareTx = await nftContract.erc721.claim.prepare(mintAmount)
+      const claimArgs = prepareTx.getArgs()
+      const salt = bytesToHex(numberToBytes(0, { size: 32 }))
+      const claimAndCreateArgs = {
+        receiver: claimArgs[0],
+        quantity: claimArgs[1],
+        currency: claimArgs[2],
+        pricePerToken: claimArgs[3],
+        allowlistProof: claimArgs[4],
+        data: claimArgs[5],
+        registry: env.NEXT_PUBLIC_REGISTRY_ADDRESS,
+        implementation: env.NEXT_PUBLIC_BEEP_TBA_IMPLEMENTATION_ADDRESS,
+        salt: salt,
+        chainId: env.NEXT_PUBLIC_CHAIN_ID,
+        tokenToTransfer: tokenAddressFrom,
+        // Note: leave amountToTransfer as 0 if user doesn't want to deposit token before mint, it will still create tba but does not transfer any toke right after
+        amountToTransfer: ethers.utils.parseUnits(totalDepositAmount <= 0 ? '0' : String(amount), TOKENS_FROM[tokenAddressFrom].decimal),
+      }
+
+      await nftContract.call('claimAndCreateTba', [claimAndCreateArgs])
+
+      // wait for NFTs re-collection
+      const nftResponse = await refetch()
+      const nfts = nftResponse.data
+      const ownedNFTs = nfts?.map(nft => nft.metadata.id)
+      const mintedNFTs = ownedNFTs?.slice(-1 * mintAmount)
+
+      if (!mintedNFTs) {
+        toast.warning(
+          'Mint was successful but failed to create investment plan(s). You can manually create an investment plan in settings page '
+        )
+        setStep(4)
+        return
+      }
+
+      const tokenboundClient = new TokenboundClient({
+        signer: signer,
+        chainId: +env.NEXT_PUBLIC_CHAIN_ID,
+        implementationAddress: env.NEXT_PUBLIC_BEEP_TBA_IMPLEMENTATION_ADDRESS as `0x${string}`,
+        registryAddress: env.NEXT_PUBLIC_REGISTRY_ADDRESS as `0x${string}`,
+      })
+
+      const tokenIds = mintedNFTs.map(_nft =>
+        tokenboundClient.getAccount({
+          tokenContract: env.NEXT_PUBLIC_BEEP_CONTRACT_ADDRESS as `0x${string}`,
+          tokenId: _nft,
+        })
+      )
+
+      const res = await fetch(`/api/beep/profile`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          addresses: tokenIds,
+          ownerAddress: address,
+          frequency,
+          amount,
+          tokenAddressFrom,
+          tokenAddressTo,
+          endDate,
+        }),
+      })
+
+      if (!res.ok) {
+        toast.warning(
+          'Mint was successful but failed to create investment plan(s). You can manually create an investment plan in settings page '
+        )
+      } else {
+        toast.success('Mint was successful and created investment plan(s)')
+      }
+
+      setStep(4)
+    } catch (error) {
+      toast.error((error as Error)?.message)
+    }
+  }
+
   return (
-    <div className="flex flex-col items-center gap-10 font-medium">
+    <form
+      className="flex flex-col items-center gap-10 font-medium"
+      onSubmit={handleSubmit(onSubmit)}
+    >
       <div>
         <Image
           alt="beep"
@@ -106,168 +211,29 @@ const BeepConfirm = ({ control, getValues, watch, setStep }: IBeepConfirmProps) 
               </div>
             </div>
             <div className="w-[90%] flex items-center gap-4">
-              {!deployed && (
-                <Button
-                  className="h-12 w-12 min-w-12 shrink-0 p-0 bg-[#efefef] rounded-[10px]"
-                  onClick={() => setStep(2)}
-                >
-                  <div className="w-3 rotate-180">
-                    <ArrowIcon />
-                  </div>
-                </Button>
-              )}
-              {deployed ? (
-                <CreateAccountsButton
-                  getValues={getValues}
-                  setStep={setStep}
-                />
-              ) : (
-                <Web3Button
-                  action={async contract => {
-                    if (!balance.data) {
-                      throw new Error('Failed to get balance')
-                    }
-
-                    const { depositAmount, amount } = getValues()
-                    const totalDepositAmount = depositAmount * mintAmount
-
-                    if (balance.data.value.div(10 ** balance.data.decimals).lt(totalDepositAmount)) {
-                      throw new Error('Not enought balance')
-                    }
-
-                    if (!signer) {
-                      throw new Error('Signer not defined')
-                    }
-
-                    if (totalDepositAmount > 0) {
-                      await contract.call('approve', [
-                        env.NEXT_PUBLIC_BEEP_CONTRACT_ADDRESS,
-                        ethers.utils.parseUnits(String(totalDepositAmount), TOKENS_FROM[tokenAddressFrom].decimal),
-                      ])
-                    }
-
-                    const sdk = ThirdwebSDK.fromSigner(signer, env.NEXT_PUBLIC_CHAIN_ID, {
-                      clientId: env.NEXT_PUBLIC_THIRDWEB_CLIENT_ID,
-                    })
-                    const nftContract = await sdk.getContract(env.NEXT_PUBLIC_BEEP_CONTRACT_ADDRESS)
-                    const prepareTx = await nftContract.erc721.claim.prepare(mintAmount)
-                    const claimArgs = prepareTx.getArgs()
-                    const salt = bytesToHex(numberToBytes(0, { size: 32 }))
-                    const claimAndCreateArgs = {
-                      receiver: claimArgs[0],
-                      quantity: claimArgs[1],
-                      currency: claimArgs[2],
-                      pricePerToken: claimArgs[3],
-                      allowlistProof: claimArgs[4],
-                      data: claimArgs[5],
-                      registry: env.NEXT_PUBLIC_REGISTRY_ADDRESS,
-                      implementation: env.NEXT_PUBLIC_BEEP_TBA_IMPLEMENTATION_ADDRESS,
-                      salt: salt,
-                      chainId: env.NEXT_PUBLIC_CHAIN_ID,
-                      tokenToTransfer: TOKENS_FROM[tokenAddressFrom].address,
-                      /**Note: leave amountToTransfer as 0 if user doesn't want to deposit token before mint, it will still create tba but does not transfer any toke right after*/
-                      amountToTransfer: ethers.utils.parseUnits(
-                        totalDepositAmount <= 0 ? '0' : String(amount),
-                        TOKENS_FROM[tokenAddressFrom].decimal
-                      ),
-                    }
-                    await nftContract.call('claimAndCreateTba', [claimAndCreateArgs])
-
-                    toast.success(`Successfully deposit and mint`)
-                    setDeployed(true)
-                  }}
-                  contractAbi={erc20ABI}
-                  contractAddress={TOKENS_FROM[tokenAddressFrom].address}
-                  className="!h-14 !grow !bg-black !text-2xl !text-white !rounded-full [&>svg>circle]:!stroke-white"
-                  onError={error => toast.error(error?.message || 'Failed to approve')}
-                  theme="dark"
-                >
-                  Mint
-                </Web3Button>
-              )}
+              <Button
+                className="h-12 w-12 min-w-12 shrink-0 p-0 bg-[#efefef] rounded-[10px]"
+                disabled={isSubmitting}
+                onClick={() => setStep(2)}
+              >
+                <div className="w-3 rotate-180">
+                  <ArrowIcon />
+                </div>
+              </Button>
+              <Button
+                className="h-14 w-full bg-black text-2xl text-white rounded-full"
+                disabled={isSubmitting}
+                isLoading={isSubmitting}
+                type="submit"
+              >
+                Mint
+              </Button>
             </div>
           </>
         )}
       />
-    </div>
+    </form>
   )
 }
 
 export default BeepConfirm
-
-const CreateAccountsButton = ({
-  getValues,
-  setStep,
-}: {
-  getValues: UseFormGetValues<ConfigForm>
-  setStep: (value: 1 | 2 | 3 | 4) => void
-}) => {
-  const { mintAmount, frequency, amount, tokenAddressFrom, tokenAddressTo, endDate } = getValues()
-
-  const [creating, setCreating] = useState(false)
-
-  const address = useAddress()
-  const signer = useSigner()
-  const { contract } = useContract(env.NEXT_PUBLIC_BEEP_CONTRACT_ADDRESS)
-  const { data, isLoading } = useOwnedNFTs(contract, address)
-
-  const ownedNFTs = useMemo(() => data?.map(nft => nft.metadata.id), [data])
-  const mintedNFTs = ownedNFTs?.slice(-1 * mintAmount)
-
-  const createAccounts = async () => {
-    if (!mintedNFTs) return
-
-    const tokenboundClient = new TokenboundClient({
-      signer: signer,
-      chainId: +env.NEXT_PUBLIC_CHAIN_ID,
-      implementationAddress: env.NEXT_PUBLIC_BEEP_TBA_IMPLEMENTATION_ADDRESS as `0x${string}`,
-      registryAddress: env.NEXT_PUBLIC_REGISTRY_ADDRESS as `0x${string}`,
-    })
-
-    const tokenIds = mintedNFTs.map(_nft =>
-      tokenboundClient.getAccount({
-        tokenContract: env.NEXT_PUBLIC_BEEP_CONTRACT_ADDRESS as `0x${string}`,
-        tokenId: _nft,
-      })
-    )
-
-    try {
-      setCreating(true)
-
-      const res = await fetch(`/api/beep/profile`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          addresses: tokenIds,
-          ownerAddress: address,
-          frequency,
-          amount,
-          tokenAddressFrom,
-          tokenAddressTo,
-          endDate,
-        }),
-      })
-
-      if (!res.ok) {
-        throw new Error(res.statusText)
-      }
-
-      toast.success('Created account successfully')
-      setStep(4)
-    } catch (error) {
-      toast.error((error as Error)?.message || 'Failed to create account')
-    } finally {
-      setCreating(false)
-    }
-  }
-
-  return (
-    <Button
-      className="h-14 w-full bg-black text-2xl text-white rounded-full"
-      isLoading={isLoading || creating}
-      onClick={() => createAccounts()}
-    >
-      Create DCA Accounts
-    </Button>
-  )
-}
