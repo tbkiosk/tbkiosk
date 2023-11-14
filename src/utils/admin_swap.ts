@@ -1,14 +1,14 @@
 import { Alchemy, Utils, Wallet, BigNumber } from 'alchemy-sdk'
 
-import { abi } from '@/utils/adminAbi'
+import { abi } from '@/utils/admin_abi'
 import { ALCHEMY_CONFIG } from '@/constants/alchemy'
 
 import { env } from 'env.mjs'
 
 type SwapDetail = {
   swapContract: string // TBA address
-  tokenIn: string
-  tokenOut: string
+  tokenIn: string // erc20 token
+  tokenOut: string // usdc or usdt
   amountIn: BigNumber // should include decimals
   gasFee: BigNumber // should include decimals
   beepFee: BigNumber // should include decimals
