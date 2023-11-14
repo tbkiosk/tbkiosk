@@ -20,6 +20,8 @@ import { env } from 'env.mjs'
 
 import ArrowIcon from 'public/icons/arrow.svg'
 
+import type { ThirdWebError } from '@/types'
+
 type ConfigForm = z.infer<typeof TBA_USER_CONFIG_SCHEMA>
 
 interface IBeepConfirmProps extends UseFormReturn<ConfigForm> {
@@ -80,7 +82,10 @@ const BeepConfirm = ({ control, getValues, watch, handleSubmit, formState: { isS
         chainId: env.NEXT_PUBLIC_CHAIN_ID,
         tokenToTransfer: tokenAddressFrom,
         // Note: leave amountToTransfer as 0 if user doesn't want to deposit token before mint, it will still create tba but does not transfer any toke right after
-        amountToTransfer: ethers.utils.parseUnits(totalDepositAmount <= 0 ? '0' : String(amount), TOKENS_FROM[tokenAddressFrom].decimal),
+        amountToTransfer: ethers.utils.parseUnits(
+          totalDepositAmount <= 0 ? '0' : String(depositAmount),
+          TOKENS_FROM[tokenAddressFrom].decimal
+        ),
       }
 
       await nftContract.call('claimAndCreateTba', [claimAndCreateArgs])
@@ -132,12 +137,12 @@ const BeepConfirm = ({ control, getValues, watch, handleSubmit, formState: { isS
           'Mint was successful but failed to create investment plan(s). You can manually create an investment plan in settings page '
         )
       } else {
-        toast.success('Mint was successful and created investment plan(s)')
+        toast.success('Mint was successful')
       }
 
       setStep(4)
     } catch (error) {
-      toast.error((error as Error)?.message)
+      toast.error((error as ThirdWebError)?.reason || (error as Error)?.message || 'Failed to mint')
     }
   }
 
