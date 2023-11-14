@@ -42,7 +42,7 @@ const BeepDeployed = ({ tbaAddress }: { tokenId: string; tbaAddress: string }) =
   }
 
   if (tbaUserError) {
-    return <p>{(tbaUserError as Error)?.message || 'Failed to load profile'}</p>
+    return <p>{(tbaUserError as Error)?.message || 'Failed to load profile, try to refresh the page'}</p>
   }
 
   if (!tbaUser) {
