@@ -48,7 +48,7 @@ const BeepConfig = ({ control, watch, setValue, trigger, clearErrors, formState,
       label="End date"
       onClick={onClick}
       ref={ref}
-      value={value ? dayjs(value).format('DD MMM YYYY') : 'N/A'}
+      value={value ? dayjs(value).format('DD MMM YYYY') : 'Forever'}
     />
   ))
 
@@ -261,7 +261,7 @@ const BeepConfig = ({ control, watch, setValue, trigger, clearErrors, formState,
               isSelected={!endDate}
               onValueChange={value => setValue('endDate', !value ? dayjs().add(8, 'days').toISOString() : null)}
             >
-              No end date
+              DCA Forever
             </Checkbox>
           </div>
           <Controller
@@ -279,9 +279,9 @@ const BeepConfig = ({ control, watch, setValue, trigger, clearErrors, formState,
                   />
                 </div>
                 <div className="flex justify-between flex-wrap">
-                  <span className="text-[#808080]">Investment total</span>
+                  <span className="text-[#808080]">Suggested Deposit</span>
                   <span>
-                    {!endDate ? 'N/A' : Math.floor(dayjs(field.value).diff(dayjs()) / (frequency * 86400000) + 1) * amount}{' '}
+                    {!endDate ? amount * 10 : Math.floor(dayjs(field.value).diff(dayjs()) / (frequency * 86400 * 1000) + 1) * amount}{' '}
                     {TOKENS_FROM[tokenAddressFrom].name}
                   </span>
                 </div>
