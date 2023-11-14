@@ -7,6 +7,7 @@ import { Button, Modal, ModalContent, ModalHeader, ModalBody, useDisclosure, Sel
 import { useQuery } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
 import { useForm, Controller } from 'react-hook-form'
+import { formatUnits } from 'viem'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import clsx from 'clsx'
@@ -37,7 +38,14 @@ const WithdrawButton = ({ tbaAddress }: { tbaAddress: string }) => {
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
 
-  const { control, handleSubmit, reset, setError, clearErrors } = useForm<WithdrawForm>({
+  const {
+    control,
+    handleSubmit,
+    reset,
+    setError,
+    clearErrors,
+    formState: { isSubmitting },
+  } = useForm<WithdrawForm>({
     defaultValues,
     resolver: zodResolver(schema),
   })
@@ -46,6 +54,7 @@ const WithdrawButton = ({ tbaAddress }: { tbaAddress: string }) => {
     data: balances,
     isLoading: balancesLoading,
     error,
+    refetch,
   } = useQuery<{ [address: `0x${string}`]: string }>({
     queryKey: ['tba-balances', tbaAddress],
     queryFn: async () => {
@@ -58,6 +67,7 @@ const WithdrawButton = ({ tbaAddress }: { tbaAddress: string }) => {
       return await res.json()
     },
     enabled: isOpen,
+    refetchInterval: 5000,
   })
 
   const onSubmit = async (data: WithdrawForm) => {
@@ -95,8 +105,26 @@ const WithdrawButton = ({ tbaAddress }: { tbaAddress: string }) => {
           </a>
         </p>
       )
+
+      refetch()
     } catch (error) {
       toast.error((error as Error)?.message || 'Failed to withdraw')
+    }
+  }
+
+  const renderBalance = (token: `0x${string}`) => {
+    const tokenBalance = balances?.[token]
+
+    if (tokenBalance === undefined) {
+      return '-'
+    }
+
+    try {
+      const tokenBalanceInBigInt = BigInt(tokenBalance)
+
+      return formatUnits(tokenBalanceInBigInt, TOKENS[token].decimal)
+    } catch (error) {
+      return '-'
     }
   }
 
@@ -175,7 +203,7 @@ const WithdrawButton = ({ tbaAddress }: { tbaAddress: string }) => {
                                 size="sm"
                               />
                             ) : (
-                              `Balance: ${balances?.[field.value as `0x${string}`] || '-'}`
+                              `Balance: ${renderBalance(field.value as `0x${string}`)}`
                             )}
                           </div>
                         </>
@@ -241,6 +269,8 @@ const WithdrawButton = ({ tbaAddress }: { tbaAddress: string }) => {
                   </div>
                   <Button
                     className="h-12 w-full max-w-[320px] mt-8 px-8 bg-white font-bold text-xl text-black rounded-full tracking-wider transition-colors hover:bg-[#e1e1e1]"
+                    disabled={isSubmitting}
+                    isLoading={isSubmitting}
                     type="submit"
                   >
                     Confirm withdrawal

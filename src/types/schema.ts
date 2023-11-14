@@ -16,5 +16,5 @@ export const TBA_USER_CONFIG_SCHEMA = z.object({
   tokenAddressTo: z.string().startsWith('0x'),
   endDate: z.string().datetime().nullable(),
   depositAmount: z.number().int().min(0),
-  mintAmount: z.number().int().min(0),
+  mintAmount: z.number().int().min(1),
 })
