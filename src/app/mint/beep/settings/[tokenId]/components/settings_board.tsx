@@ -61,7 +61,7 @@ const SettingsBoard = ({ tbaUser, refetch, tbaAddress }: { tbaAddress: string; r
   }
 
   return (
-    <div className="flex flex-col items-center grow">
+    <div className="flex flex-col items-center grow px-8 py-4 bg-[#131313] rounded-[10px] shadow-md">
       <div className="w-full flex items-center gap-4 mb-2">
         <span className="h-10 w-10">
           <EthereumCircle />
