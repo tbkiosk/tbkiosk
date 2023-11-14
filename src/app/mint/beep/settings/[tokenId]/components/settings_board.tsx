@@ -1,22 +1,23 @@
 'use client'
 
 import { useState } from 'react'
-import { useSigner } from '@thirdweb-dev/react'
+import { useAddress } from '@thirdweb-dev/react'
 import { toast } from 'react-toastify'
 import { Switch, Spinner, useDisclosure } from '@nextui-org/react'
 import dayjs from 'dayjs'
 
-import PlanModal from './plan_modal'
-
-import EthereumCircle from 'public/icons/tokens/ethereum-circle.svg'
+import PlanModal, { type PlanForm } from './plan_modal'
 import GearIcon from 'public/icons/gear.svg'
+
+import { FREQUENCY_OPTIONS } from '@/constants/beep'
+import { TOKENS_FROM, TOKENS_TO } from '@/constants/token'
 
 import type { TBAUser } from '@prisma/client'
 
 const SettingsBoard = ({ tbaUser, refetch, tbaAddress }: { tbaAddress: string; refetch: () => Promise<unknown>; tbaUser: TBAUser }) => {
-  const signer = useSigner()
+  const address = useAddress()
 
-  const { isOpen, onOpen, onOpenChange } = useDisclosure()
+  const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure()
 
   const [isAccountUpdating, setIsAccountUpdating] = useState(false)
 
@@ -24,13 +25,6 @@ const SettingsBoard = ({ tbaUser, refetch, tbaAddress }: { tbaAddress: string; r
     setIsAccountUpdating(true)
 
     try {
-      await signer?.signMessage(
-        JSON.stringify({
-          address: tbaAddress,
-          isActive: !tbaUser.is_active,
-        })
-      )
-
       const res = await fetch(`/api/beep/profile/${tbaAddress}/status`, {
         method: 'PUT',
         body: JSON.stringify({
@@ -60,35 +54,63 @@ const SettingsBoard = ({ tbaUser, refetch, tbaAddress }: { tbaAddress: string; r
     }
   }
 
+  const onSubmit = async ({ amount, frequency, tokenAddressFrom, tokenAddressTo, endDate }: PlanForm) => {
+    const res = await fetch(`/api/beep/profile/${tbaAddress}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        ownerAddress: address,
+        frequency,
+        amount,
+        tokenAddressFrom,
+        tokenAddressTo,
+        endDate,
+      }),
+    })
+
+    if (!res.ok) {
+      toast.error(res.statusText || 'Failed to create plan')
+      return
+    }
+
+    toast.success('Investment plan updated')
+    await refetch()
+    onClose()
+  }
+
   return (
     <div className="flex flex-col items-center grow px-8 py-4 bg-[#131313] rounded-[10px] shadow-md">
+      <PlanModal
+        amount={tbaUser.amount}
+        endDate={tbaUser.end_date ? dayjs(tbaUser.end_date).toISOString() : null}
+        frequncy={tbaUser.frequency}
+        isOpen={isOpen}
+        onOpenChange={onOpenChange}
+        onSubmit={onSubmit}
+      />
       <div className="w-full flex items-center gap-4 mb-2">
-        <span className="h-10 w-10">
-          <EthereumCircle />
-        </span>
+        <div className="h-10 w-10">{TOKENS_TO[tbaUser.token_address_to]?.icon()}</div>
+        <div className="grow">
+          <div className="font-bold text-lg leading-normal">{TOKENS_TO[tbaUser.token_address_to]?.name}</div>
+          <div className="text-sm text-[#a6a9ae] tracking-wide leading-normal">
+            Invest {tbaUser.amount || '-'} {TOKENS_FROM[tbaUser.token_address_from].name}&nbsp;
+            {FREQUENCY_OPTIONS.find(_option => +_option.frequency === +tbaUser.frequency)?.name}
+          </div>
+        </div>
         <div
-          className="h-6 w-6 flex justify-center items-center bg-white text-black rounded-full cursor-pointer transition-colors hover:bg-[#e1e1e1]"
+          className="h-6 w-6 flex justify-center items-center shrink-0 bg-white text-black rounded-full cursor-pointer transition-colors hover:bg-[#e1e1e1]"
           onClick={onOpen}
         >
-          <PlanModal
-            amount={tbaUser.amount}
-            endDate={tbaUser.end_date ? dayjs(tbaUser.end_date).toISOString() : null}
-            frequncy={tbaUser.frequency}
-            isOpen={isOpen}
-            onOpenChange={onOpenChange}
-            refetch={refetch}
-            tbaAddress={tbaAddress}
-          />
-          <span className="h-4 w-4 rounded-full">
+          <div className="h-4 w-4 rounded-full">
             <GearIcon />
-          </span>
+          </div>
         </div>
       </div>
       <hr className="w-full mb-6 border-[#a6a9ae]" />
       <div className="w-full flex flex-col md:flex-row justify-between mb-8 tracking-wide">
         <div>
           <div className="text-sm text-[#a6a9ae] ">Total invested</div>
-          <div className="font-bold text-[28px] truncate">- USDC</div>
+          <div className="font-bold text-[28px] truncate">- {TOKENS_FROM[tbaUser.token_address_from].name}</div>
         </div>
         <div>
           <div className="text-sm text-[#a6a9ae] text-start md:text-end">Status</div>
@@ -126,7 +148,7 @@ const SettingsBoard = ({ tbaUser, refetch, tbaAddress }: { tbaAddress: string; r
         </div>
         <div>
           <div className="text-sm text-[#a6a9ae] text-start md:text-end">Unrealised PnL</div>
-          <div className="font-bold text-lg text-start md:text-end">- USDC</div>
+          <div className="font-bold text-lg text-start md:text-end">- {TOKENS_FROM[tbaUser.token_address_from].name}</div>
         </div>
       </div>
     </div>
