@@ -23,7 +23,7 @@ interface IBeepConfigProps extends UseFormReturn<ConfigForm> {
 
 const SUGGESTED_DEPOSIT_MULTIPLIER = 10
 
-const BeepConfig = ({ control, watch, setValue, trigger, clearErrors, formState, setStep }: IBeepConfigProps) => {
+const BeepConfig = ({ control, watch, setValue, trigger, clearErrors, setStep }: IBeepConfigProps) => {
   const tokenAddressFrom = watch('tokenAddressFrom')
   const frequency = watch('frequency')
   const amount = watch('amount')
@@ -52,10 +52,10 @@ const BeepConfig = ({ control, watch, setValue, trigger, clearErrors, formState,
     />
   ))
 
-  const onSubmit = () => {
-    trigger()
+  const onSubmit = async () => {
+    const isValid = await trigger()
 
-    if (formState.isValid) {
+    if (isValid) {
       setValue(
         'depositAmount',
         !endDate ? amount * SUGGESTED_DEPOSIT_MULTIPLIER : Math.floor(dayjs(endDate).diff(dayjs()) / (frequency * 86400000) + 1) * amount
@@ -281,7 +281,9 @@ const BeepConfig = ({ control, watch, setValue, trigger, clearErrors, formState,
                 <div className="flex justify-between flex-wrap">
                   <span className="text-[#808080]">Suggested Deposit</span>
                   <span>
-                    {!endDate ? amount * 10 : Math.floor(dayjs(field.value).diff(dayjs()) / (frequency * 86400 * 1000) + 1) * amount}{' '}
+                    {!endDate
+                      ? amount * SUGGESTED_DEPOSIT_MULTIPLIER
+                      : Math.floor(dayjs(field.value).diff(dayjs()) / (frequency * 86400 * 1000) + 1) * amount}{' '}
                     {TOKENS_FROM[tokenAddressFrom].name}
                   </span>
                 </div>
