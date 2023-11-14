@@ -1,9 +1,7 @@
 'use client'
 
 import { useEffect, forwardRef } from 'react'
-import { useSigner } from '@thirdweb-dev/react'
 import { Modal, ModalContent, ModalHeader, ModalBody, Button, Input, InputProps, Select, SelectItem } from '@nextui-org/react'
-import { toast } from 'react-toastify'
 import DatePicker from 'react-datepicker'
 import { useForm, Controller } from 'react-hook-form'
 import { z } from 'zod'
@@ -24,7 +22,7 @@ const schema = z.object({
   endDate: z.string().datetime().nullable(),
 })
 
-type PlanForm = z.infer<typeof schema>
+export type PlanForm = z.infer<typeof schema>
 
 interface IPlanModalProps {
   amount?: number
@@ -34,9 +32,7 @@ interface IPlanModalProps {
   tokenAddressTo?: string
   isOpen: boolean
   onOpenChange: () => void
-  onSuccess?: () => void
-  refetch: () => Promise<unknown>
-  tbaAddress: string
+  onSubmit: (data: PlanForm) => unknown | Promise<unknown>
 }
 
 const PlanModal = ({
@@ -47,13 +43,16 @@ const PlanModal = ({
   tokenAddressTo: defaultTokenAddressTo,
   isOpen,
   onOpenChange,
-  onSuccess,
-  refetch,
-  tbaAddress,
+  onSubmit,
 }: IPlanModalProps) => {
-  const signer = useSigner()
-
-  const { control, setValue, clearErrors, reset } = useForm<PlanForm>({
+  const {
+    control,
+    setValue,
+    clearErrors,
+    reset,
+    handleSubmit,
+    formState: { isSubmitting },
+  } = useForm<PlanForm>({
     defaultValues: {
       amount: defaultAmount ?? 60,
       frequency: defaultFrequncy ?? 7,
@@ -84,6 +83,10 @@ const PlanModal = ({
     />
   ))
 
+  const _onSubmit = async (data: PlanForm) => {
+    await onSubmit(data)
+  }
+
   useEffect(() => {
     if (isOpen) {
       reset({
@@ -107,7 +110,10 @@ const PlanModal = ({
           <>
             <ModalHeader className="justify-center font-bold text-2xl">Dollar Cost Averaging Plan</ModalHeader>
             <ModalBody className="px-8 pb-8">
-              <div className="flex flex-col items-center">
+              <form
+                className="flex flex-col items-center"
+                onSubmit={handleSubmit(_onSubmit)}
+              >
                 <div className="w-[320px] max-w-[320px] flex flex-col items-center gap-8">
                   <div className="flex items-center justify-center gap-2">
                     <span className="shrink-0 text-xs">Auto invest in</span>
@@ -249,9 +255,16 @@ const PlanModal = ({
                       </div>
                     )}
                   />
-                  <Button className="w-[200px] bg-white font-bold text-sm text-black tracking-wide rounded-full">Save Plan</Button>
+                  <Button
+                    className="w-[200px] bg-white font-bold text-sm text-black tracking-wide rounded-full"
+                    disabled={isSubmitting}
+                    isLoading={isSubmitting}
+                    type="submit"
+                  >
+                    Save Plan
+                  </Button>
                 </div>
-              </div>
+              </form>
             </ModalBody>
           </>
         )}
