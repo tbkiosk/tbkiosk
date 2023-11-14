@@ -8,6 +8,7 @@ import { toast } from 'react-toastify'
 import { useContract } from '@thirdweb-dev/react'
 import { erc20ABI } from 'wagmi'
 import { ethers } from 'ethers'
+import { formatUnits } from 'viem'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import clsx from 'clsx'
@@ -68,6 +69,7 @@ const DepositButton = ({ tbaAddress }: { tokenId: string; tbaAddress: string }) 
       return await res.json()
     },
     enabled: isOpen,
+    refetchInterval: 5000,
   })
 
   const onSubmit = async ({ amount, token }: DepositForm) => {
@@ -85,6 +87,22 @@ const DepositButton = ({ tbaAddress }: { tokenId: string; tbaAddress: string }) 
       await contract.call('approve', [tbaAddress, ethers.utils.parseUnits(String(amount), TOKENS_FROM[token].decimal)])
     } catch (error) {
       toast.error((error as Error)?.message)
+    }
+  }
+
+  const renderBalance = (token: `0x${string}`) => {
+    const tokenBalance = balances?.[token]
+
+    if (tokenBalance === undefined) {
+      return '-'
+    }
+
+    try {
+      const tokenBalanceInBigInt = BigInt(tokenBalance)
+
+      return formatUnits(tokenBalanceInBigInt, TOKENS_FROM[token].decimal)
+    } catch (error) {
+      return '-'
     }
   }
 
@@ -180,7 +198,7 @@ const DepositButton = ({ tbaAddress }: { tokenId: string; tbaAddress: string }) 
                                 size="sm"
                               />
                             ) : (
-                              `Balance: ${balances?.[field.value as `0x${string}`] || '-'}`
+                              `Balance: ${renderBalance(field.value as `0x${string}`)}`
                             )}
                           </div>
                         </>
