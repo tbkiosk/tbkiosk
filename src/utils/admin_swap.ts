@@ -103,7 +103,9 @@ export const batchSwap = async (swapDetails: SwapDetail[]) => {
   const feeData = await alchemy.core.getFeeData()
 
   const adminInterface = new Utils.Interface(abi)
-  const data = adminInterface.encodeFunctionData('batchSwap', [swapDetails])
+  const data = adminInterface.encodeFunctionData('batchSwap', [
+    swapDetails.map(_sd => ({ ..._sd, amountIn: Utils.parseUnits(String(_sd.amountIn), TOKENS_FROM[_sd.tokenIn].decimal) })),
+  ])
 
   if (!feeData.maxFeePerGas || !feeData.maxPriorityFeePerGas) {
     throw new Error('Fee data not found')

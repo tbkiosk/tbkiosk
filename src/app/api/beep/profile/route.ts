@@ -39,7 +39,7 @@ export async function POST(request: Request) {
     const tbaUser = await prismaClient.tBAUser.findMany({
       where: {
         address: {
-          in: body.addresses as string[],
+          in: validation.data.addresses,
         },
       },
     })

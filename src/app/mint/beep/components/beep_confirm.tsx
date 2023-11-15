@@ -111,7 +111,7 @@ const BeepConfirm = ({ control, getValues, watch, handleSubmit, formState: { isS
         registryAddress: env.NEXT_PUBLIC_REGISTRY_ADDRESS as `0x${string}`,
       })
 
-      const tokenIds = mintedNFTs.map(_nft =>
+      const tokenAddresses = mintedNFTs.map(_nft =>
         tokenboundClient.getAccount({
           tokenContract: env.NEXT_PUBLIC_BEEP_CONTRACT_ADDRESS as `0x${string}`,
           tokenId: _nft,
@@ -122,7 +122,7 @@ const BeepConfirm = ({ control, getValues, watch, handleSubmit, formState: { isS
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          addresses: tokenIds,
+          addresses: tokenAddresses,
           ownerAddress: address,
           frequency,
           amount,
@@ -134,7 +134,7 @@ const BeepConfirm = ({ control, getValues, watch, handleSubmit, formState: { isS
 
       if (!res.ok) {
         toast.warning(
-          'Mint was successful but failed to create investment plan(s). You can manually create an investment plan in settings page '
+          'Mint was successful but failed to create investment plan(s). You can manually create an investment plan in settings page'
         )
       } else {
         toast.success('Mint was successful')
