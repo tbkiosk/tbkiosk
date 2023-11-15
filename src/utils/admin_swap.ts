@@ -73,6 +73,8 @@ export const swapSingleUser = async ({ swapContract, beepFee, gasFee, tokenOut, 
     } catch (error) {
       console.error(`Failed to insert swap history of ${swapContract}|${tokenIn}|${amountIn} to database: ${(error as Error)?.message}`)
     }
+
+    return tx
   } catch (error) {
     console.error((error as Error & { reason?: string })?.reason)
 

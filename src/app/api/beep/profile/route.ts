@@ -1,9 +1,15 @@
 import { NextResponse } from 'next/server'
+import { Utils } from 'alchemy-sdk'
 import { fromZodError } from 'zod-validation-error'
 import dayjs from 'dayjs'
 import { z } from 'zod'
 
 import { prismaClient } from '@/lib/prisma'
+
+import { batchSwap } from '@/utils/admin_swap'
+
+import { TOKENS_FROM } from '@/constants/token'
+import { GAS_FEE_PROPORTION, BEEP_FEE_PROPORTION } from '@/constants/fee'
 
 const schema = z.object({
   ownerAddress: z.string().startsWith('0x'),
@@ -42,7 +48,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: `User ${tbaUser[0].address} already exists` }, { status: 400 })
     }
 
-    const newTbaUser = await prismaClient.tBAUser.createMany({
+    const result = await prismaClient.tBAUser.createMany({
       data: (body.addresses as string[]).map(_address => ({
         address: _address,
         owner_address: validation.data.ownerAddress,
@@ -58,7 +64,24 @@ export async function POST(request: Request) {
       })),
     })
 
-    return NextResponse.json(newTbaUser)
+    const tx = await batchSwap(
+      validation.data.addresses.map(_address => ({
+        swapContract: _address,
+        tokenIn: validation.data.tokenAddressFrom,
+        tokenOut: validation.data.tokenAddressTo,
+        amountIn: validation.data.amount,
+        beepFee: Utils.parseUnits(
+          String(validation.data.amount * BEEP_FEE_PROPORTION),
+          TOKENS_FROM[validation.data.tokenAddressFrom].decimal
+        ),
+        gasFee: Utils.parseUnits(
+          String(validation.data.amount * GAS_FEE_PROPORTION),
+          TOKENS_FROM[validation.data.tokenAddressFrom].decimal
+        ),
+      }))
+    )
+
+    return NextResponse.json({ count: result.count, tx })
   } catch (error) {
     return NextResponse.json({ error: (error as Error)?.message }, { status: 500 })
   }
