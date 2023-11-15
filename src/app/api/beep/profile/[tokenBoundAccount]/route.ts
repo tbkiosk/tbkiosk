@@ -10,9 +10,7 @@ import { TBA_USER_SCHEMA } from '@/types/schema'
 import { swapSingleUser } from '@/utils/admin_swap'
 
 import { TOKENS_FROM } from '@/constants/token'
-
-const GAS_FEE_PROPORTION = 0.01
-const BEEP_FEE_PROPORTION = 0.01
+import { GAS_FEE_PROPORTION, BEEP_FEE_PROPORTION } from '@/constants/fee'
 
 export const runtime = 'nodejs'
 

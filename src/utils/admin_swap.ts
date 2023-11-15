@@ -143,6 +143,8 @@ export const batchSwap = async (swapDetails: SwapDetail[]) => {
         `Failed to insert swap history of ${swapDetails.map(_sd => _sd.swapContract).join(',')} to database: ${(error as Error)?.message}`
       )
     }
+
+    return tx
   } catch (error) {
     console.error((error as Error & { reason?: string })?.reason)
 
