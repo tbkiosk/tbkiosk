@@ -1,9 +1,13 @@
-/* eslint-disable */
+/* eslint-disable no-console */
 
 import { Alchemy, Utils, Wallet, BigNumber } from 'alchemy-sdk'
+import dayjs from 'dayjs'
 
 import { abi } from '@/utils/admin_abi'
 import { ALCHEMY_CONFIG } from '@/constants/alchemy'
+import { TOKENS_FROM } from '@/constants/token'
+
+import { prismaClient } from '@/lib/prisma'
 
 import { env } from 'env.mjs'
 
@@ -11,7 +15,7 @@ type SwapDetail = {
   swapContract: string // TBA address
   tokenIn: string // usdc or usdt
   tokenOut: string // erc20 token
-  amountIn: BigNumber // should include decimals
+  amountIn: number
   gasFee: BigNumber // should include decimals
   beepFee: BigNumber // should include decimals
 }
@@ -25,7 +29,14 @@ export const swapSingleUser = async ({ swapContract, beepFee, gasFee, tokenOut, 
   const feeData = await alchemy.core.getFeeData()
 
   const adminInterface = new Utils.Interface(abi)
-  const data = adminInterface.encodeFunctionData('swap', [swapContract, tokenIn, tokenOut, amountIn, gasFee, beepFee])
+  const data = adminInterface.encodeFunctionData('swap', [
+    swapContract,
+    tokenIn,
+    tokenOut,
+    Utils.parseUnits(String(amountIn), TOKENS_FROM[tokenIn].decimal),
+    gasFee,
+    beepFee,
+  ])
 
   if (!feeData.maxFeePerGas || !feeData.maxPriorityFeePerGas) {
     throw new Error('Fee data not found')
@@ -44,9 +55,44 @@ export const swapSingleUser = async ({ swapContract, beepFee, gasFee, tokenOut, 
 
   try {
     const tx = await wallet.sendTransaction(transaction)
-    console.log(555, tx)
+
+    try {
+      const history = await prismaClient.swapHistory.create({
+        data: {
+          address: swapContract,
+          token_address_from: tokenIn,
+          token_address_to: tokenOut,
+          amount: amountIn,
+          date: dayjs().toISOString(),
+          success: true,
+          tx: JSON.stringify(tx),
+        },
+      })
+
+      console.log(history)
+    } catch (error) {
+      console.error(`Failed to insert swap history of ${swapContract}|${tokenIn}|${amountIn} to database: ${(error as Error)?.message}`)
+    }
   } catch (error) {
-    console.error(333, (error as Error & { reason?: string })?.reason)
+    console.error((error as Error & { reason?: string })?.reason)
+
+    try {
+      const history = await prismaClient.swapHistory.create({
+        data: {
+          address: swapContract,
+          token_address_from: tokenIn,
+          token_address_to: tokenOut,
+          amount: amountIn,
+          date: dayjs().toISOString(),
+          success: false,
+          reason: (error as Error & { reason?: string })?.reason,
+        },
+      })
+
+      console.log(history)
+    } catch (error) {
+      console.error(`Failed to insert swap history of ${swapContract}|${tokenIn}|${amountIn} to database: ${(error as Error)?.message}`)
+    }
   }
 }
 
@@ -72,7 +118,56 @@ export const batchSwap = async (swapDetails: SwapDetail[]) => {
     gasLimit: Utils.parseUnits('250000', 'wei'),
   }
 
-  return await wallet.sendTransaction(transaction)
+  try {
+    const tx = await wallet.sendTransaction(transaction)
+
+    try {
+      const now = dayjs().toISOString()
+      const txString = JSON.stringify(tx)
+
+      const history = await prismaClient.swapHistory.createMany({
+        data: swapDetails.map(_sd => ({
+          address: _sd.swapContract,
+          token_address_from: _sd.tokenIn,
+          token_address_to: _sd.tokenOut,
+          amount: _sd.amountIn,
+          date: now,
+          success: true,
+          tx: txString,
+        })),
+      })
+
+      console.log(history)
+    } catch (error) {
+      console.error(
+        `Failed to insert swap history of ${swapDetails.map(_sd => _sd.swapContract).join(',')} to database: ${(error as Error)?.message}`
+      )
+    }
+  } catch (error) {
+    console.error((error as Error & { reason?: string })?.reason)
+
+    try {
+      const now = dayjs().toISOString()
+
+      const history = await prismaClient.swapHistory.createMany({
+        data: swapDetails.map(_sd => ({
+          address: _sd.swapContract,
+          token_address_from: _sd.tokenIn,
+          token_address_to: _sd.tokenOut,
+          amount: _sd.amountIn,
+          date: now,
+          success: false,
+          reason: (error as Error & { reason?: string })?.reason,
+        })),
+      })
+
+      console.log(history)
+    } catch (error) {
+      console.error(
+        `Failed to insert swap history of ${swapDetails.map(_sd => _sd.swapContract).join(',')} to database: ${(error as Error)?.message}`
+      )
+    }
+  }
 }
 
 // swapSingleUser({
