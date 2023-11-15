@@ -1,61 +1,55 @@
 /* eslint-disable no-console */
 
-import { Utils } from 'alchemy-sdk'
 import { NextResponse } from 'next/server'
-// import dayjs from 'dayjs'
+import { Utils } from 'alchemy-sdk'
+import dayjs from 'dayjs'
 
-import { swapSingleUser } from '@/utils/admin_swap'
+import { batchSwap } from '@/utils/admin_swap'
 
-// import { prismaClient } from '@/lib/prisma'
+import { TOKENS_FROM } from '@/constants/token'
+import { GAS_FEE_PROPORTION, BEEP_FEE_PROPORTION } from '@/constants/fee'
+
+import { prismaClient } from '@/lib/prisma'
 
 export const runtime = 'nodejs'
 
-// export async function GET() {
-//   try {
-//     const usersToSwap = await prismaClient.tBAUser.findMany({
-//       where: {
-//         next_swap: {
-//           lte: dayjs().toDate(),
-//         },
-//         is_active: true,
-//         OR: [
-//           {
-//             end_date: {
-//               gte: dayjs().toDate(),
-//             },
-//           },
-//           {
-//             end_date: {
-//               equals: null,
-//             },
-//           },
-//         ],
-//       },
-//     })
-
-//     const results = usersToSwap
-
-//     console.log(results)
-//     return NextResponse.json(results)
-//   } catch (error) {
-//     console.error(error)
-//     return NextResponse.json({ error: (error as Error)?.message }, { status: 500 })
-//   }
-// }
-
 export async function GET() {
   try {
-    const result = await swapSingleUser({
-      swapContract: '0xD913fB80c3E691c9A44d603e3190435F40823087',
-      tokenIn: '0x07865c6E87B9F70255377e024ace6630C1Eaa37F',
-      tokenOut: '0xb4fbf271143f4fbf7b91a5ded31805e42b2208d6',
-      amountIn: Utils.parseUnits('200', 6),
-      beepFee: Utils.parseUnits('40', 6),
-      gasFee: Utils.parseUnits('20', 6),
+    const usersToSwap = await prismaClient.tBAUser.findMany({
+      where: {
+        next_swap: {
+          lte: dayjs().toDate(),
+        },
+        is_active: true,
+        OR: [
+          {
+            end_date: {
+              gte: dayjs().toDate(),
+            },
+          },
+          {
+            end_date: {
+              equals: null,
+            },
+          },
+        ],
+      },
     })
 
-    return NextResponse.json(result)
+    const tx = await batchSwap(
+      usersToSwap.map(_user => ({
+        swapContract: _user.address,
+        tokenIn: _user.token_address_from,
+        tokenOut: _user.token_address_to,
+        amountIn: _user.amount,
+        beepFee: Utils.parseUnits(String(_user.amount * BEEP_FEE_PROPORTION), TOKENS_FROM[_user.token_address_from].decimal),
+        gasFee: Utils.parseUnits(String(_user.amount * GAS_FEE_PROPORTION), TOKENS_FROM[_user.token_address_from].decimal),
+      }))
+    )
+
+    return NextResponse.json(tx)
   } catch (error) {
+    console.error(error)
     return NextResponse.json({ error: (error as Error)?.message }, { status: 500 })
   }
 }
