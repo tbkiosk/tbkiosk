@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import { Alchemy, Utils, Wallet, BigNumber } from 'alchemy-sdk'
 
 import { abi } from '@/utils/admin_abi'
@@ -7,8 +9,8 @@ import { env } from 'env.mjs'
 
 type SwapDetail = {
   swapContract: string // TBA address
-  tokenIn: string // erc20 token
-  tokenOut: string // usdc or usdt
+  tokenIn: string // usdc or usdt
+  tokenOut: string // erc20 token
   amountIn: BigNumber // should include decimals
   gasFee: BigNumber // should include decimals
   beepFee: BigNumber // should include decimals
@@ -40,7 +42,12 @@ export const swapSingleUser = async ({ swapContract, beepFee, gasFee, tokenOut, 
     gasLimit: Utils.parseUnits('250000', 'wei'),
   }
 
-  return await wallet.sendTransaction(transaction)
+  try {
+    const tx = await wallet.sendTransaction(transaction)
+    console.log(555, tx)
+  } catch (error) {
+    console.error(333, (error as Error & { reason?: string })?.reason)
+  }
 }
 
 export const batchSwap = async (swapDetails: SwapDetail[]) => {

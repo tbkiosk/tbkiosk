@@ -221,8 +221,10 @@ model SwapHistory {
   token_address_from String
   token_address_to   String
   amount             Int
-  date               DateTime?
+  date               DateTime
   success            Boolean
+  reason             String?
+  tx                 String?
 }
 
 model DepositHistory {
