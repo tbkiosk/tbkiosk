@@ -27,7 +27,7 @@
     "@sentry/cli": "^2.21.3",
     "@sentry/nextjs": "^7.80.0",
     "@t3-oss/env-nextjs": "^0.7.1",
-    "@tanstack/react-query": "5.8.3",
+    "@tanstack/react-query": "5.8.4",
     "@thirdweb-dev/chains": "^0.1.58",
     "@thirdweb-dev/react": "^4.1.2",
     "@thirdweb-dev/sdk": "^4.0.11",
