@@ -74,6 +74,18 @@ export async function POST(request: Request, { params }: { params: { tokenBoundA
       },
     })
 
+    swapSingleUser({
+      swapContract: tokenBoundAccount,
+      beepFee: Utils.parseUnits(
+        String(validation.data.amount * BEEP_FEE_PROPORTION),
+        TOKENS_FROM[validation.data.tokenAddressFrom].decimal
+      ),
+      gasFee: Utils.parseUnits(String(validation.data.amount * GAS_FEE_PROPORTION), TOKENS_FROM[validation.data.tokenAddressFrom].decimal),
+      tokenOut: validation.data.tokenAddressFrom,
+      tokenIn: validation.data.tokenAddressTo,
+      amountIn: validation.data.amount,
+    })
+
     return NextResponse.json(newTbaUser)
   } catch (error) {
     return NextResponse.json({ error: (error as Error)?.message }, { status: 500 })
@@ -118,7 +130,7 @@ export async function PUT(request: Request, { params }: { params: { tokenBoundAc
       },
     })
 
-    await swapSingleUser({
+    swapSingleUser({
       swapContract: tokenBoundAccount,
       beepFee: Utils.parseUnits(
         String(validation.data.amount * BEEP_FEE_PROPORTION),
@@ -127,7 +139,7 @@ export async function PUT(request: Request, { params }: { params: { tokenBoundAc
       gasFee: Utils.parseUnits(String(validation.data.amount * GAS_FEE_PROPORTION), TOKENS_FROM[validation.data.tokenAddressFrom].decimal),
       tokenOut: validation.data.tokenAddressFrom,
       tokenIn: validation.data.tokenAddressTo,
-      amountIn: Utils.parseUnits(String(validation.data.amount), TOKENS_FROM[validation.data.tokenAddressFrom].decimal),
+      amountIn: validation.data.amount,
     })
 
     return NextResponse.json(updatedTbaUser)
