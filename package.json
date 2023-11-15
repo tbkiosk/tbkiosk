@@ -32,7 +32,7 @@
     "@thirdweb-dev/react": "^4.1.2",
     "@thirdweb-dev/sdk": "^4.0.11",
     "@tokenbound/sdk": "^0.4.4",
-    "alchemy-sdk": "^2.11.0",
+    "alchemy-sdk": "^3.0.0",
     "autoprefixer": "10.4.16",
     "clsx": "^2.0.0",
     "dayjs": "^1.11.10",
