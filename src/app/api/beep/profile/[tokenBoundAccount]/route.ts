@@ -1,3 +1,4 @@
+import { Utils } from 'alchemy-sdk'
 import { NextResponse } from 'next/server'
 import { fromZodError } from 'zod-validation-error'
 import dayjs from 'dayjs'
@@ -5,6 +6,13 @@ import dayjs from 'dayjs'
 import { prismaClient } from '@/lib/prisma'
 
 import { TBA_USER_SCHEMA } from '@/types/schema'
+
+import { swapSingleUser } from '@/utils/admin_swap'
+
+import { TOKENS_FROM } from '@/constants/token'
+
+const GAS_FEE_PROPORTION = 0.01
+const BEEP_FEE_PROPORTION = 0.01
 
 export const runtime = 'nodejs'
 
@@ -107,8 +115,19 @@ export async function PUT(request: Request, { params }: { params: { tokenBoundAc
         frequency: validation.data.frequency,
         end_date: validation.data.endDate,
         updated_at: now.toISOString(),
-        next_swap: now.add(validation.data.frequency, 'day').toISOString(),
       },
+    })
+
+    await swapSingleUser({
+      swapContract: tokenBoundAccount,
+      beepFee: Utils.parseUnits(
+        String(validation.data.amount * BEEP_FEE_PROPORTION),
+        TOKENS_FROM[validation.data.tokenAddressFrom].decimal
+      ),
+      gasFee: Utils.parseUnits(String(validation.data.amount * GAS_FEE_PROPORTION), TOKENS_FROM[validation.data.tokenAddressFrom].decimal),
+      tokenOut: validation.data.tokenAddressFrom,
+      tokenIn: validation.data.tokenAddressTo,
+      amountIn: Utils.parseUnits(String(validation.data.amount), TOKENS_FROM[validation.data.tokenAddressFrom].decimal),
     })
 
     return NextResponse.json(updatedTbaUser)
