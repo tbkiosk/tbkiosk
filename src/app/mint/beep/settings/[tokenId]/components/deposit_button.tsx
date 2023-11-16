@@ -19,6 +19,8 @@ import { maskAddress } from '@/utils/address'
 
 import { TOKENS_FROM, USDC_CONTRACT_ADDRESS } from '@/constants/token'
 
+import type { ThirdWebError } from '@/types'
+
 import { env } from 'env.mjs'
 
 const schema = z.object({
@@ -84,9 +86,11 @@ const DepositButton = ({ tbaAddress }: { tokenId: string; tbaAddress: string }) 
     }
 
     try {
-      await contract.call('approve', [tbaAddress, ethers.utils.parseUnits(String(amount), TOKENS_FROM[token].decimal)])
+      await contract.call('transfer', [tbaAddress, ethers.utils.parseUnits(String(amount), TOKENS_FROM[token].decimal)])
+
+      toast.success(`Successfully deposited ${amount} ${TOKENS_FROM[token].name}`)
     } catch (error) {
-      toast.error((error as Error)?.message)
+      toast.error((error as ThirdWebError)?.reason || (error as Error)?.message || 'Failed to deposit')
     }
   }
 
