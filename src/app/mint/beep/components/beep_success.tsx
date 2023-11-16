@@ -17,7 +17,7 @@ import { env } from 'env.mjs'
 
 type ConfigForm = z.infer<typeof TBA_USER_CONFIG_SCHEMA>
 
-const BeepSuccess = ({ getValues }: UseFormReturn<ConfigForm>) => {
+const BeepSuccess = ({ getValues, onClose }: UseFormReturn<ConfigForm> & { onClose: () => void }) => {
   const address = useAddress()
   const signer = useSigner()
   const { contract } = useContract(env.NEXT_PUBLIC_BEEP_CONTRACT_ADDRESS)
@@ -63,7 +63,12 @@ const BeepSuccess = ({ getValues }: UseFormReturn<ConfigForm>) => {
           href="/mint/beep/settings"
           target="_blank"
         >
-          <Button className="h-14 w-full bg-black text-2xl text-white rounded-full">Go to Settings Page</Button>
+          <Button
+            className="h-14 w-full bg-black text-2xl text-white rounded-full"
+            onClick={() => onClose()}
+          >
+            Go to Settings Page
+          </Button>
         </a>
       </div>
     </div>

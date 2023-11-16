@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { Modal, ModalContent, ModalHeader, ModalBody, ModalProps } from '@nextui-org/react'
+import { Modal, ModalContent, ModalHeader, ModalBody, useDisclosure } from '@nextui-org/react'
 import { useForm } from 'react-hook-form'
 import { match } from 'ts-pattern'
 import { z } from 'zod'
@@ -31,7 +31,7 @@ const defaultValues = {
   depositAmount: 120,
 }
 
-const DeployModal = ({ isOpen, onOpenChange }: Pick<ModalProps, 'isOpen' | 'onOpenChange'>) => {
+const DeployModal = ({ isOpen, onOpenChange, onClose }: ReturnType<typeof useDisclosure>) => {
   const [step, setStep] = useState<1 | 2 | 3 | 4>(4)
 
   const form = useForm<ConfigForm>({
@@ -87,7 +87,12 @@ const DeployModal = ({ isOpen, onOpenChange }: Pick<ModalProps, 'isOpen' | 'onOp
                       setStep={setStep}
                     />
                   ))
-                  .with(4, () => <BeepSuccess {...form} />)
+                  .with(4, () => (
+                    <BeepSuccess
+                      {...form}
+                      onClose={onClose}
+                    />
+                  ))
                   .exhaustive()}
               </ModalBody>
             </>

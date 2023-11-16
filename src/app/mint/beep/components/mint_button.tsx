@@ -16,7 +16,7 @@ const MintButton = () => {
   const switchChain = useSwitchChain()
   const connectionStatus = useConnectionStatus()
 
-  const { isOpen, onOpen, onOpenChange } = useDisclosure()
+  const disclosure = useDisclosure()
 
   if (connectionStatus !== 'connected') {
     return (
@@ -28,16 +28,13 @@ const MintButton = () => {
 
   return (
     <div className="mt-4">
-      <DeployModal
-        isOpen={isOpen}
-        onOpenChange={onOpenChange}
-      />
+      <DeployModal {...disclosure} />
       <Button
         className="h-12 w-full text-xl text-white bg-black rounded-full hover:bg-[#0f0f0f]"
         disableRipple
         onClick={async () => {
           await switchChain(+env.NEXT_PUBLIC_CHAIN_ID)
-          onOpen()
+          disclosure.onOpen()
         }}
         startContent={
           <div className="h-6 w-6 block text-white">
