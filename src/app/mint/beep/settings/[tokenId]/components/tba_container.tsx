@@ -14,7 +14,7 @@ import useTbaAddress from '@/hooks/useTbaAddress'
 import { env } from 'env.mjs'
 
 import { maskAddress } from '@/utils/address'
-import TbaRecord from '@/app/mint/beep/settings/[tokenId]/components/tba_record'
+// import TbaRecord from '@/app/mint/beep/settings/[tokenId]/components/tba_record'
 
 const TBAContainer = ({ tokenId }: { tokenId: string }) => {
   const address = useAddress()
@@ -72,9 +72,9 @@ const TBAContainer = ({ tokenId }: { tokenId: string }) => {
           <BeepSettingsPanel tbaAddress={tbaAddress} />
         </div>
       </div>
-      <div className="my-10 md:my-20 max-w-[900px] mx-auto">
+      {/* <div className="my-10 md:my-20 max-w-[900px] mx-auto">
         <TbaRecord tbaAddress={tbaAddress} />
-      </div>
+      </div> */}
     </div>
   )
 }
