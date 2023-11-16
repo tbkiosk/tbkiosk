@@ -1,3 +1,11 @@
-export const maskAddress = (address: string) => {
-  return address ? `${address.slice(0, 6)}...${address.slice(-4)}` : ''
+export const maskAddress = (address: any) => {
+  if (typeof address !== 'string') {
+    return ''
+  }
+
+  if (address.length <= 10) {
+    return address
+  }
+
+  return `${address.slice(0, 6)}...${address.slice(-4)}`
 }
