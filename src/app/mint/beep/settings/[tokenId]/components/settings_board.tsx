@@ -82,8 +82,10 @@ const SettingsBoard = ({ tbaUser, refetch, tbaAddress }: { tbaAddress: string; r
     <div className="flex flex-col items-center grow px-8 py-4 bg-[#131313] rounded-[10px] shadow-md">
       <PlanModal
         amount={tbaUser.amount}
-        endDate={tbaUser.end_date ? dayjs(tbaUser.end_date).toISOString() : null}
         frequncy={tbaUser.frequency}
+        endDate={tbaUser.end_date ? dayjs(tbaUser.end_date).toISOString() : null}
+        tokenAddressFrom={tbaUser.token_address_from}
+        tokenAddressTo={tbaUser.token_address_to}
         isOpen={isOpen}
         onOpenChange={onOpenChange}
         onSubmit={onSubmit}
