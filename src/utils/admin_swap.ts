@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 
 import { Alchemy, Utils, Wallet, BigNumber } from 'alchemy-sdk'
+import { decodeErrorResult } from 'viem/utils'
 import dayjs from 'dayjs'
 
 import { abi } from '@/utils/admin_abi'
@@ -54,32 +55,12 @@ export const swapSingleUser = async ({ swapContract, beepFee, gasFee, tokenOut, 
   }
 
   try {
-    const tx = await wallet.sendTransaction(transaction)
+    const hex = await wallet.call(transaction)
 
-    try {
-      const history = await prismaClient.swapHistory.create({
-        data: {
-          address: swapContract,
-          token_address_from: tokenIn,
-          token_address_to: tokenOut,
-          amount: amountIn,
-          date: dayjs().toISOString(),
-          success: true,
-          tx: JSON.stringify(tx),
-        },
-      })
+    const error = getTransactionError(hex as `0x${string}`)
 
-      console.log(history)
-    } catch (error) {
-      console.error(`Failed to insert swap history of ${swapContract}|${tokenIn}|${amountIn} to database: ${(error as Error)?.message}`)
-    }
-
-    return tx
-  } catch (error) {
-    console.error((error as Error & { reason?: string })?.reason)
-
-    try {
-      const history = await prismaClient.swapHistory.create({
+    if (error) {
+      await prismaClient.swapHistory.create({
         data: {
           address: swapContract,
           token_address_from: tokenIn,
@@ -87,14 +68,32 @@ export const swapSingleUser = async ({ swapContract, beepFee, gasFee, tokenOut, 
           amount: amountIn,
           date: dayjs().toISOString(),
           success: false,
-          reason: (error as Error & { reason?: string })?.reason,
+          reason: error,
         },
       })
 
-      console.log(history)
-    } catch (error) {
-      console.error(`Failed to insert swap history of ${swapContract}|${tokenIn}|${amountIn} to database: ${(error as Error)?.message}`)
+      return null
     }
+
+    const tx = await wallet.sendTransaction(transaction)
+
+    await prismaClient.swapHistory.create({
+      data: {
+        address: swapContract,
+        token_address_from: tokenIn,
+        token_address_to: tokenOut,
+        amount: amountIn,
+        date: dayjs().toISOString(),
+        success: true,
+        tx: tx.hash,
+      },
+    })
+
+    return tx
+  } catch (error) {
+    console.error((error as Error & { reason?: string })?.reason)
+
+    return null
   }
 }
 
@@ -123,39 +122,12 @@ export const batchSwap = async (swapDetails: SwapDetail[]) => {
   }
 
   try {
-    const tx = await wallet.sendTransaction(transaction)
+    const hex = await wallet.call(transaction)
+    const error = getTransactionError(hex as `0x${string}`)
+    const now = dayjs().toISOString()
 
-    try {
-      const now = dayjs().toISOString()
-      const txString = JSON.stringify(tx)
-
-      const history = await prismaClient.swapHistory.createMany({
-        data: swapDetails.map(_sd => ({
-          address: _sd.swapContract,
-          token_address_from: _sd.tokenIn,
-          token_address_to: _sd.tokenOut,
-          amount: _sd.amountIn,
-          date: now,
-          success: true,
-          tx: txString,
-        })),
-      })
-
-      console.log(history)
-    } catch (error) {
-      console.error(
-        `Failed to insert swap history of ${swapDetails.map(_sd => _sd.swapContract).join(',')} to database: ${(error as Error)?.message}`
-      )
-    }
-
-    return tx
-  } catch (error) {
-    console.error((error as Error & { reason?: string })?.reason)
-
-    try {
-      const now = dayjs().toISOString()
-
-      const history = await prismaClient.swapHistory.createMany({
+    if (error) {
+      await prismaClient.swapHistory.createMany({
         data: swapDetails.map(_sd => ({
           address: _sd.swapContract,
           token_address_from: _sd.tokenIn,
@@ -163,43 +135,44 @@ export const batchSwap = async (swapDetails: SwapDetail[]) => {
           amount: _sd.amountIn,
           date: now,
           success: false,
-          reason: (error as Error & { reason?: string })?.reason,
+          reason: error,
         })),
       })
 
-      console.log(history)
-    } catch (error) {
-      console.error(
-        `Failed to insert swap history of ${swapDetails.map(_sd => _sd.swapContract).join(',')} to database: ${(error as Error)?.message}`
-      )
+      return null
     }
+
+    const tx = await wallet.sendTransaction(transaction)
+
+    await prismaClient.swapHistory.createMany({
+      data: swapDetails.map(_sd => ({
+        address: _sd.swapContract,
+        token_address_from: _sd.tokenIn,
+        token_address_to: _sd.tokenOut,
+        amount: _sd.amountIn,
+        date: now,
+        success: true,
+        tx: tx.hash,
+      })),
+    })
+
+    return tx
+  } catch (error) {
+    console.error((error as Error & { reason?: string })?.reason)
+
+    return null
   }
 }
 
-// swapSingleUser({
-//   swapContract: '0xD913fB80c3E691c9A44d603e3190435F40823087', // TBA address
-//   tokenIn: '0x07865c6E87B9F70255377e024ace6630C1Eaa37F',
-//   tokenOut: '0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6',
-//   amountIn: Utils.parseUnits('200', 6),
-//   beepFee: Utils.parseUnits('40', 6),
-//   gasFee: Utils.parseUnits('20', 6),
-// })
+const getTransactionError = (resultHex: `0x${string}`) => {
+  try {
+    const errorResult = decodeErrorResult({
+      abi: abi,
+      data: resultHex,
+    })
 
-// batchSwap([
-//   {
-//     swapContract: '0xD913fB80c3E691c9A44d603e3190435F40823087', // TBA address
-//     tokenIn: '0x07865c6E87B9F70255377e024ace6630C1Eaa37F',
-//     tokenOut: '0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6',
-//     amountIn: Utils.parseUnits('100', 6),
-//     beepFee: Utils.parseUnits('30', 6),
-//     gasFee: Utils.parseUnits('20', 6),
-//   },
-//   {
-//     swapContract: '0xD913fB80c3E691c9A44d603e3190435F40823087', // TBA address
-//     tokenIn: '0x07865c6E87B9F70255377e024ace6630C1Eaa37F',
-//     tokenOut: '0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6',
-//     amountIn: Utils.parseUnits('50', 6),
-//     beepFee: Utils.parseUnits('10', 6),
-//     gasFee: Utils.parseUnits('2', 6),
-//   },
-// ])
+    return String(errorResult.args?.[0]) || errorResult.errorName || 'Error'
+  } catch (error) {
+    return null
+  }
+}
