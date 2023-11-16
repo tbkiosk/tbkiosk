@@ -64,20 +64,23 @@ export async function POST(request: Request) {
       })),
     })
 
+    const beepFee = Utils.parseUnits(
+      String(validation.data.amount * BEEP_FEE_PROPORTION),
+      TOKENS_FROM[validation.data.tokenAddressFrom].decimal
+    )
+    const gasFee = Utils.parseUnits(
+      String(validation.data.amount * GAS_FEE_PROPORTION),
+      TOKENS_FROM[validation.data.tokenAddressFrom].decimal
+    )
+
     const tx = await batchSwap(
       validation.data.addresses.map(_address => ({
         swapContract: _address,
         tokenIn: validation.data.tokenAddressFrom,
         tokenOut: validation.data.tokenAddressTo,
         amountIn: validation.data.amount,
-        beepFee: Utils.parseUnits(
-          String(validation.data.amount * BEEP_FEE_PROPORTION),
-          TOKENS_FROM[validation.data.tokenAddressFrom].decimal
-        ),
-        gasFee: Utils.parseUnits(
-          String(validation.data.amount * GAS_FEE_PROPORTION),
-          TOKENS_FROM[validation.data.tokenAddressFrom].decimal
-        ),
+        beepFee,
+        gasFee,
       }))
     )
 

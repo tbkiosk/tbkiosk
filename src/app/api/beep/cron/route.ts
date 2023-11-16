@@ -47,7 +47,25 @@ export async function GET() {
       }))
     )
 
-    return NextResponse.json(tx)
+    if (tx) {
+      const now = dayjs()
+      const updatedTbaUsers = await prismaClient.$transaction(
+        usersToSwap.map(_user =>
+          prismaClient.tBAUser.update({
+            where: {
+              address: _user.address,
+            },
+            data: {
+              next_swap: now.add(_user.frequency, 'day').toISOString(),
+            },
+          })
+        )
+      )
+
+      return NextResponse.json({ tx, users: updatedTbaUsers })
+    }
+
+    return NextResponse.json({ tx, users: [] })
   } catch (error) {
     console.error(error)
     return NextResponse.json({ error: (error as Error)?.message }, { status: 500 })

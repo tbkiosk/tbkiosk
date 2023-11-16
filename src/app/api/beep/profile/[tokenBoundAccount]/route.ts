@@ -54,8 +54,19 @@ export async function PUT(request: Request, { params }: { params: { tokenBoundAc
       return NextResponse.json({ error: fromZodError(validation.error).details }, { status: 400 })
     }
 
-    const now = dayjs()
+    const tx = await swapSingleUser({
+      swapContract: tokenBoundAccount,
+      beepFee: Utils.parseUnits(
+        String(validation.data.amount * BEEP_FEE_PROPORTION),
+        TOKENS_FROM[validation.data.tokenAddressFrom].decimal
+      ),
+      gasFee: Utils.parseUnits(String(validation.data.amount * GAS_FEE_PROPORTION), TOKENS_FROM[validation.data.tokenAddressFrom].decimal),
+      tokenOut: validation.data.tokenAddressTo,
+      tokenIn: validation.data.tokenAddressFrom,
+      amountIn: validation.data.amount,
+    })
 
+    const now = dayjs()
     const updatedTbaUser = await prismaClient.tBAUser.update({
       where: {
         address: tokenBoundAccount,
@@ -67,20 +78,8 @@ export async function PUT(request: Request, { params }: { params: { tokenBoundAc
         frequency: validation.data.frequency,
         end_date: validation.data.endDate,
         updated_at: now.toISOString(),
-        next_swap: now.add(validation.data.frequency, 'day').toISOString(),
+        next_swap: tx ? now.add(validation.data.frequency, 'day').toISOString() : tbaUser.next_swap,
       },
-    })
-
-    const tx = await swapSingleUser({
-      swapContract: tokenBoundAccount,
-      beepFee: Utils.parseUnits(
-        String(validation.data.amount * BEEP_FEE_PROPORTION),
-        TOKENS_FROM[validation.data.tokenAddressFrom].decimal
-      ),
-      gasFee: Utils.parseUnits(String(validation.data.amount * GAS_FEE_PROPORTION), TOKENS_FROM[validation.data.tokenAddressFrom].decimal),
-      tokenOut: validation.data.tokenAddressTo,
-      tokenIn: validation.data.tokenAddressFrom,
-      amountIn: validation.data.amount,
     })
 
     return NextResponse.json({ user: updatedTbaUser, tx })
