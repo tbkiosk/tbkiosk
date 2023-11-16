@@ -82,11 +82,11 @@ export const TOKENS_TO = {
     decimal: WETH_DECIMAL,
     icon: () => <EthereumCircle />,
   },
-  [WSTETH_CONTRACT_ADDRESS[+env.NEXT_PUBLIC_CHAIN_ID as 1 | 5 | 137]]: {
-    name: 'wstETH',
-    fullName: "Lido's wrapped stETH",
-    address: WSTETH_CONTRACT_ADDRESS[+env.NEXT_PUBLIC_CHAIN_ID as 1 | 5 | 137],
-    decimal: WSTETH_DECIMAL,
-    icon: () => <STEthereum />,
-  },
+  // [WSTETH_CONTRACT_ADDRESS[+env.NEXT_PUBLIC_CHAIN_ID as 1 | 5 | 137]]: {
+  //   name: 'wstETH',
+  //   fullName: "Lido's wrapped stETH",
+  //   address: WSTETH_CONTRACT_ADDRESS[+env.NEXT_PUBLIC_CHAIN_ID as 1 | 5 | 137],
+  //   decimal: WSTETH_DECIMAL,
+  //   icon: () => <STEthereum />,
+  // },
 }
