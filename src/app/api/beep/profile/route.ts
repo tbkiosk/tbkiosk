@@ -6,7 +6,7 @@ import { z } from 'zod'
 
 import { prismaClient } from '@/lib/prisma'
 
-import { batchSwap } from '@/utils/admin_swap'
+import { swapSingleUser } from '@/utils/admin_swap'
 
 import { TOKENS_FROM } from '@/constants/token'
 import { GAS_FEE_PROPORTION, BEEP_FEE_PROPORTION } from '@/constants/fee'
@@ -73,18 +73,20 @@ export async function POST(request: Request) {
       TOKENS_FROM[validation.data.tokenAddressFrom].decimal
     )
 
-    const tx = await batchSwap(
-      validation.data.addresses.map(_address => ({
-        swapContract: _address,
-        tokenIn: validation.data.tokenAddressFrom,
-        tokenOut: validation.data.tokenAddressTo,
-        amountIn: validation.data.amount,
-        beepFee,
-        gasFee,
-      }))
+    const transactions = await Promise.allSettled(
+      validation.data.addresses.map(_address =>
+        swapSingleUser({
+          swapContract: _address,
+          beepFee,
+          gasFee,
+          tokenOut: validation.data.tokenAddressTo,
+          tokenIn: validation.data.tokenAddressFrom,
+          amountIn: validation.data.amount,
+        })
+      )
     )
 
-    return NextResponse.json({ count: result.count, tx })
+    return NextResponse.json({ count: result.count, transactions })
   } catch (error) {
     return NextResponse.json({ error: (error as Error)?.message }, { status: 500 })
   }
