@@ -5,18 +5,17 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ['main', 'dev']
   pull_request:
-    branches: [ "main" ]
+    branches: ['main', 'dev']
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
-        node-version: [16.x, 18.x, 20.x]
+        node-version: [18.x, 20.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     env:
@@ -24,19 +23,18 @@ jobs:
       NEXT_PUBLIC_THIRDWEB_CLIENT_ID: ${{ secrets.NEXT_PUBLIC_THIRDWEB_CLIENT_ID }}
 
     steps:
-    - uses: actions/checkout@v4
-    - uses: pnpm/action-setup@v2
-      with:
-        version: latest
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v4
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'pnpm'
-    - name: Install dependencies
-      run: pnpm install
-    - name: Run tests
-      run: pnpm run test --watch=false
-    - name: Run lint
-      run: pnpm lint
-
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v2
+        with:
+          version: latest
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'pnpm'
+      - name: Install dependencies
+        run: pnpm install
+      - name: Run tests
+        run: pnpm run test --watch=false
+      - name: Run lint
+        run: pnpm lint
