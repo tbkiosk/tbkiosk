@@ -26,37 +26,36 @@ const adminContract = env.NEXT_PUBLIC_ADMIN_CONTRACT_ADDRESS
 const chainId = env.NEXT_PUBLIC_CHAIN_ID
 
 export const swapSingleUser = async ({ swapContract, beepFee, gasFee, tokenOut, tokenIn, amountIn }: SwapDetail) => {
-  const wallet = new Wallet(env.SWAP_PRIVATE_KEY, alchemy)
-  const feeData = await alchemy.core.getFeeData()
-
-  const adminInterface = new Utils.Interface(abi)
-  const data = adminInterface.encodeFunctionData('swap', [
-    swapContract,
-    tokenIn,
-    tokenOut,
-    Utils.parseUnits(String(amountIn), TOKENS_FROM[tokenIn].decimal),
-    gasFee,
-    beepFee,
-  ])
-
-  if (!feeData.maxFeePerGas || !feeData.maxPriorityFeePerGas) {
-    throw new Error('Fee data not found')
-  }
-
-  const transaction = {
-    to: adminContract,
-    nonce: await alchemy.core.getTransactionCount(wallet.getAddress()),
-    maxPriorityFeePerGas: feeData.maxPriorityFeePerGas,
-    maxFeePerGas: feeData.maxFeePerGas,
-    type: 2,
-    chainId: parseInt(chainId),
-    data: data,
-    gasLimit: Utils.parseUnits('250000', 'wei'),
-  }
-
   try {
-    const hex = await wallet.call(transaction)
+    const wallet = new Wallet(env.SWAP_PRIVATE_KEY, alchemy)
+    const feeData = await alchemy.core.getFeeData()
 
+    const adminInterface = new Utils.Interface(abi)
+    const data = adminInterface.encodeFunctionData('swap', [
+      swapContract,
+      tokenIn,
+      tokenOut,
+      Utils.parseUnits(String(amountIn), TOKENS_FROM[tokenIn].decimal),
+      gasFee,
+      beepFee,
+    ])
+
+    if (!feeData.maxFeePerGas || !feeData.maxPriorityFeePerGas) {
+      throw new Error('Fee data not found')
+    }
+
+    const transaction = {
+      to: adminContract,
+      nonce: await alchemy.core.getTransactionCount(wallet.getAddress()),
+      maxPriorityFeePerGas: feeData.maxPriorityFeePerGas,
+      maxFeePerGas: feeData.maxFeePerGas,
+      type: 2,
+      chainId: parseInt(chainId),
+      data: data,
+      gasLimit: Utils.parseUnits('250000', 'wei'),
+    }
+
+    const hex = await wallet.call(transaction)
     const error = getTransactionError(hex as `0x${string}`)
 
     if (error) {
@@ -91,7 +90,21 @@ export const swapSingleUser = async ({ swapContract, beepFee, gasFee, tokenOut, 
 
     return tx
   } catch (error) {
-    console.error((error as Error & { reason?: string })?.reason)
+    const message = (error as Error & { reason?: string })?.reason || (error as Error)?.message || 'unknown error'
+
+    console.error(message)
+
+    await prismaClient.swapHistory.create({
+      data: {
+        address: swapContract,
+        token_address_from: tokenIn,
+        token_address_to: tokenOut,
+        amount: amountIn,
+        date: dayjs().toISOString(),
+        success: false,
+        reason: message,
+      },
+    })
 
     return null
   }
