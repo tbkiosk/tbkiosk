@@ -28,7 +28,7 @@ interface IBeepConfirmProps extends UseFormReturn<ConfigForm> {
   setStep: (value: 1 | 2 | 3 | 4) => void
 }
 
-const MAX_MINT_AMOUNT = 5
+const MAX_MINT_AMOUNT = 2
 
 const BeepConfirm = ({ control, getValues, watch, handleSubmit, formState: { isSubmitting }, setStep }: IBeepConfirmProps) => {
   const { depositAmount, tokenAddressFrom, tokenAddressTo, amount, frequency, endDate } = getValues()
