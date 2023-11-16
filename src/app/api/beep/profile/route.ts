@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { Utils } from 'alchemy-sdk'
+import { Alchemy, Utils, Wallet, BigNumber } from 'alchemy-sdk'
 import { fromZodError } from 'zod-validation-error'
 import dayjs from 'dayjs'
 import { z } from 'zod'
@@ -8,8 +8,11 @@ import { prismaClient } from '@/lib/prisma'
 
 import { swapSingleUser } from '@/utils/admin_swap'
 
+import { ALCHEMY_CONFIG } from '@/constants/alchemy'
 import { TOKENS_FROM } from '@/constants/token'
 import { GAS_FEE_PROPORTION, BEEP_FEE_PROPORTION } from '@/constants/fee'
+
+import { env } from 'env.mjs'
 
 const schema = z.object({
   ownerAddress: z.string().startsWith('0x'),
@@ -20,6 +23,8 @@ const schema = z.object({
   tokenAddressTo: z.string().startsWith('0x'),
   endDate: z.string().datetime().nullable(),
 })
+
+const alchemy = new Alchemy(ALCHEMY_CONFIG)
 
 export const runtime = 'nodejs'
 
@@ -48,6 +53,9 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: `User ${tbaUser[0].address} already exists` }, { status: 400 })
     }
 
+    const wallet = new Wallet(env.SWAP_PRIVATE_KEY, alchemy)
+    const nonce = await alchemy.core.getTransactionCount(wallet.getAddress())
+
     const result = await prismaClient.tBAUser.createMany({
       data: (body.addresses as string[]).map(_address => ({
         address: _address,
@@ -74,7 +82,7 @@ export async function POST(request: Request) {
     )
 
     const transactions = await Promise.allSettled(
-      validation.data.addresses.map(_address =>
+      validation.data.addresses.map((_address, i) =>
         swapSingleUser({
           swapContract: _address,
           beepFee,
@@ -82,6 +90,7 @@ export async function POST(request: Request) {
           tokenOut: validation.data.tokenAddressTo,
           tokenIn: validation.data.tokenAddressFrom,
           amountIn: validation.data.amount,
+          nonce: nonce + i,
         })
       )
     )

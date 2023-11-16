@@ -19,13 +19,14 @@ type SwapDetail = {
   amountIn: number
   gasFee: BigNumber // should include decimals
   beepFee: BigNumber // should include decimals
+  nonce?: number
 }
 
 const alchemy = new Alchemy(ALCHEMY_CONFIG)
 const adminContract = env.NEXT_PUBLIC_ADMIN_CONTRACT_ADDRESS
 const chainId = env.NEXT_PUBLIC_CHAIN_ID
 
-export const swapSingleUser = async ({ swapContract, beepFee, gasFee, tokenOut, tokenIn, amountIn }: SwapDetail) => {
+export const swapSingleUser = async ({ swapContract, beepFee, gasFee, tokenOut, tokenIn, amountIn, nonce }: SwapDetail) => {
   try {
     const wallet = new Wallet(env.SWAP_PRIVATE_KEY, alchemy)
     const feeData = await alchemy.core.getFeeData()
@@ -46,7 +47,7 @@ export const swapSingleUser = async ({ swapContract, beepFee, gasFee, tokenOut, 
 
     const transaction = {
       to: adminContract,
-      nonce: await alchemy.core.getTransactionCount(wallet.getAddress()),
+      nonce: nonce || (await alchemy.core.getTransactionCount(wallet.getAddress())),
       maxPriorityFeePerGas: feeData.maxPriorityFeePerGas,
       maxFeePerGas: feeData.maxFeePerGas,
       type: 2,
