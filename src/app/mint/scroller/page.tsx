@@ -25,7 +25,7 @@ import { env } from 'env.mjs'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: `Kiosk - Mint Beep on ${
+  title: `Kiosk - Mint ScrollerPass on ${
     {
       [Goerli.chainId]: Goerli.name,
       [Ethereum.chainId]: Ethereum.name,
@@ -48,7 +48,7 @@ const Mint = () => (
         </div>
         <div className="w-auto md:w-[180px] flex gap-4 items-center justify-end">
           <a
-            href="/mint/beep/settings"
+            href="/mint/scroller/settings"
             target="_blank"
           >
             <Button
@@ -56,7 +56,7 @@ const Mint = () => (
               disableRipple
               variant="bordered"
             >
-              🤖️ Manage Beeps
+              📜 Manage Scrollers
             </Button>
           </a>
           <ConnectWalletButton />
@@ -78,7 +78,7 @@ const Mint = () => (
                 height={480}
                 loading="eager"
                 priority
-                src="/beep/beep.png"
+                src="/scroller/scroller.png"
                 width={480}
               />
               <div className="flex flex-col grow-0">
@@ -88,7 +88,7 @@ const Mint = () => (
                     <LogoText />
                   </span>
                 </div>
-                <p className="font-bold text-5xl leading-snug md:leading-normal">BEEP BOT</p>
+                <p className="font-bold text-5xl leading-snug md:leading-normal">SCROLLER PASS</p>
                 <div className="flex items-center gap-2">
                   <span className="h-6 w-6">
                     {match(env.NEXT_PUBLIC_CHAIN_ID)
@@ -107,9 +107,9 @@ const Mint = () => (
                 </div>
                 <div className="mt-8 font-medium text-sm">
                   <p className="mb-2">
-                    Beep Bot, is an experimental NFT app that lets you add a Dollar Cost Averaging (DCA) feature to any decentralized
-                    wallet. We are currently in close beta, and only allowlisted addresses can mint. Join the Beep waitlist now and be first
-                    in line for its public release. Don&apos;t miss out!
+                    Scroller Pass is an experimental NFT app that lets you bridge ETH from mainnet to Scroll L2 when gas fees are low. We
+                    are currently in close beta, and only allowlisted addresses can mint. Join the Beep waitlist now and be first in line
+                    for its public release. Don&apos;t miss out!
                   </p>
                   <p>
                     Join the&nbsp;
@@ -121,7 +121,7 @@ const Mint = () => (
                     >
                       waitlist
                     </a>
-                    &nbsp;to be among the first to hear about the public release of Beep!
+                    &nbsp;to be among the first to hear about the public release of Scroller Pass!
                   </p>
                 </div>
                 <div className="py-4 md:grow" />
@@ -140,7 +140,7 @@ const Mint = () => (
             <hr className="my-16 border-black" />
             <div className="flex flex-col md:flex-row gap-8 md:gap-16">
               <div className="md:w-1/2">
-                <p className="font-bold text-3xl leading-normal">ABOUT BEEP BOT</p>
+                <p className="font-bold text-3xl leading-normal">ABOUT SCROLLER PASS BOT</p>
                 <div className="flex flex-wrap gap-2 mt-4 mb-12 overflow-hidden">
                   {['DeFi', 'SmartNFT', 'Bot'].map(_c => (
                     <span
@@ -153,8 +153,9 @@ const Mint = () => (
                 </div>
                 <div className="flex items-center justify-between md:justify-start gap-12 my-4 font-medium">
                   <span className="md:min-w-[130px] inline-block text-[#a6a9ae]">Contract address</span>
-                  <CopyButton copyText={env.NEXT_PUBLIC_BEEP_CONTRACT_ADDRESS}>
-                    {maskAddress(env.NEXT_PUBLIC_BEEP_CONTRACT_ADDRESS)}
+                  {/* TODO ADD TYPES */}
+                  <CopyButton copyText={env.NEXT_PUBLIC_SCROLLER_CONTRACT_ADDRESS}>
+                    {maskAddress(env.NEXT_PUBLIC_SCROLLER_CONTRACT_ADDRESS)}
                   </CopyButton>
                 </div>
                 <div className="flex items-center justify-between md:justify-start gap-12 my-4 font-medium">
@@ -186,21 +187,24 @@ const Mint = () => (
                     src="data:image/jpeg;base64,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"
                     width={24}
                   />
-                  <span className="font-medium">BEEP BOT</span>
+                  <span className="font-medium">SCROLLER PASS</span>
                 </div>
                 <div className="mb-4 text-[#a6a9ae]">
                   <p className="mb-2">
-                    Beep is a game-changing NFT that instantly adds a Dollar Cost Averaging (DCA) feature to any decentralized wallet.{' '}
+                    Scroller Pass Bot is a game-changing Smart NFT that monitors gas fees, and bridges your ETH to the Scroll blockchain at
+                    the most opportune moment .{' '}
                   </p>
-                  <p className="mb-2">No fuss, just mint Beep, tailor your settings and experience the magic of DCA in your wallet.</p>
                   <p className="mb-2">
-                    Forget waking up every Sunday morning and manually buying ETH. Step into the future and maximize your wallet&apos;s
-                    potential with Beep!
+                    No fuss, just mint Beep, set your gas tolerance and top up its balance whenever you want to bridge ETH to the Scroll L2.
+                  </p>
+                  <p className="mb-2">
+                    Forget waking up at 4am to catch the lowest gas prices. Step into the future and maximize your wallet&apos;s potential
+                    with your own Scroller Pass!
                   </p>
                 </div>
                 <a
                   className="flex items-center gap-2 mb-2"
-                  href="/mint/beep/settings"
+                  href="/mint/scroller/settings"
                   target="_blank"
                 >
                   <span>
@@ -229,14 +233,14 @@ const Mint = () => (
                       </defs>
                     </svg>
                   </span>
-                  <span className="font-medium">Set up your beep</span>
+                  <span className="font-medium">Set up your Scroller Pass</span>
                   <span className="h-3 w-3">
                     <ChevronRight />
                   </span>
                 </a>
                 <a
                   className="flex items-center gap-2 mb-2"
-                  href="/mint/beep/settings"
+                  href="/mint/scroller/settings"
                   target="_blank"
                 >
                   <span>
@@ -253,7 +257,7 @@ const Mint = () => (
                       />
                     </svg>
                   </span>
-                  <span className="font-medium">View minted beeps</span>
+                  <span className="font-medium">View minted Scroller Pass</span>
                   <span className="h-3 w-3">
                     <ChevronRight />
                   </span>

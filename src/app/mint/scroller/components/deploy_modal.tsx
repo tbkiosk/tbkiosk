@@ -8,10 +8,10 @@ import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import dayjs from 'dayjs'
 
-import BeepConfig from './beep_config'
-import BeepPreview from './beep_preview'
-import BeepConfirm from './beep_confirm'
-import BeepSuccess from './beep_success'
+import BeepConfig from './scroller_config'
+import BeepPreview from './scroller_preview'
+import BeepConfirm from './scroller_confirm'
+import BeepSuccess from './scroller_success'
 
 import { TBA_USER_CONFIG_SCHEMA } from '@/types/schema'
 
@@ -61,9 +61,9 @@ const DeployModal = ({ isOpen, onOpenChange, onClose }: ReturnType<typeof useDis
             <>
               <ModalHeader className="justify-center">
                 {match(step)
-                  .with(1, () => 'Configure your Beep DCA')
-                  .with(2, () => 'Review your Beep')
-                  .with(3, () => 'Confirm')
+                  .with(1, () => 'Configure your Scroller Pass')
+                  .with(2, () => 'Review your Scroller Pass')
+                  .with(3, () => 'Confirm') // todo: does this exist for scroller?
                   .with(4, () => null)
                   .exhaustive()}
               </ModalHeader>
