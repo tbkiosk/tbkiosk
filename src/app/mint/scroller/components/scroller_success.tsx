@@ -17,7 +17,7 @@ import { env } from 'env.mjs'
 
 type ConfigForm = z.infer<typeof TBA_USER_CONFIG_SCHEMA>
 
-const BeepSuccess = ({ getValues, onClose }: UseFormReturn<ConfigForm> & { onClose: () => void }) => {
+const ScrollerSuccess = ({ getValues, onClose }: UseFormReturn<ConfigForm> & { onClose: () => void }) => {
   const address = useAddress()
   const signer = useSigner()
   const { contract } = useContract(env.NEXT_PUBLIC_BEEP_CONTRACT_ADDRESS)
@@ -75,4 +75,4 @@ const BeepSuccess = ({ getValues, onClose }: UseFormReturn<ConfigForm> & { onClo
   )
 }
 
-export default BeepSuccess
+export default ScrollerSuccess

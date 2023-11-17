@@ -15,32 +15,26 @@ import { TOKENS_FROM, TOKENS_TO, USDC_CONTRACT_ADDRESS, WETH_CONTRACT_ADDRESS } 
 import { env } from 'env.mjs'
 
 const schema = z.object({
-  frequency: z.number().int().positive(),
-  amount: z.number().int().min(60),
-  tokenAddressFrom: z.string().startsWith('0x'),
-  tokenAddressTo: z.string().startsWith('0x'),
-  endDate: z.string().datetime().nullable(),
+  depositAmount: z.number().int().min(0.005),
+  mintAmount: z.number().int().min(1),
+  gasTolerance: z.number().int().min(0).max(2),
 })
 
 export type PlanForm = z.infer<typeof schema>
 
 interface IPlanModalProps {
-  amount?: number
-  frequncy?: number
-  endDate?: string | null
-  tokenAddressFrom?: string
-  tokenAddressTo?: string
+  depositAmount: number
+  mintAmount: number
+  gasTolerance: number
   isOpen: boolean
   onOpenChange: () => void
   onSubmit: (data: PlanForm) => unknown | Promise<unknown>
 }
 
 const PlanModal = ({
-  amount: defaultAmount,
-  frequncy: defaultFrequncy,
-  endDate: defaultEndDate,
-  tokenAddressFrom: defaultTokenAddressFrom,
-  tokenAddressTo: defaultTokenAddressTo,
+  depositAmount: defaultDepositAmount,
+  mintAmount: defaultMintAmount,
+  gasTolerance: defaultGasTolerance,
   isOpen,
   onOpenChange,
   onSubmit,
@@ -54,34 +48,12 @@ const PlanModal = ({
     formState: { isSubmitting },
   } = useForm<PlanForm>({
     defaultValues: {
-      amount: defaultAmount ?? 60,
-      frequency: defaultFrequncy ?? 7,
-      endDate: defaultEndDate === null ? null : defaultEndDate || dayjs().add(8, 'days').toISOString(),
-      tokenAddressFrom: defaultTokenAddressFrom || USDC_CONTRACT_ADDRESS[+env.NEXT_PUBLIC_CHAIN_ID as 1 | 5 | 137],
-      tokenAddressTo: defaultTokenAddressTo || WETH_CONTRACT_ADDRESS[+env.NEXT_PUBLIC_CHAIN_ID as 1 | 5 | 137],
+      depositAmount: defaultDepositAmount ?? 0.005,
+      mintAmount: defaultMintAmount ?? 1,
+      gasTolerance: defaultGasTolerance ?? 2,
     },
     resolver: zodResolver(schema),
   })
-
-  // eslint-disable-next-line
-  const EndDateInput = forwardRef<HTMLInputElement>(({ value, onClick }: InputProps, ref) => (
-    <Input
-      classNames={{
-        base: 'px-4 rounded-full border border-[#808080]',
-        clearButton: '!bottom-4',
-        label: '!font-normal !text-white',
-        innerWrapper: 'bg-transparent',
-        input: 'bg-transparent font-bold !text-white text-lg text-end',
-        inputWrapper: '!bg-transparent',
-      }}
-      isClearable
-      label="End date"
-      onClear={() => setValue('endDate', null)}
-      onClick={onClick}
-      ref={ref}
-      value={value ? dayjs(value).format('MM/DD/YYYY') : 'N/A'}
-    />
-  ))
 
   const _onSubmit = async (data: PlanForm) => {
     await onSubmit(data)
@@ -90,11 +62,9 @@ const PlanModal = ({
   useEffect(() => {
     if (isOpen) {
       reset({
-        amount: defaultAmount ?? 60,
-        frequency: defaultFrequncy ?? 7,
-        endDate: defaultEndDate === null ? null : defaultEndDate || dayjs().add(8, 'days').toISOString(),
-        tokenAddressFrom: defaultTokenAddressFrom || USDC_CONTRACT_ADDRESS[+env.NEXT_PUBLIC_CHAIN_ID as 1 | 5 | 137],
-        tokenAddressTo: defaultTokenAddressTo || WETH_CONTRACT_ADDRESS[+env.NEXT_PUBLIC_CHAIN_ID as 1 | 5 | 137],
+        depositAmount: defaultDepositAmount ?? 0.005,
+        mintAmount: defaultMintAmount ?? 1,
+        gasTolerance: defaultGasTolerance ?? 2,
       })
     }
   }, [isOpen])
@@ -117,7 +87,7 @@ const PlanModal = ({
                 <div className="w-[320px] max-w-[320px] flex flex-col items-center gap-8">
                   <div className="flex items-center justify-center gap-2">
                     <span className="shrink-0 text-xs">Auto invest in</span>
-                    <Controller
+                    {/* <Controller
                       control={control}
                       name="tokenAddressTo"
                       render={({ field }) => (
@@ -152,9 +122,9 @@ const PlanModal = ({
                           )}
                         </Select>
                       )}
-                    />
+                    /> */}
                   </div>
-                  <Controller
+                  {/* <Controller
                     control={control}
                     name="amount"
                     render={({ field, fieldState }) => (
@@ -216,10 +186,10 @@ const PlanModal = ({
                         value={String(field.value)}
                       />
                     )}
-                  />
+                  /> */}
                   <div className="w-full">
                     <p className="mb-4 text-xs text-left">Recurring Cycle</p>
-                    <Controller
+                    {/* <Controller
                       control={control}
                       name="frequency"
                       render={({ field }) => (
@@ -238,9 +208,9 @@ const PlanModal = ({
                           ))}
                         </div>
                       )}
-                    />
+                    /> */}
                   </div>
-                  <Controller
+                  {/* <Controller
                     control={control}
                     name="endDate"
                     render={({ field }) => (
@@ -254,7 +224,7 @@ const PlanModal = ({
                         />
                       </div>
                     )}
-                  />
+                  /> */}
                   <Button
                     className="w-[200px] bg-white font-bold text-sm text-black tracking-wide rounded-full"
                     disabled={isSubmitting}

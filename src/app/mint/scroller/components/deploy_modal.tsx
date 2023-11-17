@@ -8,27 +8,23 @@ import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import dayjs from 'dayjs'
 
-import BeepConfig from './scroller_config'
-import BeepPreview from './scroller_preview'
-import BeepConfirm from './scroller_confirm'
-import BeepSuccess from './scroller_success'
+import ScrollerConfig from './scroller_config'
+import ScrollerPreview from './scroller_preview'
+import ScrollerConfirm from './scroller_confirm'
+import ScrollerSuccess from './scroller_success'
 
-import { TBA_USER_CONFIG_SCHEMA } from '@/types/schema'
+import { SCROLLER_USER_CONFIG_SCHEMA } from '@/types/schema'
 
 import { USDC_CONTRACT_ADDRESS, WETH_CONTRACT_ADDRESS } from '@/constants/token'
 
 import { env } from 'env.mjs'
 
-type ConfigForm = z.infer<typeof TBA_USER_CONFIG_SCHEMA>
+type ConfigForm = z.infer<typeof SCROLLER_USER_CONFIG_SCHEMA>
 
 const defaultValues = {
-  tokenAddressFrom: USDC_CONTRACT_ADDRESS[+env.NEXT_PUBLIC_CHAIN_ID as 1 | 5 | 137],
-  tokenAddressTo: WETH_CONTRACT_ADDRESS[+env.NEXT_PUBLIC_CHAIN_ID as 1 | 5 | 137],
-  amount: 60,
-  frequency: 7,
-  endDate: dayjs().add(8, 'days').toISOString(),
+  depositAmount: 0.005,
   mintAmount: 1,
-  depositAmount: 120,
+  gasTolerance: 2, // 2 = MED
 }
 
 const DeployModal = ({ isOpen, onOpenChange, onClose }: ReturnType<typeof useDisclosure>) => {
@@ -36,7 +32,7 @@ const DeployModal = ({ isOpen, onOpenChange, onClose }: ReturnType<typeof useDis
 
   const form = useForm<ConfigForm>({
     defaultValues,
-    resolver: zodResolver(TBA_USER_CONFIG_SCHEMA),
+    resolver: zodResolver(SCROLLER_USER_CONFIG_SCHEMA),
   })
 
   useEffect(() => {
@@ -59,7 +55,7 @@ const DeployModal = ({ isOpen, onOpenChange, onClose }: ReturnType<typeof useDis
         {() =>
           isOpen && (
             <>
-              <ModalHeader className="justify-center">
+              <ModalHeader className="justify-center text-2xl">
                 {match(step)
                   .with(1, () => 'Configure your Scroller Pass')
                   .with(2, () => 'Review your Scroller Pass')
@@ -70,25 +66,25 @@ const DeployModal = ({ isOpen, onOpenChange, onClose }: ReturnType<typeof useDis
               <ModalBody className="px-8 pb-8">
                 {match(step)
                   .with(1, () => (
-                    <BeepConfig
+                    <ScrollerConfig
                       {...form}
                       setStep={setStep}
                     />
                   ))
                   .with(2, () => (
-                    <BeepPreview
+                    <ScrollerPreview
                       {...form}
                       setStep={setStep}
                     />
                   ))
                   .with(3, () => (
-                    <BeepConfirm
+                    <ScrollerConfirm
                       {...form}
                       setStep={setStep}
                     />
                   ))
                   .with(4, () => (
-                    <BeepSuccess
+                    <ScrollerSuccess
                       {...form}
                       onClose={onClose}
                     />

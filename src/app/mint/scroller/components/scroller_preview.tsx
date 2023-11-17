@@ -20,7 +20,7 @@ interface IBeepPreviewProps extends UseFormReturn<ConfigForm> {
   setStep: (value: 1 | 2 | 3) => void
 }
 
-const BeepPreview = ({ control, getValues, setValue, setStep, setError, clearErrors }: IBeepPreviewProps) => {
+const ScrollerPreview = ({ control, getValues, setValue, setStep, setError, clearErrors }: IBeepPreviewProps) => {
   const { frequency, amount, tokenAddressFrom, tokenAddressTo, endDate } = getValues()
 
   const balance = useBalance(tokenAddressFrom)
@@ -201,4 +201,4 @@ const BeepPreview = ({ control, getValues, setValue, setStep, setError, clearErr
   )
 }
 
-export default BeepPreview
+export default ScrollerPreview
