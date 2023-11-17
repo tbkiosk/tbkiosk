@@ -296,7 +296,7 @@ const BeepConfig = ({ control, watch, setValue, trigger, clearErrors, setStep }:
         className="h-14 w-full bg-black text-2xl text-white rounded-full"
         onClick={onSubmit}
       >
-        Continue to review
+        Proceed To Review
       </Button>
     </div>
   )
