@@ -3,11 +3,11 @@
 import { useAddress, useChainId, useContract, useOwnedNFTs } from '@thirdweb-dev/react'
 import { Spinner } from '@nextui-org/react'
 
-import BeepIframe from '../../components/beep_iframe'
+import ScrollerIframe from '../../components/scroller_iframe' // TODO: tailor for Scroller
 import CopyButton from '@/components/copy_button'
-import DepositButton from './deposit_button'
-import WithdrawButton from './withdraw_button'
-import BeepSettingsPanel from './beep_settings_panel'
+import DepositButton from './deposit_button' // TODO: tailor for Scroller
+import WithdrawButton from './withdraw_button' // TODO: tailor for Scroller
+import BeepSettingsPanel from './beep_settings_panel' // TODO: tailor for Scroller
 
 import useTbaAddress from '@/hooks/useTbaAddress'
 
@@ -48,7 +48,7 @@ const TBAContainer = ({ tokenId }: { tokenId: string }) => {
       <div className="flex flex-col md:flex-row justify-center gap-4 md:gap-8 pt-8 md:pt-16">
         <div className="w-full md:w-[40%] flex justify-center md:justify-end shrink-0">
           <div className="max-h-full aspect-square overflow-hidden">
-            <BeepIframe tokenId={tokenId} />
+            <ScrollerIframe tokenId={tokenId} />
           </div>
         </div>
         <div className="w-full max-w-[534px]">

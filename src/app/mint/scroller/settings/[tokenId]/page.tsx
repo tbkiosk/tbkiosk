@@ -6,13 +6,13 @@ import ChevronRight from 'public/icons/chevron-right.svg'
 
 import type { Metadata } from 'next'
 
-const BeepSettingsByTokenId = ({ params }: { params: { tokenId: string } }) => {
+const ScrollerSettingsByTokenId = ({ params }: { params: { tokenId: string } }) => {
   return (
     <main className="max-w-screen-2xl mx-auto px-4 md:px-8 py-2 pt-16 text-white">
       <div className="flex">
         <Link
           className="flex items-center gap-2"
-          href="/mint/beep/settings"
+          href="/mint/scroller/settings"
         >
           <span className="h-3 w-3 rotate-180">
             <ChevronRight />
@@ -26,7 +26,7 @@ const BeepSettingsByTokenId = ({ params }: { params: { tokenId: string } }) => {
 }
 
 export const generateMetadata = async ({ params }: { params: { tokenId: string } }): Promise<Metadata> => ({
-  title: `Kiosk - Beep Settings #${params.tokenId}`,
+  title: `Kiosk - Scroller Pass Settings #${params.tokenId}`,
 })
 
-export default BeepSettingsByTokenId
+export default ScrollerSettingsByTokenId

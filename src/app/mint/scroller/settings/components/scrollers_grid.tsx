@@ -5,21 +5,21 @@ import { useConnectionStatus, useChainId, useAddress, useContract, useOwnedNFTs 
 import { Spinner } from '@nextui-org/react'
 
 import ConnectWalletButton from '@/components/connect_wallet_button'
-import BeepIframe from './beep_iframe'
+import ScrollerIframe from './scroller_iframe'
 
 import { env } from 'env.mjs'
 
-const BeepsGrid = () => {
+const ScrollerGrid = () => {
   const connectionStatus = useConnectionStatus()
   const chainId = useChainId()
   const address = useAddress()
-  const { contract } = useContract(chainId ? env.NEXT_PUBLIC_BEEP_CONTRACT_ADDRESS : null)
+  const { contract } = useContract(chainId ? env.NEXT_PUBLIC_SCROLLER_NFT_CONTRACT_ADDRESS : null)
   const { data, isLoading, error } = useOwnedNFTs(contract, address)
 
   if (connectionStatus === 'disconnected') {
     return (
       <div className="min-h-[540px] flex flex-col items-center justify-center gap-4 tracking-wide">
-        <p className="font-[pixeloid-mono] text-sm text-center">Connect wallet to view your Beeps</p>
+        <p className="font-[pixeloid-mono] text-sm text-center">Connect wallet to view your Scoller Passes</p>
         <ConnectWalletButton
           className="!bg-transparent !font-medium !text-[#78edc1] [&>div>span:first-child]:text-[#78edc1]"
           style={{ border: '1px solid #78edc1' }}
@@ -55,12 +55,12 @@ const BeepsGrid = () => {
   if (!data?.length) {
     return (
       <div className="min-h-[540px] flex flex-col items-center justify-center gap-4 tracking-wide">
-        <p className="font-[pixeloid-mono] text-sm text-center">Looks like you don’t have any Beep bot</p>
+        <p className="font-[pixeloid-mono] text-sm text-center">Alas! Seems you don&apos;t have any Scroller Passes yet!</p>
         <Link
           className="px-8 py-2 font-medium text-[#78edc1] border border-[#78edc1] rounded-lg"
           href="/mint/beep"
         >
-          Mint Beep
+          Mint Scoller Pass
         </Link>
       </div>
     )
@@ -77,11 +77,12 @@ const BeepsGrid = () => {
             className="h-full w-full absolute inset-0 z-10"
             href={`/mint/beep/settings/${_nft.metadata.id}`}
           />
-          <BeepIframe tokenId={_nft.metadata.id} />
+          {/* TODO – add SVG */}
+          <ScrollerIframe tokenId={_nft.metadata.id} />
         </div>
       ))}
     </div>
   )
 }
 
-export default BeepsGrid
+export default ScrollerGrid

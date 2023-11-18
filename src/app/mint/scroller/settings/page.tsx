@@ -1,10 +1,10 @@
-import BeepsGrid from './components/beeps_grid'
+import ScrollerGrid from './components/scrollers_grid'
 
-const BeepSettings = () => (
+const ScrollerSettings = () => (
   <main className="max-w-screen-2xl mx-auto px-4 md:px-8 py-2 pt-16 text-white">
     <h1 className="mb-4 font-bold text-2xl">My Scrollers</h1>
-    <BeepsGrid />
+    <ScrollerGrid />
   </main>
 )
 
-export default BeepSettings
+export default ScrollerSettings

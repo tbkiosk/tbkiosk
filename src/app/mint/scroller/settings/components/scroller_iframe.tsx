@@ -7,7 +7,7 @@ import clsx from 'clsx'
 
 import { env } from 'env.mjs'
 
-const BeepIframe = ({ tokenId }: { tokenId: string | number }) => {
+const ScrollerIframe = ({ tokenId }: { tokenId: string | number }) => {
   const chainId = useChainId()
 
   const [loaded, setLoaded] = useState(false)
@@ -31,4 +31,4 @@ const BeepIframe = ({ tokenId }: { tokenId: string | number }) => {
   )
 }
 
-export default BeepIframe
+export default ScrollerIframe
