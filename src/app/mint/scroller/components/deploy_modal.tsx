@@ -9,13 +9,13 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import dayjs from 'dayjs'
 
 import ScrollerConfig from './scroller_config'
-import ScrollerPreview from './scroller_preview'
+// import ScrollerPreview from './scroller_preview'
 import ScrollerConfirm from './scroller_confirm'
 import ScrollerSuccess from './scroller_success'
 
 import { SCROLLER_USER_CONFIG_SCHEMA } from '@/types/schema'
 
-import { USDC_CONTRACT_ADDRESS, WETH_CONTRACT_ADDRESS } from '@/constants/token'
+// import { USDC_CONTRACT_ADDRESS, WETH_CONTRACT_ADDRESS } from '@/constants/token'
 
 import { env } from 'env.mjs'
 
@@ -72,10 +72,11 @@ const DeployModal = ({ isOpen, onOpenChange, onClose }: ReturnType<typeof useDis
                     />
                   ))
                   .with(2, () => (
-                    <ScrollerPreview
-                      {...form}
-                      setStep={setStep}
-                    />
+                    // <ScrollerPreview
+                    //   {...form}
+                    //   setStep={setStep}
+                    // />
+                    <></>
                   ))
                   .with(3, () => (
                     <ScrollerConfirm

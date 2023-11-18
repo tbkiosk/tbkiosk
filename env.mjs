@@ -14,6 +14,8 @@ export const env = createEnv({
     NEXT_PUBLIC_BEEP_TBA_IMPLEMENTATION_ADDRESS: z.string().min(1).startsWith('0x'),
     NEXT_PUBLIC_REGISTRY_ADDRESS: z.string().min(1).startsWith('0x'),
     NEXT_PUBLIC_ADMIN_CONTRACT_ADDRESS: z.string().min(1).startsWith('0x'),
+
+    NEXT_PUBLIC_SCROLLER_CONTRACT_ADDRESS: z.string().min(1).startsWith('0x'),
   },
   client: {
     NEXT_PUBLIC_THIRDWEB_CLIENT_ID: z.string().min(1),
@@ -22,6 +24,8 @@ export const env = createEnv({
     NEXT_PUBLIC_BEEP_TBA_IMPLEMENTATION_ADDRESS: z.string().min(1).startsWith('0x'),
     NEXT_PUBLIC_REGISTRY_ADDRESS: z.string().min(1).startsWith('0x'),
     NEXT_PUBLIC_ADMIN_CONTRACT_ADDRESS: z.string().min(1).startsWith('0x'),
+
+    NEXT_PUBLIC_SCROLLER_CONTRACT_ADDRESS: z.string().min(1).startsWith('0x'),
   },
   runtimeEnv: {
     DATABASE_URL: process.env.DATABASE_URL,
@@ -35,5 +39,7 @@ export const env = createEnv({
     NEXT_PUBLIC_BEEP_TBA_IMPLEMENTATION_ADDRESS: process.env.NEXT_PUBLIC_BEEP_TBA_IMPLEMENTATION_ADDRESS,
     NEXT_PUBLIC_REGISTRY_ADDRESS: process.env.NEXT_PUBLIC_REGISTRY_ADDRESS,
     NEXT_PUBLIC_ADMIN_CONTRACT_ADDRESS: process.env.NEXT_PUBLIC_ADMIN_CONTRACT_ADDRESS,
+
+    NEXT_PUBLIC_SCROLLER_CONTRACT_ADDRESS: process.env.NEXT_PUBLIC_SCROLLER_CONTRACT_ADDRESS,
   },
 })

@@ -14,7 +14,7 @@ import clsx from 'clsx'
 
 import { TOKENS_FROM } from '@/constants/token'
 
-import { TBA_USER_CONFIG_SCHEMA } from '@/types/schema'
+import { SCROLLER_USER_CONFIG_SCHEMA } from '@/types/schema'
 
 import { env } from 'env.mjs'
 
@@ -22,7 +22,7 @@ import ArrowIcon from 'public/icons/arrow.svg'
 
 import type { ThirdWebError } from '@/types'
 
-type ConfigForm = z.infer<typeof TBA_USER_CONFIG_SCHEMA>
+type ConfigForm = z.infer<typeof SCROLLER_USER_CONFIG_SCHEMA>
 
 interface IBeepConfirmProps extends UseFormReturn<ConfigForm> {
   setStep: (value: 1 | 2 | 3 | 4) => void
@@ -31,15 +31,30 @@ interface IBeepConfirmProps extends UseFormReturn<ConfigForm> {
 const MAX_MINT_AMOUNT = 2
 
 const BeepConfirm = ({ control, getValues, watch, handleSubmit, formState: { isSubmitting }, setStep }: IBeepConfirmProps) => {
-  const { depositAmount, tokenAddressFrom, tokenAddressTo, amount, frequency, endDate } = getValues()
-
+  const { depositAmount, gasTolerance } = getValues()
   const address = useAddress()
   const signer = useSigner()
-  const { contract: tokenContract } = useContract(tokenAddressFrom, erc20ABI)
-  const { contract: beepContract } = useContract(env.NEXT_PUBLIC_BEEP_CONTRACT_ADDRESS)
-  const { refetch } = useOwnedNFTs(beepContract, address)
+  // const { contract: tokenContract } = useContract(tokenAddressFrom, erc20ABI)
+  const { contract: scrollerContract } = useContract(env.NEXT_PUBLIC_SCROLLER_CONTRACT_ADDRESS)
+  const { refetch } = useOwnedNFTs(scrollerContract, address)
 
   const mintAmount = watch('mintAmount')
+  const depositPerScroller = depositAmount / mintAmount
+
+  const gasToleranceMap: any = {
+    0: 'disabed.',
+    1: 'Low',
+    2: 'Medium',
+    3: 'High',
+  }
+  const gasPriceMap: any = {
+    0: '',
+    1: '(est. $5-10)',
+    2: '(est. $10-30)',
+    3: '(est. $30-50)',
+  }
+  const tolerance = gasToleranceMap[gasTolerance]
+  const price = gasPriceMap[gasTolerance]
 
   const onSubmit = async () => {
     if (!signer) {
@@ -47,25 +62,16 @@ const BeepConfirm = ({ control, getValues, watch, handleSubmit, formState: { isS
       return
     }
 
-    if (!tokenContract || !beepContract) {
+    if (!scrollerContract) {
       toast.error('Failed to collect contract information')
       return
     }
 
     try {
-      const totalDepositAmount = depositAmount * mintAmount
-
-      if (totalDepositAmount > 0) {
-        await tokenContract.call('approve', [
-          env.NEXT_PUBLIC_BEEP_CONTRACT_ADDRESS,
-          ethers.utils.parseUnits(String(totalDepositAmount), TOKENS_FROM[tokenAddressFrom].decimal),
-        ])
-      }
-
       const sdk = ThirdwebSDK.fromSigner(signer, env.NEXT_PUBLIC_CHAIN_ID, {
         clientId: env.NEXT_PUBLIC_THIRDWEB_CLIENT_ID,
       })
-      const nftContract = await sdk.getContract(env.NEXT_PUBLIC_BEEP_CONTRACT_ADDRESS)
+      const nftContract = await sdk.getContract(env.NEXT_PUBLIC_SCROLLER_CONTRACT_ADDRESS)
       const prepareTx = await nftContract.erc721.claim.prepare(mintAmount)
       const claimArgs = prepareTx.getArgs()
       const salt = bytesToHex(numberToBytes(0, { size: 32 }))
@@ -80,12 +86,9 @@ const BeepConfirm = ({ control, getValues, watch, handleSubmit, formState: { isS
         implementation: env.NEXT_PUBLIC_BEEP_TBA_IMPLEMENTATION_ADDRESS,
         salt: salt,
         chainId: env.NEXT_PUBLIC_CHAIN_ID,
-        tokenToTransfer: tokenAddressFrom,
+        // tokenToTransfer: tokenAddressFrom,
         // Note: leave amountToTransfer as 0 if user doesn't want to deposit token before mint, it will still create tba but does not transfer any toke right after
-        amountToTransfer: ethers.utils.parseUnits(
-          totalDepositAmount <= 0 ? '0' : String(depositAmount),
-          TOKENS_FROM[tokenAddressFrom].decimal
-        ),
+        amountToTransfer: ethers.utils.parseUnits(depositAmount <= 0 ? '0' : String(depositAmount)),
       }
 
       await nftContract.call('claimAndCreateTba', [claimAndCreateArgs])
@@ -118,27 +121,7 @@ const BeepConfirm = ({ control, getValues, watch, handleSubmit, formState: { isS
         })
       )
 
-      const res = await fetch(`/api/beep/profile`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          addresses: tokenAddresses,
-          ownerAddress: address,
-          frequency,
-          amount,
-          tokenAddressFrom,
-          tokenAddressTo,
-          endDate,
-        }),
-      })
-
-      if (!res.ok) {
-        toast.warning(
-          'Mint was successful but failed to create investment plan(s). You can manually create an investment plan in settings page'
-        )
-      } else {
-        toast.success('Mint was successful')
-      }
+      // ADD VERIFICATION IN EVENT OF NO DB STORAGE
 
       setStep(4)
     } catch (error) {
@@ -162,10 +145,17 @@ const BeepConfirm = ({ control, getValues, watch, handleSubmit, formState: { isS
           height={92}
           loading="eager"
           priority
-          src="/beep/beep.png"
+          src="/scroller/scroller.png"
           width={92}
         />
       </div>
+
+      <p className="text-center text-xl">
+        Bridge from Ethereum to Scroll when the gas fee is
+        <span className={gasTolerance == 3 ? 'text-red-500' : 'text-blue-500'}> {tolerance}</span>
+        <span> {price}</span>
+      </p>
+
       <Controller
         control={control}
         name="mintAmount"
@@ -199,19 +189,15 @@ const BeepConfirm = ({ control, getValues, watch, handleSubmit, formState: { isS
               <div className="px-8">
                 <div className="flex justify-between mb-4">
                   <div className="font-normal">Deposit amount</div>
-                  <div>
-                    {depositAmount} {TOKENS_FROM[tokenAddressFrom].name}
-                  </div>
+                  <div>{depositAmount} ETH</div>
                 </div>
                 <div className="flex justify-between mb-4">
                   <div className="font-normal">Mint fee</div>
-                  <div>0.00</div>
+                  <div>0.00 ETH</div>
                 </div>
                 <div className="flex justify-between mb-4">
-                  <div className="font-normal">Total</div>
-                  <div>
-                    {depositAmount * mintAmount} {TOKENS_FROM[tokenAddressFrom].name}
-                  </div>
+                  <div className="font-normal">Deposit per Scroller Pass</div>
+                  <div>{depositPerScroller} ETH</div>
                 </div>
               </div>
             </div>
@@ -219,7 +205,7 @@ const BeepConfirm = ({ control, getValues, watch, handleSubmit, formState: { isS
               <Button
                 className="h-12 w-12 min-w-12 shrink-0 p-0 bg-[#efefef] rounded-[10px]"
                 disabled={isSubmitting}
-                onClick={() => setStep(2)}
+                onClick={() => setStep(1)}
               >
                 <div className="w-3 rotate-180">
                   <ArrowIcon />

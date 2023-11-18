@@ -7,7 +7,7 @@ import { Spinner, Button } from '@nextui-org/react'
 import { type UseFormReturn } from 'react-hook-form'
 import { z } from 'zod'
 
-import { TBA_USER_CONFIG_SCHEMA } from '@/types/schema'
+import { SCROLLER_USER_CONFIG_SCHEMA } from '@/types/schema'
 
 import { maskAddress } from '@/utils/address'
 
@@ -15,7 +15,7 @@ import RobotSuccess from 'public/beep/robot-success.svg'
 
 import { env } from 'env.mjs'
 
-type ConfigForm = z.infer<typeof TBA_USER_CONFIG_SCHEMA>
+type ConfigForm = z.infer<typeof SCROLLER_USER_CONFIG_SCHEMA>
 
 const ScrollerSuccess = ({ getValues, onClose }: UseFormReturn<ConfigForm> & { onClose: () => void }) => {
   const address = useAddress()

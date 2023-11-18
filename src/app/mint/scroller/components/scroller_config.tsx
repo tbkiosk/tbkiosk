@@ -9,25 +9,27 @@ import { Controller, type UseFormReturn } from 'react-hook-form'
 import { z } from 'zod'
 import dayjs from 'dayjs'
 
-import { TOKENS_FROM, TOKENS_TO } from '@/constants/token'
-import { FREQUENCY_OPTIONS } from '@/constants/beep'
+// import { TOKENS_FROM, TOKENS_TO } from '@/constants/token'
+// import { FREQUENCY_OPTIONS } from '@/constants/beep'
 
-import { TBA_USER_CONFIG_SCHEMA } from '@/types/schema'
+import { SCROLLER_USER_CONFIG_SCHEMA } from '@/types/schema'
 
 import ArrowIcon from 'public/icons/arrow.svg'
 import CalendarIcon from 'public/icons/calendar.svg'
 
-type ConfigForm = z.infer<typeof TBA_USER_CONFIG_SCHEMA>
+type ConfigForm = z.infer<typeof SCROLLER_USER_CONFIG_SCHEMA>
 
 interface IBeepConfigProps extends UseFormReturn<ConfigForm> {
   setStep: (value: 1 | 2 | 3) => void
 }
 
-const SUGGESTED_DEPOSIT_MULTIPLIER = 10
+// const SUGGESTED_DEPOSIT_MULTIPLIER = 10
 
 const ScrollerConfig = ({ control, watch, setValue, trigger, clearErrors, setStep }: IBeepConfigProps) => {
   const depositAmount = watch('depositAmount')
   const gasTolerance = watch('gasTolerance')
+
+  // console.log(watch())
 
   const onSubmit = async () => {
     const isValid = await trigger()
@@ -35,7 +37,7 @@ const ScrollerConfig = ({ control, watch, setValue, trigger, clearErrors, setSte
     if (isValid) {
       setValue('depositAmount', depositAmount)
       setValue('gasTolerance', gasTolerance)
-      setStep(2)
+      setStep(3)
     }
   }
 
@@ -93,7 +95,7 @@ const ScrollerConfig = ({ control, watch, setValue, trigger, clearErrors, setSte
 
       <Controller
         control={control}
-        name="gasFeeTolerance"
+        name="gasTolerance"
         render={({ field }) => (
           <>
             <div className="text-xl leading-[4rem]">
@@ -106,14 +108,14 @@ const ScrollerConfig = ({ control, watch, setValue, trigger, clearErrors, setSte
               {/* LOW Option */}
               <label
                 className={`rounded-md w-1/3 text-sm p-8 cursor-pointer ${
-                  field.value === '1' ? 'bg-blue-500 text-white' : 'bg-gray-100 hover:bg-gray-200'
+                  field.value === 1 ? 'bg-blue-500 text-white' : 'bg-gray-100 hover:bg-gray-200'
                 }`}
               >
                 <input
                   type="radio"
                   value="1"
-                  checked={field.value === '1'}
-                  onChange={() => field.onChange('1')}
+                  checked={field.value === 1}
+                  onChange={() => field.onChange(1)}
                   className="hidden"
                 />
                 <p className="text-base font-bold pb-2 text-xl">LOW</p>
@@ -126,14 +128,14 @@ const ScrollerConfig = ({ control, watch, setValue, trigger, clearErrors, setSte
               {/* MED Option */}
               <label
                 className={`rounded-md w-1/3 text-sm p-8 cursor-pointer ${
-                  field.value === '2' ? 'bg-blue-500 text-white' : 'bg-gray-100 hover:bg-gray-200'
+                  field.value === 2 ? 'bg-blue-500 text-white' : 'bg-gray-100 hover:bg-gray-200'
                 }`}
               >
                 <input
                   type="radio"
                   value="2"
-                  checked={field.value === '2'}
-                  onChange={() => field.onChange('2')}
+                  checked={field.value === 2}
+                  onChange={() => field.onChange(2)}
                   className="hidden"
                 />
                 <p className="text-base font-bold pb-2 text-xl">MED</p>
@@ -146,14 +148,14 @@ const ScrollerConfig = ({ control, watch, setValue, trigger, clearErrors, setSte
               {/* HIGH Option */}
               <label
                 className={`rounded-md w-1/3 text-sm p-8 cursor-pointer ${
-                  field.value === '3' ? 'bg-blue-500 text-white' : 'bg-gray-100 hover:bg-gray-200'
+                  field.value === 3 ? 'bg-blue-500 text-white' : 'bg-gray-100 hover:bg-gray-200'
                 }`}
               >
                 <input
                   type="radio"
                   value="3"
-                  checked={field.value === '3'}
-                  onChange={() => field.onChange('3')}
+                  checked={field.value === 3}
+                  onChange={() => field.onChange(3)}
                   className="hidden"
                 />
                 <p className="text-base font-bold pb-2 text-xl">HIGH</p>
@@ -189,7 +191,7 @@ const ScrollerConfig = ({ control, watch, setValue, trigger, clearErrors, setSte
                   onValueChange={value => {
                     if (value === '' || /^\d*(\.\d{1,8})?$/.test(value)) {
                       field.onChange(value) // Pass the string value directly
-                      clearErrors('amount')
+                      clearErrors('depositAmount')
                     }
                   }}
                   value={String(field.value)}
@@ -207,7 +209,9 @@ const ScrollerConfig = ({ control, watch, setValue, trigger, clearErrors, setSte
             </div>
           </div>
         </div>
-        <p className="py-3">Leave this blank to deposit after mint</p>
+        <p className="p-3">
+          If you mint mutliple Scroller Passes, this amount will be deposited equally amnong them <br /> Enter 0.0 to deposit after mint
+        </p>
       </div>
 
       <Button
