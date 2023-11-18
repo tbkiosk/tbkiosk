@@ -2,7 +2,7 @@ import NextImage from 'next/image'
 import Link from 'next/link'
 import { Image, Button } from '@nextui-org/react'
 import { match } from 'ts-pattern'
-import { Ethereum, Goerli, Polygon } from '@thirdweb-dev/chains'
+import { Ethereum, Goerli, Polygon, Sepolia } from '@thirdweb-dev/chains'
 
 import ConnectWalletButton from '@/components/connect_wallet_button'
 import CopyButton from '@/components/copy_button'
@@ -25,11 +25,12 @@ import { env } from 'env.mjs'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: `Kiosk - Mint ScrollerPass on ${
+  title: `Kiosk - Mint Scroller Pass on ${
     {
       [Goerli.chainId]: Goerli.name,
       [Ethereum.chainId]: Ethereum.name,
       [Polygon.chainId]: Polygon.name,
+      [Sepolia.chainId]: Sepolia.name,
     }[+env.NEXT_PUBLIC_CHAIN_ID]
   }`,
 }
@@ -95,6 +96,7 @@ const Mint = () => (
                       .with('1', () => <EthereumCircle />)
                       .with('5', () => <EthereumCircle />)
                       .with('137', () => <PolygonCircle />)
+                      .with('11155111', () => <EthereumCircle />)
                       .exhaustive()}
                   </span>
                   <span>
@@ -102,6 +104,7 @@ const Mint = () => (
                       .with('1', () => 'On Ethereum')
                       .with('5', () => 'On Goerli')
                       .with('137', () => 'On Polygon')
+                      .with('11155111', () => 'On Sepolia')
                       .exhaustive()}
                   </span>
                 </div>
@@ -154,8 +157,8 @@ const Mint = () => (
                 <div className="flex items-center justify-between md:justify-start gap-12 my-4 font-medium">
                   <span className="md:min-w-[130px] inline-block text-[#a6a9ae]">Contract address</span>
                   {/* TODO ADD TYPES */}
-                  <CopyButton copyText={env.NEXT_PUBLIC_SCROLLER_CONTRACT_ADDRESS}>
-                    {maskAddress(env.NEXT_PUBLIC_SCROLLER_CONTRACT_ADDRESS)}
+                  <CopyButton copyText={env.NEXT_PUBLIC_SCROLLER_NFT_CONTRACT_ADDRESS}>
+                    {maskAddress(env.NEXT_PUBLIC_SCROLLER_NFT_CONTRACT_ADDRESS)}
                   </CopyButton>
                 </div>
                 <div className="flex items-center justify-between md:justify-start gap-12 my-4 font-medium">
@@ -165,6 +168,7 @@ const Mint = () => (
                       .with('1', () => 'Ethereum')
                       .with('5', () => 'Goerli')
                       .with('137', () => 'Polygon')
+                      .with('11155111', () => 'Sepolia')
                       .exhaustive()}
                   </span>
                 </div>

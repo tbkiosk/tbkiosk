@@ -1,4 +1,4 @@
-import { Ethereum, Goerli, Polygon } from '@thirdweb-dev/chains'
+import { Ethereum, Goerli, Polygon, Sepolia } from '@thirdweb-dev/chains'
 
 import { env } from 'env.mjs'
 

@@ -1,10 +1,10 @@
 import ConnectWalletButton from '@/components/connect_wallet_button'
 
-import BeepTextLogo from 'public/beep/beep-text-logo.svg'
+import BeepTextLogo from 'public/beep/beep-text-logo.svg' // TODO
 
 import type { Metadata } from 'next'
 
-const BeepSettingsLayout = ({ children }: { children: React.ReactNode }) => {
+const ScrollerSettingsLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="h-[100vh] bg-black bg-[url('/beep/tba-bg.svg')] bg-cover bg-no-repeat overflow-y-auto">
       <header className="h-[var(--header-height)]">
@@ -24,7 +24,7 @@ const BeepSettingsLayout = ({ children }: { children: React.ReactNode }) => {
 }
 
 export const metadata: Metadata = {
-  title: 'Kiosk - Beep Settings',
+  title: 'Kiosk - Scroller Pass Settings',
 }
 
-export default BeepSettingsLayout
+export default ScrollerSettingsLayout
