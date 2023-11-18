@@ -12,7 +12,7 @@ import { toast } from 'react-toastify'
 import { z } from 'zod'
 import clsx from 'clsx'
 
-import { TOKENS_FROM } from '@/constants/token'
+// import { TOKENS_FROM } from '@/constants/token'
 
 import { SCROLLER_USER_CONFIG_SCHEMA } from '@/types/schema'
 
@@ -35,7 +35,7 @@ const BeepConfirm = ({ control, getValues, watch, handleSubmit, formState: { isS
   const address = useAddress()
   const signer = useSigner()
   // const { contract: tokenContract } = useContract(tokenAddressFrom, erc20ABI)
-  const { contract: scrollerContract } = useContract(env.NEXT_PUBLIC_SCROLLER_CONTRACT_ADDRESS)
+  const { contract: scrollerContract } = useContract(env.NEXT_PUBLIC_SCROLLER_NFT_CONTRACT_ADDRESS)
   const { refetch } = useOwnedNFTs(scrollerContract, address)
 
   const mintAmount = watch('mintAmount')
@@ -71,7 +71,7 @@ const BeepConfirm = ({ control, getValues, watch, handleSubmit, formState: { isS
       const sdk = ThirdwebSDK.fromSigner(signer, env.NEXT_PUBLIC_CHAIN_ID, {
         clientId: env.NEXT_PUBLIC_THIRDWEB_CLIENT_ID,
       })
-      const nftContract = await sdk.getContract(env.NEXT_PUBLIC_SCROLLER_CONTRACT_ADDRESS)
+      const nftContract = await sdk.getContract(env.NEXT_PUBLIC_SCROLLER_NFT_CONTRACT_ADDRESS)
       const prepareTx = await nftContract.erc721.claim.prepare(mintAmount)
       const claimArgs = prepareTx.getArgs()
       const salt = bytesToHex(numberToBytes(0, { size: 32 }))
@@ -82,13 +82,13 @@ const BeepConfirm = ({ control, getValues, watch, handleSubmit, formState: { isS
         pricePerToken: claimArgs[3],
         allowlistProof: claimArgs[4],
         data: claimArgs[5],
-        registry: env.NEXT_PUBLIC_REGISTRY_ADDRESS,
-        implementation: env.NEXT_PUBLIC_BEEP_TBA_IMPLEMENTATION_ADDRESS,
+        registry: env.NEXT_PUBLIC_REGISTRY_ADDRESS_SCROLLER,
+        implementation: env.NEXT_PUBLIC_SCROLLER_TBA_IMPLEMENTATION_ADDRESS,
         salt: salt,
         chainId: env.NEXT_PUBLIC_CHAIN_ID,
         // tokenToTransfer: tokenAddressFrom,
         // Note: leave amountToTransfer as 0 if user doesn't want to deposit token before mint, it will still create tba but does not transfer any toke right after
-        amountToTransfer: ethers.utils.parseUnits(depositAmount <= 0 ? '0' : String(depositAmount)),
+        amountToTransfer: ethers.utils.parseUnits(depositPerScroller <= 0 ? '0' : String(depositPerScroller)),
       }
 
       await nftContract.call('claimAndCreateTba', [claimAndCreateArgs])

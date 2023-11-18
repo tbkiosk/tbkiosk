@@ -20,7 +20,7 @@ type ConfigForm = z.infer<typeof SCROLLER_USER_CONFIG_SCHEMA>
 const ScrollerSuccess = ({ getValues, onClose }: UseFormReturn<ConfigForm> & { onClose: () => void }) => {
   const address = useAddress()
   const signer = useSigner()
-  const { contract } = useContract(env.NEXT_PUBLIC_BEEP_CONTRACT_ADDRESS)
+  const { contract } = useContract(env.NEXT_PUBLIC_SCROLLER_NFT_CONTRACT_ADDRESS)
   const { data, isLoading } = useOwnedNFTs(contract, address)
 
   const { mintAmount } = getValues()
@@ -31,8 +31,8 @@ const ScrollerSuccess = ({ getValues, onClose }: UseFormReturn<ConfigForm> & { o
   const tokenboundClient = new TokenboundClient({
     signer: signer,
     chainId: +env.NEXT_PUBLIC_CHAIN_ID,
-    implementationAddress: env.NEXT_PUBLIC_BEEP_TBA_IMPLEMENTATION_ADDRESS as `0x${string}`,
-    registryAddress: env.NEXT_PUBLIC_REGISTRY_ADDRESS as `0x${string}`,
+    implementationAddress: env.NEXT_PUBLIC_SCROLLER_TBA_IMPLEMENTATION_ADDRESS as `0x${string}`,
+    registryAddress: env.NEXT_PUBLIC_REGISTRY_ADDRESS_SCROLLER as `0x${string}`,
   })
 
   return (
@@ -46,13 +46,13 @@ const ScrollerSuccess = ({ getValues, onClose }: UseFormReturn<ConfigForm> & { o
         <div className="h-16 flex justify-center">
           <RobotSuccess />
         </div>
-        <div>Congrats, Your Beep&apos;s Wallet is live and ready to use!</div>
+        <div>Congrats, Your Scroller Pass is live and ready to use!</div>
         <div className="text-xl text-[#a6a9ae]">
           {mintedNFTs?.map(_nft => (
             <div key={_nft}>
               {maskAddress(
                 tokenboundClient.getAccount({
-                  tokenContract: env.NEXT_PUBLIC_BEEP_CONTRACT_ADDRESS as `0x${string}`,
+                  tokenContract: env.NEXT_PUBLIC_SCROLLER_NFT_CONTRACT_ADDRESS as `0x${string}`,
                   tokenId: _nft,
                 })
               )}
@@ -60,7 +60,7 @@ const ScrollerSuccess = ({ getValues, onClose }: UseFormReturn<ConfigForm> & { o
           ))}
         </div>
         <a
-          href="/mint/beep/settings"
+          href="/mint/scoller/settings"
           target="_blank"
         >
           <Button

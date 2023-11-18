@@ -15,7 +15,7 @@ import dayjs from 'dayjs'
 import { SCROLLER_USER_CONFIG_SCHEMA } from '@/types/schema'
 
 import ArrowIcon from 'public/icons/arrow.svg'
-import CalendarIcon from 'public/icons/calendar.svg'
+// import CalendarIcon from 'public/icons/calendar.svg'
 
 type ConfigForm = z.infer<typeof SCROLLER_USER_CONFIG_SCHEMA>
 
@@ -63,109 +63,75 @@ const ScrollerConfig = ({ control, watch, setValue, trigger, clearErrors, setSte
         <div>Scroll</div>
       </div>
 
-      {/* <div className="text-xl leading-[4rem]">
+      <div className="text-xl leading-[4rem]">
         <p>
           Current gas price: {200} GWEI (<span className="text-red-500">{'High'}</span>)
         </p>
         <p>I would like my gas fee tolerance to be:</p>
       </div>
-      <div className="flex justify-between gap-6 text-center">
-        <div className="bg-gray-100 rounded-md w-1/3 text-sm p-8 hover:bg-gray-200 cursor-pointer">
-          <p className="text-base font-bold pb-2 text-xl">LOW</p>
-          <p>
-            ${5}-{10}
-          </p>
-          <p>Execute within {48} hours</p>
-        </div>
-        <div className="bg-gray-100 rounded-md w-1/3 text-sm p-8 hover:bg-gray-200 cursor-pointer">
-          <p className="text-base font-bold pb-2 text-xl">MED</p>
-          <p>
-            ${10}-{30}
-          </p>
-          <p>Execute within {24} hours</p>
-        </div>
-        <div className="bg-gray-100 rounded-md w-1/3 text-sm p-8 hover:bg-gray-200 cursor-pointer">
-          <p className="text-base font-bold pb-2 text-xl">HIGH</p>
-          <p>
-            ${30}-{50}
-          </p>
-          <p>Execute within {1} hours</p>
-        </div>
-      </div> */}
 
       <Controller
         control={control}
         name="gasTolerance"
         render={({ field }) => (
-          <>
-            <div className="text-xl leading-[4rem]">
+          <div className="flex justify-between gap-6 text-center">
+            <label
+              className={`rounded-md w-1/3 text-sm p-8 cursor-pointer ${
+                field.value === 1 ? 'bg-blue-500 text-white' : 'bg-gray-100 hover:bg-gray-200'
+              }`}
+            >
+              <input
+                type="radio"
+                value="1"
+                checked={field.value === 1}
+                onChange={() => field.onChange(1)}
+                className="hidden"
+              />
+              <p className="text-base font-bold pb-2 text-xl">LOW</p>
               <p>
-                Current gas price: {200} GWEI (<span className="text-red-500">{'High'}</span>)
+                ${5}-{10}
               </p>
-              <p>I would like my gas fee tolerance to be:</p>
-            </div>
-            <div className="flex justify-between gap-6 text-center">
-              {/* LOW Option */}
-              <label
-                className={`rounded-md w-1/3 text-sm p-8 cursor-pointer ${
-                  field.value === 1 ? 'bg-blue-500 text-white' : 'bg-gray-100 hover:bg-gray-200'
-                }`}
-              >
-                <input
-                  type="radio"
-                  value="1"
-                  checked={field.value === 1}
-                  onChange={() => field.onChange(1)}
-                  className="hidden"
-                />
-                <p className="text-base font-bold pb-2 text-xl">LOW</p>
-                <p>
-                  ${5}-{10}
-                </p>
-                <p>Execute within 48 hours</p>
-              </label>
+              <p>Execute within 48 hours</p>
+            </label>
 
-              {/* MED Option */}
-              <label
-                className={`rounded-md w-1/3 text-sm p-8 cursor-pointer ${
-                  field.value === 2 ? 'bg-blue-500 text-white' : 'bg-gray-100 hover:bg-gray-200'
-                }`}
-              >
-                <input
-                  type="radio"
-                  value="2"
-                  checked={field.value === 2}
-                  onChange={() => field.onChange(2)}
-                  className="hidden"
-                />
-                <p className="text-base font-bold pb-2 text-xl">MED</p>
-                <p>
-                  ${10}-{30}
-                </p>
-                <p>Execute within 24 hours</p>
-              </label>
+            <label
+              className={`rounded-md w-1/3 text-sm p-8 cursor-pointer ${
+                field.value === 2 ? 'bg-blue-500 text-white' : 'bg-gray-100 hover:bg-gray-200'
+              }`}
+            >
+              <input
+                type="radio"
+                value="2"
+                checked={field.value === 2}
+                onChange={() => field.onChange(2)}
+                className="hidden"
+              />
+              <p className="text-base font-bold pb-2 text-xl">MED</p>
+              <p>
+                ${10}-{30}
+              </p>
+              <p>Execute within 24 hours</p>
+            </label>
 
-              {/* HIGH Option */}
-              <label
-                className={`rounded-md w-1/3 text-sm p-8 cursor-pointer ${
-                  field.value === 3 ? 'bg-blue-500 text-white' : 'bg-gray-100 hover:bg-gray-200'
-                }`}
-              >
-                <input
-                  type="radio"
-                  value="3"
-                  checked={field.value === 3}
-                  onChange={() => field.onChange(3)}
-                  className="hidden"
-                />
-                <p className="text-base font-bold pb-2 text-xl">HIGH</p>
-                <p>
-                  ${30}-{50}
-                </p>
-                <p>Execute within 1 hours</p>
-              </label>
-            </div>
-          </>
+            <label
+              className={`rounded-md w-1/3 text-sm p-8 cursor-pointer ${
+                field.value === 3 ? 'bg-blue-500 text-white' : 'bg-gray-100 hover:bg-gray-200'
+              }`}
+            >
+              <input
+                type="radio"
+                value="3"
+                checked={field.value === 3}
+                onChange={() => field.onChange(3)}
+                className="hidden"
+              />
+              <p className="text-base font-bold pb-2 text-xl">HIGH</p>
+              <p>
+                ${30}-{50}
+              </p>
+              <p>Execute within 1 hours</p>
+            </label>
+          </div>
         )}
       />
 
@@ -210,7 +176,8 @@ const ScrollerConfig = ({ control, watch, setValue, trigger, clearErrors, setSte
           </div>
         </div>
         <p className="p-3">
-          If you mint mutliple Scroller Passes, this amount will be deposited equally amnong them <br /> Enter 0.0 to deposit after mint
+          If you mint mutliple Scroller Passes, this amount will be deposited among them equally.
+          <br /> Enter 0.0 to deposit after mint.
         </p>
       </div>
 
