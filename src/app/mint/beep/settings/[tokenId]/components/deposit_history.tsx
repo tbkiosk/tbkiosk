@@ -1,89 +1,106 @@
 'use client'
 
-import { Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, Spinner } from '@nextui-org/react'
+import { useEffect, type Key } from 'react'
+import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, getKeyValue } from '@nextui-org/react'
 import { useQuery } from '@tanstack/react-query'
+import { toast } from 'react-toastify'
+import { checksumAddress } from 'viem'
 import dayjs from 'dayjs'
 
-import ExplorerLink from '@/app/mint/beep/settings/[tokenId]/components/etherscan_link'
-import type { TransferTransaction } from '@/app/api/beep/profile/[tokenBoundAccount]/asset-transactions/route'
+import { TOKENS_FROM } from '@/constants/token'
+import { explorer } from '@/constants/explorer'
 
-type Props = {
-  tbaAddress: string
-}
+import { env } from 'env.mjs'
 
-export const DepositHistory = ({ tbaAddress }: Props) => {
-  const columns = ['Activity', 'Amount', 'Time', 'Status']
-  const { data, status } = useQuery<TransferTransaction[]>({
-    queryKey: ['investment-history', tbaAddress],
+import type { AssetTransfersResponse, AssetTransfersResult } from 'alchemy-sdk'
+
+const DepositHistory = ({ tbaAddress }: { tbaAddress: string }) => {
+  const { data, isFetching, error } = useQuery<AssetTransfersResult[]>({
+    refetchInterval: 0,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    queryKey: ['token-bound-account-deposit-transactions', tbaAddress],
     queryFn: async () => {
-      const res = await fetch(`/api/beep/profile/${tbaAddress}/asset-transactions`)
+      const res = await fetch(`/api/beep/profile/${tbaAddress}/asset-transactions/deposit`)
 
       if (!res.ok) {
         throw new Error(res.statusText)
       }
 
-      return await res.json()
+      const response: AssetTransfersResponse = await res.json()
+
+      return response?.transfers || []
     },
-    refetchInterval: 0,
-    refetchOnWindowFocus: false,
-    refetchOnMount: false,
-    enabled: !!tbaAddress,
   })
 
-  if (status === 'pending') {
-    return <Spinner color="default" />
-  }
+  const renderCell = (item: AssetTransfersResult, columnKey: Key) => {
+    const value = getKeyValue(item, columnKey)
 
-  if (data === null || data === undefined) {
-    return <div>No Data</div>
-  }
-
-  const tableData = data.map(item => {
-    const date = dayjs(item.timestamp).format('YYYY-MM-DD HH:mm:ss')
-    return {
-      hash: item.hash,
-      value: item.value,
-      date,
-      type: item.type,
-      currency: item.currency,
+    if (!value) {
+      return null
     }
-  })
+
+    switch (columnKey) {
+      case 'rawContract': {
+        const token = value?.address ? TOKENS_FROM[checksumAddress(value.address)] : null
+
+        return (
+          <div className="flex items-center gap-2">
+            {token && <div className="h-6 w-6">{token?.icon()}</div>}
+            <div>{token?.name || 'Unknown'}</div>
+          </div>
+        )
+      }
+      case 'value': {
+        return value
+      }
+      case 'hash': {
+        return (
+          <a
+            className="text-green-500"
+            href={`${explorer[+env.NEXT_PUBLIC_CHAIN_ID as 1 | 5 | 137]}/tx/${value}`}
+            rel="noreferrer"
+            target="_blank"
+          >
+            Success
+          </a>
+        )
+      }
+      case 'metadata': {
+        return value?.blockTimestamp ? dayjs(value.blockTimestamp).format('YYYY-MM-DD HH:mm') : '-'
+      }
+      default: {
+        return null
+      }
+    }
+  }
+
+  useEffect(() => {
+    if (error) {
+      toast.error((error as Error)?.message || 'Failed to load deposit transactions')
+    }
+  }, [error])
 
   return (
     <Table
-      aria-label="Token bound transaction history"
-      removeWrapper
+      aria-label="TBA deposity history"
+      classNames={{
+        td: 'font-medium',
+        th: 'bg-transparent',
+        wrapper: 'p-0 bg-transparent shadow-none',
+      }}
     >
-      <TableHeader className="p-0">
-        {columns.map((column, index) => (
-          <TableColumn
-            key={index}
-            className={`bg-transparent text-[#808080] ${index === columns.length - 1 ? 'text-right' : ''}`}
-          >
-            {column}
-          </TableColumn>
-        ))}
+      <TableHeader>
+        <TableColumn key="rawContract">Asset</TableColumn>
+        <TableColumn key="value">Amount</TableColumn>
+        <TableColumn key="metadata">Time</TableColumn>
+        <TableColumn key="hash">Status</TableColumn>
       </TableHeader>
-      <TableBody emptyContent={'No Data'}>
-        {tableData.map(item => (
-          <TableRow
-            key={item.hash}
-            className={'text-[#F5F5F5]'}
-          >
-            <TableCell className="font-medium py-5">{item.type}</TableCell>
-            <TableCell className="font-medium">
-              {item.value} {item.currency}
-            </TableCell>
-            <TableCell className="font-medium">{item.date}</TableCell>
-            <TableCell className="font-medium text-right">
-              <ExplorerLink
-                txhash={item.hash}
-                isSuccessful={true}
-              />
-            </TableCell>
-          </TableRow>
-        ))}
+      <TableBody items={data || []}>
+        {item => <TableRow key={item.uniqueId}>{columnKey => <TableCell>{renderCell(item, columnKey)}</TableCell>}</TableRow>}
       </TableBody>
     </Table>
   )
 }
+
+export default DepositHistory
