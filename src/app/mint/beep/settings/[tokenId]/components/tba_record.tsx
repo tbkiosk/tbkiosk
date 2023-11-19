@@ -1,35 +1,32 @@
 'use client'
+
+import { useState } from 'react'
 import { Tabs, Tab } from '@nextui-org/react'
 
-import InvestmentHistory from '@/app/mint/beep/settings/[tokenId]/components/investment_history'
-import { DepositHistory } from '@/app/mint/beep/settings/[tokenId]/components/deposit_history'
+import DepositHistory from './deposit_history'
 
-type Props = {
-  tbaAddress: string
+enum TabsKeys {
+  DW = 'DW',
 }
 
-const TbaRecord = ({ tbaAddress }: Props) => {
+const TbaRecord = ({ tbaAddress }: { tbaAddress: string }) => {
+  const [selected, setSelected] = useState<TabsKeys>(TabsKeys.DW)
+
   return (
     <div className="flex w-full flex-col">
       <Tabs
-        aria-label="Options"
-        variant="underlined"
+        aria-label="tba-record-tabs"
         classNames={{
-          tabList: 'gap-6 w-full relative rounded-none p-0 border-b border-divider',
-          cursor: 'w-full bg-[#78EDC1]',
-          tab: 'max-w-fit px-0 h-12 md:text-xl font-medium',
-          tabContent: 'group-data-[selected=true]:text-[#78EDC1] group-data-[hover=true]:text-[#78EDC1] text-white',
-          panel: 'px-0',
+          cursor: 'bg-transparent shadow-none',
+          tabContent:
+            'font-medium text-xl group-data-[selected=false]:text-white group-data-[selected=true]:text-[#78edc1] bg-transparent group-data-[selected=true]:border-b-2 group-data-[selected=true]:border-b-[#78edc1]',
+          tabList: 'bg-transparent',
         }}
+        onSelectionChange={key => setSelected(key as TabsKeys)}
+        selectedKey={selected}
       >
         <Tab
-          key="invest"
-          title="DCA Transactions"
-        >
-          <InvestmentHistory tbaAddress={tbaAddress} />
-        </Tab>
-        <Tab
-          key="deposit"
+          key={TabsKeys.DW}
           title="Deposit/Withdrawals"
         >
           <DepositHistory tbaAddress={tbaAddress} />
