@@ -6,7 +6,6 @@ const CHAIN_NETWORK_MAP = {
   '1': Network.ETH_MAINNET,
   '5': Network.ETH_GOERLI,
   '137': Network.MATIC_MAINNET,
-  '11155111': Network.ETH_SEPOLIA,
 }
 
 export const ALCHEMY_CONFIG = {
