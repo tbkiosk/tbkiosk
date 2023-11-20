@@ -2,9 +2,9 @@
 
 import { WagmiConfig, createConfig, configureChains } from 'wagmi'
 import { publicProvider } from 'wagmi/providers/public'
-import { goerli } from 'wagmi/chains'
+import { goerli, sepolia } from 'wagmi/chains'
 
-const { publicClient, webSocketPublicClient } = configureChains([goerli], [publicProvider()])
+const { publicClient, webSocketPublicClient } = configureChains([goerli, sepolia], [publicProvider()])
 
 const config = createConfig({
   autoConnect: true,

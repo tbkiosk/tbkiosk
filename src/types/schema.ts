@@ -18,3 +18,24 @@ export const TBA_USER_CONFIG_SCHEMA = z.object({
   depositAmount: z.number().int().min(0),
   mintAmount: z.number().int().min(1).max(2),
 })
+
+export const SCROLLER_USER_CONFIG_SCHEMA = z.object({
+  depositAmount: z.number().min(0.125),
+  mintAmount: z.number().int().min(1).max(2),
+  gasTolerance: z.number().int().min(0).max(3),
+  // gasTolerance: z.enum(['OFF', 'LOW', 'MED', 'HIGH']),
+})
+
+// // Define constants for gas tolerance levels
+// const GAS_TOLERANCE_OFF = 0;
+// const GAS_TOLERANCE_LOW = 1;
+// const GAS_TOLERANCE_MED = 2;
+// const GAS_TOLERANCE_HIGH = 3;
+
+// // Map numeric values to gas tolerance strings
+// const gasToleranceMap = {
+//   [GAS_TOLERANCE_OFF]: "OFF",
+//   [GAS_TOLERANCE_LOW]: "LOW",
+//   [GAS_TOLERANCE_MED]: "MED",
+//   [GAS_TOLERANCE_HIGH]: "HIGH",
+// };
