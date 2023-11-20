@@ -1,27 +1,31 @@
 'use client'
 
 import { useEffect, type Key } from 'react'
-import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, getKeyValue } from '@nextui-org/react'
+import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell } from '@nextui-org/react'
 import { useQuery } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
 import { checksumAddress } from 'viem'
 import dayjs from 'dayjs'
 
 import ArrowIcon from 'public/icons/arrow-short.svg'
+import DepositIcon from 'public/icons/deposit.svg'
 
 import { TOKENS_FROM } from '@/constants/token'
 import { explorer } from '@/constants/explorer'
+import { TransactionType } from '@/constants/transactions'
 
 import { env } from 'env.mjs'
 
-import type { AssetTransfersResponse, AssetTransfersResult } from 'alchemy-sdk'
+import type { AssetTransfersWithMetadataResult } from 'alchemy-sdk'
 
-const DepositHistory = ({ tbaAddress }: { tbaAddress: string }) => {
-  const { data, isFetching, error } = useQuery<AssetTransfersResult[]>({
+type BeepTransferResult = AssetTransfersWithMetadataResult & { type: TransactionType }
+
+const AssetHistory = ({ tbaAddress }: { tbaAddress: string }) => {
+  const { data, isFetching, error } = useQuery<BeepTransferResult[]>({
     refetchInterval: 0,
     refetchOnMount: false,
     refetchOnWindowFocus: false,
-    queryKey: ['token-bound-account-deposit-transactions', tbaAddress],
+    queryKey: ['token-bound-account-transactions', tbaAddress],
     queryFn: async () => {
       const res = await fetch(`/api/beep/profile/${tbaAddress}/asset-transactions/deposit`)
 
@@ -29,38 +33,45 @@ const DepositHistory = ({ tbaAddress }: { tbaAddress: string }) => {
         throw new Error(res.statusText)
       }
 
-      const response: AssetTransfersResponse = await res.json()
+      const response: BeepTransferResult[] = await res.json()
 
-      return response?.transfers || []
+      return response || []
     },
   })
 
-  const renderCell = (item: AssetTransfersResult, columnKey: Key) => {
-    const value = getKeyValue(item, columnKey)
-
-    if (!value) {
-      return null
-    }
-
+  const renderCell = (item: BeepTransferResult, columnKey: Key) => {
     switch (columnKey) {
-      case 'rawContract': {
-        const token = value?.address ? TOKENS_FROM[checksumAddress(value.address)] : null
+      case 'activity': {
+        const token = TOKENS_FROM[checksumAddress((item?.rawContract?.address || '0x') as `0x${string}`)]
 
         return (
           <div className="flex items-center gap-2">
-            {token && <div className="h-6 w-6">{token?.icon()}</div>}
-            <div>{token?.name || 'Unknown'}</div>
+            <div className="h-6 w-6 flex justify-center items-center bg-[#222325] rounded-full">
+              <div className="h-3 w-3">
+                <DepositIcon />
+              </div>
+            </div>
+            <div>Deposit {token ? token.name : 'unknown'}</div>
           </div>
         )
       }
-      case 'value': {
-        return value
+      case 'amount': {
+        const token = TOKENS_FROM[checksumAddress((item?.rawContract?.address || '0x') as `0x${string}`)]
+
+        return (
+          <div className="flex items-center gap-2">
+            <div className="h-6 w-6 bg-[#222325] rounded-full">{token && token.icon()}</div>
+            <div>
+              {item.value} {token ? token.name : 'unknown'}
+            </div>
+          </div>
+        )
       }
-      case 'hash': {
+      case 'status': {
         return (
           <a
             className="flex items-center text-[#78edc1] hover:underline"
-            href={`${explorer[+env.NEXT_PUBLIC_CHAIN_ID as 1 | 5 | 137]}/tx/${value}`}
+            href={`${explorer[+env.NEXT_PUBLIC_CHAIN_ID as 1 | 5 | 137]}/tx/${item.hash}`}
             rel="noreferrer"
             target="_blank"
           >
@@ -71,8 +82,8 @@ const DepositHistory = ({ tbaAddress }: { tbaAddress: string }) => {
           </a>
         )
       }
-      case 'metadata': {
-        return value?.blockTimestamp ? dayjs(value.blockTimestamp).format('YYYY-MM-DD HH:mm') : '-'
+      case 'time': {
+        return item?.metadata?.blockTimestamp ? dayjs(item.metadata.blockTimestamp).format('YYYY-MM-DD HH:mm') : '-'
       }
       default: {
         return null
@@ -96,13 +107,13 @@ const DepositHistory = ({ tbaAddress }: { tbaAddress: string }) => {
       }}
     >
       <TableHeader>
-        <TableColumn key="rawContract">Asset</TableColumn>
-        <TableColumn key="value">Amount</TableColumn>
-        <TableColumn key="metadata">Time</TableColumn>
-        <TableColumn key="hash">Status</TableColumn>
+        <TableColumn key="activity">Activity</TableColumn>
+        <TableColumn key="amount">Amount</TableColumn>
+        <TableColumn key="time">Time</TableColumn>
+        <TableColumn key="status">Status</TableColumn>
       </TableHeader>
       <TableBody
-        isLoading
+        isLoading={isFetching}
         items={data || []}
       >
         {item => <TableRow key={item.uniqueId}>{columnKey => <TableCell>{renderCell(item, columnKey)}</TableCell>}</TableRow>}
@@ -111,4 +122,4 @@ const DepositHistory = ({ tbaAddress }: { tbaAddress: string }) => {
   )
 }
 
-export default DepositHistory
+export default AssetHistory
