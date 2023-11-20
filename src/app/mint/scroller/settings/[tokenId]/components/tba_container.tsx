@@ -3,7 +3,7 @@
 import { useAddress, useChainId, useContract, useOwnedNFTs } from '@thirdweb-dev/react'
 import { Spinner } from '@nextui-org/react'
 
-import ScrollerIframe from '../../components/scroller_iframe'
+// import ScrollerIframe from '../../components/scroller_iframe'
 import CopyButton from '@/components/copy_button'
 import DepositButton from './deposit_button'
 import WithdrawButton from './withdraw_button'
@@ -49,7 +49,8 @@ const TBAContainer = ({ tokenId }: { tokenId: string }) => {
       <div className="flex flex-col md:flex-row justify-center gap-4 md:gap-8 pt-8 md:pt-16">
         <div className="w-full md:w-[40%] flex justify-center md:justify-end shrink-0">
           <div className="max-h-full aspect-square overflow-hidden">
-            <ScrollerIframe tokenId={tokenId} />
+            {/* <ScrollerIframe tokenId={tokenId} /> */}
+            IFRAME HERE
           </div>
         </div>
         <div className="w-full max-w-[534px]">

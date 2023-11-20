@@ -79,12 +79,13 @@ const SettingsBoard = ({ tbaUser, refetch, tbaAddress }: { tbaAddress: string; r
   return (
     <div className="flex flex-col items-center grow px-8 py-4 bg-[#131313] rounded-[10px] shadow-md">
       <PlanModal
-        // gasTolerance={gasTolerance} // add if required
         isOpen={isOpen}
         onOpenChange={onOpenChange}
         onSubmit={onSubmit}
+        depositAmount={0.125}
+        mintAmount={1}
+        gasTolerance={2}
       />
-      {/* TODO – Get gas tolerance from on-chain */}
       <div className="w-full flex items-center gap-4 mb-2">Your Gas Tolerance will appear here.</div>
       {/* <div className="w-full flex items-center gap-4 mb-2">
         <div className="h-10 w-10">{TOKENS_TO[tbaUser.token_address_to]?.icon()}</div>

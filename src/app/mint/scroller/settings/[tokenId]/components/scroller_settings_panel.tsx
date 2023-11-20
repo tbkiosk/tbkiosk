@@ -3,12 +3,12 @@
 import { useQuery } from '@tanstack/react-query'
 import { Spinner } from '@nextui-org/react'
 
-import BeepAccountNotCreated from './scroller_account_not_created'
+import ScrollerAccountNotCreated from './scroller_account_not_created'
 import SettingsBoard from './settings_board'
 
 import type { TBAUser } from '@prisma/client'
 
-const BeepSettingsPanel = ({ tbaAddress }: { tbaAddress: string }) => {
+const ScrollerSettingsPanel = ({ tbaAddress }: { tbaAddress: string }) => {
   const {
     data: tbaUser,
     isFetching: tbaUserLoading,
@@ -47,7 +47,7 @@ const BeepSettingsPanel = ({ tbaAddress }: { tbaAddress: string }) => {
 
   if (!tbaUser) {
     return (
-      <BeepAccountNotCreated
+      <ScrollerAccountNotCreated
         refetch={refetch}
         tbaAddress={tbaAddress}
       />
@@ -63,4 +63,4 @@ const BeepSettingsPanel = ({ tbaAddress }: { tbaAddress: string }) => {
   )
 }
 
-export default BeepSettingsPanel
+export default ScrollerSettingsPanel

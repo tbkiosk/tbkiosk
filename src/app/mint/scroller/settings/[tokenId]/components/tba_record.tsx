@@ -1,8 +1,8 @@
 'use client'
 import { Tabs, Tab } from '@nextui-org/react'
 
-import InvestmentHistory from '@/app/mint/scroller/settings/[tokenId]/components/investment_history'
-import { DepositHistory } from '@/app/mint/scroller/settings/[tokenId]/components/deposit_history'
+// import InvestmentHistory from '@/app/mint/scroller/settings/[tokenId]/components/investment_history'
+// import { DepositHistory } from '@/app/mint/scroller/settings/[tokenId]/components/deposit_history'
 
 type Props = {
   tbaAddress: string
@@ -26,13 +26,13 @@ const TbaRecord = ({ tbaAddress }: Props) => {
           key="invest"
           title="DCA Transactions"
         >
-          <InvestmentHistory tbaAddress={tbaAddress} />
+          {/* <InvestmentHistory tbaAddress={tbaAddress} /> */}
         </Tab>
         <Tab
           key="deposit"
           title="Deposit/Withdrawals"
         >
-          <DepositHistory tbaAddress={tbaAddress} />
+          {/* <DepositHistory tbaAddress={tbaAddress} /> */}
         </Tab>
       </Tabs>
     </div>

@@ -12,7 +12,6 @@ const ScrollerAccountNotCreated = ({ refetch, tbaAddress }: { refetch: () => Pro
 
   const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure()
 
-  // const onSubmit = async ({ amount, frequency, tokenAddressFrom, tokenAddressTo, endDate }: PlanForm) => {
   const onSubmit = async ({ depositAmount, gasTolerance, mintAmount }: PlanForm) => {
     const res = await fetch(`/api/beep/profile/${tbaAddress}`, {
       method: 'POST',
@@ -22,11 +21,6 @@ const ScrollerAccountNotCreated = ({ refetch, tbaAddress }: { refetch: () => Pro
         depositAmount,
         gasTolerance,
         mintAmount,
-        // frequency,
-        // amount,
-        // tokenAddressFrom,
-        // tokenAddressTo,
-        // endDate,
       }),
     })
 
@@ -46,6 +40,9 @@ const ScrollerAccountNotCreated = ({ refetch, tbaAddress }: { refetch: () => Pro
         isOpen={isOpen}
         onOpenChange={onOpenChange}
         onSubmit={onSubmit}
+        depositAmount={0.125}
+        mintAmount={1}
+        gasTolerance={2}
       />
       <div className="h-16 flex justify-center">
         <RobotSuccess />

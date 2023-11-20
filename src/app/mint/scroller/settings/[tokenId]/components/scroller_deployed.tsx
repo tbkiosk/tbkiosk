@@ -3,12 +3,12 @@
 import { useQuery } from '@tanstack/react-query'
 import { Spinner } from '@nextui-org/react'
 
-import BeepAccountNotCreated from './scroller_account_not_created'
+import ScrollerAccountNotCreated from './scroller_account_not_created'
 import SettingsBoard from './settings_board'
 
 import type { TBAUser } from '@prisma/client'
 
-const BeepDeployed = ({ tbaAddress }: { tokenId: string; tbaAddress: string }) => {
+const ScrollerDeployed = ({ tbaAddress }: { tokenId: string; tbaAddress: string }) => {
   const {
     data: tbaUser,
     isFetching: tbaUserLoading,
@@ -21,7 +21,7 @@ const BeepDeployed = ({ tbaAddress }: { tokenId: string; tbaAddress: string }) =
     refetchOnWindowFocus: false,
     queryKey: ['token-bound-account-tbaUser', tbaAddress],
     queryFn: async () => {
-      const res = await fetch(`/api/beep/profile/${tbaAddress}`)
+      const res = await fetch(`/api/scroller/profile/${tbaAddress}`)
 
       if (!res.ok) {
         throw new Error(res.statusText)
@@ -47,7 +47,7 @@ const BeepDeployed = ({ tbaAddress }: { tokenId: string; tbaAddress: string }) =
 
   if (!tbaUser) {
     return (
-      <BeepAccountNotCreated
+      <ScrollerAccountNotCreated
         refetch={refetch}
         tbaAddress={tbaAddress}
       />
@@ -63,4 +63,4 @@ const BeepDeployed = ({ tbaAddress }: { tokenId: string; tbaAddress: string }) =
   )
 }
 
-export default BeepDeployed
+export default ScrollerDeployed

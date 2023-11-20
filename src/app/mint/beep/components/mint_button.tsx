@@ -42,6 +42,7 @@ const MintButton = () => {
               .with('1', () => <Ethereum />)
               .with('5', () => <Ethereum />)
               .with('137', () => <Polygon />)
+              .with('11155111', () => <Ethereum />)
               .exhaustive()}
           </div>
         }

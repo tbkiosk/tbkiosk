@@ -95,6 +95,7 @@ const Mint = () => (
                       .with('1', () => <EthereumCircle />)
                       .with('5', () => <EthereumCircle />)
                       .with('137', () => <PolygonCircle />)
+                      .with('11155111', () => <EthereumCircle />)
                       .exhaustive()}
                   </span>
                   <span>
@@ -102,6 +103,7 @@ const Mint = () => (
                       .with('1', () => 'On Ethereum')
                       .with('5', () => 'On Goerli')
                       .with('137', () => 'On Polygon')
+                      .with('11155111', () => 'On Ethereum')
                       .exhaustive()}
                   </span>
                 </div>
@@ -164,6 +166,7 @@ const Mint = () => (
                       .with('1', () => 'Ethereum')
                       .with('5', () => 'Goerli')
                       .with('137', () => 'Polygon')
+                      .with('11155111', () => 'Sepolia')
                       .exhaustive()}
                   </span>
                 </div>
