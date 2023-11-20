@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { Alchemy, AssetTransfersCategory } from 'alchemy-sdk'
+import { Alchemy, AssetTransfersCategory, SortingOrder } from 'alchemy-sdk'
 
 import { ALCHEMY_CONFIG } from '@/constants/alchemy'
 import { TOKENS_FROM } from '@/constants/token'
@@ -19,6 +19,7 @@ export async function GET(request: Request, { params }: { params: { tokenBoundAc
       contractAddresses: [...Object.keys(TOKENS_FROM)],
       excludeZeroValue: true,
       fromBlock: '0x0',
+      order: SortingOrder.DESCENDING,
       toAddress: tokenBoundAccount,
       toBlock: 'latest',
       withMetadata: true,
