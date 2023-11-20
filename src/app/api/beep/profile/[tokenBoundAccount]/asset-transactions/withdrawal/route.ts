@@ -12,7 +12,7 @@ const SWAP_CONTRACT_ADDRESSES = ['0x6337b3caf9c5236c7f3d1694410776119edaf9fa', '
 export const dynamic = 'force-dynamic'
 export const fetchCache = 'force-no-store'
 
-export async function POST(request: Request, { params }: { params: { tokenBoundAccount: string } }) {
+export async function GET(request: Request, { params }: { params: { tokenBoundAccount: string } }) {
   const tokenBoundAccount = params.tokenBoundAccount
 
   try {
@@ -30,7 +30,7 @@ export async function POST(request: Request, { params }: { params: { tokenBoundA
     const response =
       withdrawalTransactions?.transfers
         ?.map(_tx => ({ ..._tx, type: TransactionType.WITHDRAWAL }))
-        .filter(_tx => SWAP_CONTRACT_ADDRESSES.includes(_tx.to || '')) || []
+        .filter(_tx => !SWAP_CONTRACT_ADDRESSES.includes(_tx.to || '')) || []
 
     return NextResponse.json(response)
   } catch (error) {

@@ -91,7 +91,7 @@ const SettingsBoard = ({ tbaUser, refetch, tbaAddress }: { tbaAddress: string; r
         onSubmit={onSubmit}
       />
       <div className="w-full flex items-center gap-4 mb-2">
-        <div className="h-10 w-10">{TOKENS_TO[tbaUser.token_address_to]?.icon()}</div>
+        <div className="h-10 w-10 p-2 border border-white rounded-full">{TOKENS_TO[tbaUser.token_address_to]?.beepIcon()}</div>
         <div className="grow">
           <div className="font-bold text-lg leading-normal">{TOKENS_TO[tbaUser.token_address_to]?.name}</div>
           <div className="text-sm text-[#a6a9ae] tracking-wide leading-normal">

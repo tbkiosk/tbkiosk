@@ -9,6 +9,7 @@ import dayjs from 'dayjs'
 
 import ArrowIcon from 'public/icons/arrow-short.svg'
 import DepositIcon from 'public/icons/deposit.svg'
+import WithdrawIcon from 'public/icons/withdraw.svg'
 
 import { TOKENS_FROM } from '@/constants/token'
 import { explorer } from '@/constants/explorer'
@@ -27,31 +28,39 @@ const AssetHistory = ({ tbaAddress }: { tbaAddress: string }) => {
     refetchOnWindowFocus: false,
     queryKey: ['token-bound-account-transactions', tbaAddress],
     queryFn: async () => {
-      const res = await fetch(`/api/beep/profile/${tbaAddress}/asset-transactions/deposit`)
+      const [depositRes, withdrawalRes] = await Promise.all([
+        fetch(`/api/beep/profile/${tbaAddress}/asset-transactions/deposit`),
+        fetch(`/api/beep/profile/${tbaAddress}/asset-transactions/withdrawal`),
+      ])
 
-      if (!res.ok) {
-        throw new Error(res.statusText)
+      if (!depositRes.ok) {
+        throw new Error(depositRes.statusText)
       }
 
-      const response: BeepTransferResult[] = await res.json()
+      if (!withdrawalRes.ok) {
+        throw new Error(withdrawalRes.statusText)
+      }
 
-      return response || []
+      const [depositData, withdrawalData]: BeepTransferResult[][] = await Promise.all([depositRes.json(), withdrawalRes.json()])
+
+      return [...depositData, ...withdrawalData] || []
     },
   })
 
   const renderCell = (item: BeepTransferResult, columnKey: Key) => {
     switch (columnKey) {
       case 'activity': {
-        const token = TOKENS_FROM[checksumAddress((item?.rawContract?.address || '0x') as `0x${string}`)]
-
         return (
           <div className="flex items-center gap-2">
             <div className="h-6 w-6 flex justify-center items-center bg-[#222325] rounded-full">
               <div className="h-3 w-3">
-                <DepositIcon />
+                {item.type === TransactionType.DEPOSIT && <DepositIcon />}
+                {item.type === TransactionType.WITHDRAWAL && <WithdrawIcon />}
               </div>
             </div>
-            <div>Deposit {token ? token.name : 'unknown'}</div>
+            <div>
+              {item.type} {item.asset || 'unknown'}
+            </div>
           </div>
         )
       }
@@ -60,9 +69,11 @@ const AssetHistory = ({ tbaAddress }: { tbaAddress: string }) => {
 
         return (
           <div className="flex items-center gap-2">
-            <div className="h-6 w-6 bg-[#222325] rounded-full">{token && token.icon()}</div>
+            <div className="h-6 w-6 flex items-center justify-center bg-[#222325] rounded-full">
+              <div className="h-3 w-3">{token && token.beepIcon()}</div>
+            </div>
             <div>
-              {item.value} {token ? token.name : 'unknown'}
+              {item.value} {item.asset || 'unknown'}
             </div>
           </div>
         )
@@ -101,6 +112,7 @@ const AssetHistory = ({ tbaAddress }: { tbaAddress: string }) => {
     <Table
       aria-label="TBA deposity history"
       classNames={{
+        base: 'min-w-[640px]',
         td: 'font-medium',
         th: 'bg-transparent',
         wrapper: 'p-0 bg-transparent shadow-none',
