@@ -16,7 +16,7 @@ import { env } from 'env.mjs'
 
 const schema = z.object({
   frequency: z.number().int().positive(),
-  amount: z.number().int().min(60),
+  amount: z.number().int().min(20),
   tokenAddressFrom: z.string().startsWith('0x'),
   tokenAddressTo: z.string().startsWith('0x'),
   endDate: z.string().datetime().nullable(),
@@ -54,7 +54,7 @@ const PlanModal = ({
     formState: { isSubmitting },
   } = useForm<PlanForm>({
     defaultValues: {
-      amount: defaultAmount ?? 60,
+      amount: defaultAmount ?? 20,
       frequency: defaultFrequncy ?? 7,
       endDate: defaultEndDate === null ? null : defaultEndDate || dayjs().add(8, 'days').toISOString(),
       tokenAddressFrom: defaultTokenAddressFrom || USDC_CONTRACT_ADDRESS[+env.NEXT_PUBLIC_CHAIN_ID as 1 | 5 | 137],
@@ -90,7 +90,7 @@ const PlanModal = ({
   useEffect(() => {
     if (isOpen) {
       reset({
-        amount: defaultAmount ?? 60,
+        amount: defaultAmount ?? 20,
         frequency: defaultFrequncy ?? 7,
         endDate: defaultEndDate === null ? null : defaultEndDate || dayjs().add(8, 'days').toISOString(),
         tokenAddressFrom: defaultTokenAddressFrom || USDC_CONTRACT_ADDRESS[+env.NEXT_PUBLIC_CHAIN_ID as 1 | 5 | 137],

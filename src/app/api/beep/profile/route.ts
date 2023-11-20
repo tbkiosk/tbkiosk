@@ -18,7 +18,7 @@ const schema = z.object({
   ownerAddress: z.string().startsWith('0x'),
   addresses: z.array(z.string().startsWith('0x')),
   frequency: z.number().int().positive(),
-  amount: z.number().int().min(60),
+  amount: z.number().int().min(20),
   tokenAddressFrom: z.string().startsWith('0x'),
   tokenAddressTo: z.string().startsWith('0x'),
   endDate: z.string().datetime().nullable(),

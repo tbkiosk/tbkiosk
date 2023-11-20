@@ -24,7 +24,7 @@ type ConfigForm = z.infer<typeof TBA_USER_CONFIG_SCHEMA>
 const defaultValues = {
   tokenAddressFrom: USDC_CONTRACT_ADDRESS[+env.NEXT_PUBLIC_CHAIN_ID as 1 | 5 | 137],
   tokenAddressTo: WETH_CONTRACT_ADDRESS[+env.NEXT_PUBLIC_CHAIN_ID as 1 | 5 | 137],
-  amount: 60,
+  amount: 20,
   frequency: 7,
   endDate: dayjs().add(8, 'days').toISOString(),
   mintAmount: 1,

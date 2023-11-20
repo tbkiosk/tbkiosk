@@ -8,7 +8,7 @@ test('Single swap should fail if TBA address is invalid', async () => {
     swapContract: '0x000000000000000000000000000000000000dead',
     tokenIn: '0x07865c6E87B9F70255377e024ace6630C1Eaa37F',
     tokenOut: '0xb4fbf271143f4fbf7b91a5ded31805e42b2208d6',
-    amountIn: 60,
+    amountIn: 20,
     beepFee: Utils.parseUnits('1', 6),
     gasFee: Utils.parseUnits('1', 6),
   })
