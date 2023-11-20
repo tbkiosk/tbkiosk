@@ -3,6 +3,7 @@ import { Alchemy, AssetTransfersCategory } from 'alchemy-sdk'
 
 import { ALCHEMY_CONFIG } from '@/constants/alchemy'
 import { TOKENS_FROM, TOKENS_TO } from '@/constants/token'
+import { TransactionType } from '@/constants/transactions'
 
 const alchemy = new Alchemy(ALCHEMY_CONFIG)
 
@@ -20,9 +21,12 @@ export async function GET(request: Request, { params }: { params: { tokenBoundAc
       fromBlock: '0x0',
       fromAddress: tokenBoundAccount,
       toBlock: 'latest',
+      withMetadata: true,
     })
 
-    return NextResponse.json(withdrawalTransactions)
+    const response = withdrawalTransactions?.transfers?.map(_tx => ({ ..._tx, type: TransactionType.WITHDRAWAL })) || []
+
+    return NextResponse.json(response)
   } catch (error) {
     return NextResponse.json({ error: (error as Error)?.message || 'Failed to get withdrawal transactions' }, { status: 500 })
   }

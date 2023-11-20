@@ -3,6 +3,7 @@ import { Alchemy, AssetTransfersCategory } from 'alchemy-sdk'
 
 import { ALCHEMY_CONFIG } from '@/constants/alchemy'
 import { TOKENS_FROM } from '@/constants/token'
+import { TransactionType } from '@/constants/transactions'
 
 const alchemy = new Alchemy(ALCHEMY_CONFIG)
 
@@ -23,7 +24,9 @@ export async function GET(request: Request, { params }: { params: { tokenBoundAc
       withMetadata: true,
     })
 
-    return NextResponse.json(depositTransactions)
+    const response = depositTransactions?.transfers?.map(_tx => ({ ..._tx, type: TransactionType.DEPOSIT })) || []
+
+    return NextResponse.json(response)
   } catch (error) {
     return NextResponse.json({ error: (error as Error)?.message || 'Failed to get deposit transactions' }, { status: 500 })
   }
