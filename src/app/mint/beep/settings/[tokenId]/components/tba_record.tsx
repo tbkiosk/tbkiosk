@@ -3,14 +3,21 @@
 import { useState } from 'react'
 import { Tabs, Tab } from '@nextui-org/react'
 
-import DepositHistory from './deposit_history'
+import AssetHistory from './asset_history'
 
 enum TabsKeys {
   DW = 'DW',
 }
 
+// enum HistoryFilter {
+//   ALL = 'ALL',
+//   DEPOSIT = 'DEPOSIT',
+//   WITHDRAWAL = 'WITHDRAWAL',
+// }
+
 const TbaRecord = ({ tbaAddress }: { tbaAddress: string }) => {
   const [selected, setSelected] = useState<TabsKeys>(TabsKeys.DW)
+  // const [filter, setFilter] = useState<HistoryFilter>(HistoryFilter.ALL)
 
   return (
     <div className="flex w-full flex-col">
@@ -18,6 +25,7 @@ const TbaRecord = ({ tbaAddress }: { tbaAddress: string }) => {
         aria-label="tba-record-tabs"
         classNames={{
           cursor: 'bg-transparent shadow-none',
+          panel: 'overflow-x-auto',
           tabContent:
             'font-medium text-xl group-data-[selected=false]:text-white group-data-[selected=true]:text-[#78edc1] bg-transparent group-data-[selected=true]:border-b-2 group-data-[selected=true]:border-b-[#78edc1]',
           tabList: 'bg-transparent',
@@ -29,7 +37,7 @@ const TbaRecord = ({ tbaAddress }: { tbaAddress: string }) => {
           key={TabsKeys.DW}
           title="Deposit/Withdrawals"
         >
-          <DepositHistory tbaAddress={tbaAddress} />
+          <AssetHistory tbaAddress={tbaAddress} />
         </Tab>
       </Tabs>
     </div>
