@@ -9,8 +9,8 @@ import dayjs from 'dayjs'
 import PlanModal, { type PlanForm } from './plan_modal'
 import GearIcon from 'public/icons/gear.svg'
 
-import { FREQUENCY_OPTIONS } from '@/constants/beep'
-import { TOKENS_FROM, TOKENS_TO } from '@/constants/token'
+// import { FREQUENCY_OPTIONS } from '@/constants/beep'
+// import { TOKENS_FROM, TOKENS_TO } from '@/constants/token'
 
 import type { TBAUser } from '@prisma/client'
 
@@ -25,7 +25,7 @@ const SettingsBoard = ({ tbaUser, refetch, tbaAddress }: { tbaAddress: string; r
     setIsAccountUpdating(true)
 
     try {
-      const res = await fetch(`/api/beep/profile/${tbaAddress}/status`, {
+      const res = await fetch(`/api/scroller/profile/${tbaAddress}/status`, {
         method: 'PUT',
         body: JSON.stringify({
           address: tbaAddress,
@@ -40,9 +40,9 @@ const SettingsBoard = ({ tbaUser, refetch, tbaAddress }: { tbaAddress: string; r
       const response: TBAUser = await res.json()
       if (response) {
         if (response.is_active) {
-          toast.success('Your Beep is activated and the first transaction has been initiated')
+          toast.success('Your Scroller Pass is activated and the first transaction has been initiated')
         } else {
-          toast.success('Your Beep is Deactivated')
+          toast.success('Your Scroller Pass is Deactivated')
         }
 
         refetch()
@@ -54,17 +54,15 @@ const SettingsBoard = ({ tbaUser, refetch, tbaAddress }: { tbaAddress: string; r
     }
   }
 
-  const onSubmit = async ({ amount, frequency, tokenAddressFrom, tokenAddressTo, endDate }: PlanForm) => {
-    const res = await fetch(`/api/beep/profile/${tbaAddress}`, {
+  const onSubmit = async ({ depositAmount, gasTolerance, mintAmount }: PlanForm) => {
+    const res = await fetch(`/api/scroller/profile/${tbaAddress}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         ownerAddress: address,
-        frequency,
-        amount,
-        tokenAddressFrom,
-        tokenAddressTo,
-        endDate,
+        depositAmount,
+        gasTolerance,
+        mintAmount,
       }),
     })
 
@@ -81,16 +79,14 @@ const SettingsBoard = ({ tbaUser, refetch, tbaAddress }: { tbaAddress: string; r
   return (
     <div className="flex flex-col items-center grow px-8 py-4 bg-[#131313] rounded-[10px] shadow-md">
       <PlanModal
-        amount={tbaUser.amount}
-        frequncy={tbaUser.frequency}
-        endDate={tbaUser.end_date ? dayjs(tbaUser.end_date).toISOString() : null}
-        tokenAddressFrom={tbaUser.token_address_from}
-        tokenAddressTo={tbaUser.token_address_to}
+        // gasTolerance={gasTolerance} // add if required
         isOpen={isOpen}
         onOpenChange={onOpenChange}
         onSubmit={onSubmit}
       />
-      <div className="w-full flex items-center gap-4 mb-2">
+      {/* TODO – Get gas tolerance from on-chain */}
+      <div className="w-full flex items-center gap-4 mb-2">Your Gas Tolerance will appear here.</div>
+      {/* <div className="w-full flex items-center gap-4 mb-2">
         <div className="h-10 w-10">{TOKENS_TO[tbaUser.token_address_to]?.icon()}</div>
         <div className="grow">
           <div className="font-bold text-lg leading-normal">{TOKENS_TO[tbaUser.token_address_to]?.name}</div>
@@ -107,9 +103,9 @@ const SettingsBoard = ({ tbaUser, refetch, tbaAddress }: { tbaAddress: string; r
             <GearIcon />
           </div>
         </div>
-      </div>
+      </div> */}
       <hr className="w-full mb-6 border-[#a6a9ae]" />
-      <div className="w-full flex flex-col md:flex-row justify-between mb-8 tracking-wide">
+      {/* <div className="w-full flex flex-col md:flex-row justify-between mb-8 tracking-wide">
         <div>
           <div className="text-sm text-[#a6a9ae] ">Total invested</div>
           <div className="font-bold text-[28px] truncate">- {TOKENS_FROM[tbaUser.token_address_from].name}</div>
@@ -142,8 +138,8 @@ const SettingsBoard = ({ tbaUser, refetch, tbaAddress }: { tbaAddress: string; r
             </Switch>
           </div>
         </div>
-      </div>
-      <div className="w-full flex flex-col md:flex-row justify-between tracking-wide">
+      </div> */}
+      {/* <div className="w-full flex flex-col md:flex-row justify-between tracking-wide">
         <div>
           <div className="text-sm text-[#a6a9ae] ">Next Auto-Invest Date</div>
           <div className="font-bold text-lg truncate">{tbaUser.next_swap ? dayjs(tbaUser.next_swap).format('DD MMM YY') : '-'}</div>
@@ -152,7 +148,7 @@ const SettingsBoard = ({ tbaUser, refetch, tbaAddress }: { tbaAddress: string; r
           <div className="text-sm text-[#a6a9ae] text-start md:text-end">Unrealised PnL</div>
           <div className="font-bold text-lg text-start md:text-end">- {TOKENS_FROM[tbaUser.token_address_from].name}</div>
         </div>
-      </div>
+      </div> */}
     </div>
   )
 }

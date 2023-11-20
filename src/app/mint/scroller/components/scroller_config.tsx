@@ -1,21 +1,17 @@
 'use client'
 
-import { forwardRef } from 'react'
-import { Select, SelectItem, Input, Checkbox, Button, type InputProps } from '@nextui-org/react'
-import DatePicker from 'react-datepicker'
+import { useEffect, useState } from 'react'
+import { Alchemy, Network } from 'alchemy-sdk'
+import { Input, Button } from '@nextui-org/react'
 import EthereumCircle from 'public/icons/tokens/ethereum-circle.svg'
 import ScrollCircle from 'public/icons/tokens/scroll-circle.svg'
 import { Controller, type UseFormReturn } from 'react-hook-form'
+import { ethers } from 'ethers'
 import { z } from 'zod'
-import dayjs from 'dayjs'
-
-// import { TOKENS_FROM, TOKENS_TO } from '@/constants/token'
-// import { FREQUENCY_OPTIONS } from '@/constants/beep'
 
 import { SCROLLER_USER_CONFIG_SCHEMA } from '@/types/schema'
 
 import ArrowIcon from 'public/icons/arrow.svg'
-// import CalendarIcon from 'public/icons/calendar.svg'
 
 type ConfigForm = z.infer<typeof SCROLLER_USER_CONFIG_SCHEMA>
 
@@ -23,13 +19,49 @@ interface IBeepConfigProps extends UseFormReturn<ConfigForm> {
   setStep: (value: 1 | 2 | 3) => void
 }
 
-// const SUGGESTED_DEPOSIT_MULTIPLIER = 10
+// TODO: add dynamic retrieval of gas price + USD price + levels
+const LOW_GWEI_PRICE = 25
+const MED_GWEI_PRICE = 35
+// const HIGH_GAS_PRICE = 50
+
+const getPriceLevel = (_gasPrice: number) => {
+  if (_gasPrice < LOW_GWEI_PRICE) {
+    return 'Low'
+  } else if (_gasPrice < MED_GWEI_PRICE) {
+    return 'Medium'
+  } else {
+    return 'High'
+  }
+}
+
+const config = {
+  apiKey: 'sB96npElqKwCP0JpkITs_kf-owtYJ6iL', // todo: move to env
+  network: Network.ETH_SEPOLIA,
+}
+const alchemy = new Alchemy(config)
 
 const ScrollerConfig = ({ control, watch, setValue, trigger, clearErrors, setStep }: IBeepConfigProps) => {
+  const [gasPrice, setGasPrice] = useState<string | null>('')
+  const [gasPriceLevel, setPriceLevel] = useState<string | null>('')
+
   const depositAmount = watch('depositAmount')
   const gasTolerance = watch('gasTolerance')
 
-  // console.log(watch())
+  const fetchGasPrice = async () => {
+    const response = await alchemy.core.getGasPrice()
+
+    const gasPriceFormatted = ethers.utils.formatUnits(response, 'wei')
+    const priceLevel: string = getPriceLevel(parseInt(gasPriceFormatted))
+
+    setGasPrice(gasPriceFormatted)
+    setPriceLevel(priceLevel)
+  }
+
+  useEffect(() => {
+    fetchGasPrice()
+    const intervalId = setInterval(fetchGasPrice, 60000)
+    return () => clearInterval(intervalId)
+  }, [])
 
   const onSubmit = async () => {
     const isValid = await trigger()
@@ -42,7 +74,7 @@ const ScrollerConfig = ({ control, watch, setValue, trigger, clearErrors, setSte
   }
 
   return (
-    <div className="flex flex-col gap-10 font-medium">
+    <div className="flex flex-col gap-6 font-medium">
       {/* intro */}
       <div className="flex items-center">
         <p>Tell us how much gas you would like to spend on the bridging, we will take care of the rest</p>
@@ -63,9 +95,10 @@ const ScrollerConfig = ({ control, watch, setValue, trigger, clearErrors, setSte
         <div>Scroll</div>
       </div>
 
-      <div className="text-xl leading-[4rem]">
+      <div className="text-xl leading-[3rem]">
         <p>
-          Current gas price: {200} GWEI (<span className="text-red-500">{'High'}</span>)
+          Current gas price: {gasPrice ? `${gasPrice} Gwei ` : 'Loading..'}
+          <span className="text-red-500">{gasPriceLevel ? `(${gasPriceLevel}) ` : ''}</span>
         </p>
         <p>I would like my gas fee tolerance to be:</p>
       </div>
@@ -88,10 +121,10 @@ const ScrollerConfig = ({ control, watch, setValue, trigger, clearErrors, setSte
                 className="hidden"
               />
               <p className="text-base font-bold pb-2 text-xl">LOW</p>
-              <p>
+              <p className="text-lg">
                 ${5}-{10}
               </p>
-              <p>Execute within 48 hours</p>
+              <p>Usually executes within 48 hours</p>
             </label>
 
             <label
@@ -107,10 +140,10 @@ const ScrollerConfig = ({ control, watch, setValue, trigger, clearErrors, setSte
                 className="hidden"
               />
               <p className="text-base font-bold pb-2 text-xl">MED</p>
-              <p>
+              <p className="text-lg">
                 ${10}-{30}
               </p>
-              <p>Execute within 24 hours</p>
+              <p>Usually executes within 24 hours</p>
             </label>
 
             <label
@@ -126,10 +159,10 @@ const ScrollerConfig = ({ control, watch, setValue, trigger, clearErrors, setSte
                 className="hidden"
               />
               <p className="text-base font-bold pb-2 text-xl">HIGH</p>
-              <p>
+              <p className="text-lg">
                 ${30}-{50}
               </p>
-              <p>Execute within 1 hours</p>
+              <p>Usually executes within 1 hours</p>
             </label>
           </div>
         )}
@@ -155,8 +188,9 @@ const ScrollerConfig = ({ control, watch, setValue, trigger, clearErrors, setSte
                   errorMessage={fieldState.error?.message}
                   label="Deposit amount"
                   onValueChange={value => {
-                    if (value === '' || /^\d*(\.\d{1,8})?$/.test(value)) {
-                      field.onChange(value) // Pass the string value directly
+                    // Allow adding a decimal point to '0'
+                    if (/^\d+\.$/.test(value) || /^\d*(\.\d+)?$/.test(value)) {
+                      field.onChange(/^\d+\.$/.test(value) ? value : +value)
                       clearErrors('depositAmount')
                     }
                   }}

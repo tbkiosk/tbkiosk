@@ -8,12 +8,13 @@ import ConnectWalletButton from '@/components/connect_wallet_button'
 import ScrollerIframe from './scroller_iframe'
 
 import { env } from 'env.mjs'
+import { abi } from '@/utils/scollerNft_abi'
 
 const ScrollerGrid = () => {
   const connectionStatus = useConnectionStatus()
   const chainId = useChainId()
   const address = useAddress()
-  const { contract } = useContract(chainId ? env.NEXT_PUBLIC_SCROLLER_NFT_CONTRACT_ADDRESS : null)
+  const { contract } = useContract(chainId ? env.NEXT_PUBLIC_SCROLLER_NFT_CONTRACT_ADDRESS : null, abi)
   const { data, isLoading, error } = useOwnedNFTs(contract, address)
 
   if (connectionStatus === 'disconnected') {
@@ -58,7 +59,7 @@ const ScrollerGrid = () => {
         <p className="font-[pixeloid-mono] text-sm text-center">Alas! Seems you don&apos;t have any Scroller Passes yet!</p>
         <Link
           className="px-8 py-2 font-medium text-[#78edc1] border border-[#78edc1] rounded-lg"
-          href="/mint/beep"
+          href="/mint/scroller"
         >
           Mint Scoller Pass
         </Link>
@@ -75,7 +76,7 @@ const ScrollerGrid = () => {
         >
           <Link
             className="h-full w-full absolute inset-0 z-10"
-            href={`/mint/beep/settings/${_nft.metadata.id}`}
+            href={`/mint/scroller/settings/${_nft.metadata.id}`}
           />
           {/* TODO – add SVG */}
           <ScrollerIframe tokenId={_nft.metadata.id} />

@@ -21,31 +21,35 @@ import { env } from 'env.mjs'
 import ArrowIcon from 'public/icons/arrow.svg'
 
 import type { ThirdWebError } from '@/types'
+import { abi } from '@/utils/scollerNft_abi'
 
 type ConfigForm = z.infer<typeof SCROLLER_USER_CONFIG_SCHEMA>
-
 interface IBeepConfirmProps extends UseFormReturn<ConfigForm> {
   setStep: (value: 1 | 2 | 3 | 4) => void
 }
 
-const MAX_MINT_AMOUNT = 2
+// const MAX_MINT_AMOUNT = 2
 
 const BeepConfirm = ({ control, getValues, watch, handleSubmit, formState: { isSubmitting }, setStep }: IBeepConfirmProps) => {
   const { depositAmount, gasTolerance } = getValues()
   const address = useAddress()
   const signer = useSigner()
-  // const { contract: tokenContract } = useContract(tokenAddressFrom, erc20ABI)
-  const { contract: scrollerContract } = useContract(env.NEXT_PUBLIC_SCROLLER_NFT_CONTRACT_ADDRESS)
+  const { contract: scrollerContract } = useContract(env.NEXT_PUBLIC_SCROLLER_NFT_CONTRACT_ADDRESS, abi)
   const { refetch } = useOwnedNFTs(scrollerContract, address)
 
   const mintAmount = watch('mintAmount')
-  const depositPerScroller = depositAmount / mintAmount
+  // const depositAmountMultiple = depositAmount * mintAmount
 
   const gasToleranceMap: any = {
     0: 'disabed.',
     1: 'Low',
     2: 'Medium',
     3: 'High',
+  }
+  const gasToleranceParamMap: any = {
+    1: 'LOW',
+    2: 'MED',
+    3: 'HIGH',
   }
   const gasPriceMap: any = {
     0: '',
@@ -71,27 +75,11 @@ const BeepConfirm = ({ control, getValues, watch, handleSubmit, formState: { isS
       const sdk = ThirdwebSDK.fromSigner(signer, env.NEXT_PUBLIC_CHAIN_ID, {
         clientId: env.NEXT_PUBLIC_THIRDWEB_CLIENT_ID,
       })
-      const nftContract = await sdk.getContract(env.NEXT_PUBLIC_SCROLLER_NFT_CONTRACT_ADDRESS)
-      const prepareTx = await nftContract.erc721.claim.prepare(mintAmount)
-      const claimArgs = prepareTx.getArgs()
-      const salt = bytesToHex(numberToBytes(0, { size: 32 }))
-      const claimAndCreateArgs = {
-        receiver: claimArgs[0],
-        quantity: claimArgs[1],
-        currency: claimArgs[2],
-        pricePerToken: claimArgs[3],
-        allowlistProof: claimArgs[4],
-        data: claimArgs[5],
-        registry: env.NEXT_PUBLIC_REGISTRY_ADDRESS_SCROLLER,
-        implementation: env.NEXT_PUBLIC_SCROLLER_TBA_IMPLEMENTATION_ADDRESS,
-        salt: salt,
-        chainId: env.NEXT_PUBLIC_CHAIN_ID,
-        // tokenToTransfer: tokenAddressFrom,
-        // Note: leave amountToTransfer as 0 if user doesn't want to deposit token before mint, it will still create tba but does not transfer any toke right after
-        amountToTransfer: ethers.utils.parseUnits(depositPerScroller <= 0 ? '0' : String(depositPerScroller)),
-      }
+      const nftContract = await sdk.getContract(env.NEXT_PUBLIC_SCROLLER_NFT_CONTRACT_ADDRESS, abi)
 
-      await nftContract.call('claimAndCreateTba', [claimAndCreateArgs])
+      const mintArgs = [address, env.NEXT_PUBLIC_CHAIN_ID, gasToleranceParamMap[gasTolerance]]
+
+      await nftContract.call('mint', mintArgs)
 
       // wait for NFTs re-collection
       const nftResponse = await refetch()
@@ -107,19 +95,19 @@ const BeepConfirm = ({ control, getValues, watch, handleSubmit, formState: { isS
         return
       }
 
-      const tokenboundClient = new TokenboundClient({
-        signer: signer,
-        chainId: +env.NEXT_PUBLIC_CHAIN_ID,
-        implementationAddress: env.NEXT_PUBLIC_BEEP_TBA_IMPLEMENTATION_ADDRESS as `0x${string}`,
-        registryAddress: env.NEXT_PUBLIC_REGISTRY_ADDRESS as `0x${string}`,
-      })
-
-      const tokenAddresses = mintedNFTs.map(_nft =>
-        tokenboundClient.getAccount({
-          tokenContract: env.NEXT_PUBLIC_BEEP_CONTRACT_ADDRESS as `0x${string}`,
-          tokenId: _nft,
-        })
-      )
+      // USED FOR DB STORAGE
+      // const tokenboundClient = new TokenboundClient({
+      //   signer: signer,
+      //   chainId: +env.NEXT_PUBLIC_CHAIN_ID,
+      //   implementationAddress: env.NEXT_PUBLIC_BEEP_TBA_IMPLEMENTATION_ADDRESS as `0x${string}`,
+      //   registryAddress: env.NEXT_PUBLIC_REGISTRY_ADDRESS as `0x${string}`,
+      // })
+      // const tokenAddresses = mintedNFTs.map(_nft =>
+      //   tokenboundClient.getAccount({
+      //     tokenContract: env.NEXT_PUBLIC_BEEP_CONTRACT_ADDRESS as `0x${string}`,
+      //     tokenId: _nft,
+      //   })
+      // )
 
       // ADD VERIFICATION IN EVENT OF NO DB STORAGE
 
@@ -161,7 +149,7 @@ const BeepConfirm = ({ control, getValues, watch, handleSubmit, formState: { isS
         name="mintAmount"
         render={({ field }) => (
           <>
-            <div className="flex items-center gap-4">
+            {/* <div className="flex items-center gap-4">
               <Button
                 className={clsx(
                   'h-12 w-12 min-w-12 bg-white text-black border border-black',
@@ -183,7 +171,7 @@ const BeepConfirm = ({ control, getValues, watch, handleSubmit, formState: { isS
               >
                 +
               </Button>
-            </div>
+            </div> */}
             <div className="w-[90%]">
               <div className="mb-4">Summary</div>
               <div className="px-8">
@@ -195,10 +183,10 @@ const BeepConfirm = ({ control, getValues, watch, handleSubmit, formState: { isS
                   <div className="font-normal">Mint fee</div>
                   <div>0.00 ETH</div>
                 </div>
-                <div className="flex justify-between mb-4">
-                  <div className="font-normal">Deposit per Scroller Pass</div>
-                  <div>{depositPerScroller} ETH</div>
-                </div>
+                {/* <div className="flex justify-between mb-4">
+                  <div className="font-normal">Total Amount</div>
+                  <div>{depositAmountMultiple} ETH</div>
+                </div> */}
               </div>
             </div>
             <div className="w-[90%] flex items-center gap-4">

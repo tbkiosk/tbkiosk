@@ -7,22 +7,26 @@ import { toast } from 'react-toastify'
 import PlanModal, { type PlanForm } from './plan_modal'
 import RobotSuccess from 'public/beep/robot-success.svg'
 
-const BeepAccountNotCreated = ({ refetch, tbaAddress }: { refetch: () => Promise<unknown>; tbaAddress: string }) => {
+const ScrollerAccountNotCreated = ({ refetch, tbaAddress }: { refetch: () => Promise<unknown>; tbaAddress: string }) => {
   const address = useAddress()
 
   const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure()
 
-  const onSubmit = async ({ amount, frequency, tokenAddressFrom, tokenAddressTo, endDate }: PlanForm) => {
+  // const onSubmit = async ({ amount, frequency, tokenAddressFrom, tokenAddressTo, endDate }: PlanForm) => {
+  const onSubmit = async ({ depositAmount, gasTolerance, mintAmount }: PlanForm) => {
     const res = await fetch(`/api/beep/profile/${tbaAddress}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         ownerAddress: address,
-        frequency,
-        amount,
-        tokenAddressFrom,
-        tokenAddressTo,
-        endDate,
+        depositAmount,
+        gasTolerance,
+        mintAmount,
+        // frequency,
+        // amount,
+        // tokenAddressFrom,
+        // tokenAddressTo,
+        // endDate,
       }),
     })
 
@@ -46,7 +50,7 @@ const BeepAccountNotCreated = ({ refetch, tbaAddress }: { refetch: () => Promise
       <div className="h-16 flex justify-center">
         <RobotSuccess />
       </div>
-      <div className="text-lg tracking-wider">Your Beep does not have any plan yet</div>
+      <div className="text-lg tracking-wider">Your Scroller Pass does not have any plan yet</div>
       <Button
         className="px-8 font-bold text-black bg-white rounded-full tracking-wider"
         onClick={onOpen}
@@ -57,4 +61,4 @@ const BeepAccountNotCreated = ({ refetch, tbaAddress }: { refetch: () => Promise
   )
 }
 
-export default BeepAccountNotCreated
+export default ScrollerAccountNotCreated

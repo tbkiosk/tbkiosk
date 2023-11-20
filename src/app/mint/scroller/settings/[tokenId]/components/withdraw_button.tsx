@@ -58,7 +58,7 @@ const WithdrawButton = ({ tbaAddress }: { tbaAddress: string }) => {
   } = useQuery<{ [address: `0x${string}`]: string }>({
     queryKey: ['tba-balances', tbaAddress],
     queryFn: async () => {
-      const res = await fetch(`/api/beep/profile/${tbaAddress}/balances`)
+      const res = await fetch(`/api/scroller/profile/${tbaAddress}/balances`)
 
       if (!res.ok) {
         throw new Error(res.statusText)

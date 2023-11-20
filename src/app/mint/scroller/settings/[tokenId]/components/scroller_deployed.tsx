@@ -3,7 +3,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { Spinner } from '@nextui-org/react'
 
-import BeepAccountNotCreated from './beep_account_not_created'
+import BeepAccountNotCreated from './scroller_account_not_created'
 import SettingsBoard from './settings_board'
 
 import type { TBAUser } from '@prisma/client'

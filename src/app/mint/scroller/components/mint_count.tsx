@@ -4,9 +4,10 @@ import { useContract, useTotalCirculatingSupply } from '@thirdweb-dev/react'
 import { Spinner } from '@nextui-org/react'
 
 import { env } from 'env.mjs'
+import { abi } from '@/utils/scollerNft_abi'
 
 const MintedCount = () => {
-  const { contract } = useContract(env.NEXT_PUBLIC_BEEP_CONTRACT_ADDRESS)
+  const { contract } = useContract(env.NEXT_PUBLIC_SCROLLER_NFT_CONTRACT_ADDRESS, abi)
   const { data, isLoading } = useTotalCirculatingSupply(contract)
 
   return (

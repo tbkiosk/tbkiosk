@@ -22,7 +22,7 @@ import { env } from 'env.mjs'
 type ConfigForm = z.infer<typeof SCROLLER_USER_CONFIG_SCHEMA>
 
 const defaultValues = {
-  depositAmount: 0.005,
+  depositAmount: 0.125,
   mintAmount: 1,
   gasTolerance: 2, // 2 = MED
 }

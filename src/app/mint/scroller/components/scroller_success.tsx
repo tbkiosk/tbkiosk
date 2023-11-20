@@ -14,13 +14,14 @@ import { maskAddress } from '@/utils/address'
 import RobotSuccess from 'public/beep/robot-success.svg'
 
 import { env } from 'env.mjs'
+import { abi } from '@/utils/scollerNft_abi'
 
 type ConfigForm = z.infer<typeof SCROLLER_USER_CONFIG_SCHEMA>
 
 const ScrollerSuccess = ({ getValues, onClose }: UseFormReturn<ConfigForm> & { onClose: () => void }) => {
   const address = useAddress()
   const signer = useSigner()
-  const { contract } = useContract(env.NEXT_PUBLIC_SCROLLER_NFT_CONTRACT_ADDRESS)
+  const { contract } = useContract(env.NEXT_PUBLIC_SCROLLER_NFT_CONTRACT_ADDRESS, abi)
   const { data, isLoading } = useOwnedNFTs(contract, address)
 
   const { mintAmount } = getValues()

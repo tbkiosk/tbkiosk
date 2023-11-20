@@ -4,9 +4,9 @@ import { Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, Spinne
 import { useQuery } from '@tanstack/react-query'
 import dayjs from 'dayjs'
 
-import ExplorerLink from '@/app/mint/beep/settings/[tokenId]/components/etherscan_link'
+import ExplorerLink from '@/app/mint/scroller/settings/[tokenId]/components/etherscan_link'
 
-import type { SwapTransaction } from '@/app/api/beep/profile/[tokenBoundAccount]/investment-history/route'
+import type { SwapTransaction } from '@/app/api/scroller/profile/[tokenBoundAccount]/investment-history/route'
 
 type Props = {
   tbaAddress: string
@@ -17,7 +17,7 @@ const InvestmentHistory = ({ tbaAddress }: Props) => {
   const { data, status } = useQuery<SwapTransaction[]>({
     queryKey: ['deposit-history', tbaAddress],
     queryFn: async () => {
-      const res = await fetch(`/api/beep/profile/${tbaAddress}/investment-history`)
+      const res = await fetch(`/api/scroller/profile/${tbaAddress}/investment-history`)
 
       if (!res.ok) {
         throw new Error(res.statusText)

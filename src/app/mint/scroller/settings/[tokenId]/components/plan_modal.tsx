@@ -15,7 +15,7 @@ import { TOKENS_FROM, TOKENS_TO, USDC_CONTRACT_ADDRESS, WETH_CONTRACT_ADDRESS } 
 import { env } from 'env.mjs'
 
 const schema = z.object({
-  depositAmount: z.number().int().min(0.005),
+  depositAmount: z.number().int().min(0.125),
   mintAmount: z.number().int().min(1),
   gasTolerance: z.number().int().min(0).max(2),
 })
@@ -48,7 +48,7 @@ const PlanModal = ({
     formState: { isSubmitting },
   } = useForm<PlanForm>({
     defaultValues: {
-      depositAmount: defaultDepositAmount ?? 0.005,
+      depositAmount: defaultDepositAmount ?? 0.125,
       mintAmount: defaultMintAmount ?? 1,
       gasTolerance: defaultGasTolerance ?? 2,
     },
@@ -62,7 +62,7 @@ const PlanModal = ({
   useEffect(() => {
     if (isOpen) {
       reset({
-        depositAmount: defaultDepositAmount ?? 0.005,
+        depositAmount: defaultDepositAmount ?? 0.125,
         mintAmount: defaultMintAmount ?? 1,
         gasTolerance: defaultGasTolerance ?? 2,
       })
