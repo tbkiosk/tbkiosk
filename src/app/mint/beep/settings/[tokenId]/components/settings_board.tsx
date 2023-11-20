@@ -7,7 +7,7 @@ import { Switch, Spinner, useDisclosure } from '@nextui-org/react'
 import dayjs from 'dayjs'
 
 import PlanModal, { type PlanForm } from './plan_modal'
-import GearIcon from 'public/icons/gear.svg'
+import PenIcon from 'public/icons/pen.svg'
 
 import { FREQUENCY_OPTIONS } from '@/constants/beep'
 import { TOKENS_FROM, TOKENS_TO } from '@/constants/token'
@@ -79,7 +79,7 @@ const SettingsBoard = ({ tbaUser, refetch, tbaAddress }: { tbaAddress: string; r
   }
 
   return (
-    <div className="flex flex-col items-center grow px-8 py-4 bg-[#131313] rounded-[10px] shadow-md">
+    <div className="flex flex-col items-center grow px-8 py-4 bg-[#2b2b2b] rounded-[10px] shadow-md">
       <PlanModal
         amount={tbaUser.amount}
         frequncy={tbaUser.frequency}
@@ -100,15 +100,16 @@ const SettingsBoard = ({ tbaUser, refetch, tbaAddress }: { tbaAddress: string; r
           </div>
         </div>
         <div
-          className="h-6 w-6 flex justify-center items-center shrink-0 bg-white text-black rounded-full cursor-pointer transition-colors hover:bg-[#e1e1e1]"
+          className="flex justify-center items-center shrink-0 font-bold cursor-pointer"
           onClick={onOpen}
         >
-          <div className="h-4 w-4 rounded-full">
-            <GearIcon />
+          <div className="h-4 w-4 text-[#caff47]">
+            <PenIcon />
           </div>
+          Edit
         </div>
       </div>
-      <hr className="w-full mb-6 border-[#a6a9ae]" />
+      <hr className="w-full mb-6 border-white opacity-10" />
       <div className="w-full flex flex-col md:flex-row justify-between mb-8 tracking-wide">
         <div>
           <div className="text-sm text-[#a6a9ae] ">Total invested</div>

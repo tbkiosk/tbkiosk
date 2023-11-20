@@ -5,7 +5,7 @@ import { env } from 'env.mjs'
 import USDC from 'public/icons/tokens/usdc.svg'
 import USDT from 'public/icons/tokens/usdt.svg'
 import EthereumCircle from 'public/icons/tokens/ethereum-circle.svg'
-import STEthereum from 'public/icons/tokens/steth.svg'
+// import STEthereum from 'public/icons/tokens/steth.svg'
 
 export const USDC_CONTRACT_ADDRESS = {
   [Ethereum.chainId]: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
