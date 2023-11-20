@@ -37,7 +37,7 @@ const BeepAccountNotCreated = ({ refetch, tbaAddress }: { refetch: () => Promise
   }
 
   return (
-    <div className="min-h-[240px] flex flex-col justify-center items-center gap-4 bg-[#131313] rounded-[10px]">
+    <div className="min-h-[240px] flex flex-col justify-center items-center gap-4 bg-[#2b2b2b] rounded-[10px]">
       <PlanModal
         isOpen={isOpen}
         onOpenChange={onOpenChange}

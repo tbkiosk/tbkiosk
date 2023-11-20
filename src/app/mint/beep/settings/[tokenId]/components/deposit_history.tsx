@@ -7,6 +7,8 @@ import { toast } from 'react-toastify'
 import { checksumAddress } from 'viem'
 import dayjs from 'dayjs'
 
+import ArrowIcon from 'public/icons/arrow-short.svg'
+
 import { TOKENS_FROM } from '@/constants/token'
 import { explorer } from '@/constants/explorer'
 
@@ -57,12 +59,15 @@ const DepositHistory = ({ tbaAddress }: { tbaAddress: string }) => {
       case 'hash': {
         return (
           <a
-            className="text-green-500"
+            className="flex items-center text-[#78edc1] hover:underline"
             href={`${explorer[+env.NEXT_PUBLIC_CHAIN_ID as 1 | 5 | 137]}/tx/${value}`}
             rel="noreferrer"
             target="_blank"
           >
             Success
+            <span className="h-4 w-4">
+              <ArrowIcon />
+            </span>
           </a>
         )
       }
@@ -96,7 +101,10 @@ const DepositHistory = ({ tbaAddress }: { tbaAddress: string }) => {
         <TableColumn key="metadata">Time</TableColumn>
         <TableColumn key="hash">Status</TableColumn>
       </TableHeader>
-      <TableBody items={data || []}>
+      <TableBody
+        isLoading
+        items={data || []}
+      >
         {item => <TableRow key={item.uniqueId}>{columnKey => <TableCell>{renderCell(item, columnKey)}</TableCell>}</TableRow>}
       </TableBody>
     </Table>
