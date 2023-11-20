@@ -78,7 +78,7 @@ const Mint = () => (
                 height={480}
                 loading="eager"
                 priority
-                src="/beep/beep.png"
+                src="/beep/beep.gif"
                 width={480}
               />
               <div className="flex flex-col grow-0">
@@ -183,7 +183,7 @@ const Mint = () => (
                     as={NextImage}
                     height={24}
                     loading="eager"
-                    src="/beep/beep-icon.svg"
+                    src="/beep/beep-icon.jpg"
                     width={24}
                   />
                   <span className="font-medium">BEEP BOT</span>
