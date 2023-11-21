@@ -13,7 +13,7 @@ import WithdrawIcon from 'public/icons/withdraw.svg'
 
 import { TOKENS_FROM } from '@/constants/token'
 import { EXPLORER } from '@/constants/explorer'
-import { TransactionType } from '@/constants/transactions'
+import { TransactionType } from '@/types/transactions'
 
 import { env } from 'env.mjs'
 
