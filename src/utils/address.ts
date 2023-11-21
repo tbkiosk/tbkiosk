@@ -1,4 +1,4 @@
-export const maskAddress = (address: any) => {
+export const maskAddress = (address: unknown) => {
   if (typeof address !== 'string') {
     return ''
   }

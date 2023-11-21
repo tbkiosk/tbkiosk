@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { Alchemy, Utils, Wallet, BigNumber } from 'alchemy-sdk'
+import { Alchemy, Utils, Wallet } from 'alchemy-sdk'
 import { fromZodError } from 'zod-validation-error'
 import dayjs from 'dayjs'
 import { z } from 'zod'
