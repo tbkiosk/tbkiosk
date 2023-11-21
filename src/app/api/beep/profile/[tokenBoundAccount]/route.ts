@@ -4,8 +4,7 @@ import { fromZodError } from 'zod-validation-error'
 import dayjs from 'dayjs'
 
 import { prismaClient } from '@/lib/prisma'
-
-import { TBA_USER_SCHEMA } from '@/types/schema'
+import { TBA_USER_SCHEMA } from 'prisma/schema'
 
 import { swapSingleUser } from '@/utils/admin_swap'
 

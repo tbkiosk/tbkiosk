@@ -3,14 +3,13 @@
 import { Button, Tooltip, Chip, Input } from '@nextui-org/react'
 import { Controller, type UseFormReturn } from 'react-hook-form'
 import { useBalance } from '@thirdweb-dev/react'
-
 import { z } from 'zod'
 import dayjs from 'dayjs'
 
 import { TOKENS_FROM, TOKENS_TO } from '@/constants/token'
 import { FREQUENCY_OPTIONS } from '@/constants/beep'
 
-import { TBA_USER_CONFIG_SCHEMA } from '@/types/schema'
+import { TBA_USER_CONFIG_SCHEMA } from 'prisma/schema'
 
 import ArrowIcon from 'public/icons/arrow.svg'
 

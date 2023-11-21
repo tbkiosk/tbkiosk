@@ -13,7 +13,7 @@ import BeepPreview from './beep_preview'
 import BeepConfirm from './beep_confirm'
 import BeepSuccess from './beep_success'
 
-import { TBA_USER_CONFIG_SCHEMA } from '@/types/schema'
+import { TBA_USER_CONFIG_SCHEMA } from 'prisma/schema'
 
 import { USDC_CONTRACT_ADDRESS, WETH_CONTRACT_ADDRESS } from '@/constants/token'
 
