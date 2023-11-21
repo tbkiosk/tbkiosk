@@ -1,8 +1,6 @@
 import { NextResponse } from 'next/server'
 import { AssetTransfersCategory, SortingOrder } from 'alchemy-sdk'
 
-import { TOKENS_TO } from '@/constants/token'
-
 import { alchemy } from '@/lib/alchemy'
 
 const SWAP_CONTRACT_ADDRESSES = '0x6337b3caf9c5236c7f3d1694410776119edaf9fa'
@@ -13,23 +11,29 @@ export const fetchCache = 'force-no-store'
 export async function GET(request: Request, { params }: { params: { tokenBoundAccount: string } }) {
   const tokenBoundAccount = params.tokenBoundAccount
 
+  const { searchParams } = new URL(request.url)
+  const tokenAddress = searchParams.get('token_address')
+
+  if (!tokenAddress) {
+    return NextResponse.json([])
+  }
+
   try {
     const transactions = await alchemy.core.getAssetTransfers({
       category: [AssetTransfersCategory.ERC20],
-      contractAddresses: [...Object.keys(TOKENS_TO)],
+      contractAddresses: [tokenAddress],
       excludeZeroValue: true,
-      fromAddress: SWAP_CONTRACT_ADDRESSES,
+      fromAddress: tokenBoundAccount,
       fromBlock: '0x0',
       order: SortingOrder.DESCENDING,
-      toAddress: tokenBoundAccount,
+      toAddress: SWAP_CONTRACT_ADDRESSES,
       toBlock: 'latest',
-      withMetadata: true,
     })
 
-    const response = transactions?.transfers || []
+    const totalInvt = transactions?.transfers.reduce((acc, cur) => acc + (cur?.value ?? 0), 0) ?? 0
 
-    return NextResponse.json(response)
+    return NextResponse.json(totalInvt)
   } catch (error) {
-    return NextResponse.json({ error: (error as Error)?.message || 'Failed to get investment history' }, { status: 500 })
+    return NextResponse.json({ error: (error as Error)?.message || 'Failed to get total investment' }, { status: 500 })
   }
 }
