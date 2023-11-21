@@ -1,11 +1,10 @@
 import { NextResponse } from 'next/server'
-import { Alchemy, AssetTransfersCategory, SortingOrder } from 'alchemy-sdk'
+import { AssetTransfersCategory, SortingOrder } from 'alchemy-sdk'
 
-import { ALCHEMY_CONFIG } from '@/constants/alchemy'
 import { TOKENS_FROM } from '@/constants/token'
 import { TransactionType } from '@/types/transactions'
 
-const alchemy = new Alchemy(ALCHEMY_CONFIG)
+import { alchemy } from '@/lib/alchemy'
 
 export const dynamic = 'force-dynamic'
 export const fetchCache = 'force-no-store'

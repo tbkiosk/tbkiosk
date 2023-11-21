@@ -1,11 +1,10 @@
 import { NextResponse } from 'next/server'
-import { Alchemy, AssetTransfersCategory, SortingOrder } from 'alchemy-sdk'
+import { AssetTransfersCategory, SortingOrder } from 'alchemy-sdk'
 
-import { ALCHEMY_CONFIG } from '@/constants/alchemy'
 import { TOKENS_FROM, TOKENS_TO } from '@/constants/token'
 import { TransactionType } from '@/types/transactions'
 
-const alchemy = new Alchemy(ALCHEMY_CONFIG)
+import { alchemy } from '@/lib/alchemy'
 
 const SWAP_CONTRACT_ADDRESSES = ['0x6337b3caf9c5236c7f3d1694410776119edaf9fa', '0x449f07dc7616c43b47dbe8cf57dc1f6e34ef82f8']
 

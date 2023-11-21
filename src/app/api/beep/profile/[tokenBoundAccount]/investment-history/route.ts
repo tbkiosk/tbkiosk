@@ -1,75 +1,11 @@
 import { NextResponse } from 'next/server'
-import { decodeFunctionData, formatUnits } from 'viem'
+import { AssetTransfersCategory, SortingOrder } from 'alchemy-sdk'
 
-import { API_SCAN } from '@/constants/explorer'
+import { TOKENS_TO } from '@/constants/token'
 
-import { env } from 'env.mjs'
+import { alchemy } from '@/lib/alchemy'
 
-type Transaction = {
-  blockNumber: string
-  blockHash: string
-  timeStamp: string
-  hash: string
-  nonce: string
-  transactionIndex: string
-  from: string
-  to: string
-  value: string
-  gas: string
-  gasPrice: string
-  input: string
-  methodId: string
-  functionName: string
-  contractAddress: string
-  cumulativeGasUsed: string
-  txreceipt_status: string
-  gasUsed: string
-  confirmations: string
-  isError: string
-}
-
-export type SwapTransaction = {
-  isSuccess: boolean
-  hash: string
-  value: string
-  timestamp: number
-}
-
-const getSwapValue = (data: `0x${string}`) => {
-  const { args } = decodeFunctionData({
-    abi: [
-      {
-        constant: false,
-        inputs: [
-          {
-            name: 'receiver',
-            type: 'address',
-          },
-          {
-            name: 'amountIn',
-            type: 'uint256',
-          },
-          {
-            name: 'bizId',
-            type: 'uint256',
-          },
-          {
-            name: 'amountOutMinimum',
-            type: 'uint256',
-          },
-        ],
-        name: 'swapExactInputSingle',
-        outputs: [],
-        payable: false,
-        stateMutability: 'nonpayable',
-        type: 'function',
-      },
-    ],
-    data: data,
-  })
-  const usdcDecimal = 6
-  return formatUnits(BigInt(args[1].toString()), usdcDecimal)
-}
+const SWAP_CONTRACT_ADDRESSES = ['0x6337b3caf9c5236c7f3d1694410776119edaf9fa', '0x449f07dc7616c43b47dbe8cf57dc1f6e34ef82f8']
 
 export const dynamic = 'force-dynamic'
 export const fetchCache = 'force-no-store'
@@ -78,31 +14,21 @@ export async function GET(request: Request, { params }: { params: { tokenBoundAc
   const tokenBoundAccount = params.tokenBoundAccount
 
   try {
-    const key = ['1', '5'].includes(env.NEXT_PUBLIC_CHAIN_ID) ? env.ETHERSCAN_KEY : env.POLYGONSCAN_KEY
-
-    const response = await fetch(
-      `${
-        API_SCAN[env.NEXT_PUBLIC_CHAIN_ID]
-      }?module=account&action=txlist&address=${tokenBoundAccount}&startblock=0&endblock=99999999&page=1&offset=100&sort=desc&apikey=${key}`
-    )
-
-    const { result } = (await response.json()) as { result: Transaction[] }
-
-    const swapTransactions = result.filter(
-      item => item.functionName === 'swapExactInputSingle(address receiver,uint256 amountIn,uint256 bizId,uint256 amountOutMinimum)'
-    )
-
-    const data = swapTransactions.map(item => {
-      return {
-        isSuccess: item.isError === '0',
-        hash: item.hash,
-        value: getSwapValue(item.input as `0x${string}`),
-        timestamp: parseInt(item.timeStamp) * 1000,
-      }
+    const withdrawalTransactions = await alchemy.core.getAssetTransfers({
+      category: [AssetTransfersCategory.ERC20],
+      contractAddresses: [...Object.keys(TOKENS_TO)],
+      excludeZeroValue: true,
+      fromBlock: '0x0',
+      fromAddress: tokenBoundAccount,
+      order: SortingOrder.DESCENDING,
+      toBlock: 'latest',
+      withMetadata: true,
     })
 
-    return NextResponse.json(data)
+    const response = withdrawalTransactions?.transfers?.filter(_tx => !SWAP_CONTRACT_ADDRESSES.includes(_tx.to || '')) || []
+
+    return NextResponse.json(response)
   } catch (error) {
-    return NextResponse.json({ error: 'Internal Server Error', detail: error }, { status: 500 })
+    return NextResponse.json({ error: (error as Error)?.message || 'Failed to get withdrawal transactions' }, { status: 500 })
   }
 }
