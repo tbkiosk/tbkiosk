@@ -14,7 +14,7 @@ import { maskAddress } from '@/utils/address'
 import RobotSuccess from 'public/beep/robot-success.svg'
 
 import { env } from 'env.mjs'
-import { abi } from '@/utils/scollerNft_abi'
+import { abi } from '@/utils/scrollerNft_abi'
 
 type ConfigForm = z.infer<typeof SCROLLER_USER_CONFIG_SCHEMA>
 
@@ -31,7 +31,7 @@ const ScrollerSuccess = ({ getValues, onClose }: UseFormReturn<ConfigForm> & { o
 
   const tokenboundClient = new TokenboundClient({
     signer: signer,
-    chainId: +env.NEXT_PUBLIC_CHAIN_ID,
+    chainId: +env.NEXT_PUBLIC_CHAIN_ID_SCROLLER,
     implementationAddress: env.NEXT_PUBLIC_SCROLLER_TBA_IMPLEMENTATION_ADDRESS as `0x${string}`,
     registryAddress: env.NEXT_PUBLIC_REGISTRY_ADDRESS_SCROLLER as `0x${string}`,
   })
@@ -61,7 +61,7 @@ const ScrollerSuccess = ({ getValues, onClose }: UseFormReturn<ConfigForm> & { o
           ))}
         </div>
         <a
-          href="/mint/scoller/settings"
+          href="/mint/scroller/settings"
           target="_blank"
         >
           <Button

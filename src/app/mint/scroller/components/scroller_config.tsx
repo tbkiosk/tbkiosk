@@ -36,7 +36,7 @@ const getPriceLevel = (_gasPrice: number) => {
 
 const config = {
   apiKey: 'sB96npElqKwCP0JpkITs_kf-owtYJ6iL', // todo: move to env
-  network: Network.ETH_SEPOLIA,
+  network: Network.ETH_MAINNET,
 }
 const alchemy = new Alchemy(config)
 
@@ -50,7 +50,7 @@ const ScrollerConfig = ({ control, watch, setValue, trigger, clearErrors, setSte
   const fetchGasPrice = async () => {
     const response = await alchemy.core.getGasPrice()
 
-    const gasPriceFormatted = ethers.utils.formatUnits(response, 'wei')
+    const gasPriceFormatted = ethers.utils.formatUnits(response, 'gwei')
     const priceLevel: string = getPriceLevel(parseInt(gasPriceFormatted))
 
     setGasPrice(gasPriceFormatted)

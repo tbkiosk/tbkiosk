@@ -6,7 +6,6 @@ import { useForm } from 'react-hook-form'
 import { match } from 'ts-pattern'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import dayjs from 'dayjs'
 
 import ScrollerConfig from './scroller_config'
 // import ScrollerPreview from './scroller_preview'
@@ -14,10 +13,6 @@ import ScrollerConfirm from './scroller_confirm'
 import ScrollerSuccess from './scroller_success'
 
 import { SCROLLER_USER_CONFIG_SCHEMA } from '@/types/schema'
-
-// import { USDC_CONTRACT_ADDRESS, WETH_CONTRACT_ADDRESS } from '@/constants/token'
-
-import { env } from 'env.mjs'
 
 type ConfigForm = z.infer<typeof SCROLLER_USER_CONFIG_SCHEMA>
 

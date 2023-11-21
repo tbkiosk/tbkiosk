@@ -4,15 +4,8 @@ import NextImage from 'next/image'
 import { Image, Button } from '@nextui-org/react'
 import { Controller, type UseFormReturn } from 'react-hook-form'
 import { useSigner, ThirdwebSDK, useAddress, useContract, useOwnedNFTs } from '@thirdweb-dev/react'
-import { TokenboundClient } from '@tokenbound/sdk'
-import { erc20ABI } from 'wagmi'
-import { ethers } from 'ethers'
-import { bytesToHex, numberToBytes } from 'viem'
 import { toast } from 'react-toastify'
 import { z } from 'zod'
-import clsx from 'clsx'
-
-// import { TOKENS_FROM } from '@/constants/token'
 
 import { SCROLLER_USER_CONFIG_SCHEMA } from '@/types/schema'
 
@@ -21,7 +14,7 @@ import { env } from 'env.mjs'
 import ArrowIcon from 'public/icons/arrow.svg'
 
 import type { ThirdWebError } from '@/types'
-import { abi } from '@/utils/scollerNft_abi'
+import { abi } from '@/utils/scrollerNft_abi'
 
 type ConfigForm = z.infer<typeof SCROLLER_USER_CONFIG_SCHEMA>
 interface IBeepConfirmProps extends UseFormReturn<ConfigForm> {
@@ -72,12 +65,12 @@ const BeepConfirm = ({ control, getValues, watch, handleSubmit, formState: { isS
     }
 
     try {
-      const sdk = ThirdwebSDK.fromSigner(signer, env.NEXT_PUBLIC_CHAIN_ID, {
+      const sdk = ThirdwebSDK.fromSigner(signer, env.NEXT_PUBLIC_CHAIN_ID_SCROLLER, {
         clientId: env.NEXT_PUBLIC_THIRDWEB_CLIENT_ID,
       })
       const nftContract = await sdk.getContract(env.NEXT_PUBLIC_SCROLLER_NFT_CONTRACT_ADDRESS, abi)
 
-      const mintArgs = [address, env.NEXT_PUBLIC_CHAIN_ID, gasToleranceParamMap[gasTolerance]]
+      const mintArgs = [address, env.NEXT_PUBLIC_CHAIN_ID_SCROLLER, gasToleranceParamMap[gasTolerance]]
 
       await nftContract.call('mint', mintArgs)
 
@@ -94,22 +87,6 @@ const BeepConfirm = ({ control, getValues, watch, handleSubmit, formState: { isS
         setStep(4)
         return
       }
-
-      // USED FOR DB STORAGE
-      // const tokenboundClient = new TokenboundClient({
-      //   signer: signer,
-      //   chainId: +env.NEXT_PUBLIC_CHAIN_ID,
-      //   implementationAddress: env.NEXT_PUBLIC_BEEP_TBA_IMPLEMENTATION_ADDRESS as `0x${string}`,
-      //   registryAddress: env.NEXT_PUBLIC_REGISTRY_ADDRESS as `0x${string}`,
-      // })
-      // const tokenAddresses = mintedNFTs.map(_nft =>
-      //   tokenboundClient.getAccount({
-      //     tokenContract: env.NEXT_PUBLIC_BEEP_CONTRACT_ADDRESS as `0x${string}`,
-      //     tokenId: _nft,
-      //   })
-      // )
-
-      // ADD VERIFICATION IN EVENT OF NO DB STORAGE
 
       setStep(4)
     } catch (error) {
