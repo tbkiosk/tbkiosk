@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import { decodeFunctionData, formatUnits } from 'viem'
 
-import { explorer } from '@/constants/explorer'
+import { API_SCAN } from '@/constants/explorer'
 
 import { env } from 'env.mjs'
 
@@ -82,8 +82,8 @@ export async function GET(request: Request, { params }: { params: { tokenBoundAc
 
     const response = await fetch(
       `${
-        explorer[env.NEXT_PUBLIC_CHAIN_ID]
-      }/api?module=account&action=txlist&address=${tokenBoundAccount}&startblock=0&endblock=99999999&page=1&offset=100&sort=desc&apikey=${key}`
+        API_SCAN[env.NEXT_PUBLIC_CHAIN_ID]
+      }?module=account&action=txlist&address=${tokenBoundAccount}&startblock=0&endblock=99999999&page=1&offset=100&sort=desc&apikey=${key}`
     )
 
     const { result } = (await response.json()) as { result: Transaction[] }
