@@ -5,7 +5,7 @@ import { TOKENS_TO } from '@/constants/token'
 
 import { alchemy } from '@/lib/alchemy'
 
-const SWAP_CONTRACT_ADDRESSES = ['0x6337b3caf9c5236c7f3d1694410776119edaf9fa', '0x449f07dc7616c43b47dbe8cf57dc1f6e34ef82f8']
+const SWAP_CONTRACT_ADDRESSES = '0x6337b3caf9c5236c7f3d1694410776119edaf9fa'
 
 export const dynamic = 'force-dynamic'
 export const fetchCache = 'force-no-store'
@@ -18,14 +18,15 @@ export async function GET(request: Request, { params }: { params: { tokenBoundAc
       category: [AssetTransfersCategory.ERC20],
       contractAddresses: [...Object.keys(TOKENS_TO)],
       excludeZeroValue: true,
+      fromAddress: SWAP_CONTRACT_ADDRESSES,
       fromBlock: '0x0',
-      fromAddress: tokenBoundAccount,
       order: SortingOrder.DESCENDING,
+      toAddress: tokenBoundAccount,
       toBlock: 'latest',
       withMetadata: true,
     })
 
-    const response = withdrawalTransactions?.transfers?.filter(_tx => !SWAP_CONTRACT_ADDRESSES.includes(_tx.to || '')) || []
+    const response = withdrawalTransactions?.transfers || []
 
     return NextResponse.json(response)
   } catch (error) {
