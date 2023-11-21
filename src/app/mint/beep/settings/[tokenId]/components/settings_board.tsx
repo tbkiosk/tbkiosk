@@ -7,6 +7,7 @@ import { Switch, Spinner, useDisclosure } from '@nextui-org/react'
 import dayjs from 'dayjs'
 
 import PlanModal, { type PlanForm } from './plan_modal'
+import TotalInvestment from './total_investment'
 import PenIcon from 'public/icons/pen.svg'
 
 import { FREQUENCY_OPTIONS } from '@/constants/beep'
@@ -113,7 +114,13 @@ const SettingsBoard = ({ tbaUser, refetch, tbaAddress }: { tbaAddress: string; r
       <div className="w-full flex flex-col md:flex-row justify-between mb-8 tracking-wide">
         <div>
           <div className="text-sm text-[#a6a9ae] ">Total invested</div>
-          <div className="font-bold text-[28px] truncate">- {TOKENS_FROM[tbaUser.token_address_from].name}</div>
+          <div className="font-bold text-[28px] truncate">
+            <TotalInvestment
+              tbaAddress={tbaAddress}
+              tokenAddress={tbaUser.token_address_from}
+            />
+            <span className="ml-2">{TOKENS_FROM[tbaUser.token_address_from].name}</span>
+          </div>
         </div>
         <div>
           <div className="text-sm text-[#a6a9ae] text-start md:text-end">Status</div>
