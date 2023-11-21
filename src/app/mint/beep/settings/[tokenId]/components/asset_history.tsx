@@ -12,7 +12,7 @@ import DepositIcon from 'public/icons/deposit.svg'
 import WithdrawIcon from 'public/icons/withdraw.svg'
 
 import { TOKENS_FROM } from '@/constants/token'
-import { explorer } from '@/constants/explorer'
+import { EXPLORER } from '@/constants/explorer'
 import { TransactionType } from '@/constants/transactions'
 
 import { env } from 'env.mjs'
@@ -82,7 +82,7 @@ const AssetHistory = ({ tbaAddress }: { tbaAddress: string }) => {
         return (
           <a
             className="flex items-center text-[#78edc1] hover:underline"
-            href={`${explorer[+env.NEXT_PUBLIC_CHAIN_ID as 1 | 5 | 137]}/tx/${item.hash}`}
+            href={`${EXPLORER[+env.NEXT_PUBLIC_CHAIN_ID as 1 | 5 | 137]}/tx/${item.hash}`}
             rel="noreferrer"
             target="_blank"
           >
