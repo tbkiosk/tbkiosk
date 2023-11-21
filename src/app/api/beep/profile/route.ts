@@ -1,14 +1,14 @@
 import { NextResponse } from 'next/server'
-import { Alchemy, Utils, Wallet } from 'alchemy-sdk'
+import { Utils, Wallet } from 'alchemy-sdk'
 import { fromZodError } from 'zod-validation-error'
 import dayjs from 'dayjs'
 import { z } from 'zod'
 
 import { prismaClient } from '@/lib/prisma'
+import { alchemy } from '@/lib/alchemy'
 
 import { swapSingleUser } from '@/utils/admin_swap'
 
-import { ALCHEMY_CONFIG } from '@/constants/alchemy'
 import { TOKENS_FROM } from '@/constants/token'
 import { GAS_FEE_PROPORTION, BEEP_FEE_PROPORTION } from '@/constants/fee'
 
@@ -23,8 +23,6 @@ const schema = z.object({
   tokenAddressTo: z.string().startsWith('0x'),
   endDate: z.string().datetime().nullable(),
 })
-
-const alchemy = new Alchemy(ALCHEMY_CONFIG)
 
 export const runtime = 'nodejs'
 
