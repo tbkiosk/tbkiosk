@@ -138,7 +138,7 @@ const PlanModal = ({
                           selectorIcon={<></>}
                           size="sm"
                           startContent={
-                            <div className="h-6 w-6 shrink-0">{TOKENS_TO[field.value].icon && TOKENS_TO[field.value].icon()}</div>
+                            <div className="h-6 w-6 shrink-0">{TOKENS_TO[field.value]?.beepIcon && TOKENS_TO[field.value].beepIcon()}</div>
                           }
                         >
                           {_token => (
@@ -189,7 +189,9 @@ const PlanModal = ({
                                 selectorIcon={<></>}
                                 size="sm"
                                 startContent={
-                                  <div className="h-6 w-6 shrink-0">{TOKENS_FROM[field.value].icon && TOKENS_FROM[field.value].icon()}</div>
+                                  <div className="h-6 w-6 shrink-0">
+                                    {TOKENS_FROM[field.value]?.beepIcon && TOKENS_FROM[field.value].beepIcon()}
+                                  </div>
                                 }
                               >
                                 {_token => (

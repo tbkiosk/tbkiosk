@@ -4,8 +4,10 @@ import { useState } from 'react'
 import { Tabs, Tab } from '@nextui-org/react'
 
 import AssetHistory from './asset_history'
+import SwapHistory from './swap_history'
 
 enum TabsKeys {
+  INVT = 'INVT',
   DW = 'DW',
 }
 
@@ -16,7 +18,7 @@ enum TabsKeys {
 // }
 
 const TbaRecord = ({ tbaAddress }: { tbaAddress: string }) => {
-  const [selected, setSelected] = useState<TabsKeys>(TabsKeys.DW)
+  const [selected, setSelected] = useState<TabsKeys>(TabsKeys.INVT)
   // const [filter, setFilter] = useState<HistoryFilter>(HistoryFilter.ALL)
 
   return (
@@ -33,6 +35,12 @@ const TbaRecord = ({ tbaAddress }: { tbaAddress: string }) => {
         onSelectionChange={key => setSelected(key as TabsKeys)}
         selectedKey={selected}
       >
+        <Tab
+          key={TabsKeys.INVT}
+          title="Invest History"
+        >
+          <SwapHistory tbaAddress={tbaAddress} />
+        </Tab>
         <Tab
           key={TabsKeys.DW}
           title="Deposit/Withdrawals"
