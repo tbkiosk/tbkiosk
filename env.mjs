@@ -18,6 +18,7 @@ export const env = createEnv({
     NEXT_PUBLIC_SCROLLER_NFT_CONTRACT_ADDRESS: z.string().min(1).startsWith('0x'),
     NEXT_PUBLIC_SCROLLER_TBA_IMPLEMENTATION_ADDRESS: z.string().min(1).startsWith('0x'),
     NEXT_PUBLIC_REGISTRY_ADDRESS_SCROLLER: z.string().min(1).startsWith('0x'),
+    NEXT_PUBLIC_CHAIN_ID_SCROLLER: z.enum(['1', '5', '137', '11155111']),
   },
   client: {
     NEXT_PUBLIC_THIRDWEB_CLIENT_ID: z.string().min(1),
@@ -30,6 +31,7 @@ export const env = createEnv({
     NEXT_PUBLIC_SCROLLER_NFT_CONTRACT_ADDRESS: z.string().min(1).startsWith('0x'),
     NEXT_PUBLIC_SCROLLER_TBA_IMPLEMENTATION_ADDRESS: z.string().min(1).startsWith('0x'),
     NEXT_PUBLIC_REGISTRY_ADDRESS_SCROLLER: z.string().min(1).startsWith('0x'),
+    NEXT_PUBLIC_CHAIN_ID_SCROLLER: z.enum(['1', '5', '137', '11155111']),
   },
   runtimeEnv: {
     DATABASE_URL: process.env.DATABASE_URL,
@@ -47,5 +49,6 @@ export const env = createEnv({
     NEXT_PUBLIC_SCROLLER_NFT_CONTRACT_ADDRESS: process.env.NEXT_PUBLIC_SCROLLER_NFT_CONTRACT_ADDRESS,
     NEXT_PUBLIC_SCROLLER_TBA_IMPLEMENTATION_ADDRESS: process.env.NEXT_PUBLIC_SCROLLER_TBA_IMPLEMENTATION_ADDRESS,
     NEXT_PUBLIC_REGISTRY_ADDRESS_SCROLLER: process.env.NEXT_PUBLIC_REGISTRY_ADDRESS_SCROLLER,
+    NEXT_PUBLIC_CHAIN_ID_SCROLLER: process.env.NEXT_PUBLIC_CHAIN_ID_SCROLLER,
   },
 })
