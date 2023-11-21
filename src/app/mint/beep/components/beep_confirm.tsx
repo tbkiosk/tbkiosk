@@ -14,7 +14,7 @@ import clsx from 'clsx'
 
 import { TOKENS_FROM } from '@/constants/token'
 
-import { TBA_USER_CONFIG_SCHEMA } from '@/types/schema'
+import { TBA_USER_CONFIG_SCHEMA } from 'prisma/schema'
 
 import { env } from 'env.mjs'
 

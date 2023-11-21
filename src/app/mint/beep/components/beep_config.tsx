@@ -10,7 +10,7 @@ import dayjs from 'dayjs'
 import { TOKENS_FROM, TOKENS_TO } from '@/constants/token'
 import { FREQUENCY_OPTIONS } from '@/constants/beep'
 
-import { TBA_USER_CONFIG_SCHEMA } from '@/types/schema'
+import { TBA_USER_CONFIG_SCHEMA } from 'prisma/schema'
 
 import ArrowIcon from 'public/icons/arrow.svg'
 import CalendarIcon from 'public/icons/calendar.svg'

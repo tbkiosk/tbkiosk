@@ -7,7 +7,7 @@ import { Spinner, Button } from '@nextui-org/react'
 import { type UseFormReturn } from 'react-hook-form'
 import { z } from 'zod'
 
-import { TBA_USER_CONFIG_SCHEMA } from '@/types/schema'
+import { TBA_USER_CONFIG_SCHEMA } from 'prisma/schema'
 
 import { maskAddress } from '@/utils/address'
 
