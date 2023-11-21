@@ -49,8 +49,8 @@ const DeployModal = ({ isOpen, onOpenChange, onClose }: ReturnType<typeof useDis
 
   return (
     <Modal
-      hideCloseButton={step === 3}
-      isDismissable={step !== 3}
+      hideCloseButton={form.formState.isSubmitting}
+      isDismissable={form.formState.isSubmitting}
       isOpen={isOpen}
       onOpenChange={onOpenChange}
       size="2xl"
