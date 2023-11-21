@@ -1,6 +1,6 @@
 import ConnectWalletButton from '@/components/connect_wallet_button'
 
-import BeepTextLogo from 'public/beep/beep-text-logo.svg' // TODO
+import BeepTextLogo from 'public/scroller/scroller-text-logo.svg' // TODO
 
 import type { Metadata } from 'next'
 

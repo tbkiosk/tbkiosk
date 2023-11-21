@@ -3,14 +3,9 @@
 import { useState } from 'react'
 import { useAddress } from '@thirdweb-dev/react'
 import { toast } from 'react-toastify'
-import { Switch, Spinner, useDisclosure } from '@nextui-org/react'
-import dayjs from 'dayjs'
+import { useDisclosure } from '@nextui-org/react'
 
 import PlanModal, { type PlanForm } from './plan_modal'
-import GearIcon from 'public/icons/gear.svg'
-
-// import { FREQUENCY_OPTIONS } from '@/constants/beep'
-// import { TOKENS_FROM, TOKENS_TO } from '@/constants/token'
 
 import type { TBAUser } from '@prisma/client'
 

@@ -1,16 +1,10 @@
 'use client'
 
-import { useEffect, forwardRef } from 'react'
-import { Modal, ModalContent, ModalHeader, ModalBody, Button, Input, InputProps, Select, SelectItem } from '@nextui-org/react'
-import DatePicker from 'react-datepicker'
+import { useEffect } from 'react'
+import { Modal, ModalContent, ModalHeader, ModalBody, Button } from '@nextui-org/react'
 import { useForm, Controller } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import dayjs from 'dayjs'
-import clsx from 'clsx'
-
-import { FREQUENCY_OPTIONS } from '@/constants/beep'
-import { TOKENS_FROM, TOKENS_TO, USDC_CONTRACT_ADDRESS, WETH_CONTRACT_ADDRESS } from '@/constants/token'
 
 import { env } from 'env.mjs'
 

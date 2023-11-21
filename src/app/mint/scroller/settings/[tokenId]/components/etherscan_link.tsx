@@ -3,7 +3,7 @@ import { explorer } from '@/constants/explorer'
 import { env } from 'env.mjs'
 
 const ExplorerLink = ({ txhash, isSuccessful }: { txhash: string; isSuccessful: boolean }) => {
-  const explorerBase = explorer[+env.NEXT_PUBLIC_CHAIN_ID as 1 | 5 | 137]
+  const explorerBase = explorer[+env.NEXT_PUBLIC_CHAIN_ID_SCROLLER as 1 | 5 | 137 | 11155111]
   return (
     <a
       href={`${explorerBase}/tx/${txhash}`}

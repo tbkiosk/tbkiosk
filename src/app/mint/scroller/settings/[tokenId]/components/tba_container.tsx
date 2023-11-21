@@ -1,30 +1,37 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import { useAddress, useChainId, useContract, useOwnedNFTs } from '@thirdweb-dev/react'
 import { Spinner } from '@nextui-org/react'
 
-// import ScrollerIframe from '../../components/scroller_iframe'
+import ScrollerIframe from '../../components/scroller_iframe'
 import CopyButton from '@/components/copy_button'
 import DepositButton from './deposit_button'
 import WithdrawButton from './withdraw_button'
-import ScrollerSettingsPanel from './scroller_settings_panel'
-
-import useTbaAddress from '@/hooks/useTbaAddress'
 
 import { env } from 'env.mjs'
 
 import { maskAddress } from '@/utils/address'
-import { abi } from '@/utils/scollerNft_abi'
-// import TbaRecord from '@/app/mint/beep/settings/[tokenId]/components/tba_record'
+import { abi } from '@/utils/scrollerNft_abi'
 
 const TBAContainer = ({ tokenId }: { tokenId: string }) => {
+  const [tbaAddress, setTbaAddress] = useState<string>('loading...')
   const address = useAddress()
   const chainId = useChainId()
   const { contract } = useContract(chainId ? env.NEXT_PUBLIC_SCROLLER_NFT_CONTRACT_ADDRESS : null, abi)
   const { data, isLoading, error } = useOwnedNFTs(contract, address)
-  const tbaAddress = useTbaAddress(tokenId)
 
-  if (!chainId || +chainId !== +env.NEXT_PUBLIC_CHAIN_ID) {
+  useEffect(() => {
+    const getTbaAddress = async () => {
+      if (!contract || !address) return
+      const response = await contract.call('getTBA', [tokenId])
+      setTbaAddress(response[0][0])
+    }
+
+    getTbaAddress()
+  }, [tokenId, contract, address])
+
+  if (!chainId || +chainId !== +env.NEXT_PUBLIC_CHAIN_ID_SCROLLER) {
     return null
   }
 
@@ -49,7 +56,7 @@ const TBAContainer = ({ tokenId }: { tokenId: string }) => {
       <div className="flex flex-col md:flex-row justify-center gap-4 md:gap-8 pt-8 md:pt-16">
         <div className="w-full md:w-[40%] flex justify-center md:justify-end shrink-0">
           <div className="max-h-full aspect-square overflow-hidden">
-            {/* <ScrollerIframe tokenId={tokenId} /> */}
+            <ScrollerIframe tokenId={tokenId} />
             IFRAME HERE
           </div>
         </div>
@@ -71,7 +78,7 @@ const TBAContainer = ({ tokenId }: { tokenId: string }) => {
             />
             <WithdrawButton tbaAddress={tbaAddress} />
           </div>
-          <ScrollerSettingsPanel tbaAddress={tbaAddress} />
+          {/* <ScrollerSettingsPanel tbaAddress={tbaAddress} /> */} TODO: Settings Panel
         </div>
       </div>
       {/* <div className="my-10 md:my-20 max-w-[900px] mx-auto">

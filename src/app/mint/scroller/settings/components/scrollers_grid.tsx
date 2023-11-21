@@ -5,10 +5,10 @@ import { useConnectionStatus, useChainId, useAddress, useContract, useOwnedNFTs 
 import { Spinner } from '@nextui-org/react'
 
 import ConnectWalletButton from '@/components/connect_wallet_button'
-// import ScrollerIframe from './scroller_iframe'
+import ScrollerIframe from './scroller_iframe'
 
 import { env } from 'env.mjs'
-import { abi } from '@/utils/scollerNft_abi'
+import { abi } from '@/utils/scrollerNft_abi'
 
 const ScrollerGrid = () => {
   const connectionStatus = useConnectionStatus()
@@ -20,7 +20,7 @@ const ScrollerGrid = () => {
   if (connectionStatus === 'disconnected') {
     return (
       <div className="min-h-[540px] flex flex-col items-center justify-center gap-4 tracking-wide">
-        <p className="font-[pixeloid-mono] text-sm text-center">Connect wallet to view your Scoller Passes</p>
+        <p className="font-[pixeloid-mono] text-sm text-center">Connect wallet to view your scroller Passes</p>
         <ConnectWalletButton
           className="!bg-transparent !font-medium !text-[#78edc1] [&>div>span:first-child]:text-[#78edc1]"
           style={{ border: '1px solid #78edc1' }}
@@ -61,7 +61,7 @@ const ScrollerGrid = () => {
           className="px-8 py-2 font-medium text-[#78edc1] border border-[#78edc1] rounded-lg"
           href="/mint/scroller"
         >
-          Mint Scoller Pass
+          Mint Scroller Pass
         </Link>
       </div>
     )
@@ -79,8 +79,7 @@ const ScrollerGrid = () => {
             href={`/mint/scroller/settings/${_nft.metadata.id}`}
           />
           {/* TODO – add SVG */}
-          IFRAME HERE
-          {/* <ScrollerIframe tokenId={_nft.metadata.id} /> */}
+          <ScrollerIframe tokenId={_nft.metadata.id} />
         </div>
       ))}
     </div>

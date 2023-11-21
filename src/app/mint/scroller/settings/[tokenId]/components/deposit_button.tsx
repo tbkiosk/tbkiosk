@@ -1,14 +1,10 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useDisclosure, Modal, ModalContent, ModalHeader, ModalBody, Select, SelectItem, Button, Input, Spinner } from '@nextui-org/react'
-import { useQuery } from '@tanstack/react-query'
 import { useForm, Controller } from 'react-hook-form'
 import { toast } from 'react-toastify'
-import { useContract } from '@thirdweb-dev/react'
-import { erc20ABI } from 'wagmi'
-import { ethers } from 'ethers'
-import { formatUnits } from 'viem'
+import { ThirdwebSDK, useAddress, useChainId, useContract, useOwnedNFTs, useSigner } from '@thirdweb-dev/react'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import clsx from 'clsx'
@@ -17,31 +13,27 @@ import CopyButton from '@/components/copy_button'
 
 import { maskAddress } from '@/utils/address'
 
-import { TOKENS_FROM, USDC_CONTRACT_ADDRESS } from '@/constants/token'
-
 import type { ThirdWebError } from '@/types'
 
 import { env } from 'env.mjs'
+import { abi } from '@/utils/scrollerNft_abi'
 
 const schema = z.object({
-  token: z.string().startsWith('0x'),
   amount: z.string(),
 })
 
 type DepositForm = z.infer<typeof schema>
 
 const defaultValues: DepositForm = {
-  token: USDC_CONTRACT_ADDRESS[+env.NEXT_PUBLIC_CHAIN_ID as 1 | 5 | 137],
   amount: '',
 }
 
-const DepositButton = ({ tbaAddress }: { tokenId: string; tbaAddress: string }) => {
+const DepositButton = ({ tbaAddress, tokenId }: { tokenId: string; tbaAddress: string }) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
 
   const {
     control,
     handleSubmit,
-    watch,
     reset,
     setError,
     clearErrors,
@@ -51,32 +43,31 @@ const DepositButton = ({ tbaAddress }: { tokenId: string; tbaAddress: string }) 
     resolver: zodResolver(schema),
   })
 
-  const tokenAddress = watch('token')
+  const [tbaBalance, setTbaBalance] = useState<string>('loading...')
+  const address = useAddress()
+  const signer = useSigner()
+  const chainId = useChainId()
+  const { contract, isLoading, error } = useContract(chainId ? env.NEXT_PUBLIC_SCROLLER_NFT_CONTRACT_ADDRESS : null, abi)
 
-  const { contract } = useContract(tokenAddress, erc20ABI)
+  useEffect(() => {
+    const getTbaBalance = async () => {
+      if (!contract || !address) return
+      const response = await contract.call('getTBA', [tokenId])
+      // console.log('balanceBN:', response[1]) // TODO, check with new contract
+      setTbaBalance(response[1])
+    }
 
-  const {
-    data: balances,
-    isLoading: balancesLoading,
-    error,
-  } = useQuery<{ [address: `0x${string}`]: string }>({
-    queryKey: ['tba-balances', tbaAddress],
-    queryFn: async () => {
-      const res = await fetch(`/api/beep/profile/${tbaAddress}/balances`)
+    getTbaBalance()
+  }, [tokenId, contract, address])
 
-      if (!res.ok) {
-        throw new Error(res.statusText)
-      }
-
-      return await res.json()
-    },
-    enabled: isOpen,
-    refetchInterval: 5000,
-  })
-
-  const onSubmit = async ({ amount, token }: DepositForm) => {
+  const onSubmit = async ({ amount }: DepositForm) => {
     if (+amount <= 0) {
       setError('amount', { type: 'custom', message: 'Invalid balance' })
+      return
+    }
+
+    if (!signer) {
+      toast.error('Signer not defined')
       return
     }
 
@@ -86,27 +77,15 @@ const DepositButton = ({ tbaAddress }: { tokenId: string; tbaAddress: string }) 
     }
 
     try {
-      await contract.call('transfer', [tbaAddress, ethers.utils.parseUnits(String(amount), TOKENS_FROM[token].decimal)])
+      // await contract.call('transfer', [tbaAddress, ethers.utils.parseEther(String(amount))])
+      const sdk = ThirdwebSDK.fromSigner(signer, env.NEXT_PUBLIC_CHAIN_ID_SCROLLER, {
+        clientId: env.NEXT_PUBLIC_THIRDWEB_CLIENT_ID,
+      })
+      await sdk.wallet.transfer(tbaAddress, amount)
 
-      toast.success(`Successfully deposited ${amount} ${TOKENS_FROM[token].name}`)
+      toast.success(`Successfully deposited ${amount} ETH}`)
     } catch (error) {
       toast.error((error as ThirdWebError)?.reason || (error as Error)?.message || 'Failed to deposit')
-    }
-  }
-
-  const renderBalance = (token: `0x${string}`) => {
-    const tokenBalance = balances?.[token]
-
-    if (tokenBalance === undefined) {
-      return '-'
-    }
-
-    try {
-      const tokenBalanceInBigInt = BigInt(tokenBalance)
-
-      return formatUnits(tokenBalanceInBigInt, TOKENS_FROM[token].decimal)
-    } catch (error) {
-      return '-'
     }
   }
 
@@ -138,14 +117,14 @@ const DepositButton = ({ tbaAddress }: { tokenId: string; tbaAddress: string }) 
         <ModalContent className="bg-black text-white">
           {() => (
             <>
-              <ModalHeader className="justify-center text-2xl">Deposit to your Beep account</ModalHeader>
+              <ModalHeader className="justify-center text-2xl">Deposit to your Scroller Pass</ModalHeader>
               <ModalBody className="px-8 pb-8 tracking-wider">
                 <form
                   className="flex flex-col items-center gap-4"
                   onSubmit={handleSubmit(onSubmit)}
                 >
                   <div className="flex flex-col items-center gap-2">
-                    <div>Your Beep wallet address</div>
+                    <div>Your Scroller Pass wallet address</div>
                     <CopyButton
                       className="px-4 py-1 border border-[#a6a9ae] rounded-full font-normal text-sm text-[#a6a9ae] tracking-wider hover:border-[#666666]"
                       copyText={tbaAddress}
@@ -154,60 +133,16 @@ const DepositButton = ({ tbaAddress }: { tokenId: string; tbaAddress: string }) 
                     </CopyButton>
                   </div>
                   <div className="w-full flex flex-col items-center gap-2">
-                    <Controller
-                      control={control}
-                      name="token"
-                      render={({ field }) => (
-                        <>
-                          <Select
-                            classNames={{
-                              base: 'w-full max-w-[320px] border border-[#808080] rounded-full',
-                              label: 'hidden',
-                              popoverContent: 'bg-[#1f1f1f]',
-                              trigger: 'h-[56px] bg-black hover:!bg-[#0f0f0f]',
-                              value: 'font-bold text-lg text-center !text-white',
-                            }}
-                            items={Object.values(TOKENS_FROM)}
-                            label="Select token"
-                            labelPlacement="outside"
-                            listboxProps={{
-                              itemClasses: {
-                                base: 'text-white',
-                              },
-                            }}
-                            onSelectionChange={keys => {
-                              Array.from(keys)[0] && field.onChange(Array.from(keys)[0].toString())
-                            }}
-                            radius="full"
-                            renderValue={items => items.map(_item => _item.data && <div key={_item.data.name}>{_item.data.name}</div>)}
-                            selectedKeys={[field.value]}
-                            size="sm"
-                            startContent={
-                              <div className="h-6 w-6 shrink-0">{TOKENS_FROM[field.value].icon && TOKENS_FROM[field.value].icon()}</div>
-                            }
-                          >
-                            {_token => (
-                              <SelectItem
-                                key={_token.address}
-                                value={_token.address}
-                              >
-                                {_token.name}
-                              </SelectItem>
-                            )}
-                          </Select>
-                          <div className="text-center text-sm">
-                            {balancesLoading ? (
-                              <Spinner
-                                color="default"
-                                size="sm"
-                              />
-                            ) : (
-                              `Balance: ${renderBalance(field.value as `0x${string}`)}`
-                            )}
-                          </div>
-                        </>
+                    <div className="text-center text-sm">
+                      {isLoading ? (
+                        <Spinner
+                          color="default"
+                          size="sm"
+                        />
+                      ) : (
+                        `Balance: ${tbaBalance} ETH`
                       )}
-                    />
+                    </div>
                   </div>
                   <div className="w-full flex flex-col items-center">
                     <Controller
@@ -225,7 +160,7 @@ const DepositButton = ({ tbaAddress }: { tokenId: string; tbaAddress: string }) 
                             inputWrapper: '!bg-transparent',
                           }}
                           color={fieldState.error ? 'danger' : 'default'}
-                          // errorMessage={fieldState.error?.message}
+                          errorMessage={fieldState.error?.message}
                           label="amount"
                           onValueChange={value => {
                             if (/^(\d+(\.\d*)?|\.\d+)?$/.test(value)) {
