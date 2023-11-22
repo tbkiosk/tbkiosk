@@ -17,7 +17,7 @@ import { SCROLLER_USER_CONFIG_SCHEMA } from '@/types/schema'
 type ConfigForm = z.infer<typeof SCROLLER_USER_CONFIG_SCHEMA>
 
 const defaultValues = {
-  depositAmount: 0.125,
+  depositAmount: '0.000',
   mintAmount: 1,
   gasTolerance: 2, // 2 = MED
 }
@@ -53,8 +53,8 @@ const DeployModal = ({ isOpen, onOpenChange, onClose }: ReturnType<typeof useDis
               <ModalHeader className="justify-center text-2xl">
                 {match(step)
                   .with(1, () => 'Configure your Scroller Pass')
-                  .with(2, () => 'Review your Scroller Pass')
-                  .with(3, () => 'Confirm') // todo: does this exist for scroller?
+                  .with(2, () => 'Review your Scroller Pass') // TODO: REMOVE
+                  .with(3, () => 'Confirm')
                   .with(4, () => null)
                   .exhaustive()}
               </ModalHeader>

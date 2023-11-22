@@ -9,7 +9,8 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { env } from 'env.mjs'
 
 const schema = z.object({
-  depositAmount: z.number().int().min(0.125),
+  // depositAmount: z.number().int().min(0.125),
+  depositAmount: z.string(),
   mintAmount: z.number().int().min(1),
   gasTolerance: z.number().int().min(0).max(2),
 })
@@ -17,7 +18,7 @@ const schema = z.object({
 export type PlanForm = z.infer<typeof schema>
 
 interface IPlanModalProps {
-  depositAmount: number
+  depositAmount: string
   mintAmount: number
   gasTolerance: number
   isOpen: boolean
@@ -42,7 +43,7 @@ const PlanModal = ({
     formState: { isSubmitting },
   } = useForm<PlanForm>({
     defaultValues: {
-      depositAmount: defaultDepositAmount ?? 0.125,
+      depositAmount: defaultDepositAmount ?? '0.000',
       mintAmount: defaultMintAmount ?? 1,
       gasTolerance: defaultGasTolerance ?? 2,
     },
@@ -56,7 +57,7 @@ const PlanModal = ({
   useEffect(() => {
     if (isOpen) {
       reset({
-        depositAmount: defaultDepositAmount ?? 0.125,
+        depositAmount: defaultDepositAmount ?? '0.000',
         mintAmount: defaultMintAmount ?? 1,
         gasTolerance: defaultGasTolerance ?? 2,
       })

@@ -97,7 +97,7 @@ const ScrollerConfig = ({ control, watch, setValue, trigger, clearErrors, setSte
 
       <div className="text-xl leading-[3rem]">
         <p>
-          Current gas price: {gasPrice ? `${gasPrice} Gwei ` : 'Loading..'}
+          Current gas price: {gasPrice ? `${parseInt(gasPrice).toFixed()} Gwei ` : 'Loading..'}
           <span className="text-red-500">{gasPriceLevel ? `(${gasPriceLevel}) ` : ''}</span>
         </p>
         <p>I would like my gas fee tolerance to be:</p>
@@ -188,9 +188,8 @@ const ScrollerConfig = ({ control, watch, setValue, trigger, clearErrors, setSte
                   errorMessage={fieldState.error?.message}
                   label="Deposit amount"
                   onValueChange={value => {
-                    // Allow adding a decimal point to '0'
-                    if (/^\d+\.$/.test(value) || /^\d*(\.\d+)?$/.test(value)) {
-                      field.onChange(/^\d+\.$/.test(value) ? value : +value)
+                    if (/^(\d+(\.\d*)?|\.\d+)?$/.test(value)) {
+                      field.onChange(value)
                       clearErrors('depositAmount')
                     }
                   }}
