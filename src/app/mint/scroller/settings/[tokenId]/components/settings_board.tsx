@@ -77,7 +77,7 @@ const SettingsBoard = ({ tbaUser, refetch, tbaAddress }: { tbaAddress: string; r
         isOpen={isOpen}
         onOpenChange={onOpenChange}
         onSubmit={onSubmit}
-        depositAmount={0.125}
+        depositAmount={'0.125'}
         mintAmount={1}
         gasTolerance={2}
       />
