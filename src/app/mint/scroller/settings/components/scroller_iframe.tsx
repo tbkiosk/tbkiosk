@@ -6,7 +6,7 @@ import { Spinner } from '@nextui-org/react'
 import clsx from 'clsx'
 
 import { env } from 'env.mjs'
-import { abi } from '@/utils/scrollerNft_abi'
+import { abi } from '@/utils/scrollerNft_abiEnumerable'
 
 const ScrollerIframe = ({ tokenId }: { tokenId: string | number }) => {
   const [loaded, setLoaded] = useState(false)

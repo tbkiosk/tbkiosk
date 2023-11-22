@@ -12,7 +12,7 @@ import WithdrawButton from './withdraw_button'
 import { env } from 'env.mjs'
 
 import { maskAddress } from '@/utils/address'
-import { abi } from '@/utils/scrollerNft_abi'
+import { abi } from '@/utils/scrollerNft_abiEnumerable'
 
 const TBAContainer = ({ tokenId }: { tokenId: string }) => {
   const [tbaAddress, setTbaAddress] = useState<string>('loading...')
@@ -76,7 +76,10 @@ const TBAContainer = ({ tokenId }: { tokenId: string }) => {
               tbaAddress={tbaAddress}
               tokenId={tokenId}
             />
-            <WithdrawButton tbaAddress={tbaAddress} />
+            <WithdrawButton
+              tbaAddress={tbaAddress}
+              tokenId={tokenId}
+            />
           </div>
           {/* <ScrollerSettingsPanel tbaAddress={tbaAddress} /> */} TODO: Settings Panel
         </div>

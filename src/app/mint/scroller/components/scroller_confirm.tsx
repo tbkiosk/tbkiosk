@@ -14,7 +14,7 @@ import { env } from 'env.mjs'
 import ArrowIcon from 'public/icons/arrow.svg'
 
 import type { ThirdWebError } from '@/types'
-import { abi } from '@/utils/scrollerNft_abi'
+import { abi } from '@/utils/scrollerNft_abiEnumerable'
 
 type ConfigForm = z.infer<typeof SCROLLER_USER_CONFIG_SCHEMA>
 interface IBeepConfirmProps extends UseFormReturn<ConfigForm> {

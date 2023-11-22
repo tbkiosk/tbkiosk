@@ -16,7 +16,8 @@ import { maskAddress } from '@/utils/address'
 import type { ThirdWebError } from '@/types'
 
 import { env } from 'env.mjs'
-import { abi } from '@/utils/scrollerNft_abi'
+import { abi } from '@/utils/scrollerNft_abiEnumerable'
+import { formatEther } from 'viem'
 
 const schema = z.object({
   amount: z.string(),
@@ -43,7 +44,7 @@ const DepositButton = ({ tbaAddress, tokenId }: { tokenId: string; tbaAddress: s
     resolver: zodResolver(schema),
   })
 
-  const [tbaBalance, setTbaBalance] = useState<string>('loading...')
+  const [tbaBalance, setTbaBalance] = useState<string>('')
   const address = useAddress()
   const signer = useSigner()
   const chainId = useChainId()
@@ -53,12 +54,11 @@ const DepositButton = ({ tbaAddress, tokenId }: { tokenId: string; tbaAddress: s
     const getTbaBalance = async () => {
       if (!contract || !address) return
       const response = await contract.call('getTBA', [tokenId])
-      // console.log('balanceBN:', response[1]) // TODO, check with new contract
-      setTbaBalance(response[1])
+      setTbaBalance(formatEther(response[1]))
     }
 
     getTbaBalance()
-  }, [tokenId, contract, address])
+  }, [isOpen])
 
   const onSubmit = async ({ amount }: DepositForm) => {
     if (+amount <= 0) {
@@ -77,13 +77,13 @@ const DepositButton = ({ tbaAddress, tokenId }: { tokenId: string; tbaAddress: s
     }
 
     try {
-      // await contract.call('transfer', [tbaAddress, ethers.utils.parseEther(String(amount))])
       const sdk = ThirdwebSDK.fromSigner(signer, env.NEXT_PUBLIC_CHAIN_ID_SCROLLER, {
         clientId: env.NEXT_PUBLIC_THIRDWEB_CLIENT_ID,
       })
       await sdk.wallet.transfer(tbaAddress, amount)
 
       toast.success(`Successfully deposited ${amount} ETH}`)
+      onOpenChange()
     } catch (error) {
       toast.error((error as ThirdWebError)?.reason || (error as Error)?.message || 'Failed to deposit')
     }
@@ -117,7 +117,7 @@ const DepositButton = ({ tbaAddress, tokenId }: { tokenId: string; tbaAddress: s
         <ModalContent className="bg-black text-white">
           {() => (
             <>
-              <ModalHeader className="justify-center text-2xl">Deposit to your Scroller Pass</ModalHeader>
+              <ModalHeader className="justify-center text-2xl">Deposit ETH to your Scroller Pass</ModalHeader>
               <ModalBody className="px-8 pb-8 tracking-wider">
                 <form
                   className="flex flex-col items-center gap-4"

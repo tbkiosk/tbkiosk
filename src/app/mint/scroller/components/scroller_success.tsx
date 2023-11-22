@@ -14,7 +14,7 @@ import { maskAddress } from '@/utils/address'
 import RobotSuccess from 'public/beep/robot-success.svg'
 
 import { env } from 'env.mjs'
-import { abi } from '@/utils/scrollerNft_abi'
+import { abi } from '@/utils/scrollerNft_abiEnumerable'
 
 type ConfigForm = z.infer<typeof SCROLLER_USER_CONFIG_SCHEMA>
 

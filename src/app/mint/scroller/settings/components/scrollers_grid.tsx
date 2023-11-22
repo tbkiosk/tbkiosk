@@ -8,7 +8,7 @@ import ConnectWalletButton from '@/components/connect_wallet_button'
 import ScrollerIframe from './scroller_iframe'
 
 import { env } from 'env.mjs'
-import { abi } from '@/utils/scrollerNft_abi'
+import { abi } from '@/utils/scrollerNft_abiEnumerable'
 
 const ScrollerGrid = () => {
   const connectionStatus = useConnectionStatus()
