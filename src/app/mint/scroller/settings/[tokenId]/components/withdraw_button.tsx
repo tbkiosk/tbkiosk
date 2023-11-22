@@ -1,24 +1,23 @@
 'use client'
 
-import { useEffect } from 'react'
-import { useSigner } from '@thirdweb-dev/react'
+import { useEffect, useState } from 'react'
+import { useAddress, useChainId, useContract, useSigner } from '@thirdweb-dev/react'
 import { TokenboundClient } from '@tokenbound/sdk'
-import { Button, Modal, ModalContent, ModalHeader, ModalBody, useDisclosure, Select, SelectItem, Input, Spinner } from '@nextui-org/react'
-import { useQuery } from '@tanstack/react-query'
+import { Button, Modal, ModalContent, ModalHeader, ModalBody, useDisclosure, Input, Spinner } from '@nextui-org/react'
 import { toast } from 'react-toastify'
 import { useForm, Controller } from 'react-hook-form'
-import { formatUnits } from 'viem'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import clsx from 'clsx'
 
 import { explorer } from '@/constants/explorer'
-import { TOKENS_FROM, TOKENS_TO, USDC_CONTRACT_ADDRESS } from '@/constants/token'
 
 import { env } from 'env.mjs'
+import { abi } from '@/utils/scrollerNft_abiEnumerable'
+import { maskAddress } from '@/utils/address'
+import { formatEther } from 'viem'
 
 const schema = z.object({
-  token: z.string().startsWith('0x'),
   amount: z.string(),
   toAddress: z.string().startsWith('0x'),
 })
@@ -26,17 +25,37 @@ const schema = z.object({
 type WithdrawForm = z.infer<typeof schema>
 
 const defaultValues: WithdrawForm = {
-  token: USDC_CONTRACT_ADDRESS[+env.NEXT_PUBLIC_CHAIN_ID_SCROLLER as 1 | 5 | 137],
   amount: '',
   toAddress: '',
 }
 
-const TOKENS = { ...TOKENS_FROM, ...TOKENS_TO }
-
-const WithdrawButton = ({ tbaAddress }: { tbaAddress: string }) => {
-  const signer = useSigner()
-
+const WithdrawButton = ({ tbaAddress, tokenId }: { tokenId: string; tbaAddress: string }) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
+
+  const [tbaBalance, setTbaBalance] = useState<string>('')
+  const [tbaOwner, setTbaOwner] = useState<string>('')
+
+  const address = useAddress()
+  const signer = useSigner()
+  const chainId = useChainId()
+  const { contract, isLoading, error } = useContract(chainId ? env.NEXT_PUBLIC_SCROLLER_NFT_CONTRACT_ADDRESS : null, abi)
+
+  useEffect(() => {
+    const getTbaBalance = async () => {
+      if (!contract || !address) return
+      const response = await contract.call('getTBA', [tokenId])
+      setTbaBalance(formatEther(response[1]))
+    }
+
+    const getTbaOwner = async () => {
+      if (!contract || !address) return
+      const owner = await contract.erc721.ownerOf(tokenId)
+      setTbaOwner(owner)
+    }
+
+    getTbaBalance()
+    getTbaOwner()
+  }, [isOpen])
 
   const {
     control,
@@ -50,29 +69,9 @@ const WithdrawButton = ({ tbaAddress }: { tbaAddress: string }) => {
     resolver: zodResolver(schema),
   })
 
-  const {
-    data: balances,
-    isLoading: balancesLoading,
-    error,
-    refetch,
-  } = useQuery<{ [address: `0x${string}`]: string }>({
-    queryKey: ['tba-balances', tbaAddress],
-    queryFn: async () => {
-      const res = await fetch(`/api/scroller/profile/${tbaAddress}/balances`)
-
-      if (!res.ok) {
-        throw new Error(res.statusText)
-      }
-
-      return await res.json()
-    },
-    enabled: isOpen,
-    refetchInterval: 5000,
-  })
-
   const onSubmit = async (data: WithdrawForm) => {
-    if (BigInt(+data.amount * 10 ** TOKENS[data.token].decimal) > BigInt(balances?.[data.token as `0x${string}`] || 0)) {
-      setError('amount', { type: 'custom', message: 'Not enough balance' })
+    if (+data.amount > +tbaBalance) {
+      setError('amount', { type: 'custom', message: 'Not enough ETH balance' })
       return
     }
 
@@ -84,20 +83,18 @@ const WithdrawButton = ({ tbaAddress }: { tbaAddress: string }) => {
     })
 
     try {
-      const txHash = await tokenboundClient.transferERC20({
+      const txHash = await tokenboundClient.transferETH({
         account: tbaAddress as `0x${string}`,
         amount: +data.amount,
         recipientAddress: data.toAddress as `0x${string}`,
-        erc20tokenAddress: data.token as `0x${string}`,
-        erc20tokenDecimals: TOKENS[data.token].decimal,
       })
 
       toast.success(
         <p>
-          Successfully transferred {TOKENS[data.token].name}.&nbsp;
+          Successfully transferred {data.amount} ETH at &nbsp;
           <a
             className="underline"
-            href={`${explorer[+env.NEXT_PUBLIC_CHAIN_ID_SCROLLER as 1 | 5 | 137]}/tx/${txHash} | 11155111`}
+            href={`${explorer[+env.NEXT_PUBLIC_CHAIN_ID_SCROLLER as 1 | 5 | 137 | 11155111]}/tx/${txHash} | 11155111`}
             rel="noreferrer"
             target="_blank"
           >
@@ -105,26 +102,9 @@ const WithdrawButton = ({ tbaAddress }: { tbaAddress: string }) => {
           </a>
         </p>
       )
-
-      refetch()
+      onOpenChange()
     } catch (error) {
       toast.error((error as Error)?.message || 'Failed to withdraw')
-    }
-  }
-
-  const renderBalance = (token: `0x${string}`) => {
-    const tokenBalance = balances?.[token]
-
-    if (tokenBalance === undefined) {
-      return '-'
-    }
-
-    try {
-      const tokenBalanceInBigInt = BigInt(tokenBalance)
-
-      return formatUnits(tokenBalanceInBigInt, TOKENS[token].decimal)
-    } catch (error) {
-      return '-'
     }
   }
 
@@ -150,120 +130,121 @@ const WithdrawButton = ({ tbaAddress }: { tbaAddress: string }) => {
         <ModalContent className="bg-black text-white">
           {() => (
             <>
-              <ModalHeader className="justify-center font-bold text-2xl">Withdraw from Beep</ModalHeader>
+              <ModalHeader className="justify-center font-bold text-2xl">Withdraw ETH from your Scroller Pass</ModalHeader>
               <ModalBody className="px-8 pb-8 tracking-wide">
                 <form
                   className="flex flex-col items-center gap-4"
                   onSubmit={handleSubmit(onSubmit)}
                 >
-                  <div className="w-full flex flex-col items-center gap-2">
-                    <Controller
-                      control={control}
-                      name="token"
-                      render={({ field }) => (
-                        <>
-                          <Select
-                            classNames={{
-                              base: 'w-full max-w-[320px] border border-[#808080] rounded-full',
-                              label: 'hidden',
-                              popoverContent: 'bg-[#1f1f1f]',
-                              trigger: 'h-[56px] bg-black hover:!bg-[#0f0f0f]',
-                              value: 'font-bold text-lg text-center !text-white',
-                            }}
-                            items={Object.values(TOKENS)}
-                            label="Select token"
-                            labelPlacement="outside"
-                            listboxProps={{
-                              itemClasses: {
-                                base: 'text-white',
-                              },
-                            }}
-                            onSelectionChange={keys => {
-                              Array.from(keys)[0] && field.onChange(Array.from(keys)[0].toString())
-                            }}
-                            radius="full"
-                            renderValue={items => items.map(_item => _item.data && <div key={_item.data.name}>{_item.data.name}</div>)}
-                            selectedKeys={[field.value]}
-                            size="sm"
-                            startContent={<div className="h-6 w-6 shrink-0">{TOKENS[field.value].icon && TOKENS[field.value].icon()}</div>}
-                          >
-                            {_token => (
-                              <SelectItem
-                                key={_token.address}
-                                value={_token.address}
-                              >
-                                {_token.name}
-                              </SelectItem>
-                            )}
-                          </Select>
-                          <div className="text-center text-sm">
-                            {balancesLoading ? (
-                              <Spinner
-                                color="default"
-                                size="sm"
-                              />
-                            ) : (
-                              `Balance: ${renderBalance(field.value as `0x${string}`)}`
-                            )}
-                          </div>
-                        </>
-                      )}
-                    />
-                  </div>
+                  {/* WITHDRAW AMOUNT */}
                   <div className="w-full flex flex-col items-center">
                     <Controller
                       control={control}
                       name="amount"
                       render={({ field, fieldState }) => (
-                        <Input
-                          classNames={{
-                            base: clsx('max-w-[320px] px-4 rounded-full border border-[#808080]', fieldState.error && 'border-red-500'),
-                            label: clsx(
-                              'font-normal text-white group-data-[has-value=true]:text-white',
-                              fieldState.error && 'text-red-500 group-data-[has-value=true]:text-red-500'
-                            ),
-                            input: 'font-bold text-lg text-end group-data-[has-value=true]:text-white',
-                            inputWrapper: '!bg-transparent',
-                          }}
-                          color={fieldState.error ? 'danger' : 'default'}
-                          // errorMessage={fieldState.error?.message}
-                          label="amount"
-                          onValueChange={value => {
-                            if (/^(\d+(\.\d*)?|\.\d+)?$/.test(value)) {
-                              field.onChange(value)
-                              clearErrors('amount')
-                            }
-                          }}
-                          value={String(field.value)}
-                        />
+                        <>
+                          <div className="w-full flex flex-col items-center gap-2 mb-4">
+                            <div className="flex justify-between items-center gap-4 text-center text-sm">
+                              <div className="flex items-center gap-1">
+                                <div>
+                                  {isLoading ? (
+                                    <Spinner
+                                      color="default"
+                                      size="sm"
+                                    />
+                                  ) : (
+                                    `Balance:`
+                                  )}
+                                </div>
+                                <button
+                                  onClick={e => {
+                                    e.preventDefault()
+                                    field.onChange(tbaBalance)
+                                  }}
+                                  className="px-2 py-1 rounded-full border border-[#808080] text-#808080 tracking-wider transition-colors hover:bg-[#808080]"
+                                >
+                                  {tbaBalance} ETH
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                          <Input
+                            classNames={{
+                              base: clsx('max-w-[320px] px-4 rounded-full border border-[#808080]', fieldState.error && 'border-red-500'),
+                              label: clsx(
+                                'font-normal text-white group-data-[has-value=true]:text-white',
+                                fieldState.error && 'text-red-500 group-data-[has-value=true]:text-red-500'
+                              ),
+                              input: 'font-bold text-lg text-end group-data-[has-value=true]:text-white',
+                              inputWrapper: '!bg-transparent',
+                            }}
+                            color={fieldState.error ? 'danger' : 'default'}
+                            errorMessage={fieldState.error?.message}
+                            label="amount"
+                            onValueChange={value => {
+                              if (/^(\d+(\.\d*)?|\.\d+)?$/.test(value)) {
+                                field.onChange(value)
+                                clearErrors('amount')
+                              }
+                            }}
+                            value={String(field.value)}
+                          />
+                        </>
                       )}
                     />
                   </div>
+                  {/* TOKEN ADDRESS */}
                   <div className="w-full flex flex-col items-center">
                     <Controller
                       control={control}
                       name="toAddress"
                       render={({ field, fieldState }) => (
-                        <Input
-                          classNames={{
-                            base: clsx('max-w-[320px] px-4 rounded-full border border-[#808080]', fieldState.error && 'border-red-500'),
-                            label: clsx(
-                              'font-normal text-white group-data-[has-value=true]:text-white',
-                              fieldState.error && 'text-red-500 group-data-[has-value=true]:text-red-500'
-                            ),
-                            input: 'font-bold text-lg text-end group-data-[has-value=true]:text-white placeholder:text-[#7f7f7f]',
-                            inputWrapper: '!bg-transparent',
-                          }}
-                          color={fieldState.error ? 'danger' : 'default'}
-                          // errorMessage={fieldState.error?.message}
-                          label="toAddress"
-                          onValueChange={value => {
-                            field.onChange(value)
-                            clearErrors('toAddress')
-                          }}
-                          placeholder="0x"
-                          value={field.value}
-                        />
+                        <>
+                          <div className="w-full flex flex-col items-center gap-2 mb-4">
+                            <div className="flex justify-between items-center gap-4 text-center text-sm">
+                              <div className="flex items-center gap-1">
+                                <div>
+                                  {isLoading ? (
+                                    <Spinner
+                                      color="default"
+                                      size="sm"
+                                    />
+                                  ) : (
+                                    `Owner: `
+                                  )}
+                                </div>
+                                <button
+                                  onClick={e => {
+                                    e.preventDefault()
+                                    field.onChange(tbaOwner)
+                                  }}
+                                  className="px-2 py-1 rounded-full border border-[#808080] text-#808080 tracking-wider transition-colors hover:bg-[#808080]"
+                                >
+                                  {maskAddress(tbaOwner)}
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                          <Input
+                            classNames={{
+                              base: clsx('max-w-[320px] px-4 rounded-full border border-[#808080]', fieldState.error && 'border-red-500'),
+                              label: clsx(
+                                'font-normal text-white group-data-[has-value=true]:text-white',
+                                fieldState.error && 'text-red-500 group-data-[has-value=true]:text-red-500'
+                              ),
+                              input: 'font-bold text-lg text-end group-data-[has-value=true]:text-white placeholder:text-[#7f7f7f]',
+                              inputWrapper: '!bg-transparent',
+                            }}
+                            color={fieldState.error ? 'danger' : 'default'}
+                            errorMessage={fieldState.error?.message}
+                            label="toAddress"
+                            onValueChange={value => {
+                              field.onChange(value)
+                              clearErrors('toAddress')
+                            }}
+                            value={field.value}
+                          />
+                        </>
                       )}
                     />
                   </div>
