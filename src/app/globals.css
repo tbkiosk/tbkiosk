@@ -35,6 +35,11 @@
 }
 
 @font-face {
+  font-family: pixel;
+  src: url('/fonts/pixel.ttf');
+}
+
+@font-face {
   font-family: gridular;
   src: url('/fonts/Gridular-Regular.woff');
 }
