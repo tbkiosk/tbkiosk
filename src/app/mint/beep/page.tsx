@@ -298,7 +298,7 @@ const Mint = () => (
               MANAGE PROJECT
             </Link>
           </div>
-          <span>@2023 Kiosk</span>
+          <span>©️ 2023 Kiosk</span>
         </footer>
       </div>
     </main>
