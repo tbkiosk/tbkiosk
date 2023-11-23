@@ -81,7 +81,7 @@ export async function GET(request: Request, { params }: { params: { tokenBoundAc
       0
     )
 
-    const pnl = tokensPrice - uSwapAmount
+    const pnl = (tokensPrice - uSwapAmount).toFixed(2)
 
     return NextResponse.json(pnl)
   } catch (error) {
