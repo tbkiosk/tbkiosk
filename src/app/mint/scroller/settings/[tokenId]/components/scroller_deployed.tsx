@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query'
 import { Spinner } from '@nextui-org/react'
 
 import ScrollerAccountNotCreated from './scroller_account_not_created'
-import SettingsBoard from './settings_board'
+import SettingsBoardScroller from './scroller_settings_board'
 
 import type { TBAUser } from '@prisma/client'
 
@@ -55,11 +55,12 @@ const ScrollerDeployed = ({ tbaAddress }: { tokenId: string; tbaAddress: string 
   }
 
   return (
-    <SettingsBoard
-      tbaUser={tbaUser}
-      refetch={refetch}
-      tbaAddress={tbaAddress}
-    />
+    // <SettingsBoard
+    //   tbaUser={tbaUser}
+    //   refetch={refetch}
+    //   tbaAddress={tbaAddress}
+    // />
+    <>SCROLLER DEPLOYED SETTINGS BOARD</>
   )
 }
 

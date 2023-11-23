@@ -7,6 +7,7 @@ import { Spinner } from '@nextui-org/react'
 import ScrollerIframe from '../../components/scroller_iframe'
 import CopyButton from '@/components/copy_button'
 import DepositButton from './deposit_button'
+import ScrollerSettingsPanel from './scroller_settings_panel'
 import WithdrawButton from './withdraw_button'
 
 import { env } from 'env.mjs'
@@ -81,7 +82,10 @@ const TBAContainer = ({ tokenId }: { tokenId: string }) => {
               tokenId={tokenId}
             />
           </div>
-          {/* <ScrollerSettingsPanel tbaAddress={tbaAddress} /> */} TODO: Settings Panel
+          <ScrollerSettingsPanel
+            tbaAddress={tbaAddress}
+            tokenId={tokenId}
+          />
         </div>
       </div>
       {/* <div className="my-10 md:my-20 max-w-[900px] mx-auto">

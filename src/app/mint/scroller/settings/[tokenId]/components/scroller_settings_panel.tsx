@@ -1,39 +1,44 @@
 'use client'
 
-import { useQuery } from '@tanstack/react-query'
 import { Spinner } from '@nextui-org/react'
 
 import ScrollerAccountNotCreated from './scroller_account_not_created'
-import SettingsBoard from './settings_board'
+import SettingsBoardScroller from './scroller_settings_board'
 
-import type { TBAUser } from '@prisma/client'
+import { env } from 'env.mjs'
+import { abi } from '@/utils/scrollerNft_abiEnumerable'
 
-const ScrollerSettingsPanel = ({ tbaAddress }: { tbaAddress: string }) => {
-  const {
-    data: tbaUser,
-    isFetching: tbaUserLoading,
-    error: tbaUserError,
-    refetch,
-  } = useQuery<TBAUser | undefined>({
-    enabled: !!tbaAddress,
-    refetchInterval: 0,
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
-    queryKey: ['token-bound-account-tbaUser', tbaAddress],
-    queryFn: async () => {
-      const res = await fetch(`/api/scroller/profile/${tbaAddress}`)
+import { useEffect, useState } from 'react'
+import { useAddress, useChainId, useContract } from '@thirdweb-dev/react'
+import { formatEther } from 'viem'
+import { BigNumber } from 'alchemy-sdk'
 
-      if (!res.ok) {
-        throw new Error(res.statusText)
-      }
+type TbaUser = {
+  active: boolean
+  lastBridge: BigNumber
+  preference: string
+  tbaAddress: string
+}
 
-      const tbaUser = await res.json()
+const ScrollerSettingsPanel = ({ tbaAddress, tokenId }: { tbaAddress: string; tokenId: string }) => {
+  const [loaded, setLoaded] = useState(false)
+  const chainId = useChainId()
+  const [tba, setTba] = useState<TbaUser>()
 
-      return tbaUser
-    },
-  })
+  const { contract } = useContract(chainId ? env.NEXT_PUBLIC_SCROLLER_NFT_CONTRACT_ADDRESS : null, abi)
 
-  if (tbaUserLoading) {
+  useEffect(() => {
+    const getTbaInfo = async () => {
+      if (!contract || !tbaAddress) return
+      const [_tba, _] = await contract.call('getTBA', [tokenId])
+      setTba(_tba)
+      setLoaded(true)
+    }
+
+    getTbaInfo()
+  }, [tokenId, contract, tbaAddress])
+
+  if (!loaded) {
     return (
       <div className="min-h-[240px] flex items-center justify-center">
         <Spinner color="default" />
@@ -41,25 +46,24 @@ const ScrollerSettingsPanel = ({ tbaAddress }: { tbaAddress: string }) => {
     )
   }
 
-  if (tbaUserError) {
-    return <p>{(tbaUserError as Error)?.message || 'Failed to load profile'}</p>
-  }
+  // if (tbaUserError) {
+  //   return <p>{(tbaUserError as Error)?.message || 'Failed to load profile'}</p>
+  // }
 
-  if (!tbaUser) {
-    return (
-      <ScrollerAccountNotCreated
-        refetch={refetch}
-        tbaAddress={tbaAddress}
-      />
-    )
-  }
+  // if (!tba) {
+  //   return (
+  //     <ScrollerAccountNotCreated
+  //       refetch={refetch}
+  //       tbaAddress={tbaAddress}
+  //     />
+  //   )
+  // }
 
   return (
-    <SettingsBoard
-      tbaUser={tbaUser}
-      refetch={refetch}
-      tbaAddress={tbaAddress}
-    />
+    <div className="w-full flex bg-red-400">
+      {tba && <SettingsBoardScroller tbaUser={tba} />}
+      {/* <>SETTINGS BOARD!!!</> */}
+    </div>
   )
 }
 
