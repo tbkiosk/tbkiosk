@@ -2,7 +2,7 @@
 
 import { Spinner } from '@nextui-org/react'
 
-import ScrollerAccountNotCreated from './scroller_account_not_created'
+// import ScrollerAccountNotCreated from './scroller_account_not_created'
 import SettingsBoardScroller from './scroller_settings_board'
 
 import { env } from 'env.mjs'

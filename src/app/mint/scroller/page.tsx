@@ -70,7 +70,7 @@ const Mint = () => (
           <div className="p-8 md:p-20 bg-[#f5f5f5] rounded-[20px]">
             <div className="flex flex-col md:flex-row gap-8 md:gap-16">
               <Image
-                alt="beep"
+                alt="scroller"
                 as={NextImage}
                 classNames={{
                   wrapper: 'w-full max-w-[480px]',
@@ -111,8 +111,8 @@ const Mint = () => (
                 <div className="mt-8 font-medium text-sm">
                   <p className="mb-2">
                     Scroller Pass is an experimental NFT app that lets you bridge ETH from mainnet to Scroll L2 when gas fees are low. We
-                    are currently in close beta, and only allowlisted addresses can mint. Join the Beep waitlist now and be first in line
-                    for its public release. Don&apos;t miss out!
+                    are currently in close beta, and only allowlisted addresses can mint. Join the Scroller Pass waitlist now and be first
+                    in line for its public release. Don&apos;t miss out!
                   </p>
                   <p>
                     Join the&nbsp;
@@ -184,7 +184,7 @@ const Mint = () => (
               <div className="md:w-1/2">
                 <div className="flex items-center gap-2 mb-4">
                   <Image
-                    alt="beep"
+                    alt="scroller"
                     as={NextImage}
                     height={24}
                     loading="eager"
@@ -199,7 +199,8 @@ const Mint = () => (
                     the most opportune moment .{' '}
                   </p>
                   <p className="mb-2">
-                    No fuss, just mint Beep, set your gas tolerance and top up its balance whenever you want to bridge ETH to the Scroll L2.
+                    No fuss, just mint your Scroller Pass, set your gas tolerance and top up its balance whenever you want to bridge ETH to
+                    the Scroll L2.
                   </p>
                   <p className="mb-2">
                     Forget waking up at 4am to catch the lowest gas prices. Step into the future and maximize your wallet&apos;s potential

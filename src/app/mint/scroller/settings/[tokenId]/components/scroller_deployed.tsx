@@ -3,7 +3,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { Spinner } from '@nextui-org/react'
 
-import ScrollerAccountNotCreated from './scroller_account_not_created'
+// import ScrollerAccountNotCreated from './scroller_account_not_created'
 import SettingsBoardScroller from './scroller_settings_board'
 
 import type { TBAUser } from '@prisma/client'
