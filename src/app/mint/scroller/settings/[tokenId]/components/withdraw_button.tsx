@@ -94,7 +94,7 @@ const WithdrawButton = ({ tbaAddress, tokenId }: { tokenId: string; tbaAddress: 
           Successfully transferred {data.amount} ETH at &nbsp;
           <a
             className="underline"
-            href={`${EXPLORER[+env.NEXT_PUBLIC_CHAIN_ID_SCROLLER as 1 | 5 | 137 | 11155111]}/tx/${txHash} | 11155111`}
+            href={`${EXPLORER[+env.NEXT_PUBLIC_CHAIN_ID_SCROLLER as 1 | 5 | 137 | 11155111]}/tx/${txHash}`}
             rel="noreferrer"
             target="_blank"
           >
