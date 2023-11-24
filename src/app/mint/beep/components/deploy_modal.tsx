@@ -13,7 +13,7 @@ import BeepPreview from './beep_preview'
 import BeepConfirm from './beep_confirm'
 import BeepSuccess from './beep_success'
 
-import { TBA_USER_CONFIG_SCHEMA } from '@/types/schema'
+import { TBA_USER_CONFIG_SCHEMA } from 'prisma/schema'
 
 import { USDC_CONTRACT_ADDRESS, WETH_CONTRACT_ADDRESS } from '@/constants/token'
 
@@ -24,7 +24,7 @@ type ConfigForm = z.infer<typeof TBA_USER_CONFIG_SCHEMA>
 const defaultValues = {
   tokenAddressFrom: USDC_CONTRACT_ADDRESS[+env.NEXT_PUBLIC_CHAIN_ID as 1 | 5 | 137],
   tokenAddressTo: WETH_CONTRACT_ADDRESS[+env.NEXT_PUBLIC_CHAIN_ID as 1 | 5 | 137],
-  amount: 60,
+  amount: 20,
   frequency: 7,
   endDate: dayjs().add(8, 'days').toISOString(),
   mintAmount: 1,
@@ -49,8 +49,8 @@ const DeployModal = ({ isOpen, onOpenChange, onClose }: ReturnType<typeof useDis
 
   return (
     <Modal
-      hideCloseButton={step === 3}
-      isDismissable={step !== 3}
+      hideCloseButton={form.formState.isSubmitting}
+      isDismissable={form.formState.isSubmitting}
       isOpen={isOpen}
       onOpenChange={onOpenChange}
       size="2xl"

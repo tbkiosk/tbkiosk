@@ -1,6 +1,6 @@
 import ConnectWalletButton from '@/components/connect_wallet_button'
 
-import BeepTextLogo from 'public/scroller/scroller-text-logo.svg' // TODO
+import ScrollerTextLogo from 'public/scroller/scroller-text-logo.svg' // TODO
 
 import type { Metadata } from 'next'
 
@@ -10,7 +10,7 @@ const ScrollerSettingsLayout = ({ children }: { children: React.ReactNode }) => 
       <header className="h-[var(--header-height)]">
         <div className="h-full max-w-screen-2xl px-4 md:px-8 py-2 mx-auto flex items-center justify-between">
           <span className="h-[50px]">
-            <BeepTextLogo />
+            <ScrollerTextLogo />
           </span>
           <ConnectWalletButton
             className="!bg-transparent !text-[#78edc1] [&>div>span:first-child]:text-[#78edc1]"

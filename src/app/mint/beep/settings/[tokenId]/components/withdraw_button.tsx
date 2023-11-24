@@ -12,7 +12,7 @@ import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import clsx from 'clsx'
 
-import { explorer } from '@/constants/explorer'
+import { EXPLORER } from '@/constants/explorer'
 import { TOKENS_FROM, TOKENS_TO, USDC_CONTRACT_ADDRESS } from '@/constants/token'
 
 import { env } from 'env.mjs'
@@ -97,7 +97,7 @@ const WithdrawButton = ({ tbaAddress }: { tbaAddress: string }) => {
           Successfully transferred {TOKENS[data.token].name}.&nbsp;
           <a
             className="underline"
-            href={`${explorer[+env.NEXT_PUBLIC_CHAIN_ID as 1 | 5 | 137]}/tx/${txHash}`}
+            href={`${EXPLORER[+env.NEXT_PUBLIC_CHAIN_ID as 1 | 5 | 137]}/tx/${txHash}`}
             rel="noreferrer"
             target="_blank"
           >

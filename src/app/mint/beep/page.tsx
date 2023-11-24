@@ -78,7 +78,7 @@ const Mint = () => (
                 height={480}
                 loading="eager"
                 priority
-                src="/beep/beep.png"
+                src="/beep/beep.gif"
                 width={480}
               />
               <div className="flex flex-col grow-0">
@@ -186,7 +186,7 @@ const Mint = () => (
                     as={NextImage}
                     height={24}
                     loading="eager"
-                    src="data:image/jpeg;base64,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"
+                    src="/beep/beep-icon.jpg"
                     width={24}
                   />
                   <span className="font-medium">BEEP BOT</span>
@@ -301,7 +301,7 @@ const Mint = () => (
               MANAGE PROJECT
             </Link>
           </div>
-          <span>@2023 Kiosk</span>
+          <span>©️ 2023 Kiosk</span>
         </footer>
       </div>
     </main>

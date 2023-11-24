@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import NextImage from 'next/image'
 import { Image, Button } from '@nextui-org/react'
 import { Controller, type UseFormReturn } from 'react-hook-form'
@@ -14,7 +15,7 @@ import clsx from 'clsx'
 
 import { TOKENS_FROM } from '@/constants/token'
 
-import { TBA_USER_CONFIG_SCHEMA } from '@/types/schema'
+import { TBA_USER_CONFIG_SCHEMA } from 'prisma/schema'
 
 import { env } from 'env.mjs'
 
@@ -39,6 +40,8 @@ const BeepConfirm = ({ control, getValues, watch, handleSubmit, formState: { isS
   const { contract: beepContract } = useContract(env.NEXT_PUBLIC_BEEP_CONTRACT_ADDRESS)
   const { refetch } = useOwnedNFTs(beepContract, address)
 
+  const [progress, setProgress] = useState(0)
+
   const mintAmount = watch('mintAmount')
 
   const onSubmit = async () => {
@@ -54,6 +57,7 @@ const BeepConfirm = ({ control, getValues, watch, handleSubmit, formState: { isS
 
     try {
       const totalDepositAmount = depositAmount * mintAmount
+      setProgress(10)
 
       if (totalDepositAmount > 0) {
         await tokenContract.call('approve', [
@@ -61,6 +65,8 @@ const BeepConfirm = ({ control, getValues, watch, handleSubmit, formState: { isS
           ethers.utils.parseUnits(String(totalDepositAmount), TOKENS_FROM[tokenAddressFrom].decimal),
         ])
       }
+
+      setProgress(25)
 
       const sdk = ThirdwebSDK.fromSigner(signer, env.NEXT_PUBLIC_CHAIN_ID, {
         clientId: env.NEXT_PUBLIC_THIRDWEB_CLIENT_ID,
@@ -88,7 +94,11 @@ const BeepConfirm = ({ control, getValues, watch, handleSubmit, formState: { isS
         ),
       }
 
+      setProgress(40)
+
       await nftContract.call('claimAndCreateTba', [claimAndCreateArgs])
+
+      setProgress(60)
 
       // wait for NFTs re-collection
       const nftResponse = await refetch()
@@ -104,6 +114,8 @@ const BeepConfirm = ({ control, getValues, watch, handleSubmit, formState: { isS
         return
       }
 
+      setProgress(80)
+
       const tokenboundClient = new TokenboundClient({
         signer: signer,
         chainId: +env.NEXT_PUBLIC_CHAIN_ID,
@@ -117,6 +129,8 @@ const BeepConfirm = ({ control, getValues, watch, handleSubmit, formState: { isS
           tokenId: _nft,
         })
       )
+
+      setProgress(85)
 
       const res = await fetch(`/api/beep/profile`, {
         method: 'POST',
@@ -132,6 +146,8 @@ const BeepConfirm = ({ control, getValues, watch, handleSubmit, formState: { isS
         }),
       })
 
+      setProgress(95)
+
       if (!res.ok) {
         toast.warning(
           'Mint was successful but failed to create investment plan(s). You can manually create an investment plan in settings page'
@@ -140,6 +156,7 @@ const BeepConfirm = ({ control, getValues, watch, handleSubmit, formState: { isS
         toast.success('Mint was successful')
       }
 
+      setProgress(100)
       setStep(4)
     } catch (error) {
       toast.error((error as ThirdWebError)?.reason || (error as Error)?.message || 'Failed to mint')
@@ -234,6 +251,20 @@ const BeepConfirm = ({ control, getValues, watch, handleSubmit, formState: { isS
                 Mint
               </Button>
             </div>
+            {isSubmitting && (
+              <div className="h-1 w-[90%] mb-4 relative bg-[#954e11] rounded-full">
+                <div
+                  className="h-full absolute top-0 flex items-center bg-[#f7b32e] rounded-full transition-[width]"
+                  style={{ width: `${progress}%` }}
+                />
+                <div className="w-full absolute top-2 flex items-center">
+                  <div className="w-1/4 text-center">Deposited</div>
+                  <div className="w-1/4 text-center">Minted</div>
+                  <div className="w-1/4 text-center">Deployed</div>
+                  <div className="w-1/4 text-center">First DCA</div>
+                </div>
+              </div>
+            )}
           </>
         )}
       />

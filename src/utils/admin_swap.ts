@@ -1,14 +1,14 @@
 /* eslint-disable no-console */
 
-import { Alchemy, Utils, Wallet, BigNumber } from 'alchemy-sdk'
+import { Utils, Wallet, BigNumber } from 'alchemy-sdk'
 import { decodeErrorResult } from 'viem/utils'
 import dayjs from 'dayjs'
 
 import { abi } from '@/utils/admin_abi'
-import { ALCHEMY_CONFIG } from '@/constants/alchemy'
 import { TOKENS_FROM } from '@/constants/token'
 
 import { prismaClient } from '@/lib/prisma'
+import { alchemy } from '@/lib/alchemy'
 
 import { env } from 'env.mjs'
 
@@ -22,7 +22,6 @@ type SwapDetail = {
   nonce?: number
 }
 
-const alchemy = new Alchemy(ALCHEMY_CONFIG)
 const adminContract = env.NEXT_PUBLIC_ADMIN_CONTRACT_ADDRESS
 const chainId = env.NEXT_PUBLIC_CHAIN_ID
 

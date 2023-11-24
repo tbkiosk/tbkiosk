@@ -1,11 +1,14 @@
-import { Ethereum, Goerli, Polygon, Sepolia } from '@thirdweb-dev/chains'
+import { Ethereum, Goerli, Polygon } from '@thirdweb-dev/chains'
 
 import { env } from 'env.mjs'
 
 import USDC from 'public/icons/tokens/usdc.svg'
+import BeepUSDC from 'public/icons/tokens/beep-usdc.svg'
 import USDT from 'public/icons/tokens/usdt.svg'
+import BeepUSDT from 'public/icons/tokens/beep-usdt.svg'
 import EthereumCircle from 'public/icons/tokens/ethereum-circle.svg'
-import STEthereum from 'public/icons/tokens/steth.svg'
+import BeepEth from 'public/icons/tokens/beep-eth.svg'
+// import STEthereum from 'public/icons/tokens/steth.svg'
 
 export const USDC_CONTRACT_ADDRESS = {
   [Ethereum.chainId]: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
@@ -64,6 +67,7 @@ export const TOKENS_FROM = {
     address: USDC_CONTRACT_ADDRESS[+env.NEXT_PUBLIC_CHAIN_ID as 1 | 5 | 137],
     decimal: USDC_DECIMAL,
     icon: () => <USDC />,
+    beepIcon: () => <BeepUSDC />,
   },
   [USDT_CONTRACT_ADDRESS[+env.NEXT_PUBLIC_CHAIN_ID as 1 | 5 | 137]]: {
     name: 'USDT',
@@ -71,6 +75,7 @@ export const TOKENS_FROM = {
     address: USDT_CONTRACT_ADDRESS[+env.NEXT_PUBLIC_CHAIN_ID as 1 | 5 | 137],
     decimal: USDT_DECIMAL,
     icon: () => <USDT />,
+    beepIcon: () => <BeepUSDT />,
   },
 }
 
@@ -81,6 +86,7 @@ export const TOKENS_TO = {
     address: WETH_CONTRACT_ADDRESS[+env.NEXT_PUBLIC_CHAIN_ID as 1 | 5 | 137],
     decimal: WETH_DECIMAL,
     icon: () => <EthereumCircle />,
+    beepIcon: () => <BeepEth />,
   },
   // [WSTETH_CONTRACT_ADDRESS[+env.NEXT_PUBLIC_CHAIN_ID as 1 | 5 | 137]]: {
   //   name: 'wstETH',

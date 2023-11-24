@@ -8,13 +8,13 @@ import CopyButton from '@/components/copy_button'
 import DepositButton from './deposit_button'
 import WithdrawButton from './withdraw_button'
 import BeepSettingsPanel from './beep_settings_panel'
+import TbaRecord from './tba_record'
 
 import useTbaAddress from '@/hooks/useTbaAddress'
 
-import { env } from 'env.mjs'
-
 import { maskAddress } from '@/utils/address'
-// import TbaRecord from '@/app/mint/beep/settings/[tokenId]/components/tba_record'
+
+import { env } from 'env.mjs'
 
 const TBAContainer = ({ tokenId }: { tokenId: string }) => {
   const address = useAddress()
@@ -46,17 +46,17 @@ const TBAContainer = ({ tokenId }: { tokenId: string }) => {
   return (
     <div>
       <div className="flex flex-col md:flex-row justify-center gap-4 md:gap-8 pt-8 md:pt-16">
-        <div className="w-full md:w-[40%] flex justify-center md:justify-end shrink-0">
+        <div className="w-full md:w-[480px] flex justify-center md:justify-start shrink-0">
           <div className="max-h-full aspect-square overflow-hidden">
             <BeepIframe tokenId={tokenId} />
           </div>
         </div>
-        <div className="w-full max-w-[534px]">
+        <div className="w-full max-w-[480px]">
           <h1 className="mb-4 font-bold text-4xl">Set up your Beep</h1>
           <div className="flex items-center gap-4 mb-8">
             <span className="font-medium text-xl">Beep #{tokenId}</span>
             <CopyButton
-              className="px-4 py-1 border border-[#a6a9ae] rounded-full font-normal text-sm text-[#a6a9ae] hover:border-[#666666]"
+              className="px-4 py-1 border-none rounded-full font-normal text-sm text-[#a6a9ae] hover:border-[#666666]"
               copyText={tbaAddress}
             >
               {maskAddress(tbaAddress)}
@@ -72,9 +72,9 @@ const TBAContainer = ({ tokenId }: { tokenId: string }) => {
           <BeepSettingsPanel tbaAddress={tbaAddress} />
         </div>
       </div>
-      {/* <div className="my-10 md:my-20 max-w-[900px] mx-auto">
+      <div className="my-10 md:my-20 max-w-4xl mx-auto">
         <TbaRecord tbaAddress={tbaAddress} />
-      </div> */}
+      </div>
     </div>
   )
 }

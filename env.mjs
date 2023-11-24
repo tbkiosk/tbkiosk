@@ -9,7 +9,7 @@ export const env = createEnv({
     ETHERSCAN_KEY: z.string().min(1),
     POLYGONSCAN_KEY: z.string().min(1),
     SWAP_PRIVATE_KEY: z.string().min(1),
-    NEXT_PUBLIC_CHAIN_ID: z.enum(['1', '5', '137', '11155111']),
+    NEXT_PUBLIC_CHAIN_ID: z.enum(['1', '5', '137']),
     NEXT_PUBLIC_BEEP_CONTRACT_ADDRESS: z.string().min(1).startsWith('0x'),
     NEXT_PUBLIC_BEEP_TBA_IMPLEMENTATION_ADDRESS: z.string().min(1).startsWith('0x'),
     NEXT_PUBLIC_REGISTRY_ADDRESS: z.string().min(1).startsWith('0x'),
@@ -22,7 +22,7 @@ export const env = createEnv({
   },
   client: {
     NEXT_PUBLIC_THIRDWEB_CLIENT_ID: z.string().min(1),
-    NEXT_PUBLIC_CHAIN_ID: z.enum(['1', '5', '137', '11155111']),
+    NEXT_PUBLIC_CHAIN_ID: z.enum(['1', '5', '137']),
     NEXT_PUBLIC_BEEP_CONTRACT_ADDRESS: z.string().min(1).startsWith('0x'),
     NEXT_PUBLIC_BEEP_TBA_IMPLEMENTATION_ADDRESS: z.string().min(1).startsWith('0x'),
     NEXT_PUBLIC_REGISTRY_ADDRESS: z.string().min(1).startsWith('0x'),

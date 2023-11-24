@@ -3,14 +3,13 @@
 import { Button, Tooltip, Chip, Input } from '@nextui-org/react'
 import { Controller, type UseFormReturn } from 'react-hook-form'
 import { useBalance } from '@thirdweb-dev/react'
-
 import { z } from 'zod'
 import dayjs from 'dayjs'
 
 import { TOKENS_FROM, TOKENS_TO } from '@/constants/token'
 import { FREQUENCY_OPTIONS } from '@/constants/beep'
 
-import { TBA_USER_CONFIG_SCHEMA } from '@/types/schema'
+import { TBA_USER_CONFIG_SCHEMA } from 'prisma/schema'
 
 import ArrowIcon from 'public/icons/arrow.svg'
 
@@ -48,6 +47,7 @@ const BeepPreview = ({ control, getValues, setValue, setStep, setError, clearErr
         will be swapping <span className="text-[#0062ff]">{amount}</span>{' '}
         <span className="text-[#0062ff]">{TOKENS_FROM[tokenAddressFrom].name}</span> to{' '}
         <span className="text-[#0062ff]">{TOKENS_TO[tokenAddressTo].name}</span>
+        <span className="text-red-500">*</span>
       </div>
       <div className="flex items-center">
         <div className="text-center">
@@ -61,11 +61,11 @@ const BeepPreview = ({ control, getValues, setValue, setStep, setError, clearErr
         </div>
         <div className="text-center">
           <div className="font-normal">End date</div>
-          <div className="text-2xl">{!endDate ? 'N/A' : dayjs(endDate).format('DD MMM YYYY')}</div>
+          <div className="text-2xl">{!endDate ? 'Forever' : dayjs(endDate).format('DD MMM YYYY')}</div>
         </div>
       </div>
       <div className="w-[90%]">
-        <div className="flex items-center">
+        <div className="flex items-center justify-center">
           Deposit Amount{' '}
           <Tooltip
             classNames={{
@@ -77,39 +77,41 @@ const BeepPreview = ({ control, getValues, setValue, setStep, setError, clearErr
             <span className="h-4 w-4 flex items-center justify-center ml-2 bg-[#babdcc] rounded-full cursor-pointer">?</span>
           </Tooltip>
         </div>
-        <Controller
-          control={control}
-          name="depositAmount"
-          render={({ field, fieldState }) => (
-            <Input
-              classNames={{
-                base: 'w-full md:w-[320px]',
-                innerWrapper: '!items-center bg-transparent',
-                input: 'w-full pt-0 bg-transparent font-bold text-4xl text-left',
-                inputWrapper: '!bg-transparent shadow-none',
-                label: 'hidden',
-              }}
-              color={fieldState.error ? 'danger' : 'default'}
-              errorMessage={fieldState.error?.message}
-              label="Deposit Amount"
-              onValueChange={value => {
-                if (/(^[0-9]+$|^$)/.test(value)) {
-                  field.onChange(+value)
-                  clearErrors('depositAmount')
-                }
-              }}
-              value={String(field.value)}
-            />
-          )}
-        />
-        <div className="w-[90%] flex items-center flex-wrap">
+        <div className="flex justify-center">
+          <Controller
+            control={control}
+            name="depositAmount"
+            render={({ field, fieldState }) => (
+              <Input
+                classNames={{
+                  base: 'w-full md:w-[320px]',
+                  innerWrapper: '!items-center bg-transparent',
+                  input: 'w-full pt-0 bg-transparent font-bold text-4xl text-center',
+                  inputWrapper: '!bg-transparent shadow-none',
+                  label: 'hidden',
+                }}
+                color={fieldState.error ? 'danger' : 'default'}
+                errorMessage={fieldState.error?.message}
+                label="Deposit Amount"
+                onValueChange={value => {
+                  if (/(^[0-9]+$|^$)/.test(value)) {
+                    field.onChange(+value > 1000000000 ? 999999999 : +value)
+                    clearErrors('depositAmount')
+                  }
+                }}
+                value={String(field.value)}
+              />
+            )}
+          />
+        </div>
+        <div className="flex items-center justify-center flex-wrap md:gap-8">
           <div>
             <span className="mr-4 text-[#808080]">Balance:</span>
             <span>
               {TOKENS_FROM[tokenAddressFrom].name} {balance.data?.displayValue}
             </span>
           </div>
-          <div className="flex gap-2 ml-8">
+          <div className="flex gap-2">
             <Chip
               className="text-[#0062ff] cursor-pointer"
               onClick={() => {
@@ -194,9 +196,10 @@ const BeepPreview = ({ control, getValues, setValue, setStep, setError, clearErr
           className="h-14 w-full bg-black text-2xl text-white rounded-full"
           onClick={onSubmit}
         >
-          Mint
+          Proceed To Mint
         </Button>
       </div>
+      <div className="text-red-500 text-sm -mt-8">* These settings can be changed from the settings page after you mint</div>
     </div>
   )
 }

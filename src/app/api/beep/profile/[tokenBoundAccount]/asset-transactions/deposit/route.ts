@@ -1,11 +1,10 @@
 import { NextResponse } from 'next/server'
 import { AssetTransfersCategory, SortingOrder } from 'alchemy-sdk'
 
-import { TOKENS_TO } from '@/constants/token'
+import { TOKENS_FROM } from '@/constants/token'
+import { TransactionType } from '@/types/transactions'
 
 import { alchemy } from '@/lib/alchemy'
-
-const SWAP_CONTRACT_ADDRESSES = '0x6337b3caf9c5236c7f3d1694410776119edaf9fa'
 
 export const dynamic = 'force-dynamic'
 export const fetchCache = 'force-no-store'
@@ -14,11 +13,10 @@ export async function GET(request: Request, { params }: { params: { tokenBoundAc
   const tokenBoundAccount = params.tokenBoundAccount
 
   try {
-    const transactions = await alchemy.core.getAssetTransfers({
+    const depositTransactions = await alchemy.core.getAssetTransfers({
       category: [AssetTransfersCategory.ERC20],
-      contractAddresses: [...Object.keys(TOKENS_TO)],
+      contractAddresses: [...Object.keys(TOKENS_FROM)],
       excludeZeroValue: true,
-      fromAddress: SWAP_CONTRACT_ADDRESSES,
       fromBlock: '0x0',
       order: SortingOrder.DESCENDING,
       toAddress: tokenBoundAccount,
@@ -26,10 +24,10 @@ export async function GET(request: Request, { params }: { params: { tokenBoundAc
       withMetadata: true,
     })
 
-    const response = transactions?.transfers || []
+    const response = depositTransactions?.transfers?.map(_tx => ({ ..._tx, type: TransactionType.DEPOSIT })) || []
 
     return NextResponse.json(response)
   } catch (error) {
-    return NextResponse.json({ error: (error as Error)?.message || 'Failed to get investment history' }, { status: 500 })
+    return NextResponse.json({ error: (error as Error)?.message || 'Failed to get deposit transactions' }, { status: 500 })
   }
 }

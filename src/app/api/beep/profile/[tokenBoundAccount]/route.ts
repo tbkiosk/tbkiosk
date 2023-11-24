@@ -4,8 +4,7 @@ import { fromZodError } from 'zod-validation-error'
 import dayjs from 'dayjs'
 
 import { prismaClient } from '@/lib/prisma'
-
-import { TBA_USER_SCHEMA } from '@/types/schema'
+import { TBA_USER_SCHEMA } from 'prisma/schema'
 
 import { swapSingleUser } from '@/utils/admin_swap'
 
@@ -27,6 +26,64 @@ export async function GET(request: Request, { params }: { params: { tokenBoundAc
     })
 
     return NextResponse.json(tbaUser)
+  } catch (error) {
+    return NextResponse.json({ error: (error as Error)?.message }, { status: 500 })
+  }
+}
+
+export async function POST(request: Request, { params }: { params: { tokenBoundAccount: string } }) {
+  const tokenBoundAccount = params.tokenBoundAccount
+
+  try {
+    const tbaUser = await prismaClient.tBAUser.findFirst({
+      where: {
+        address: {
+          equals: tokenBoundAccount,
+        },
+      },
+    })
+
+    if (tbaUser) {
+      return NextResponse.json({ error: 'User aleady exists' }, { status: 400 })
+    }
+
+    const body = await request.json()
+    const validation = TBA_USER_SCHEMA.safeParse({ ...body, amount: +body.amount, frequency: +body.frequency })
+    if (!validation.success) {
+      return NextResponse.json({ error: fromZodError(validation.error).details }, { status: 400 })
+    }
+
+    const now = dayjs()
+
+    const createdTbaUser = await prismaClient.tBAUser.create({
+      data: {
+        address: tokenBoundAccount,
+        owner_address: validation.data.ownerAddress,
+        amount: validation.data.amount,
+        token_address_from: validation.data.tokenAddressFrom,
+        token_address_to: validation.data.tokenAddressTo,
+        frequency: validation.data.frequency,
+        end_date: validation.data.endDate,
+        created_at: now.toISOString(),
+        updated_at: now.toISOString(),
+        is_active: true,
+        next_swap: now.add(validation.data.frequency, 'day').toISOString(),
+      },
+    })
+
+    const tx = await swapSingleUser({
+      swapContract: tokenBoundAccount,
+      beepFee: Utils.parseUnits(
+        String(validation.data.amount * BEEP_FEE_PROPORTION),
+        TOKENS_FROM[validation.data.tokenAddressFrom].decimal
+      ),
+      gasFee: Utils.parseUnits(String(validation.data.amount * GAS_FEE_PROPORTION), TOKENS_FROM[validation.data.tokenAddressFrom].decimal),
+      tokenOut: validation.data.tokenAddressTo,
+      tokenIn: validation.data.tokenAddressFrom,
+      amountIn: validation.data.amount,
+    })
+
+    return NextResponse.json({ user: createdTbaUser, tx })
   } catch (error) {
     return NextResponse.json({ error: (error as Error)?.message }, { status: 500 })
   }
