@@ -16,7 +16,7 @@ import { gasInfoMap, getPriceLevel } from '@/constants/scroller'
 
 type ConfigForm = z.infer<typeof SCROLLER_USER_CONFIG_SCHEMA>
 
-interface IBeepConfigProps extends UseFormReturn<ConfigForm> {
+interface IScrollerConfigProps extends UseFormReturn<ConfigForm> {
   setStep: (value: 1 | 2 | 3) => void
 }
 
@@ -26,7 +26,7 @@ const config = {
 }
 const alchemy = new Alchemy(config)
 
-const ScrollerConfig = ({ control, watch, setValue, trigger, clearErrors, setStep }: IBeepConfigProps) => {
+const ScrollerConfig = ({ control, watch, setValue, trigger, clearErrors, setStep }: IScrollerConfigProps) => {
   const [gasPrice, setGasPrice] = useState<string | null>('')
   const [gasPriceLevel, setPriceLevel] = useState<string | null>('')
 

@@ -179,7 +179,7 @@ const DepositButton = ({ tbaAddress, tokenId }: { tokenId: string; tbaAddress: s
                     isLoading={isSubmitting}
                     type="submit"
                   >
-                    Deposit to Beep
+                    Deposit to Scroller Pass
                   </Button>
                 </form>
               </ModalBody>

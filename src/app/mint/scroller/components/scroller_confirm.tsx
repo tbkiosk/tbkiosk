@@ -18,13 +18,13 @@ import { abi } from '@/utils/scrollerNft_abiEnumerable'
 import { gasInfoMap } from '@/constants/scroller'
 
 type ConfigForm = z.infer<typeof SCROLLER_USER_CONFIG_SCHEMA>
-interface IBeepConfirmProps extends UseFormReturn<ConfigForm> {
+interface IScrollerConfirmProps extends UseFormReturn<ConfigForm> {
   setStep: (value: 1 | 2 | 3 | 4) => void
 }
 
 // const MAX_MINT_AMOUNT = 2
 
-const BeepConfirm = ({ control, getValues, watch, handleSubmit, formState: { isSubmitting }, setStep }: IBeepConfirmProps) => {
+const ScrollerConfirm = ({ control, getValues, watch, handleSubmit, formState: { isSubmitting }, setStep }: IScrollerConfirmProps) => {
   const { depositAmount, gasTolerance } = getValues()
   const address = useAddress()
   const signer = useSigner()
@@ -68,7 +68,7 @@ const BeepConfirm = ({ control, getValues, watch, handleSubmit, formState: { isS
     >
       <div>
         <Image
-          alt="beep"
+          alt="scroller"
           as={NextImage}
           classNames={{
             wrapper: 'w-full max-w-[92px]',
@@ -161,4 +161,4 @@ const BeepConfirm = ({ control, getValues, watch, handleSubmit, formState: { isS
   )
 }
 
-export default BeepConfirm
+export default ScrollerConfirm
