@@ -12,26 +12,12 @@ import { z } from 'zod'
 import { SCROLLER_USER_CONFIG_SCHEMA } from '@/types/schema'
 
 import ArrowIcon from 'public/icons/arrow.svg'
+import { gasInfoMap, getPriceLevel } from '@/constants/scroller'
 
 type ConfigForm = z.infer<typeof SCROLLER_USER_CONFIG_SCHEMA>
 
 interface IBeepConfigProps extends UseFormReturn<ConfigForm> {
   setStep: (value: 1 | 2 | 3) => void
-}
-
-// TODO: add dynamic retrieval of gas price + USD price + levels
-const LOW_GWEI_PRICE = 25
-const MED_GWEI_PRICE = 35
-// const HIGH_GAS_PRICE = 50
-
-const getPriceLevel = (_gasPrice: number) => {
-  if (_gasPrice < LOW_GWEI_PRICE) {
-    return 'Low'
-  } else if (_gasPrice < MED_GWEI_PRICE) {
-    return 'Medium'
-  } else {
-    return 'High'
-  }
 }
 
 const config = {
@@ -50,11 +36,11 @@ const ScrollerConfig = ({ control, watch, setValue, trigger, clearErrors, setSte
   const fetchGasPrice = async () => {
     const response = await alchemy.core.getGasPrice()
 
-    const gasPriceFormatted = ethers.utils.formatUnits(response, 'gwei')
-    const priceLevel: string = getPriceLevel(parseInt(gasPriceFormatted))
+    const currectGasPrice = ethers.utils.formatUnits(response, 'gwei')
+    const currentPriceLevel: string = getPriceLevel(parseInt(currectGasPrice))
 
-    setGasPrice(gasPriceFormatted)
-    setPriceLevel(priceLevel)
+    setGasPrice(currectGasPrice)
+    setPriceLevel(currentPriceLevel)
   }
 
   useEffect(() => {
@@ -122,7 +108,7 @@ const ScrollerConfig = ({ control, watch, setValue, trigger, clearErrors, setSte
               />
               <p className="text-base font-bold pb-2 text-xl">LOW</p>
               <p className="text-lg">
-                ${5}-{10}
+                ${gasInfoMap[1].price.from}-{gasInfoMap[1].price.to}
               </p>
               <p>Usually executes within 48 hours</p>
             </label>
@@ -141,7 +127,7 @@ const ScrollerConfig = ({ control, watch, setValue, trigger, clearErrors, setSte
               />
               <p className="text-base font-bold pb-2 text-xl">MED</p>
               <p className="text-lg">
-                ${10}-{30}
+                ${gasInfoMap[2].price.from}-{gasInfoMap[2].price.to}{' '}
               </p>
               <p>Usually executes within 24 hours</p>
             </label>
@@ -160,9 +146,9 @@ const ScrollerConfig = ({ control, watch, setValue, trigger, clearErrors, setSte
               />
               <p className="text-base font-bold pb-2 text-xl">HIGH</p>
               <p className="text-lg">
-                ${30}-{50}
+                ${gasInfoMap[3].price.from}-{gasInfoMap[3].price.to}{' '}
               </p>
-              <p>Usually executes within 1 hours</p>
+              <p>Usually executes within 2 hours</p>
             </label>
           </div>
         )}
@@ -208,10 +194,7 @@ const ScrollerConfig = ({ control, watch, setValue, trigger, clearErrors, setSte
             </div>
           </div>
         </div>
-        <p className="p-3">
-          If you mint mutliple Scroller Passes, this amount will be deposited among them equally.
-          <br /> Enter 0.0 to deposit after mint.
-        </p>
+        <p className="p-3">Leave blank to deposit funds later</p>
       </div>
 
       <Button

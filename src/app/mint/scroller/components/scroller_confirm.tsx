@@ -15,6 +15,7 @@ import ArrowIcon from 'public/icons/arrow.svg'
 
 import type { ThirdWebError } from '@/types'
 import { abi } from '@/utils/scrollerNft_abiEnumerable'
+import { gasInfoMap } from '@/constants/scroller'
 
 type ConfigForm = z.infer<typeof SCROLLER_USER_CONFIG_SCHEMA>
 interface IBeepConfirmProps extends UseFormReturn<ConfigForm> {
@@ -33,26 +34,6 @@ const BeepConfirm = ({ control, getValues, watch, handleSubmit, formState: { isS
   const mintAmount = watch('mintAmount')
   // const depositAmountMultiple = depositAmount * mintAmount
 
-  const gasToleranceMap: any = {
-    0: 'disabed.',
-    1: 'Low',
-    2: 'Medium',
-    3: 'High',
-  }
-  const gasToleranceParamMap: any = {
-    1: 'LOW',
-    2: 'MED',
-    3: 'HIGH',
-  }
-  const gasPriceMap: any = {
-    0: '',
-    1: '(est. $5-10)',
-    2: '(est. $10-30)',
-    3: '(est. $30-50)',
-  }
-  const tolerance = gasToleranceMap[gasTolerance]
-  const price = gasPriceMap[gasTolerance]
-
   const onSubmit = async () => {
     if (!signer) {
       toast.error('Signer not defined')
@@ -70,23 +51,9 @@ const BeepConfirm = ({ control, getValues, watch, handleSubmit, formState: { isS
       })
       const nftContract = await sdk.getContract(env.NEXT_PUBLIC_SCROLLER_NFT_CONTRACT_ADDRESS, abi)
 
-      const mintArgs = [address, env.NEXT_PUBLIC_CHAIN_ID_SCROLLER, gasToleranceParamMap[gasTolerance]]
+      const mintArgs = [address, env.NEXT_PUBLIC_CHAIN_ID_SCROLLER, gasInfoMap[gasTolerance].arg]
 
       await nftContract.call('mint', mintArgs)
-
-      // wait for NFTs re-collection
-      const nftResponse = await refetch()
-      const nfts = nftResponse.data
-      const ownedNFTs = nfts?.map(nft => nft.metadata.id)
-      const mintedNFTs = ownedNFTs?.slice(-1 * mintAmount)
-
-      if (!mintedNFTs) {
-        toast.warning(
-          'Mint was successful but failed to create investment plan(s). You can manually create an investment plan in settings page '
-        )
-        setStep(4)
-        return
-      }
 
       setStep(4)
     } catch (error) {
@@ -116,9 +83,11 @@ const BeepConfirm = ({ control, getValues, watch, handleSubmit, formState: { isS
       </div>
 
       <p className="text-center text-xl">
-        Bridge from Ethereum to Scroll when the gas fee is
-        <span className={gasTolerance == 3 ? 'text-red-500' : 'text-blue-500'}> {tolerance}</span>
-        <span> {price}</span>
+        Your Scroller will bridge from Ethereum to Scroll when the gas fee is
+        <span className={gasTolerance == 3 ? 'text-red-500' : 'text-blue-500'}> {gasInfoMap[gasTolerance].label} </span>
+        <span>
+          (typically ${gasInfoMap[gasTolerance].price.from}-{gasInfoMap[gasTolerance].price.to})
+        </span>
       </p>
 
       <Controller
