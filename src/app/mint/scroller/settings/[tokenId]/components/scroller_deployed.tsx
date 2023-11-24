@@ -47,10 +47,11 @@ const ScrollerDeployed = ({ tbaAddress }: { tokenId: string; tbaAddress: string 
 
   if (!tbaUser) {
     return (
-      <ScrollerAccountNotCreated
-        refetch={refetch}
-        tbaAddress={tbaAddress}
-      />
+      // <ScrollerAccountNotCreated
+      //   refetch={refetch}
+      //   tbaAddress={tbaAddress}
+      // />
+      <>SCROLLER DEPLOYED ACCOUNT NOT CREATED</>
     )
   }
 

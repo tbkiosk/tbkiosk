@@ -12,38 +12,38 @@ const ScrollerAccountNotCreated = ({ refetch, tbaAddress }: { refetch: () => Pro
 
   const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure()
 
-  const onSubmit = async ({ depositAmount, gasTolerance, mintAmount }: PlanForm) => {
-    const res = await fetch(`/api/beep/profile/${tbaAddress}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        ownerAddress: address,
-        depositAmount,
-        gasTolerance,
-        mintAmount,
-      }),
-    })
+  // const onSubmit = async ({ depositAmount, gasTolerance, mintAmount }: PlanForm) => {
+  // const res = await fetch(`/api/beep/profile/${tbaAddress}`, {
+  //   method: 'POST',
+  //   headers: { 'Content-Type': 'application/json' },
+  //   body: JSON.stringify({
+  //     ownerAddress: address,
+  //     depositAmount,
+  //     gasTolerance,
+  //     mintAmount,
+  //   }),
+  // })
 
-    if (!res.ok) {
-      toast.error(res.statusText || 'Failed to create plan')
-      return
-    }
+  // if (!res.ok) {
+  //   toast.error(res.statusText || 'Failed to create plan')
+  //   return
+  // }
 
-    toast.success('Investment plan created')
-    await refetch()
-    onClose()
-  }
+  //   toast.success('Investment plan created')
+  //   await refetch()
+  //   onClose()
+  // }
 
   return (
     <div className="min-h-[240px] flex flex-col justify-center items-center gap-4 bg-[#131313] rounded-[10px]">
-      <PlanModal
+      {/* <PlanModal
         isOpen={isOpen}
         onOpenChange={onOpenChange}
-        onSubmit={onSubmit}
-        depositAmount={'0.125'}
-        mintAmount={1}
+        // onSubmit={onSubmit}
+        // depositAmount={'0.125'}
+        // mintAmount={1}
         gasTolerance={2}
-      />
+      /> */}
       <div className="h-16 flex justify-center">
         <RobotSuccess />
       </div>

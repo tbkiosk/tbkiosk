@@ -60,9 +60,13 @@ const ScrollerSettingsPanel = ({ tbaAddress, tokenId }: { tbaAddress: string; to
   // }
 
   return (
-    <div className="w-full flex bg-red-400">
-      {tba && <SettingsBoardScroller tbaUser={tba} />}
-      {/* <>SETTINGS BOARD!!!</> */}
+    <div className="w-full flex">
+      {tba && (
+        <SettingsBoardScroller
+          tbaUser={tba}
+          tokenId={tokenId}
+        />
+      )}
     </div>
   )
 }

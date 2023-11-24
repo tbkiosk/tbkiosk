@@ -7,33 +7,22 @@ import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 
 import { env } from 'env.mjs'
+import { gasInfoMap } from '@/constants/scroller'
 
 const schema = z.object({
-  // depositAmount: z.number().int().min(0.125),
-  depositAmount: z.string(),
-  mintAmount: z.number().int().min(1),
   gasTolerance: z.number().int().min(0).max(2),
 })
 
 export type PlanForm = z.infer<typeof schema>
 
 interface IPlanModalProps {
-  depositAmount: string
-  mintAmount: number
   gasTolerance: number
   isOpen: boolean
   onOpenChange: () => void
   onSubmit: (data: PlanForm) => unknown | Promise<unknown>
 }
 
-const PlanModal = ({
-  depositAmount: defaultDepositAmount,
-  mintAmount: defaultMintAmount,
-  gasTolerance: defaultGasTolerance,
-  isOpen,
-  onOpenChange,
-  onSubmit,
-}: IPlanModalProps) => {
+const PlanModal = ({ gasTolerance: defaultGasTolerance, isOpen, onOpenChange, onSubmit }: IPlanModalProps) => {
   const {
     control,
     setValue,
@@ -43,9 +32,7 @@ const PlanModal = ({
     formState: { isSubmitting },
   } = useForm<PlanForm>({
     defaultValues: {
-      depositAmount: defaultDepositAmount ?? '0.000',
-      mintAmount: defaultMintAmount ?? 1,
-      gasTolerance: defaultGasTolerance ?? 2,
+      gasTolerance: defaultGasTolerance,
     },
     resolver: zodResolver(schema),
   })
@@ -57,9 +44,7 @@ const PlanModal = ({
   useEffect(() => {
     if (isOpen) {
       reset({
-        depositAmount: defaultDepositAmount ?? '0.000',
-        mintAmount: defaultMintAmount ?? 1,
-        gasTolerance: defaultGasTolerance ?? 2,
+        gasTolerance: defaultGasTolerance ?? 0,
       })
     }
   }, [isOpen])
@@ -73,160 +58,91 @@ const PlanModal = ({
       <ModalContent className="bg-black text-white">
         {() => (
           <>
-            <ModalHeader className="justify-center font-bold text-2xl">Dollar Cost Averaging Plan</ModalHeader>
+            <ModalHeader className="justify-center font-bold text-2xl">Update Your Gas Tolerance</ModalHeader>
             <ModalBody className="px-8 pb-8">
               <form
                 className="flex flex-col items-center"
                 onSubmit={handleSubmit(_onSubmit)}
               >
+                {/* TODO */}
                 <div className="w-[320px] max-w-[320px] flex flex-col items-center gap-8">
+                  <p>Your scroller is currently set to {'MEDIUM'}</p>
                   <div className="flex items-center justify-center gap-2">
-                    <span className="shrink-0 text-xs">Auto invest in</span>
-                    {/* <Controller
+                    <Controller
                       control={control}
-                      name="tokenAddressTo"
+                      name="gasTolerance"
                       render={({ field }) => (
-                        <Select
-                          classNames={{
-                            base: '!mt-0 bg-[#292929] rounded-full',
-                            label: 'hidden',
-                            trigger: 'h-[44px] pl-4 pr-6 !bg-transparent !shadow-none',
-                            value: 'shrink-0 font-bold text-lg !text-white text-right',
-                          }}
-                          items={Object.values(TOKENS_TO)}
-                          label="Select token"
-                          labelPlacement="outside"
-                          onSelectionChange={keys => {
-                            Array.from(keys)[0] && field.onChange(Array.from(keys)[0].toString())
-                          }}
-                          selectedKeys={[field.value]}
-                          selectorIcon={<></>}
-                          size="sm"
-                          startContent={
-                            <div className="h-6 w-6 shrink-0">{TOKENS_TO[field.value].icon && TOKENS_TO[field.value].icon()}</div>
-                          }
-                        >
-                          {_token => (
-                            <SelectItem
-                              classNames={{ base: '' }}
-                              key={_token.address}
-                              value={_token.address}
-                            >
-                              {_token.name}
-                            </SelectItem>
-                          )}
-                        </Select>
-                      )}
-                    /> */}
-                  </div>
-                  {/* <Controller
-                    control={control}
-                    name="amount"
-                    render={({ field, fieldState }) => (
-                      <Input
-                        classNames={{
-                          base: 'pl-4 rounded-full border border-[#808080]',
-                          label: '!font-normal !text-white',
-                          innerWrapper: 'bg-transparent',
-                          input: 'bg-transparent font-bold !text-white text-lg text-end',
-                          inputWrapper: '!bg-transparent',
-                        }}
-                        color={fieldState.error ? 'danger' : 'default'}
-                        endContent={
-                          <Controller
-                            control={control}
-                            name="tokenAddressFrom"
-                            render={({ field }) => (
-                              <Select
-                                classNames={{
-                                  base: 'w-[120px] ml-2 bg-[#292929] rounded-full',
-                                  label: 'hidden',
-                                  trigger: 'h-[38px] pl-4 pr-6 !bg-transparent !shadow-none',
-                                  value: 'shrink-0 font-bold text-lg !text-white text-right',
-                                }}
-                                items={Object.values(TOKENS_FROM)}
-                                label="Select token"
-                                labelPlacement="outside"
-                                onSelectionChange={keys => {
-                                  Array.from(keys)[0] && field.onChange(Array.from(keys)[0].toString())
-                                }}
-                                selectedKeys={[field.value]}
-                                selectorIcon={<></>}
-                                size="sm"
-                                startContent={
-                                  <div className="h-6 w-6 shrink-0">{TOKENS_FROM[field.value].icon && TOKENS_FROM[field.value].icon()}</div>
-                                }
-                              >
-                                {_token => (
-                                  <SelectItem
-                                    classNames={{ base: '' }}
-                                    key={_token.address}
-                                    value={_token.address}
-                                  >
-                                    {_token.name}
-                                  </SelectItem>
-                                )}
-                              </Select>
-                            )}
-                          />
-                        }
-                        errorMessage={fieldState.error?.message}
-                        label="Amount Per Period"
-                        onValueChange={value => {
-                          if (/(^[0-9]+$|^$)/.test(value)) {
-                            field.onChange(+value)
-                            clearErrors('amount')
-                          }
-                        }}
-                        value={String(field.value)}
-                      />
-                    )}
-                  /> */}
-                  <div className="w-full">
-                    <p className="mb-4 text-xs text-left">Recurring Cycle</p>
-                    {/* <Controller
-                      control={control}
-                      name="frequency"
-                      render={({ field }) => (
-                        <div className="flex gap-1 no-wrap">
-                          {FREQUENCY_OPTIONS.map(_option => (
-                            <Button
-                              className={clsx(
-                                'bg-transparent font-bold text-white text-xs border border-[#808080] rounded-full',
-                                +field.value === +_option.frequency && 'bg-[#10cb93] font-bold text-black border-none'
-                              )}
-                              key={_option.frequency}
-                              onPress={() => setValue('frequency', +_option.frequency)}
-                            >
-                              {_option.name}
-                            </Button>
-                          ))}
+                        <div className="flex justify-between gap-6 text-center">
+                          <label
+                            className={`rounded-md w-1/3 text-sm p-8 cursor-pointer ${
+                              field.value === 1 ? 'bg-blue-500 text-white' : 'border hover:scale-[97%] transform transition-transform'
+                            }`}
+                          >
+                            <input
+                              type="radio"
+                              value="1"
+                              checked={field.value === 1}
+                              onChange={() => field.onChange(1)}
+                              className="hidden"
+                            />
+                            <p className="text-base font-bold pb-2 text-xl">LOW</p>
+                            <p className="text-sm">
+                              ${gasInfoMap[1].price.from}-{gasInfoMap[1].price.to}
+                            </p>
+                            <p className="text-xs">Usually executes within 48 hours</p>
+                          </label>
+
+                          <label
+                            className={`rounded-md w-1/3 text-sm p-8 cursor-pointer ${
+                              field.value === 2 ? 'bg-blue-500 text-white' : 'border hover:scale-[97%] transform transition-transform'
+                            }`}
+                          >
+                            <input
+                              type="radio"
+                              value="2"
+                              checked={field.value === 2}
+                              onChange={() => field.onChange(2)}
+                              className="hidden"
+                            />
+                            <p className="text-base font-bold pb-2 text-xl">MED</p>
+                            <p className="text-sm">
+                              ${gasInfoMap[2].price.from}-{gasInfoMap[2].price.to}
+                            </p>
+                            <p className="text-xs">Usually executes within 24 hours</p>
+                          </label>
+
+                          <label
+                            className={`rounded-md w-1/3 text-sm p-8 cursor-pointer ${
+                              field.value === 3 ? 'bg-blue-500 text-white' : 'border hover:scale-[97%] transform transition-transform'
+                            }`}
+                          >
+                            <input
+                              type="radio"
+                              value="3"
+                              checked={field.value === 3}
+                              onChange={() => field.onChange(3)}
+                              className="hidden"
+                            />
+                            <p className="text-base font-bold pb-2 text-xl">HIGH</p>
+                            <p className="text-sm">
+                              ${gasInfoMap[3].price.from}-{gasInfoMap[3].price.to}
+                            </p>
+                            <p className="text-xs">Usually executes within 1 hours</p>
+                          </label>
                         </div>
                       )}
-                    /> */}
+                    />
                   </div>
-                  {/* <Controller
-                    control={control}
-                    name="endDate"
-                    render={({ field }) => (
-                      <div className="w-full [&>.react-datepicker-wrapper]:w-full rounded">
-                        <DatePicker
-                          customInput={<EndDateInput />}
-                          minDate={dayjs().add(1, 'day').toDate()}
-                          onChange={value => field.onChange(dayjs(value).toISOString())}
-                          popperPlacement="top"
-                          selected={field.value ? dayjs(field.value).toDate() : null}
-                        />
-                      </div>
-                    )}
-                  /> */}
+                  <div className="w-full text-center text-sm opacity-50 text-xs">
+                    Updating your gas tolerance requires an on-chain transaction, costs paid by your EOA wallet.
+                  </div>
                   <Button
                     className="w-[200px] bg-white font-bold text-sm text-black tracking-wide rounded-full"
                     disabled={isSubmitting}
                     isLoading={isSubmitting}
                     type="submit"
                   >
-                    Save Plan
+                    Update Gas Tolerance
                   </Button>
                 </div>
               </form>
