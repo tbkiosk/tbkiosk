@@ -9,8 +9,8 @@ import CopyButton from '@/components/copy_button'
 import MintButton from './components/mint_button'
 import MintedCount from './components/mint_count'
 // import DCAButton from './components/dca_button'
-// import MoreProjects from './components/more_projects'
-// import FAQ from './components/faq'
+import MoreProjects from './components/more_projects'
+import FAQ from './components/faq'
 
 import LogoBlack from 'public/logo/logo-black.svg'
 import LogoText from 'public/logo/logo-text.svg'
@@ -268,12 +268,12 @@ const Mint = () => (
                 </a>
                 {/* <DCAButton /> */}
                 <h1 className="mt-8 md:mt-24 mb-6 md:mb-12 font-medium text-3xl">Frequently Asked Questions</h1>
-                {/* <FAQ /> */}
+                <FAQ />
               </div>
             </div>
           </div>
           <h1 className="mt-20 mb-4 font-medium text-2xl">Discover More Projects</h1>
-          {/* <MoreProjects /> */}
+          <MoreProjects />
         </div>
         <footer className="md:h-[var(--header-height)] max-w-screen-2xl mx-auto flex flex-col md:flex-row justify-between items-center font-medium">
           <div className="w-auto md:w-[180px] flex gap-4 items-center text-white">
