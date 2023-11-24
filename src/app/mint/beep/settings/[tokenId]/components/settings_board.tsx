@@ -8,6 +8,7 @@ import dayjs from 'dayjs'
 
 import PlanModal, { type PlanForm } from './plan_modal'
 import TotalInvestment from './total_investment'
+import PNL from './pnl'
 import PenIcon from 'public/icons/pen.svg'
 
 import { FREQUENCY_OPTIONS } from '@/constants/beep'
@@ -158,7 +159,9 @@ const SettingsBoard = ({ tbaUser, refetch, tbaAddress }: { tbaAddress: string; r
         </div>
         <div>
           <div className="text-sm text-[#a6a9ae] text-start md:text-end">Unrealised PnL</div>
-          <div className="font-bold text-lg text-start md:text-end">- {TOKENS_FROM[tbaUser.token_address_from].name}</div>
+          <div className="font-bold text-lg text-start md:text-end">
+            <PNL tbaAddress={tbaAddress} /> {TOKENS_FROM[tbaUser.token_address_from].name}
+          </div>
         </div>
       </div>
     </div>

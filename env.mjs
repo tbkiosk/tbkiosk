@@ -9,6 +9,8 @@ export const env = createEnv({
     ETHERSCAN_KEY: z.string().min(1),
     POLYGONSCAN_KEY: z.string().min(1),
     SWAP_PRIVATE_KEY: z.string().min(1),
+    COIN_GECKO_KEY: z.string().min(1),
+    
     NEXT_PUBLIC_CHAIN_ID: z.enum(['1', '5', '137', '11155111']),
     NEXT_PUBLIC_BEEP_CONTRACT_ADDRESS: z.string().min(1).startsWith('0x'),
     NEXT_PUBLIC_BEEP_TBA_IMPLEMENTATION_ADDRESS: z.string().min(1).startsWith('0x'),
@@ -40,6 +42,8 @@ export const env = createEnv({
     ETHERSCAN_KEY: process.env.ETHERSCAN_KEY,
     POLYGONSCAN_KEY: process.env.POLYGONSCAN_KEY,
     SWAP_PRIVATE_KEY: process.env.SWAP_PRIVATE_KEY,
+    COIN_GECKO_KEY: process.env.COIN_GECKO_KEY,
+    
     NEXT_PUBLIC_CHAIN_ID: process.env.NEXT_PUBLIC_CHAIN_ID,
     NEXT_PUBLIC_BEEP_CONTRACT_ADDRESS: process.env.NEXT_PUBLIC_BEEP_CONTRACT_ADDRESS,
     NEXT_PUBLIC_BEEP_TBA_IMPLEMENTATION_ADDRESS: process.env.NEXT_PUBLIC_BEEP_TBA_IMPLEMENTATION_ADDRESS,
