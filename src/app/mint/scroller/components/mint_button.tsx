@@ -33,12 +33,12 @@ const MintButton = () => {
         className="h-12 w-full text-xl text-white bg-black rounded-full hover:bg-[#0f0f0f]"
         disableRipple
         onClick={async () => {
-          await switchChain(+env.NEXT_PUBLIC_CHAIN_ID)
+          await switchChain(+env.NEXT_PUBLIC_CHAIN_ID_SCROLLER)
           disclosure.onOpen()
         }}
         startContent={
           <div className="h-6 w-6 block text-white">
-            {match(env.NEXT_PUBLIC_CHAIN_ID)
+            {match(env.NEXT_PUBLIC_CHAIN_ID_SCROLLER)
               .with('1', () => <Ethereum />)
               .with('5', () => <Ethereum />)
               .with('137', () => <Polygon />)
@@ -47,7 +47,7 @@ const MintButton = () => {
           </div>
         }
       >
-        Build your Beep & mint
+        Build your Scroller Pass & Mint
       </Button>
     </div>
   )

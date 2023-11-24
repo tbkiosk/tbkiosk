@@ -10,19 +10,30 @@ export const env = createEnv({
     POLYGONSCAN_KEY: z.string().min(1),
     SWAP_PRIVATE_KEY: z.string().min(1),
     COIN_GECKO_KEY: z.string().min(1),
-    NEXT_PUBLIC_CHAIN_ID: z.enum(['1', '5', '137']),
+    
+    NEXT_PUBLIC_CHAIN_ID: z.enum(['1', '5', '137', '11155111']),
     NEXT_PUBLIC_BEEP_CONTRACT_ADDRESS: z.string().min(1).startsWith('0x'),
     NEXT_PUBLIC_BEEP_TBA_IMPLEMENTATION_ADDRESS: z.string().min(1).startsWith('0x'),
     NEXT_PUBLIC_REGISTRY_ADDRESS: z.string().min(1).startsWith('0x'),
     NEXT_PUBLIC_ADMIN_CONTRACT_ADDRESS: z.string().min(1).startsWith('0x'),
+
+    NEXT_PUBLIC_SCROLLER_NFT_CONTRACT_ADDRESS: z.string().min(1).startsWith('0x'),
+    NEXT_PUBLIC_SCROLLER_TBA_IMPLEMENTATION_ADDRESS: z.string().min(1).startsWith('0x'),
+    NEXT_PUBLIC_REGISTRY_ADDRESS_SCROLLER: z.string().min(1).startsWith('0x'),
+    NEXT_PUBLIC_CHAIN_ID_SCROLLER: z.enum(['1', '5', '137', '11155111']),
   },
   client: {
     NEXT_PUBLIC_THIRDWEB_CLIENT_ID: z.string().min(1),
-    NEXT_PUBLIC_CHAIN_ID: z.enum(['1', '5', '137']),
+    NEXT_PUBLIC_CHAIN_ID: z.enum(['1', '5', '137', '11155111']),
     NEXT_PUBLIC_BEEP_CONTRACT_ADDRESS: z.string().min(1).startsWith('0x'),
     NEXT_PUBLIC_BEEP_TBA_IMPLEMENTATION_ADDRESS: z.string().min(1).startsWith('0x'),
     NEXT_PUBLIC_REGISTRY_ADDRESS: z.string().min(1).startsWith('0x'),
     NEXT_PUBLIC_ADMIN_CONTRACT_ADDRESS: z.string().min(1).startsWith('0x'),
+
+    NEXT_PUBLIC_SCROLLER_NFT_CONTRACT_ADDRESS: z.string().min(1).startsWith('0x'),
+    NEXT_PUBLIC_SCROLLER_TBA_IMPLEMENTATION_ADDRESS: z.string().min(1).startsWith('0x'),
+    NEXT_PUBLIC_REGISTRY_ADDRESS_SCROLLER: z.string().min(1).startsWith('0x'),
+    NEXT_PUBLIC_CHAIN_ID_SCROLLER: z.enum(['1', '5', '137', '11155111']),
   },
   runtimeEnv: {
     DATABASE_URL: process.env.DATABASE_URL,
@@ -32,10 +43,16 @@ export const env = createEnv({
     POLYGONSCAN_KEY: process.env.POLYGONSCAN_KEY,
     SWAP_PRIVATE_KEY: process.env.SWAP_PRIVATE_KEY,
     COIN_GECKO_KEY: process.env.COIN_GECKO_KEY,
+    
     NEXT_PUBLIC_CHAIN_ID: process.env.NEXT_PUBLIC_CHAIN_ID,
     NEXT_PUBLIC_BEEP_CONTRACT_ADDRESS: process.env.NEXT_PUBLIC_BEEP_CONTRACT_ADDRESS,
     NEXT_PUBLIC_BEEP_TBA_IMPLEMENTATION_ADDRESS: process.env.NEXT_PUBLIC_BEEP_TBA_IMPLEMENTATION_ADDRESS,
     NEXT_PUBLIC_REGISTRY_ADDRESS: process.env.NEXT_PUBLIC_REGISTRY_ADDRESS,
     NEXT_PUBLIC_ADMIN_CONTRACT_ADDRESS: process.env.NEXT_PUBLIC_ADMIN_CONTRACT_ADDRESS,
+
+    NEXT_PUBLIC_SCROLLER_NFT_CONTRACT_ADDRESS: process.env.NEXT_PUBLIC_SCROLLER_NFT_CONTRACT_ADDRESS,
+    NEXT_PUBLIC_SCROLLER_TBA_IMPLEMENTATION_ADDRESS: process.env.NEXT_PUBLIC_SCROLLER_TBA_IMPLEMENTATION_ADDRESS,
+    NEXT_PUBLIC_REGISTRY_ADDRESS_SCROLLER: process.env.NEXT_PUBLIC_REGISTRY_ADDRESS_SCROLLER,
+    NEXT_PUBLIC_CHAIN_ID_SCROLLER: process.env.NEXT_PUBLIC_CHAIN_ID_SCROLLER,
   },
 })
