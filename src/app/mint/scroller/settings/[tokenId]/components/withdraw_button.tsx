@@ -161,7 +161,7 @@ const WithdrawButton = ({ tbaAddress, tokenId }: { tokenId: string; tbaAddress: 
                                     e.preventDefault()
                                     field.onChange(tbaBalance)
                                   }}
-                                  className="px-2 py-1 rounded-full border border-[#808080] text-#808080 tracking-wider transition-colors hover:bg-[#808080]"
+                                  className="px-2 py-1 rounded-full bg-[#2B2B2B] text-#808080 tracking-wider transition-colors hover:bg-[#808080]"
                                 >
                                   {tbaBalance} ETH
                                 </button>
@@ -218,7 +218,7 @@ const WithdrawButton = ({ tbaAddress, tokenId }: { tokenId: string; tbaAddress: 
                                     e.preventDefault()
                                     field.onChange(tbaOwner)
                                   }}
-                                  className="px-2 py-1 rounded-full border border-[#808080] text-#808080 tracking-wider transition-colors hover:bg-[#808080]"
+                                  className="px-2 py-1 rounded-full bg-[#2B2B2B] text-#808080 tracking-wider transition-colors hover:bg-[#808080]"
                                 >
                                   {maskAddress(tbaOwner)}
                                 </button>

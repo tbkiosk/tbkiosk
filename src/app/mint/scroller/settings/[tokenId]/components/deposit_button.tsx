@@ -126,7 +126,7 @@ const DepositButton = ({ tbaAddress, tokenId }: { tokenId: string; tbaAddress: s
                   <div className="flex flex-col items-center gap-2">
                     <div>Your Scroller Pass wallet address</div>
                     <CopyButton
-                      className="px-4 py-1 border border-[#a6a9ae] rounded-full font-normal text-sm text-[#a6a9ae] tracking-wider hover:border-[#666666]"
+                      className="px-4 py-1 bg-[#2B2B2B] rounded-full font-normal text-sm text-[#a6a9ae] tracking-wider hover:border-[#666666]"
                       copyText={tbaAddress}
                     >
                       {maskAddress(tbaAddress)}

@@ -55,14 +55,14 @@ const TBAContainer = ({ tokenId }: { tokenId: string }) => {
   return (
     <div>
       <div className="flex flex-col md:flex-row justify-center gap-4 md:gap-8 pt-8 md:pt-16">
-        <div className="w-full md:w-[40%] flex justify-center md:justify-end shrink-0">
-          <div className="max-h-full aspect-square overflow-hidden">
+        <div className="max-h-full w-full flex justify-center shrink-0 md:justify-end md:w-[40%]">
+          <div className="max-h-full flex justify-center items-center w-[60%] md:w-full h-full">
             <ScrollerIframe tokenId={tokenId} />
-            IFRAME HERE
           </div>
         </div>
+
         <div className="w-full max-w-[534px]">
-          <h1 className="mb-4 font-bold text-4xl">Set up your Scroller Pass</h1>
+          <h1 className="mb-4 font-bold text-4xl">Set up your Scroller Pass!</h1>
           <div className="flex items-center gap-4 mb-8">
             <span className="font-medium text-xl">Scroller Pass #{tokenId}</span>
             <CopyButton

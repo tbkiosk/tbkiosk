@@ -47,7 +47,7 @@ const ScrollerIframe = ({ tokenId }: { tokenId: string | number }) => {
         </div>
       )}
       <div className={clsx('!h-full !w-full border-none rounded-[4%] opacity-0 cursor-pointer', loaded && 'opacity-100')}>
-        <div className="relative rounded-lg overflow-hidden w-64 h-64">
+        <div className="relative max-w-screen mx-auto aspect-square max-h-screen overflow-hidden rounded-lg">
           <div
             className="absolute inset-0 bg-no-repeat bg-center bg-cover"
             style={{ backgroundImage: `url("${tempSvg}")` }}
