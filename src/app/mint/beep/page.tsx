@@ -11,6 +11,7 @@ import MintedCount from './components/mint_count'
 import DCAButton from './components/dca_button'
 import MoreProjects from './components/more_projects'
 import FAQ from './components/faq'
+import BeepSupply from './components/beep_supply'
 
 import LogoBlack from 'public/logo/logo-black.svg'
 import LogoText from 'public/logo/logo-text.svg'
@@ -176,7 +177,7 @@ const Mint = () => (
                 </div>
                 <div className="flex items-center justify-between md:justify-start gap-12 my-4 font-medium">
                   <span className="md:min-w-[130px] inline-block text-[#a6a9ae]">Supply</span>
-                  <span>100</span>
+                  <BeepSupply />
                 </div>
               </div>
               <div className="md:w-1/2">
