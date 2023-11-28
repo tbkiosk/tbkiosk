@@ -24,8 +24,8 @@ dependencies:
     specifier: ^0.7.1
     version: 0.7.1(typescript@5.3.2)(zod@3.22.4)
   '@tanstack/react-query':
-    specifier: 5.8.7
-    version: 5.8.7(react-dom@18.2.0)(react@18.2.0)
+    specifier: 5.8.9
+    version: 5.8.9(react-dom@18.2.0)(react@18.2.0)
   '@thirdweb-dev/chains':
     specifier: ^0.1.59
     version: 0.1.59
@@ -6803,8 +6803,8 @@ packages:
       use-sync-external-store: 1.2.0(react@18.2.0)
     dev: false
 
-  /@tanstack/react-query@5.8.7(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-RYSSMmkhbJ7tPkf8w+MSRIXQLoUCm7DRnTLDcdf+uampupnriEsob3fVWTt9oaEj+AJWEKeCErDBdZeNcAzURQ==}
+  /@tanstack/react-query@5.8.9(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-AmrvpXv7Vo9HlvIFd1ChyphUUskVAq60bpQFPxZmephHf2H2LZHqPIiLl8IEij0dvORpqp6BoUH8IS/HSWkn0w==}
     peerDependencies:
       react: ^18.0.0
       react-dom: ^18.0.0
