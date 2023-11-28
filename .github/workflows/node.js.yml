@@ -5,9 +5,9 @@ name: Node.js CI
 
 on:
   push:
-    branches: ['main', 'dev']
+    branches: ['dev']
   pull_request:
-    branches: ['main', 'dev']
+    branches: ['dev']
 
 jobs:
   build:
@@ -15,12 +15,28 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [18.x, 20.x]
+        node-version: [20.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
+    environment: dev
 
     env:
       DATABASE_URL: ${{ secrets.DATABASE_URL }}
-      NEXT_PUBLIC_THIRDWEB_CLIENT_ID: ${{ secrets.NEXT_PUBLIC_THIRDWEB_CLIENT_ID }}
+      # NEXT_PUBLIC_THIRDWEB_CLIENT_ID: ${{ env.NEXT_PUBLIC_THIRDWEB_CLIENT_ID }}
+      ALCHEMY_KEY: ${{ secrets.ALCHEMY_KEY }}
+      ETHERSCAN_KEY: ${{ secrets.ETHERSCAN_KEY }}
+      POLYGONSCAN_KEY: ${{ secrets.POLYGONSCAN_KEY }}
+      COIN_GECKO_KEY: ${{ secrets.COIN_GECKO_KEY }}
+      # NEXT_PUBLIC_CHAIN_ID: ${{ env.NEXT_PUBLIC_CHAIN_ID }}
+      # NEXT_PUBLIC_BEEP_CONTRACT_ADDRESS: ${{ env.NEXT_PUBLIC_BEEP_CONTRACT_ADDRESS }}
+      # NEXT_PUBLIC_BEEP_TBA_IMPLEMENTATION_ADDRESS: ${{ env.NEXT_PUBLIC_BEEP_TBA_IMPLEMENTATION_ADDRESS }}
+      # NEXT_PUBLIC_REGISTRY_ADDRESS: ${{ env.NEXT_PUBLIC_REGISTRY_ADDRESS }}
+      # NEXT_PUBLIC_ADMIN_CONTRACT_ADDRESS: ${{ env.NEXT_PUBLIC_ADMIN_CONTRACT_ADDRESS }}
+      SWAP_PRIVATE_KEY: ${{ secrets.SWAP_PRIVATE_KEY }}
+      # NEXT_PUBLIC_REGISTRY_ADDRESS_SCROLLER: ${{ env.NEXT_PUBLIC_REGISTRY_ADDRESS_SCROLLER }}
+      # NEXT_PUBLIC_SCROLLER_NFT_CONTRACT_ADDRESS: ${{ env.NEXT_PUBLIC_SCROLLER_NFT_CONTRACT_ADDRESS }}
+      # NEXT_PUBLIC_SCROLLER_TBA_IMPLEMENTATION_ADDRESS: ${{ env.NEXT_PUBLIC_SCROLLER_TBA_IMPLEMENTATION_ADDRESS }}
+      # NEXT_PUBLIC_CHAIN_ID_SCROLLER: ${{ env.NEXT_PUBLIC_CHAIN_ID_SCROLLER }}
 
     steps:
       - uses: actions/checkout@v4
