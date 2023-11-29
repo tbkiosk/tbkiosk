@@ -44,8 +44,6 @@ const SettingsBoardScroller = ({ tbaUser, tokenId }: { tbaUser: TbaUser | undefi
     getTba()
   }, [isOpen])
 
-  // console.log
-
   const onSubmit = async ({ gasTolerance }: PlanForm) => {
     if (!signer) {
       toast.error('Signer not defined')
@@ -85,7 +83,7 @@ const SettingsBoardScroller = ({ tbaUser, tokenId }: { tbaUser: TbaUser | undefi
       <div className="w-full flex justify-between mb-2">
         <div>
           {/* TODO: USE ENUM for mapping + validation */}
-          <div className="text-xl font-bold">{tbaUser?.preference}</div>
+          <div className="text-xl font-bold">{tbaUser ? gasInfoMap[+tbaUser.preference].label : ''}</div>
           <div className="text-xs opacity-50">$123-456</div>
         </div>
         <div
@@ -100,8 +98,8 @@ const SettingsBoardScroller = ({ tbaUser, tokenId }: { tbaUser: TbaUser | undefi
       </div>
       <hr className="w-full mb-6 opacity-20" />
       <div className="text-lg mb-8 font-bold">
-        Scoller will bridge from Ethereum to Scroll when gas is <span className="text-blue-600 font-bold">{tbaUser?.preference}</span>{' '}
-        {/* TODO */}
+        Scoller will bridge from Ethereum to Scroll when gas is{' '}
+        <span className="text-blue-600 font-bold">{tbaUser ? gasInfoMap[+tbaUser.preference].label : ''}</span> {/* TODO */}
         (typically {'$30-40'})
       </div>
       <div className="w-full flex justify-between">

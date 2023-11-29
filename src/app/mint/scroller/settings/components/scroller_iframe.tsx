@@ -9,6 +9,7 @@ import { env } from 'env.mjs'
 import { abi } from '@/utils/scrollerNft_abiEnumerable'
 import { tempSvg } from './base64Scroller'
 import { formatEther } from 'viem'
+import { gasInfoMap } from '@/constants/scroller'
 
 const ScrollerIframe = ({ tokenId }: { tokenId: string | number }) => {
   const [loaded, setLoaded] = useState(false)
@@ -58,7 +59,7 @@ const ScrollerIframe = ({ tokenId }: { tokenId: string | number }) => {
               </div>
               <div className="absolute bottom-4 w-full leading-[1]">
                 <p className="text-white">Balance: {tbaBalance} ETH</p>
-                <p className="text-white">Pref: {tba.preference}</p>
+                <p className="text-white">Pref: {tba.preference ? gasInfoMap[tba.preference].label : ''}</p>
               </div>
             </div>
           </div>

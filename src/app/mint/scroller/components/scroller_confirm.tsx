@@ -16,6 +16,7 @@ import ArrowIcon from 'public/icons/arrow.svg'
 import type { ThirdWebError } from '@/types'
 import { abi } from '@/utils/scrollerNft_abiEnumerable'
 import { gasInfoMap } from '@/constants/scroller'
+import { parseEther } from 'viem'
 
 type ConfigForm = z.infer<typeof SCROLLER_USER_CONFIG_SCHEMA>
 interface IScrollerConfirmProps extends UseFormReturn<ConfigForm> {
@@ -51,9 +52,13 @@ const ScrollerConfirm = ({ control, getValues, watch, handleSubmit, formState: {
       })
       const nftContract = await sdk.getContract(env.NEXT_PUBLIC_SCROLLER_NFT_CONTRACT_ADDRESS, abi)
 
-      const mintArgs = [address, env.NEXT_PUBLIC_CHAIN_ID_SCROLLER, gasInfoMap[gasTolerance].arg]
+      const mintArgs = [address, env.NEXT_PUBLIC_CHAIN_ID_SCROLLER, gasTolerance]
+      const mintOptions = {
+        value: parseEther(depositAmount),
+        gasLimit: 500_000,
+      }
 
-      await nftContract.call('mint', mintArgs)
+      await nftContract.call('mint', mintArgs, mintOptions)
 
       setStep(4)
     } catch (error) {
