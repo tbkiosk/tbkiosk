@@ -60,7 +60,7 @@ const ScrollerConfig = ({ control, watch, setValue, trigger, clearErrors, setSte
   }
 
   return (
-    <div className="flex flex-col gap-6 font-medium">
+    <div className="flex flex-col gap-4 font-medium">
       {/* intro */}
       <div className="flex items-center">
         <p>Tell us how much gas you would like to spend on the bridging, we will take care of the rest</p>
@@ -81,7 +81,7 @@ const ScrollerConfig = ({ control, watch, setValue, trigger, clearErrors, setSte
         <div>Scroll</div>
       </div>
 
-      <div className="text-xl leading-[3rem]">
+      <div className="text-lg leading-[2rem]">
         <p>
           Current gas price: {gasPrice ? `${parseInt(gasPrice).toFixed()} Gwei ` : 'Loading..'}
           <span className="text-red-500">{gasPriceLevel ? `(${gasPriceLevel}) ` : ''}</span>
@@ -95,7 +95,7 @@ const ScrollerConfig = ({ control, watch, setValue, trigger, clearErrors, setSte
         render={({ field }) => (
           <div className="flex justify-between gap-6 text-center">
             <label
-              className={`rounded-md w-1/3 text-sm p-8 cursor-pointer ${
+              className={`rounded-md w-1/3 text-sm p-4 cursor-pointer ${
                 field.value === 1 ? 'bg-blue-500 text-white' : 'bg-gray-100 hover:bg-gray-200'
               }`}
             >
@@ -114,7 +114,7 @@ const ScrollerConfig = ({ control, watch, setValue, trigger, clearErrors, setSte
             </label>
 
             <label
-              className={`rounded-md w-1/3 text-sm p-8 cursor-pointer ${
+              className={`rounded-md w-1/3 text-sm p-4 cursor-pointer ${
                 field.value === 2 ? 'bg-blue-500 text-white' : 'bg-gray-100 hover:bg-gray-200'
               }`}
             >
@@ -133,7 +133,7 @@ const ScrollerConfig = ({ control, watch, setValue, trigger, clearErrors, setSte
             </label>
 
             <label
-              className={`rounded-md w-1/3 text-sm p-8 cursor-pointer ${
+              className={`rounded-md w-1/3 text-sm p-4 cursor-pointer ${
                 field.value === 3 ? 'bg-blue-500 text-white' : 'bg-gray-100 hover:bg-gray-200'
               }`}
             >
@@ -156,7 +156,7 @@ const ScrollerConfig = ({ control, watch, setValue, trigger, clearErrors, setSte
 
       <div className="text-xs">
         <div className="flex justify-between gap-3">
-          <div className="bg-gray-100 rounded-md p-4 px-6 w-2/3">
+          <div className="bg-gray-100 rounded-md pt-4 px-6 w-2/3">
             <p className="text-xs opacity-50">Deposit amount</p>
             <Controller
               control={control}
