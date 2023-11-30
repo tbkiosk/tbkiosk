@@ -13,7 +13,7 @@ import Image from 'next/image'
 import { abi } from '@/utils/scrollerNft_abiEnumerable'
 import { env } from 'env.mjs'
 import { ThirdWebError } from '@/types'
-import { gasInfoMap } from '@/constants/scroller/scroller'
+import { gasInfoMap } from '@/constants/scroller'
 import { formatEther } from 'viem'
 
 type TbaUser = {
