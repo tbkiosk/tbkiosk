@@ -12,7 +12,7 @@ import { z } from 'zod'
 import { SCROLLER_USER_CONFIG_SCHEMA } from '@/types/schema'
 
 import ArrowIcon from 'public/icons/arrow.svg'
-import { gasInfoMap, getPriceLevel } from '@/constants/scroller'
+import { gasInfoMap, getPriceLevel } from '@/constants/scroller/scroller'
 
 type ConfigForm = z.infer<typeof SCROLLER_USER_CONFIG_SCHEMA>
 

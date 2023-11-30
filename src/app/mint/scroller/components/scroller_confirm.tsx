@@ -15,7 +15,7 @@ import ArrowIcon from 'public/icons/arrow.svg'
 
 import type { ThirdWebError } from '@/types'
 import { abi } from '@/utils/scrollerNft_abiEnumerable'
-import { gasInfoMap } from '@/constants/scroller'
+import { gasInfoMap } from '@/constants/scroller/scroller'
 import { parseEther } from 'viem'
 
 type ConfigForm = z.infer<typeof SCROLLER_USER_CONFIG_SCHEMA>

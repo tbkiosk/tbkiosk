@@ -9,7 +9,7 @@ import { env } from 'env.mjs'
 import { abi } from '@/utils/scrollerNft_abiEnumerable'
 import { tempSvg } from './base64Scroller'
 import { formatEther } from 'viem'
-import { gasInfoMap } from '@/constants/scroller'
+import { gasInfoMap } from '@/constants/scroller/scroller'
 
 const ScrollerIframe = ({ tokenId }: { tokenId: string | number }) => {
   const [loaded, setLoaded] = useState(false)
