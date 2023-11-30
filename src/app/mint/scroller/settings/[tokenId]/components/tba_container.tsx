@@ -14,6 +14,7 @@ import { env } from 'env.mjs'
 
 import { maskAddress } from '@/utils/address'
 import { abi } from '@/utils/scrollerNft_abiEnumerable'
+import TbaRecord from './tba_record'
 
 const TBAContainer = ({ tokenId }: { tokenId: string }) => {
   const [tbaAddress, setTbaAddress] = useState<string>('loading...')
@@ -88,9 +89,9 @@ const TBAContainer = ({ tokenId }: { tokenId: string }) => {
           />
         </div>
       </div>
-      {/* <div className="my-10 md:my-20 max-w-[900px] mx-auto">
+      <div className="my-10 md:my-20 max-w-[900px] mx-auto">
         <TbaRecord tbaAddress={tbaAddress} />
-      </div> */}
+      </div>
     </div>
   )
 }

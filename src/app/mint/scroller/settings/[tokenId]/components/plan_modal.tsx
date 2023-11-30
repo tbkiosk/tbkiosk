@@ -7,7 +7,7 @@ import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 
 import { env } from 'env.mjs'
-import { gasInfoMap } from '@/constants/scroller'
+import { gasInfoMap } from '@/constants/scroller/scroller'
 
 const schema = z.object({
   gasTolerance: z.number().int().min(0).max(2),
