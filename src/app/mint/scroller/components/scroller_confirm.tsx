@@ -23,6 +23,8 @@ interface IScrollerConfirmProps extends UseFormReturn<ConfigForm> {
   setStep: (value: 1 | 2 | 3 | 4) => void
 }
 
+const trimTrailingZeros = (num: number) => (+num.toFixed(10)).toString().replace(/(\.[0-9]*?)0*$/, '$1')
+
 // const MAX_MINT_AMOUNT = 2
 
 const ScrollerConfirm = ({ control, getValues, watch, handleSubmit, formState: { isSubmitting }, setStep }: IScrollerConfirmProps) => {
@@ -32,7 +34,7 @@ const ScrollerConfirm = ({ control, getValues, watch, handleSubmit, formState: {
   const { contract: scrollerContract } = useContract(env.NEXT_PUBLIC_SCROLLER_NFT_CONTRACT_ADDRESS, abi)
   const { refetch } = useOwnedNFTs(scrollerContract, address)
 
-  const mintAmount = watch('mintAmount')
+  // const mintAmount = watch('mintAmount')
   // const depositAmountMultiple = depositAmount * mintAmount
 
   const onSubmit = async () => {
@@ -128,7 +130,7 @@ const ScrollerConfirm = ({ control, getValues, watch, handleSubmit, formState: {
               <div className="px-8">
                 <div className="flex justify-between mb-4">
                   <div className="font-normal">Deposit amount</div>
-                  <div>{depositAmount} ETH</div>
+                  <div>{trimTrailingZeros(+depositAmount)} ETH</div>
                 </div>
                 <div className="flex justify-between mb-4">
                   <div className="font-normal">Mint fee</div>

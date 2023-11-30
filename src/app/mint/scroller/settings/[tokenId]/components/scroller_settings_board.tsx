@@ -98,12 +98,20 @@ const SettingsBoardScroller = ({ tbaUser, tokenId }: { tbaUser: TbaUser | undefi
       </div>
       <hr className="w-full mb-6 opacity-20" />
       <div className="text-lg mb-8 font-bold">
-        Scoller will bridge from Ethereum to Scroll when gas is{' '}
+        Scroller will bridge from Ethereum to Scroll when gas is{' '}
         <span className="text-blue-600 font-bold">{tbaUser ? gasInfoMap[+tbaUser.preference].label : ''}</span> {/* TODO */}
         (typically {'$30-40'})
       </div>
       <div className="w-full flex justify-between">
-        <div className="text-sm flex items-end opacity-50">Check on Scroll</div>
+        <div className="text-sm flex items-end opacity-50">
+          <a
+            href={`https://sepolia.scrollscan.com/address/${address}#internaltx`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Check on Scroll
+          </a>
+        </div>
         <div>
           <p className="text-xs opacity-50 py-2">Status</p>
           <div className="w-16 pb-2">

@@ -47,7 +47,7 @@ const ScrollerSuccess = ({ getValues, onClose }: UseFormReturn<ConfigForm> & { o
         <div className="h-16 flex justify-center">
           <RobotSuccess />
         </div>
-        <div>Congrats, Your Scroller Pass is live and ready to use!</div>
+        <div>Congrats, your Scroller Pass is live and ready to use!</div>
         <div className="text-xl text-[#a6a9ae]">
           {mintedNFTs?.map(_nft => (
             <div key={_nft}>

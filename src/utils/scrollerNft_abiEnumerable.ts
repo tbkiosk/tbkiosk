@@ -8,7 +8,7 @@ export const abi = [
       },
       {
         internalType: 'address',
-        name: '_implementation',
+        name: '_transferWallet',
         type: 'address',
       },
     ],
@@ -392,7 +392,7 @@ export const abi = [
             type: 'address',
           },
           {
-            internalType: 'enum ScrollerPassV2.Preference',
+            internalType: 'enum ScrollerPass.Preference',
             name: 'preference',
             type: 'uint8',
           },
@@ -407,7 +407,7 @@ export const abi = [
             type: 'uint256',
           },
         ],
-        internalType: 'struct ScrollerPassV2.TBA',
+        internalType: 'struct ScrollerPass.TBA',
         name: '',
         type: 'tuple',
       },
@@ -459,11 +459,6 @@ export const abi = [
         name: 'tokenIds',
         type: 'uint256[]',
       },
-      {
-        internalType: 'uint256',
-        name: 'gasLimit',
-        type: 'uint256',
-      },
     ],
     name: 'initiateBulkBridge',
     outputs: [],
@@ -507,7 +502,7 @@ export const abi = [
         type: 'uint256',
       },
       {
-        internalType: 'enum ScrollerPassV2.Preference',
+        internalType: 'enum ScrollerPass.Preference',
         name: 'preference',
         type: 'uint8',
       },
@@ -698,12 +693,64 @@ export const abi = [
   {
     inputs: [
       {
+        internalType: 'uint256',
+        name: '_gasLimit',
+        type: 'uint256',
+      },
+    ],
+    name: 'setGasLimit',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: '_implementation',
+        type: 'address',
+      },
+    ],
+    name: 'setImplementation',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
         internalType: 'address',
         name: '_implementation',
         type: 'address',
       },
     ],
     name: 'setImplementationAddress',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_tbaGasUsed',
+        type: 'uint256',
+      },
+    ],
+    name: 'setTBAGasUsed',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: '_transferWallet',
+        type: 'address',
+      },
+    ],
+    name: 'setTransferWallet',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
@@ -818,7 +865,7 @@ export const abi = [
         type: 'address',
       },
       {
-        internalType: 'enum ScrollerPassV2.Preference',
+        internalType: 'enum ScrollerPass.Preference',
         name: 'preference',
         type: 'uint8',
       },
@@ -912,12 +959,19 @@ export const abi = [
         type: 'uint256',
       },
       {
-        internalType: 'enum ScrollerPassV2.Preference',
+        internalType: 'enum ScrollerPass.Preference',
         name: 'newPreference',
         type: 'uint8',
       },
     ],
     name: 'updateTBA',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'withdrawAll',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
