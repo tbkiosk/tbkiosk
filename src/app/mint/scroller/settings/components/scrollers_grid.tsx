@@ -56,7 +56,7 @@ const ScrollerGrid = () => {
   if (!data?.length) {
     return (
       <div className="min-h-[540px] flex flex-col items-center justify-center gap-4 tracking-wide">
-        <p className="font-[pixeloid-mono] text-sm text-center">Alas! Seems you don&apos;t have any Scroller Passes yet!</p>
+        <p className="font-[pixeloid-mono] text-sm text-center">Alas! Seems you don&apos;t yet have a Scroller Pass!</p>
         <Link
           className="px-8 py-2 font-medium text-[#78edc1] border border-[#78edc1] rounded-lg"
           href="/mint/scroller"
