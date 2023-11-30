@@ -65,7 +65,7 @@ const Mint = () => (
       </div>
     </header>
     <main className="h-[100vh] pt-[var(--header-height)] bg-white text-black overflow-hidden">
-      <div className="h-full px-4 md:px-8 pt-16 pb-4 overflow-y-auto custom-scrollbar">
+      <div className="h-full px-4 md:px-8 pt-4 md:pt-16 pb-4 overflow-y-auto custom-scrollbar">
         <div className="max-w-screen-2xl mx-auto pb-4">
           <div className="p-8 md:p-20 bg-[#f5f5f5] rounded-[20px]">
             <div className="flex flex-col md:flex-row gap-8 md:gap-16">
@@ -89,7 +89,12 @@ const Mint = () => (
                     <LogoText />
                   </span>
                 </div>
-                <p className="font-bold text-5xl leading-snug md:leading-normal">BEEP BOT</p>
+                <div className="flex flex-col md:flex-row md:gap-2">
+                  <span className="font-bold text-5xl leading-snug md:leading-normal">BEEP BOT</span>
+                  <span className="pb-4 md:pt-4">
+                    <span className="px-2 py-1 font-medium text-sm text-white bg-[#ed3733] rounded">Batch 2</span>
+                  </span>
+                </div>
                 <div className="flex items-center gap-2">
                   <span className="h-6 w-6">
                     {match(env.NEXT_PUBLIC_CHAIN_ID)
