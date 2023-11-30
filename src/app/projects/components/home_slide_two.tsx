@@ -1,6 +1,7 @@
 'use client'
 
 import { useRef } from 'react'
+import Link from 'next/link'
 import NextImage from 'next/image'
 import { Image, Button } from '@nextui-org/react'
 import { useSwiper, useSwiperSlide } from 'swiper/react'
@@ -44,14 +45,14 @@ const HomeSlideTwo = () => {
       ref={refPassthrough}
     >
       <div className="h-full flex flex-col">
-        <div className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-8 px-8 md:px-16 py-16 md:py-24 bg-[#f5f5f5]">
+        <div className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-12 px-8 md:px-16 py-16 md:py-24 bg-[#f5f5f5]">
           <Image
             alt="beep"
             as={NextImage}
-            className="w-full max-w-[500px]"
+            className="w-full max-w-[500px] rounded-xl"
             height={500}
             radius="none"
-            src="/beep/beep-poster.png"
+            src="/beep/beep.gif"
             width={500}
           />
           <div className="max-w-[528px] flex flex-col pt-8 md:pb-8">
@@ -71,16 +72,14 @@ const HomeSlideTwo = () => {
               purchases across different price levels.
             </p>
             <div className="flex flex-col-reverse items-start grow mt-8">
-              <a
+              <Link
                 className="w-full"
-                href="https://tally.so/r/mKxWEX"
-                rel="noreferrer"
-                target="_blank"
+                href="/mint/beep"
               >
                 <Button className="h-12 w-full bg-black hover:bg-[#0f0f0f] text-[#ffffff] rounded-full font-medium text-lg">
-                  Join waitlist
+                  Test on Goerli
                 </Button>
-              </a>
+              </Link>
             </div>
           </div>
         </div>
