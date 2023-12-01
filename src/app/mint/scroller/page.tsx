@@ -79,7 +79,7 @@ const Mint = () => (
                 height={480}
                 loading="eager"
                 priority
-                src="/scroller/scroller.png"
+                src="/scroller/scroller_gif.gif"
                 width={480}
               />
               <div className="flex flex-col grow-0">

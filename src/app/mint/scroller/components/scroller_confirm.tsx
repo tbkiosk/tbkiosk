@@ -70,7 +70,7 @@ const ScrollerConfirm = ({ control, getValues, watch, handleSubmit, formState: {
 
   return (
     <form
-      className="flex flex-col items-center gap-10 font-medium"
+      className="flex flex-col items-center gap-6 font-medium"
       onSubmit={handleSubmit(onSubmit)}
     >
       <div>
@@ -81,11 +81,11 @@ const ScrollerConfirm = ({ control, getValues, watch, handleSubmit, formState: {
             wrapper: 'w-full max-w-[92px]',
             img: 'aspect-square object-cover',
           }}
-          height={92}
+          height={200}
           loading="eager"
           priority
-          src="/scroller/scroller.png"
-          width={92}
+          src="/scroller/scroller_gif.gif"
+          width={200}
         />
       </div>
 
