@@ -17,7 +17,7 @@ import { abi } from '@/utils/scrollerNft_abiEnumerable'
 import TbaRecord from './tba_record'
 
 const TBAContainer = ({ tokenId }: { tokenId: string }) => {
-  const [tbaAddress, setTbaAddress] = useState<string>('loading...')
+  const [tbaAddress, setTbaAddress] = useState<string>('')
   const address = useAddress()
   const chainId = useChainId()
   const { contract } = useContract(chainId ? env.NEXT_PUBLIC_SCROLLER_NFT_CONTRACT_ADDRESS : null, abi)

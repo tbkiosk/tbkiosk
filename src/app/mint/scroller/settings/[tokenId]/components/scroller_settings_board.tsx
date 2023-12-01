@@ -106,8 +106,11 @@ const SettingsBoardScroller = ({ tbaUser, tokenId }: { tbaUser: TbaUser; tokenId
           (typically {`less than $${gasInfoMap[+tba.preference].price.to}`})
         </div>
       ) : (
-        <div className="text-lg mb-8 font-bold">
-          Deposit ETH into your Scroller Pass to bridge. Click Edit to udpate your gas preference.
+        <div className="text-lg mb-8">
+          <p>
+            Simply deposit ETH and your Scroller Pass will automagically bridge according to your gas tolerance. Click Edit to udpate your
+            tolerance.
+          </p>
         </div>
       )}
       <div className="w-full flex justify-between">
