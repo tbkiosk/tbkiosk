@@ -60,7 +60,7 @@ const SettingsBoardScroller = ({ tbaUser, tokenId }: { tbaUser: TbaUser; tokenId
       })
       const nftContract = await sdk.getContract(env.NEXT_PUBLIC_SCROLLER_NFT_CONTRACT_ADDRESS, abi)
 
-      const updateGasArgs = [tokenId, gasInfoMap[gasTolerance].arg]
+      const updateGasArgs = [tokenId, BigNumber.from(gasTolerance)]
 
       await nftContract.call('updateTBA', updateGasArgs)
 
@@ -83,7 +83,10 @@ const SettingsBoardScroller = ({ tbaUser, tokenId }: { tbaUser: TbaUser; tokenId
       <div className="w-full flex justify-between mb-2">
         <div>
           <div className="text-xl font-bold">{tbaUser ? gasInfoMap[+tbaUser.preference].label : ''}</div>
-          <div className="text-xs opacity-50">$123-456</div>
+
+          <div className="text-xs opacity-50">
+            Expected ${gasInfoMap[+tbaUser.preference].price.from}-{gasInfoMap[+tbaUser.preference].price.to}
+          </div>
         </div>
         <div
           className="flex justify-center items-center shrink-0 font-bold cursor-pointer"
@@ -96,11 +99,17 @@ const SettingsBoardScroller = ({ tbaUser, tokenId }: { tbaUser: TbaUser; tokenId
         </div>
       </div>
       <hr className="w-full mb-6 opacity-20" />
-      <div className="text-lg mb-8 font-bold">
-        Scroller will bridge from Ethereum to Scroll when gas is{' '}
-        <span className="text-blue-600 font-bold">{tbaUser ? gasInfoMap[+tbaUser.preference].label : ''}</span> {/* TODO */}
-        (typically {'$30-40'})
-      </div>
+      {+tba?.balance ? (
+        <div className="text-lg mb-8 font-bold">
+          Scroller will bridge from Ethereum to Scroll when gas is{' '}
+          <span className="text-blue-600 font-bold">{tba ? gasInfoMap[+tba.preference].label : ''}</span>
+          (typically {`less than $${gasInfoMap[+tba.preference].price.to}`})
+        </div>
+      ) : (
+        <div className="text-lg mb-8 font-bold">
+          Deposit ETH into your Scroller Pass to bridge. Click Edit to udpate your gas preference.
+        </div>
+      )}
       <div className="w-full flex justify-between">
         <div className="text-sm flex items-end opacity-50">
           <a
