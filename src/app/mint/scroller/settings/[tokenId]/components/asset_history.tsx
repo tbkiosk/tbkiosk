@@ -19,7 +19,6 @@ import { TransactionType } from '@/types/transactions'
 import { env } from 'env.mjs'
 
 import type { AssetTransfersWithMetadataResult } from 'alchemy-sdk'
-import { useChainId } from '@thirdweb-dev/react'
 
 type ScrollerTransferResult = AssetTransfersWithMetadataResult & { type: TransactionType }
 
@@ -68,20 +67,18 @@ const AssetHistory = ({ tbaAddress }: { tbaAddress: string }) => {
                 {item.type === TransactionType.WITHDRAWAL && <WithdrawIcon />}
               </div>
             </div>
-            <div>
-              {item.type} {item.asset || 'unknown'}
-            </div>
+            <div>{item.type}</div>
           </div>
         )
       }
       case 'amount': {
         return (
           <div className="flex items-center gap-2">
-            <div className="h-6 w-6 flex items-center justify-center bg-[#222325] rounded-full">
+            {/* <div className="h-6 w-6 flex items-center justify-center bg-[#222325] rounded-full">
               <div className="h-3 w-3">
                 <BeepEth />
               </div>
-            </div>
+            </div> */}
             <div>
               {item.value} {item.asset || 'unknown'}
             </div>
@@ -92,7 +89,7 @@ const AssetHistory = ({ tbaAddress }: { tbaAddress: string }) => {
         return (
           <a
             className="flex items-center text-[#78edc1] hover:underline"
-            href={`${EXPLORER[+env.NEXT_PUBLIC_CHAIN_ID as 1 | 5 | 137 | 11155111]}/tx/${item.hash}`}
+            href={`${EXPLORER[+env.NEXT_PUBLIC_CHAIN_ID_SCROLLER as 1 | 5 | 137 | 11155111]}/tx/${item.hash}`}
             rel="noreferrer"
             target="_blank"
           >

@@ -6,53 +6,94 @@ import { useQuery } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
 import dayjs from 'dayjs'
 
-import ArrowIcon from 'public/icons/arrow-short.svg'
+import ArrowIcon from 'public/icons/arrow.svg'
 
-import { TOKENS_TO } from '@/constants/token'
 import { EXPLORER } from '@/constants/explorer'
+import { TransactionType } from '@/types/transactions'
 
 import { env } from 'env.mjs'
 
 import type { AssetTransfersWithMetadataResult } from 'alchemy-sdk'
-import BeepEth from 'public/icons/tokens/beep-eth.svg'
+// import BeepEth from 'public/icons/tokens/beep-eth.svg'
+import EthereumCircle from 'public/icons/tokens/ethereum-circle.svg'
+import ScrollCircle from 'public/icons/tokens/scroll-circle.svg'
+
+type ScrollerTransferResult = AssetTransfersWithMetadataResult & { type: TransactionType }
 
 const BridgeHistory = ({ tbaAddress }: { tbaAddress: string }) => {
-  const { data, isFetching, error } = useQuery<AssetTransfersWithMetadataResult[]>({
+  const { data, isFetching, error } = useQuery<ScrollerTransferResult[]>({
     refetchInterval: 0,
     refetchOnMount: false,
     refetchOnWindowFocus: false,
     queryKey: ['token-bound-account-investment', tbaAddress],
     queryFn: async () => {
-      const res = await fetch(`/api/beep/profile/${tbaAddress}/investment-history`)
+      const res = await fetch(`/api/scroller/profile/${tbaAddress}/bridging-history`)
 
       if (!res.ok) {
         throw new Error(res.statusText)
       }
 
-      const investmentData: AssetTransfersWithMetadataResult[] = await res.json()
+      const investmentData: ScrollerTransferResult[] = await res.json()
 
       return investmentData || []
     },
   })
 
-  const renderCell = (item: AssetTransfersWithMetadataResult, columnKey: Key) => {
+  const trimTrailingZeros = (num: number) => (+num.toFixed(10)).toString().replace(/(\.[0-9]*?)0*$/, '$1')
+
+  const renderCell = (item: ScrollerTransferResult, columnKey: Key) => {
+    const gasItem: ScrollerTransferResult | undefined = data?.find(_tx => _tx.hash === item.hash && _tx.type === TransactionType.GAS)
+
+    const ETH_PRICE = 2050 // TODO: retrieve
+    const scrollL2Fee = 0.00035 // TODO: store in constants / get from contract
+
+    const txnValue = (gasItem?.value ?? 0) + (item.value ?? 0)
+
+    const gasUsd = (gasItem?.value ?? 0 * 2050).toFixed(2)
+
+    const scrollFee = scrollL2Fee
+    const scrollFeeUsd = (scrollFee * 2050).toFixed(2)
+
     switch (columnKey) {
       case 'activity': {
         return (
-          <div className="flex items-center gap-2">
-            <div className="h-6 w-6 flex items-center justify-center bg-[#222325] rounded-full">
-              <div className="h-3 w-3">
-                <BeepEth />
-              </div>
+          <div className="flex items-center gap-1">
+            <div className="h-6 w-6">
+              <EthereumCircle />
             </div>
-            <div>Buy {item.asset || 'unknown'}</div>
+            <div className="h-3 w-3">
+              <ArrowIcon />
+            </div>
+            <div className="h-6 w-6">
+              <ScrollCircle />
+            </div>
           </div>
         )
       }
       case 'amount': {
         return (
           <div>
-            {item.value?.toFixed(12)} {item.asset || 'unknown'}
+            {trimTrailingZeros(+txnValue.toFixed(12))} {item.asset || 'unknown'}
+          </div>
+        )
+      }
+      case 'gas': {
+        return (
+          <div className="flex items-center gap-2">
+            <div>
+              {gasItem?.value?.toFixed(8)} {item.asset || 'unknown'}
+            </div>
+            <div className="text-xs opacity-50">${gasUsd}</div>
+          </div>
+        )
+      }
+      case 'l2fee': {
+        return (
+          <div className="flex items-center gap-2">
+            <div>
+              {scrollL2Fee} {item.asset || 'unknown'}
+            </div>
+            <div className="text-xs opacity-50">${scrollFeeUsd}</div>
           </div>
         )
       }
@@ -107,12 +148,14 @@ const BridgeHistory = ({ tbaAddress }: { tbaAddress: string }) => {
       <TableHeader>
         <TableColumn key="activity">Activity</TableColumn>
         <TableColumn key="amount">Amount</TableColumn>
+        <TableColumn key="gas">L1 Gas</TableColumn>
+        <TableColumn key="l2fee">L2 Fee (Fixed)</TableColumn>
         <TableColumn key="time">Time</TableColumn>
         <TableColumn key="status">Status</TableColumn>
       </TableHeader>
       <TableBody
         isLoading={isFetching}
-        items={data || []}
+        items={data?.filter(item => item.type === 'BRIDGE') || []}
       >
         {item => <TableRow key={item.uniqueId}>{columnKey => <TableCell>{renderCell(item, columnKey)}</TableCell>}</TableRow>}
       </TableBody>
