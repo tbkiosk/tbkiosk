@@ -67,7 +67,7 @@ const TBAContainer = ({ tokenId }: { tokenId: string }) => {
           <div className="flex items-center gap-4 mb-8">
             <span className="font-medium text-xl">Scroller Pass #{tokenId}</span>
             <CopyButton
-              className="px-4 py-1 border border-[#a6a9ae] rounded-full font-normal text-sm text-[#a6a9ae] hover:border-[#666666]"
+              className="px-4 py-1 rounded-full font-normal text-sm text-[#a6a9ae] hover:border-[#666666]"
               copyText={tbaAddress}
             >
               {maskAddress(tbaAddress)}

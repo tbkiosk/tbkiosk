@@ -58,8 +58,9 @@ const ScrollerIframe = ({ tokenId }: { tokenId: string | number }) => {
                 <p className="text-white text-2xl font-[pixel]">Scroller Pass #{tokenId}</p>
               </div>
               <div className="absolute bottom-4 w-full leading-[1]">
-                <p className="text-white">Balance: {tbaBalance} ETH</p>
-                <p className="text-white">Pref: {tba.preference ? gasInfoMap[tba.preference].label : ''}</p>
+                <p>Status: {+tba?.preference == 0 ? 'OFF' : +tbaBalance ? 'PENDING' : 'RESTING'}</p>
+                <p>Balance: {tbaBalance} ETH</p>
+                <p>Gas Tolerance: {tba.preference ? gasInfoMap[+tba.preference].label : ''}</p>
               </div>
             </div>
           </div>

@@ -23,7 +23,7 @@ type TbaUser = {
   tbaAddress: string
 }
 
-const SettingsBoardScroller = ({ tbaUser, tokenId }: { tbaUser: TbaUser | undefined; tokenId: string }) => {
+const SettingsBoardScroller = ({ tbaUser, tokenId }: { tbaUser: TbaUser; tokenId: string }) => {
   const [tbaBalance, setTbaBalance] = useState<string>('')
   const [tba, setTba] = useState<any>({})
 
@@ -31,7 +31,6 @@ const SettingsBoardScroller = ({ tbaUser, tokenId }: { tbaUser: TbaUser | undefi
   const address = useAddress()
   const { contract, isLoading, error } = useContract(env.NEXT_PUBLIC_SCROLLER_NFT_CONTRACT_ADDRESS, abi)
 
-  // const { refetch } = useOwnedNFTs(contract, address)
   const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure()
 
   useEffect(() => {
@@ -61,7 +60,7 @@ const SettingsBoardScroller = ({ tbaUser, tokenId }: { tbaUser: TbaUser | undefi
       })
       const nftContract = await sdk.getContract(env.NEXT_PUBLIC_SCROLLER_NFT_CONTRACT_ADDRESS, abi)
 
-      const updateGasArgs = [tokenId, gasInfoMap[gasTolerance].arg]
+      const updateGasArgs = [tokenId, BigNumber.from(gasTolerance)]
 
       await nftContract.call('updateTBA', updateGasArgs)
 
@@ -78,13 +77,16 @@ const SettingsBoardScroller = ({ tbaUser, tokenId }: { tbaUser: TbaUser | undefi
         isOpen={isOpen}
         onOpenChange={onOpenChange}
         onSubmit={onSubmit}
+        tba={tba}
         gasTolerance={0} // TODO
       />
       <div className="w-full flex justify-between mb-2">
         <div>
-          {/* TODO: USE ENUM for mapping + validation */}
           <div className="text-xl font-bold">{tbaUser ? gasInfoMap[+tbaUser.preference].label : ''}</div>
-          <div className="text-xs opacity-50">$123-456</div>
+
+          <div className="text-xs opacity-50">
+            Expected ${gasInfoMap[+tbaUser.preference].price.from}-{gasInfoMap[+tbaUser.preference].price.to}
+          </div>
         </div>
         <div
           className="flex justify-center items-center shrink-0 font-bold cursor-pointer"
@@ -97,11 +99,17 @@ const SettingsBoardScroller = ({ tbaUser, tokenId }: { tbaUser: TbaUser | undefi
         </div>
       </div>
       <hr className="w-full mb-6 opacity-20" />
-      <div className="text-lg mb-8 font-bold">
-        Scroller will bridge from Ethereum to Scroll when gas is{' '}
-        <span className="text-blue-600 font-bold">{tbaUser ? gasInfoMap[+tbaUser.preference].label : ''}</span> {/* TODO */}
-        (typically {'$30-40'})
-      </div>
+      {+tba?.balance ? (
+        <div className="text-lg mb-8 font-bold">
+          Scroller will bridge from Ethereum to Scroll when gas is{' '}
+          <span className="text-blue-600 font-bold">{tba ? gasInfoMap[+tba.preference].label : ''}</span>
+          (typically {`less than $${gasInfoMap[+tba.preference].price.to}`})
+        </div>
+      ) : (
+        <div className="text-lg mb-8 font-bold">
+          Deposit ETH into your Scroller Pass to bridge. Click Edit to udpate your gas preference.
+        </div>
+      )}
       <div className="w-full flex justify-between">
         <div className="text-sm flex items-end opacity-50">
           <a

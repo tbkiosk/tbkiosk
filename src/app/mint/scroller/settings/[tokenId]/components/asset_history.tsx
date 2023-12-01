@@ -4,7 +4,6 @@ import { useEffect, type Key } from 'react'
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Spinner } from '@nextui-org/react'
 import { useQuery } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
-// import { checksumAddress } from 'viem'
 import dayjs from 'dayjs'
 
 import BeepEth from 'public/icons/tokens/beep-eth.svg'
@@ -12,7 +11,6 @@ import ArrowIcon from 'public/icons/arrow-short.svg'
 import DepositIcon from 'public/icons/deposit.svg'
 import WithdrawIcon from 'public/icons/withdraw.svg'
 
-// import { TOKENS_FROM } from '@/constants/token'
 import { EXPLORER } from '@/constants/explorer'
 import { TransactionType } from '@/types/transactions'
 
