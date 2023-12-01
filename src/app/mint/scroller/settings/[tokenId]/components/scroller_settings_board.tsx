@@ -23,7 +23,7 @@ type TbaUser = {
   tbaAddress: string
 }
 
-const SettingsBoardScroller = ({ tbaUser, tokenId }: { tbaUser: TbaUser | undefined; tokenId: string }) => {
+const SettingsBoardScroller = ({ tbaUser, tokenId }: { tbaUser: TbaUser; tokenId: string }) => {
   const [tbaBalance, setTbaBalance] = useState<string>('')
   const [tba, setTba] = useState<any>({})
 
@@ -31,7 +31,6 @@ const SettingsBoardScroller = ({ tbaUser, tokenId }: { tbaUser: TbaUser | undefi
   const address = useAddress()
   const { contract, isLoading, error } = useContract(env.NEXT_PUBLIC_SCROLLER_NFT_CONTRACT_ADDRESS, abi)
 
-  // const { refetch } = useOwnedNFTs(contract, address)
   const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure()
 
   useEffect(() => {
@@ -78,11 +77,11 @@ const SettingsBoardScroller = ({ tbaUser, tokenId }: { tbaUser: TbaUser | undefi
         isOpen={isOpen}
         onOpenChange={onOpenChange}
         onSubmit={onSubmit}
+        tba={tba}
         gasTolerance={0} // TODO
       />
       <div className="w-full flex justify-between mb-2">
         <div>
-          {/* TODO: USE ENUM for mapping + validation */}
           <div className="text-xl font-bold">{tbaUser ? gasInfoMap[+tbaUser.preference].label : ''}</div>
           <div className="text-xs opacity-50">$123-456</div>
         </div>

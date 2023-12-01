@@ -8,6 +8,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 
 import { env } from 'env.mjs'
 import { gasInfoMap } from '@/constants/scroller/scroller'
+import { TbaUser } from '@/types'
 
 const schema = z.object({
   gasTolerance: z.number().int().min(0).max(2),
@@ -17,12 +18,13 @@ export type PlanForm = z.infer<typeof schema>
 
 interface IPlanModalProps {
   gasTolerance: number
+  tba: TbaUser
   isOpen: boolean
   onOpenChange: () => void
   onSubmit: (data: PlanForm) => unknown | Promise<unknown>
 }
 
-const PlanModal = ({ gasTolerance: defaultGasTolerance, isOpen, onOpenChange, onSubmit }: IPlanModalProps) => {
+const PlanModal = ({ gasTolerance: defaultGasTolerance, tba, isOpen, onOpenChange, onSubmit }: IPlanModalProps) => {
   const {
     control,
     setValue,
@@ -55,7 +57,7 @@ const PlanModal = ({ gasTolerance: defaultGasTolerance, isOpen, onOpenChange, on
       onOpenChange={onOpenChange}
       size="2xl"
     >
-      <ModalContent className="bg-black text-white">
+      <ModalContent className="bg-[#1D1D1F] text-white">
         {() => (
           <>
             <ModalHeader className="justify-center font-bold text-2xl">Update Your Gas Tolerance</ModalHeader>
@@ -64,9 +66,8 @@ const PlanModal = ({ gasTolerance: defaultGasTolerance, isOpen, onOpenChange, on
                 className="flex flex-col items-center"
                 onSubmit={handleSubmit(_onSubmit)}
               >
-                {/* TODO */}
                 <div className="w-[320px] max-w-[320px] flex flex-col items-center gap-8">
-                  <p>Your scroller is currently set to {'MEDIUM'}</p>
+                  <p>Your scroller is currently set to {gasInfoMap[+tba.preference].label}</p>
                   <div className="flex items-center justify-center gap-2">
                     <Controller
                       control={control}
@@ -74,8 +75,8 @@ const PlanModal = ({ gasTolerance: defaultGasTolerance, isOpen, onOpenChange, on
                       render={({ field }) => (
                         <div className="flex justify-between gap-6 text-center">
                           <label
-                            className={`rounded-md w-1/3 text-sm p-8 cursor-pointer ${
-                              field.value === 1 ? 'bg-blue-500 text-white' : 'border hover:scale-[97%] transform transition-transform'
+                            className={`rounded-md w-1/3 text-sm p-4 px-10 bg-[#2B2B2B] cursor-pointer shadow-md ${
+                              field.value === 1 ? 'bg-blue-500 text-white' : 'hover:scale-[97%] transform transition-transform'
                             }`}
                           >
                             <input
@@ -93,8 +94,8 @@ const PlanModal = ({ gasTolerance: defaultGasTolerance, isOpen, onOpenChange, on
                           </label>
 
                           <label
-                            className={`rounded-md w-1/3 text-sm p-8 cursor-pointer ${
-                              field.value === 2 ? 'bg-blue-500 text-white' : 'border hover:scale-[97%] transform transition-transform'
+                            className={`rounded-md w-1/3 text-sm p-4 px-10 bg-[#2B2B2B] cursor-pointer shadow-md ${
+                              field.value === 2 ? 'bg-blue-500 text-white' : 'hover:scale-[97%] transform transition-transform'
                             }`}
                           >
                             <input
@@ -112,8 +113,8 @@ const PlanModal = ({ gasTolerance: defaultGasTolerance, isOpen, onOpenChange, on
                           </label>
 
                           <label
-                            className={`rounded-md w-1/3 text-sm p-8 cursor-pointer ${
-                              field.value === 3 ? 'bg-blue-500 text-white' : 'border hover:scale-[97%] transform transition-transform'
+                            className={`rounded-md w-1/3 text-sm p-4 px-10 bg-[#2B2B2B] cursor-pointer shadow-md ${
+                              field.value === 3 ? 'bg-blue-500 text-white' : 'hover:scale-[97%] transform transition-transform'
                             }`}
                           >
                             <input

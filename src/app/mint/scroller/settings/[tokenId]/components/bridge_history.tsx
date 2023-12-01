@@ -7,6 +7,7 @@ import { toast } from 'react-toastify'
 import dayjs from 'dayjs'
 
 import ArrowIcon from 'public/icons/arrow.svg'
+import ArrowIconSuccess from 'public/icons/arrow-short.svg'
 
 import { EXPLORER } from '@/constants/explorer'
 import { TransactionType } from '@/types/transactions'
@@ -107,7 +108,7 @@ const BridgeHistory = ({ tbaAddress }: { tbaAddress: string }) => {
           >
             Success
             <span className="h-4 w-4">
-              <ArrowIcon />
+              <ArrowIconSuccess />
             </span>
           </a>
         )
