@@ -3,10 +3,10 @@ export type ThirdWebError = {
 }
 
 export type TbaPrefs = {
-  active: boolean
+  isActive: boolean
   lastBridge: number
-  preference: string
-  tbaAddress: string
+  gasPref: number
+  address: string
 }
 
 export type TbaUser = TbaPrefs & {
