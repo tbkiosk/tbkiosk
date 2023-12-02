@@ -59,7 +59,7 @@ const SettingsBoardScroller = ({ tbaUser, tokenId }: { tbaUser: TbaUser; tokenId
       toast.success(`Gas Tolerance updated to ${gasInfoMap[gasTolerance].label}`)
       onOpenChange()
     } catch (error) {
-      toast.error((error as ThirdWebError)?.reason || (error as Error)?.message || 'Failed to udpate preference')
+      toast.error((error as ThirdWebError)?.reason || (error as Error)?.message || 'Failed to update preference')
     }
   }
 
@@ -93,14 +93,16 @@ const SettingsBoardScroller = ({ tbaUser, tokenId }: { tbaUser: TbaUser; tokenId
       <hr className="w-full mb-6 opacity-20" />
       {+tbaBalance > 0 ? (
         <div className="text-lg mb-8 font-bold">
-          Scroller will bridge from Ethereum to Scroll when gas is{' '}
-          <span className="text-blue-600 font-bold">{tbaUser ? gasInfoMap[+tbaUser.preference].label : ''}</span>
-          (typically {`less than $${gasInfoMap[+tbaUser.preference].price.to}`})
+          <p>
+            Scroller will bridge from Ethereum to Scroll when gas is
+            <span className="text-blue-600 font-bold"> {tbaUser ? gasInfoMap[+tbaUser.preference].label : ''} </span>
+            (typically {`less than $${gasInfoMap[+tbaUser.preference].price.to}`})
+          </p>
         </div>
       ) : (
         <div className="text-lg mb-8">
           <p>
-            Simply deposit ETH and your Scroller Pass will automagically bridge according to your gas tolerance. Click Edit to udpate your
+            Simply deposit ETH and your Scroller Pass will automagically bridge according to your gas tolerance. Click Edit to update your
             tolerance.
           </p>
         </div>
