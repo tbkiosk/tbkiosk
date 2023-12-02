@@ -12,20 +12,12 @@ import { BigNumber } from 'alchemy-sdk'
 import Image from 'next/image'
 import { abi } from '@/utils/scrollerNft_abiEnumerable'
 import { env } from 'env.mjs'
-import { ThirdWebError } from '@/types'
+import { TbaUser, ThirdWebError } from '@/types'
 import { gasInfoMap } from '@/constants/scroller/scroller'
 import { formatEther } from 'viem'
 
-type TbaUser = {
-  active: boolean
-  lastBridge: BigNumber
-  preference: string
-  tbaAddress: string
-}
-
 const SettingsBoardScroller = ({ tbaUser, tokenId }: { tbaUser: TbaUser; tokenId: string }) => {
   const [tbaBalance, setTbaBalance] = useState<string>('')
-  const [tba, setTba] = useState<any>({})
 
   const signer = useSigner()
   const address = useAddress()
@@ -37,7 +29,7 @@ const SettingsBoardScroller = ({ tbaUser, tokenId }: { tbaUser: TbaUser; tokenId
     const getTba = async () => {
       if (!contract || !address) return
       const [_tba, balance] = await contract.call('getTBA', [tokenId])
-      setTba(_tba)
+      // setTba(_tba)
       setTbaBalance(formatEther(balance))
     }
     getTba()
@@ -67,7 +59,7 @@ const SettingsBoardScroller = ({ tbaUser, tokenId }: { tbaUser: TbaUser; tokenId
       toast.success(`Gas Tolerance updated to ${gasInfoMap[gasTolerance].label}`)
       onOpenChange()
     } catch (error) {
-      toast.error((error as ThirdWebError)?.reason || (error as Error)?.message || 'Failed to udpate preference')
+      toast.error((error as ThirdWebError)?.reason || (error as Error)?.message || 'Failed to update preference')
     }
   }
 
@@ -77,7 +69,7 @@ const SettingsBoardScroller = ({ tbaUser, tokenId }: { tbaUser: TbaUser; tokenId
         isOpen={isOpen}
         onOpenChange={onOpenChange}
         onSubmit={onSubmit}
-        tba={tba}
+        tba={tbaUser}
         gasTolerance={0} // TODO
       />
       <div className="w-full flex justify-between mb-2">
@@ -99,16 +91,18 @@ const SettingsBoardScroller = ({ tbaUser, tokenId }: { tbaUser: TbaUser; tokenId
         </div>
       </div>
       <hr className="w-full mb-6 opacity-20" />
-      {+tba?.balance ? (
+      {+tbaBalance > 0 ? (
         <div className="text-lg mb-8 font-bold">
-          Scroller will bridge from Ethereum to Scroll when gas is{' '}
-          <span className="text-blue-600 font-bold">{tba ? gasInfoMap[+tba.preference].label : ''}</span>
-          (typically {`less than $${gasInfoMap[+tba.preference].price.to}`})
+          <p>
+            Scroller will bridge from Ethereum to Scroll when gas is
+            <span className="text-blue-600 font-bold"> {tbaUser ? gasInfoMap[+tbaUser.preference].label : ''} </span>
+            (typically {`less than $${gasInfoMap[+tbaUser.preference].price.to}`})
+          </p>
         </div>
       ) : (
         <div className="text-lg mb-8">
           <p>
-            Simply deposit ETH and your Scroller Pass will automagically bridge according to your gas tolerance. Click Edit to udpate your
+            Simply deposit ETH and your Scroller Pass will automagically bridge according to your gas tolerance. Click Edit to update your
             tolerance.
           </p>
         </div>
