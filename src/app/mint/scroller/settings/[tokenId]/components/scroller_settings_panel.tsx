@@ -12,13 +12,7 @@ import { useEffect, useState } from 'react'
 import { useAddress, useChainId, useContract } from '@thirdweb-dev/react'
 import { formatEther } from 'viem'
 import { BigNumber } from 'alchemy-sdk'
-
-type TbaUser = {
-  active: boolean
-  lastBridge: BigNumber
-  preference: string
-  tbaAddress: string
-}
+import { TbaUser } from '@/types'
 
 const ScrollerSettingsPanel = ({ tbaAddress, tokenId }: { tbaAddress: string; tokenId: string }) => {
   const [loaded, setLoaded] = useState(false)
