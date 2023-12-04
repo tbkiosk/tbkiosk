@@ -97,6 +97,7 @@ const TBAContainer = ({ tokenId }: { tokenId: string }) => {
             tba={tba}
             tokenId={tokenId}
             isLoading={isLoadingTba}
+            onOpenChange={handleModalChange}
           />
         </div>
       </div>

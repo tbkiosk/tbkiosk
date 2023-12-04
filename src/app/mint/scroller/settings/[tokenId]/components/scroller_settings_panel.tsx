@@ -7,7 +7,17 @@ import SettingsBoardScroller from './scroller_settings_board'
 
 import { TbaUser } from '@/types'
 
-const ScrollerSettingsPanel = ({ tba, tokenId, isLoading }: { tba: TbaUser; tokenId: string; isLoading: boolean }) => {
+const ScrollerSettingsPanel = ({
+  tba,
+  tokenId,
+  isLoading,
+  onOpenChange,
+}: {
+  tba: TbaUser
+  tokenId: string
+  isLoading: boolean
+  onOpenChange: (isOpen: boolean) => void
+}) => {
   if (isLoading) {
     return (
       <div className="min-h-[240px] flex items-center justify-center">
@@ -35,6 +45,7 @@ const ScrollerSettingsPanel = ({ tba, tokenId, isLoading }: { tba: TbaUser; toke
         <SettingsBoardScroller
           tba={tba}
           tokenId={tokenId}
+          onOpenChange={onOpenChange}
         />
       )}
     </div>

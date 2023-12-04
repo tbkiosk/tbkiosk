@@ -14,12 +14,19 @@ import { env } from 'env.mjs'
 import { TbaUser, ThirdWebError } from '@/types'
 import { gasInfoMap } from '@/constants/scroller/scroller'
 
-const SettingsBoardScroller = ({ tba, tokenId }: { tba: TbaUser; tokenId: string }) => {
+const SettingsBoardScroller = ({
+  tba,
+  tokenId,
+  onOpenChange,
+}: {
+  tba: TbaUser
+  tokenId: string
+  onOpenChange: (isOpen: boolean) => void
+}) => {
   const signer = useSigner()
   const address = useAddress()
   const { contract } = useContract(env.NEXT_PUBLIC_SCROLLER_NFT_CONTRACT_ADDRESS, abi)
-
-  const { isOpen, onOpen, onOpenChange } = useDisclosure()
+  const { isOpen, onOpen, onClose } = useDisclosure()
 
   const onSubmit = async ({ gasTolerance }: PlanForm) => {
     if (!signer) {
@@ -48,7 +55,7 @@ const SettingsBoardScroller = ({ tba, tokenId }: { tba: TbaUser; tokenId: string
       await nftContract.call('updateTBA', updateGasArgs)
 
       toast.success(`Gas Tolerance updated to ${gasInfoMap[gasTolerance].label}`)
-      onOpenChange()
+      onOpenChange(isOpen)
     } catch (error) {
       toast.error((error as ThirdWebError)?.reason || (error as Error)?.message || 'Failed to update gasPref')
     }
@@ -58,6 +65,8 @@ const SettingsBoardScroller = ({ tba, tokenId }: { tba: TbaUser; tokenId: string
     <div className="flex flex-col items-center grow px-8 py-4 bg-[#2B2B2B] rounded-[10px] shadow-md">
       <PlanModal
         isOpen={isOpen}
+        onOpen={onOpen}
+        onClose={onClose}
         onOpenChange={onOpenChange}
         onSubmit={onSubmit}
         tba={tba}

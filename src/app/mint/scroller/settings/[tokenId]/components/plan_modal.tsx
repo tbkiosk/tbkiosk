@@ -19,11 +19,13 @@ interface IPlanModalProps {
   gasTolerance: number
   tba: TbaUser
   isOpen: boolean
-  onOpenChange: () => void
+  onOpen: () => void
+  onClose: () => void
+  onOpenChange: (isOpen: boolean) => void
   onSubmit: (data: PlanForm) => unknown | Promise<unknown>
 }
 
-const PlanModal = ({ gasTolerance: defaultGasTolerance, tba, isOpen, onOpenChange, onSubmit }: IPlanModalProps) => {
+const PlanModal = ({ gasTolerance: defaultGasTolerance, tba, isOpen, onOpen, onClose, onOpenChange, onSubmit }: IPlanModalProps) => {
   const {
     control,
     reset,
@@ -53,7 +55,7 @@ const PlanModal = ({ gasTolerance: defaultGasTolerance, tba, isOpen, onOpenChang
   return (
     <Modal
       isOpen={isOpen}
-      onOpenChange={onOpenChange}
+      onClose={onClose}
       size="2xl"
     >
       <ModalContent className="bg-[#1D1D1F] text-white">
@@ -141,6 +143,10 @@ const PlanModal = ({ gasTolerance: defaultGasTolerance, tba, isOpen, onOpenChang
                     disabled={isSubmitting || watchedGasTolerance === defaultGasTolerance}
                     isLoading={isSubmitting}
                     type="submit"
+                    onPress={() => {
+                      onOpen()
+                      onOpenChange(true)
+                    }}
                   >
                     Update Gas Tolerance
                   </Button>
