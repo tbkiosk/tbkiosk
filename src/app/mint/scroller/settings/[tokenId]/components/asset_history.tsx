@@ -72,11 +72,11 @@ const AssetHistory = ({ tbaAddress }: { tbaAddress: string }) => {
       case 'amount': {
         return (
           <div className="flex items-center gap-2">
-            {/* <div className="h-6 w-6 flex items-center justify-center bg-[#222325] rounded-full">
+            <div className="h-6 w-6 flex items-center justify-center bg-[#222325] rounded-full">
               <div className="h-3 w-3">
                 <BeepEth />
               </div>
-            </div> */}
+            </div>
             <div>
               {item.value} {item.asset || 'unknown'}
             </div>

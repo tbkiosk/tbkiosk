@@ -15,7 +15,6 @@ import { TransactionType } from '@/types/transactions'
 import { env } from 'env.mjs'
 
 import type { AssetTransfersWithMetadataResult } from 'alchemy-sdk'
-// import BeepEth from 'public/icons/tokens/beep-eth.svg'
 import EthereumCircle from 'public/icons/tokens/ethereum-circle.svg'
 import ScrollCircle from 'public/icons/tokens/scroll-circle.svg'
 
@@ -50,10 +49,10 @@ const BridgeHistory = ({ tbaAddress }: { tbaAddress: string }) => {
 
     const txnValue = (gasItem?.value ?? 0) + (item.value ?? 0)
 
-    const gasUsd = (gasItem?.value ?? 0 * 2050).toFixed(2)
+    const gasUsd = (gasItem?.value ?? 0 * ETH_PRICE).toFixed(2)
 
     const scrollFee = scrollL2Fee
-    const scrollFeeUsd = (scrollFee * 2050).toFixed(2)
+    const scrollFeeUsd = (scrollFee * ETH_PRICE).toFixed(2)
 
     switch (columnKey) {
       case 'activity': {
@@ -132,6 +131,15 @@ const BridgeHistory = ({ tbaAddress }: { tbaAddress: string }) => {
     return (
       <div className="flex justify-center mt-[3rem]">
         <Spinner color="default" />
+      </div>
+    )
+  }
+
+  const hasTransactions = data && data.filter(item => item.type === 'BRIDGE').length > 0
+  if (!hasTransactions) {
+    return (
+      <div className="text-center mt-5 opacity-80">
+        <p>Alas, seems no assets have yet been bridged by your Pass!</p>
       </div>
     )
   }

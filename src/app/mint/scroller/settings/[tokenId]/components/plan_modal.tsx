@@ -6,7 +6,6 @@ import { useForm, Controller } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 
-import { env } from 'env.mjs'
 import { gasInfoMap } from '@/constants/scroller/scroller'
 import { TbaUser } from '@/types'
 
@@ -27,8 +26,6 @@ interface IPlanModalProps {
 const PlanModal = ({ gasTolerance: defaultGasTolerance, tba, isOpen, onOpenChange, onSubmit }: IPlanModalProps) => {
   const {
     control,
-    setValue,
-    clearErrors,
     reset,
     handleSubmit,
     formState: { isSubmitting },
@@ -67,7 +64,7 @@ const PlanModal = ({ gasTolerance: defaultGasTolerance, tba, isOpen, onOpenChang
                 onSubmit={handleSubmit(_onSubmit)}
               >
                 <div className="w-[320px] max-w-[320px] flex flex-col items-center gap-8">
-                  <p>Your scroller is currently set to {gasInfoMap[+tba.preference].label}</p>
+                  <p>Your scroller is currently set to {gasInfoMap[tba.gasPref].label}</p>
                   <div className="flex items-center justify-center gap-2">
                     <Controller
                       control={control}

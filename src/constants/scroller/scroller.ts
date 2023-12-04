@@ -1,9 +1,3 @@
-interface GasInfo {
-  arg: string
-  label: string
-  price: string | { from: number; to: number }
-}
-
 const lowFrom = 5
 const lowTo = 10
 const medTo = 25
