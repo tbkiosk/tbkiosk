@@ -1,8 +1,7 @@
 'use client'
 
-import { useState, useEffect } from 'react'
 import { useAddress, useChainId, useContract, useOwnedNFTs } from '@thirdweb-dev/react'
-import { Spinner } from '@nextui-org/react'
+import { Spinner, useDisclosure } from '@nextui-org/react'
 
 import ScrollerIframe from '../../components/scroller_iframe'
 import CopyButton from '@/components/copy_button'
@@ -15,33 +14,38 @@ import { env } from 'env.mjs'
 import { maskAddress } from '@/utils/address'
 import { abi } from '@/utils/scrollerNft_abiEnumerable'
 import TbaRecord from './tba_record'
+import useTbaScrollerUser from '@/hooks/useTbaScrollerUser'
 
 const TBAContainer = ({ tokenId }: { tokenId: string }) => {
-  const [tbaAddress, setTbaAddress] = useState<string>('')
   const address = useAddress()
   const chainId = useChainId()
-  const { contract } = useContract(chainId ? env.NEXT_PUBLIC_SCROLLER_NFT_CONTRACT_ADDRESS : null, abi)
-  const { data, isLoading, error } = useOwnedNFTs(contract, address)
+  const { contract } = useContract(env.NEXT_PUBLIC_SCROLLER_NFT_CONTRACT_ADDRESS, abi)
+  const { isOpen, onOpen, onClose } = useDisclosure()
 
-  useEffect(() => {
-    const getTbaAddress = async () => {
-      if (!contract || !address) return
-      const response = await contract.call('getTBA', [tokenId])
-      setTbaAddress(response[0][0])
+  const { tba, isLoading: isLoadingTba, error: errorTba } = useTbaScrollerUser(+tokenId, isOpen)
+  const { data, isLoading: isLoadingNft, error: errorNft } = useOwnedNFTs(contract, address)
+
+  const handleModalChange = (isOpen: boolean) => {
+    if (isOpen) {
+      onOpen()
+    } else {
+      onClose()
     }
-
-    getTbaAddress()
-  }, [tokenId, contract, address])
+  }
 
   if (!chainId || +chainId !== +env.NEXT_PUBLIC_CHAIN_ID_SCROLLER) {
     return null
   }
 
-  if (error) {
-    return <p className="text-center">{(error as Error)?.message || 'Failed to load NFT'}</p>
+  if (errorNft) {
+    return <p className="text-center">{(errorNft as Error)?.message || 'Failed to load NFT'}</p>
   }
 
-  if (isLoading) {
+  if (errorTba) {
+    return <p className="text-center">{(errorTba as Error)?.message || 'Failed to load TBA'}</p>
+  }
+
+  if (isLoadingNft || isLoadingTba) {
     return (
       <div className="min-h-[240px] flex items-center justify-center">
         <Spinner color="default" />
@@ -58,7 +62,11 @@ const TBAContainer = ({ tokenId }: { tokenId: string }) => {
       <div className="flex flex-col md:flex-row justify-center gap-4 md:gap-8 pt-8 md:pt-16">
         <div className="max-h-full w-full flex justify-center shrink-0 md:justify-end md:w-[40%]">
           <div className="max-h-full flex justify-center items-center w-[60%] md:w-full h-full">
-            <ScrollerIframe tokenId={tokenId} />
+            <ScrollerIframe
+              tba={tba}
+              isLoading={isLoadingTba}
+              tokenId={tokenId}
+            />
           </div>
         </div>
 
@@ -68,29 +76,32 @@ const TBAContainer = ({ tokenId }: { tokenId: string }) => {
             <span className="font-medium text-xl">Scroller Pass #{tokenId}</span>
             <CopyButton
               className="px-4 py-1 rounded-full font-normal text-sm text-[#a6a9ae] hover:border-[#666666]"
-              copyText={tbaAddress}
+              copyText={tba.address}
             >
-              {maskAddress(tbaAddress)}
+              {maskAddress(tba.address)}
             </CopyButton>
           </div>
           <div className="flex gap-4 mb-8">
             <DepositButton
-              tbaAddress={tbaAddress}
-              tokenId={tokenId}
+              tba={tba}
+              isLoading={isLoadingTba}
+              onOpenChange={handleModalChange}
             />
             <WithdrawButton
-              tbaAddress={tbaAddress}
+              tba={tba}
               tokenId={tokenId}
+              onOpenChange={handleModalChange}
             />
           </div>
           <ScrollerSettingsPanel
-            tbaAddress={tbaAddress}
+            tba={tba}
             tokenId={tokenId}
+            isLoading={isLoadingTba}
           />
         </div>
       </div>
       <div className="my-10 md:my-20 max-w-[900px] mx-auto">
-        <TbaRecord tbaAddress={tbaAddress} />
+        <TbaRecord tba={tba} />
       </div>
     </div>
   )

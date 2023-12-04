@@ -1,7 +1,7 @@
 'use client'
 
 import ConnectWalletButton from '@/components/connect_wallet_button'
-import { ThirdwebSDK, useAddress, useContract, useSigner } from '@thirdweb-dev/react'
+import { ThirdwebSDK, useContract, useSigner } from '@thirdweb-dev/react'
 import type { ThirdWebError } from '@/types'
 
 import React from 'react'
@@ -45,10 +45,6 @@ const faucet = () => {
     } catch (error) {
       toast.error((error as ThirdWebError)?.reason || (error as Error)?.message || 'Failed to withdraw')
     }
-  }
-
-  function closeTab() {
-    window.close()
   }
 
   return (

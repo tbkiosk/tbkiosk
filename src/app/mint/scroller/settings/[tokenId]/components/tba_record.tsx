@@ -5,6 +5,7 @@ import { Tabs, Tab } from '@nextui-org/react'
 
 import AssetHistory from './asset_history'
 import BridgeHistory from './bridge_history'
+import { TbaUser } from '@/types'
 
 enum TabsKeys {
   INVT = 'INVT',
@@ -15,9 +16,11 @@ enum TabsKeys {
 //   ALL = 'ALL',
 //   DEPOSIT = 'DEPOSIT',
 //   WITHDRAWAL = 'WITHDRAWAL',
+//   BRIDGE = 'BRIDGE',
+//   GAS = 'GAS',
 // }
 
-const TbaRecord = ({ tbaAddress }: { tbaAddress: string }) => {
+const TbaRecord = ({ tba }: { tba: TbaUser }) => {
   const [selected, setSelected] = useState<TabsKeys>(TabsKeys.INVT)
   // const [filter, setFilter] = useState<HistoryFilter>(HistoryFilter.ALL)
 
@@ -39,13 +42,13 @@ const TbaRecord = ({ tbaAddress }: { tbaAddress: string }) => {
           key={TabsKeys.INVT}
           title="Bridge History"
         >
-          <BridgeHistory tbaAddress={tbaAddress} />
+          <BridgeHistory tbaAddress={tba.address} />
         </Tab>
         <Tab
           key={TabsKeys.DW}
           title="Deposits/Withdrawals"
         >
-          <AssetHistory tbaAddress={tbaAddress} />
+          <AssetHistory tbaAddress={tba.address} />
         </Tab>
       </Tabs>
     </div>

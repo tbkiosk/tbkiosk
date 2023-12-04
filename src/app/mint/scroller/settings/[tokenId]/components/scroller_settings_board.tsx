@@ -1,7 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { ThirdwebSDK, useAddress, useContract, useOwnedNFTs, useSigner } from '@thirdweb-dev/react'
+import { ThirdwebSDK, useAddress, useContract, useSigner } from '@thirdweb-dev/react'
 import { toast } from 'react-toastify'
 import { useDisclosure } from '@nextui-org/react'
 
@@ -14,26 +13,13 @@ import { abi } from '@/utils/scrollerNft_abiEnumerable'
 import { env } from 'env.mjs'
 import { TbaUser, ThirdWebError } from '@/types'
 import { gasInfoMap } from '@/constants/scroller/scroller'
-import { formatEther } from 'viem'
 
-const SettingsBoardScroller = ({ tbaUser, tokenId }: { tbaUser: TbaUser; tokenId: string }) => {
-  const [tbaBalance, setTbaBalance] = useState<string>('')
-
+const SettingsBoardScroller = ({ tba, tokenId }: { tba: TbaUser; tokenId: string }) => {
   const signer = useSigner()
   const address = useAddress()
-  const { contract, isLoading, error } = useContract(env.NEXT_PUBLIC_SCROLLER_NFT_CONTRACT_ADDRESS, abi)
+  const { contract } = useContract(env.NEXT_PUBLIC_SCROLLER_NFT_CONTRACT_ADDRESS, abi)
 
-  const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure()
-
-  useEffect(() => {
-    const getTba = async () => {
-      if (!contract || !address) return
-      const [_tba, balance] = await contract.call('getTBA', [tokenId])
-      // setTba(_tba)
-      setTbaBalance(formatEther(balance))
-    }
-    getTba()
-  }, [isOpen])
+  const { isOpen, onOpen, onOpenChange } = useDisclosure()
 
   const onSubmit = async ({ gasTolerance }: PlanForm) => {
     if (!signer) {
@@ -43,6 +29,11 @@ const SettingsBoardScroller = ({ tbaUser, tokenId }: { tbaUser: TbaUser; tokenId
 
     if (!contract) {
       toast.error('Failed to collect contract information')
+      return
+    }
+
+    if (!gasTolerance) {
+      toast.error('Please select gas tolerance')
       return
     }
 
@@ -59,7 +50,7 @@ const SettingsBoardScroller = ({ tbaUser, tokenId }: { tbaUser: TbaUser; tokenId
       toast.success(`Gas Tolerance updated to ${gasInfoMap[gasTolerance].label}`)
       onOpenChange()
     } catch (error) {
-      toast.error((error as ThirdWebError)?.reason || (error as Error)?.message || 'Failed to update preference')
+      toast.error((error as ThirdWebError)?.reason || (error as Error)?.message || 'Failed to update gasPref')
     }
   }
 
@@ -69,15 +60,15 @@ const SettingsBoardScroller = ({ tbaUser, tokenId }: { tbaUser: TbaUser; tokenId
         isOpen={isOpen}
         onOpenChange={onOpenChange}
         onSubmit={onSubmit}
-        tba={tbaUser}
-        gasTolerance={0} // TODO
+        tba={tba}
+        gasTolerance={tba.gasPref} // TODO
       />
       <div className="w-full flex justify-between mb-2">
         <div>
-          <div className="text-xl font-bold">{tbaUser ? gasInfoMap[+tbaUser.preference].label : ''}</div>
+          <div className="text-xl font-bold">{gasInfoMap[tba.gasPref].label}</div>
 
           <div className="text-xs opacity-50">
-            Expected ${gasInfoMap[+tbaUser.preference].price.from}-{gasInfoMap[+tbaUser.preference].price.to}
+            Expected ${gasInfoMap[+tba.gasPref].price.from}-{gasInfoMap[+tba.gasPref].price.to}
           </div>
         </div>
         <div
@@ -91,12 +82,12 @@ const SettingsBoardScroller = ({ tbaUser, tokenId }: { tbaUser: TbaUser; tokenId
         </div>
       </div>
       <hr className="w-full mb-6 opacity-20" />
-      {+tbaBalance > 0 ? (
+      {tba.balance > 0 ? (
         <div className="text-lg mb-8 font-bold">
           <p>
             Scroller will bridge from Ethereum to Scroll when gas is
-            <span className="text-blue-600 font-bold"> {tbaUser ? gasInfoMap[+tbaUser.preference].label : ''} </span>
-            (typically {`less than $${gasInfoMap[+tbaUser.preference].price.to}`})
+            <span className="text-blue-600 font-bold"> {gasInfoMap[+tba.gasPref].label} </span>
+            (typically {`less than $${gasInfoMap[+tba.gasPref].price.to}`})
           </p>
         </div>
       ) : (
@@ -121,7 +112,7 @@ const SettingsBoardScroller = ({ tbaUser, tokenId }: { tbaUser: TbaUser; tokenId
           <p className="text-xs opacity-50 py-2">Status</p>
           <div className="w-16 pb-2">
             <Image
-              src={parseFloat(tbaBalance) > 0 && tbaUser?.preference ? '/scroller/on.png' : '/scroller/off.png'}
+              src={tba.balance > 0 && tba.gasPref ? '/scroller/on.png' : '/scroller/off.png'}
               alt="status"
               width={100}
               height={100}

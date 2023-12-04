@@ -4,8 +4,9 @@ import Link from 'next/link'
 import { useConnectionStatus, useChainId, useAddress, useContract, useOwnedNFTs } from '@thirdweb-dev/react'
 import { Spinner } from '@nextui-org/react'
 
+// import ScrollerIframe from './scroller_iframe'
+import ScrollerIframeWrapper from './scroller_iframeWrapper'
 import ConnectWalletButton from '@/components/connect_wallet_button'
-import ScrollerIframe from './scroller_iframe'
 
 import { env } from 'env.mjs'
 import { abi } from '@/utils/scrollerNft_abiEnumerable'
@@ -78,8 +79,7 @@ const ScrollerGrid = () => {
             className="h-full w-full absolute inset-0 z-10"
             href={`/mint/scroller/settings/${_nft.metadata.id}`}
           />
-          {/* TODO – add SVG */}
-          <ScrollerIframe tokenId={_nft.metadata.id} />
+          <ScrollerIframeWrapper tokenId={_nft.metadata.id} />
         </div>
       ))}
     </div>

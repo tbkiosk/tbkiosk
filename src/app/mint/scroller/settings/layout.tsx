@@ -6,8 +6,8 @@ const ScrollerSettingsLayout = ({ children }: { children: React.ReactNode }) => 
   return (
     <div className="h-[100vh] bg-[#1d1d1f] bg-cover bg-no-repeat overflow-y-auto">
       <header className="">
-        <div className="h-full max-w-screen-2xl px-4 md:px-8 py-4 md:py-8 mx-auto flex items-center justify-between">
-          <div className="h-[36px]">
+        <div className="h-full max-w-screen-2xl px-4 md:px-8 py-4 md:py-8 mx-auto sm:flex gap-10 items-center justify-between">
+          <div className="h-[36px] mb-6 sm:mb-0">
             <svg
               width="339"
               height="36"

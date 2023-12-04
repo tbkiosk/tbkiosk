@@ -15,7 +15,7 @@ import { EXPLORER } from '@/constants/explorer'
 import { env } from 'env.mjs'
 import { abi } from '@/utils/scrollerNft_abiEnumerable'
 import { maskAddress } from '@/utils/address'
-import { formatEther } from 'viem'
+import { TbaUser } from '@/types'
 
 const schema = z.object({
   amount: z.string(),
@@ -29,31 +29,26 @@ const defaultValues: WithdrawForm = {
   toAddress: '',
 }
 
-const WithdrawButton = ({ tbaAddress, tokenId }: { tokenId: string; tbaAddress: string }) => {
-  const { isOpen, onOpen, onOpenChange } = useDisclosure()
-
-  const [tbaBalance, setTbaBalance] = useState<string>('')
+const WithdrawButton = ({ tba, tokenId, onOpenChange }: { tokenId: string; tba: TbaUser; onOpenChange: (isOpen: boolean) => void }) => {
   const [tbaOwner, setTbaOwner] = useState<string>('')
 
   const address = useAddress()
   const signer = useSigner()
   const chainId = useChainId()
+
+  const { isOpen, onOpen, onClose } = useDisclosure()
   const { contract, isLoading, error } = useContract(chainId ? env.NEXT_PUBLIC_SCROLLER_NFT_CONTRACT_ADDRESS : null, abi)
 
   useEffect(() => {
-    const getTbaBalance = async () => {
-      if (!contract || !address) return
-      const response = await contract.call('getTBA', [tokenId])
-      setTbaBalance(formatEther(response[1]))
-    }
+    onOpenChange(isOpen)
+  }, [isOpen, onOpenChange])
 
+  useEffect(() => {
     const getTbaOwner = async () => {
       if (!contract || !address) return
       const owner = await contract.erc721.ownerOf(tokenId)
       setTbaOwner(owner)
     }
-
-    getTbaBalance()
     getTbaOwner()
   }, [isOpen])
 
@@ -70,7 +65,7 @@ const WithdrawButton = ({ tbaAddress, tokenId }: { tokenId: string; tbaAddress: 
   })
 
   const onSubmit = async (data: WithdrawForm) => {
-    if (+data.amount > +tbaBalance) {
+    if (+data.amount > tba.balance) {
       setError('amount', { type: 'custom', message: 'Not enough ETH balance' })
       return
     }
@@ -84,7 +79,7 @@ const WithdrawButton = ({ tbaAddress, tokenId }: { tokenId: string; tbaAddress: 
 
     try {
       const txHash = await tokenboundClient.transferETH({
-        account: tbaAddress as `0x${string}`,
+        account: tba.address as `0x${string}`,
         amount: +data.amount,
         recipientAddress: data.toAddress as `0x${string}`,
       })
@@ -102,7 +97,7 @@ const WithdrawButton = ({ tbaAddress, tokenId }: { tokenId: string; tbaAddress: 
           </a>
         </p>
       )
-      onOpenChange()
+      onOpenChange(isOpen)
     } catch (error) {
       toast.error((error as Error)?.message || 'Failed to withdraw')
     }
@@ -122,15 +117,21 @@ const WithdrawButton = ({ tbaAddress, tokenId }: { tokenId: string; tbaAddress: 
 
   return (
     <>
+      <Button
+        className="w-[172px] px-8 bg-transparent font-bold text-xl text-white border border-white rounded-full tracking-wider transition-colors hover:bg-[#0f0f0f]"
+        onPress={onOpen}
+      >
+        Withdraw
+      </Button>
       <Modal
         isOpen={isOpen}
-        onOpenChange={onOpenChange}
+        onClose={onClose}
         size="2xl"
       >
-        <ModalContent className="bg-black text-white">
+        <ModalContent className="bg-[#1b1b1b] text-white">
           {() => (
             <>
-              <ModalHeader className="justify-center font-bold text-2xl">Withdraw ETH from your Scroller Pass</ModalHeader>
+              <ModalHeader className="justify-center font-bold text-2xl">Withdraw ETH from Scroller Pass</ModalHeader>
               <ModalBody className="px-8 pb-8 tracking-wide">
                 <form
                   className="flex flex-col items-center gap-4"
@@ -159,11 +160,11 @@ const WithdrawButton = ({ tbaAddress, tokenId }: { tokenId: string; tbaAddress: 
                                 <button
                                   onClick={e => {
                                     e.preventDefault()
-                                    field.onChange(tbaBalance)
+                                    field.onChange(tba.balance.toString())
                                   }}
                                   className="px-2 py-1 rounded-full bg-[#2B2B2B] text-#808080 tracking-wider transition-colors hover:bg-[#808080]"
                                 >
-                                  {tbaBalance} ETH
+                                  {tba.balance} ETH
                                 </button>
                               </div>
                             </div>
@@ -253,6 +254,10 @@ const WithdrawButton = ({ tbaAddress, tokenId }: { tokenId: string; tbaAddress: 
                     disabled={isSubmitting}
                     isLoading={isSubmitting}
                     type="submit"
+                    onPress={() => {
+                      onOpen()
+                      onOpenChange(true)
+                    }}
                   >
                     Confirm withdrawal
                   </Button>
@@ -262,12 +267,6 @@ const WithdrawButton = ({ tbaAddress, tokenId }: { tokenId: string; tbaAddress: 
           )}
         </ModalContent>
       </Modal>
-      <Button
-        className="w-[172px] px-8 bg-transparent font-bold text-xl text-white border border-white rounded-full tracking-wider transition-colors hover:bg-[#0f0f0f]"
-        onPress={onOpen}
-      >
-        Withdraw
-      </Button>
     </>
   )
 }

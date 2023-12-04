@@ -2,16 +2,15 @@
 
 import { useEffect } from 'react'
 import { Modal, ModalContent, ModalHeader, ModalBody, Button } from '@nextui-org/react'
-import { useForm, Controller } from 'react-hook-form'
+import { useForm, Controller, useWatch } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 
-import { env } from 'env.mjs'
 import { gasInfoMap } from '@/constants/scroller/scroller'
 import { TbaUser } from '@/types'
 
 const schema = z.object({
-  gasTolerance: z.number().int().min(0).max(2),
+  gasTolerance: z.number().int().min(0).max(3),
 })
 
 export type PlanForm = z.infer<typeof schema>
@@ -27,8 +26,6 @@ interface IPlanModalProps {
 const PlanModal = ({ gasTolerance: defaultGasTolerance, tba, isOpen, onOpenChange, onSubmit }: IPlanModalProps) => {
   const {
     control,
-    setValue,
-    clearErrors,
     reset,
     handleSubmit,
     formState: { isSubmitting },
@@ -38,6 +35,8 @@ const PlanModal = ({ gasTolerance: defaultGasTolerance, tba, isOpen, onOpenChang
     },
     resolver: zodResolver(schema),
   })
+
+  const watchedGasTolerance = useWatch({ control, name: 'gasTolerance' })
 
   const _onSubmit = async (data: PlanForm) => {
     await onSubmit(data)
@@ -67,7 +66,7 @@ const PlanModal = ({ gasTolerance: defaultGasTolerance, tba, isOpen, onOpenChang
                 onSubmit={handleSubmit(_onSubmit)}
               >
                 <div className="w-[320px] max-w-[320px] flex flex-col items-center gap-8">
-                  <p>Your scroller is currently set to {gasInfoMap[+tba.preference].label}</p>
+                  <p>Your scroller is currently set to {gasInfoMap[tba.gasPref].label}</p>
                   <div className="flex items-center justify-center gap-2">
                     <Controller
                       control={control}
@@ -90,7 +89,7 @@ const PlanModal = ({ gasTolerance: defaultGasTolerance, tba, isOpen, onOpenChang
                             <p className="text-sm">
                               ${gasInfoMap[1].price.from}-{gasInfoMap[1].price.to}
                             </p>
-                            <p className="text-xs">Usually executes within 48 hours</p>
+                            <p className="text-xs">Usually executes within X hours</p>
                           </label>
 
                           <label
@@ -109,7 +108,7 @@ const PlanModal = ({ gasTolerance: defaultGasTolerance, tba, isOpen, onOpenChang
                             <p className="text-sm">
                               ${gasInfoMap[2].price.from}-{gasInfoMap[2].price.to}
                             </p>
-                            <p className="text-xs">Usually executes within 24 hours</p>
+                            <p className="text-xs">Usually executes within Y hours</p>
                           </label>
 
                           <label
@@ -128,7 +127,7 @@ const PlanModal = ({ gasTolerance: defaultGasTolerance, tba, isOpen, onOpenChang
                             <p className="text-sm">
                               ${gasInfoMap[3].price.from}-{gasInfoMap[3].price.to}
                             </p>
-                            <p className="text-xs">Usually executes within 1 hours</p>
+                            <p className="text-xs">Usually executes within Z hours</p>
                           </label>
                         </div>
                       )}
@@ -139,7 +138,7 @@ const PlanModal = ({ gasTolerance: defaultGasTolerance, tba, isOpen, onOpenChang
                   </div>
                   <Button
                     className="w-[200px] bg-white font-bold text-sm text-black tracking-wide rounded-full"
-                    disabled={isSubmitting}
+                    disabled={isSubmitting || watchedGasTolerance === defaultGasTolerance}
                     isLoading={isSubmitting}
                     type="submit"
                   >

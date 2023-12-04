@@ -3,7 +3,7 @@
 import NextImage from 'next/image'
 import { Image, Button } from '@nextui-org/react'
 import { Controller, type UseFormReturn } from 'react-hook-form'
-import { useSigner, ThirdwebSDK, useAddress, useContract, useOwnedNFTs } from '@thirdweb-dev/react'
+import { useSigner, ThirdwebSDK, useAddress } from '@thirdweb-dev/react'
 import { toast } from 'react-toastify'
 import { z } from 'zod'
 
@@ -27,12 +27,10 @@ const trimTrailingZeros = (num: number) => (+num.toFixed(10)).toString().replace
 
 // const MAX_MINT_AMOUNT = 2
 
-const ScrollerConfirm = ({ control, getValues, watch, handleSubmit, formState: { isSubmitting }, setStep }: IScrollerConfirmProps) => {
+const ScrollerConfirm = ({ control, getValues, handleSubmit, formState: { isSubmitting }, setStep }: IScrollerConfirmProps) => {
   const { depositAmount, gasTolerance } = getValues()
   const address = useAddress()
   const signer = useSigner()
-  const { contract: scrollerContract } = useContract(env.NEXT_PUBLIC_SCROLLER_NFT_CONTRACT_ADDRESS, abi)
-  const { refetch } = useOwnedNFTs(scrollerContract, address)
 
   // const mintAmount = watch('mintAmount')
   // const depositAmountMultiple = depositAmount * mintAmount
@@ -40,11 +38,6 @@ const ScrollerConfirm = ({ control, getValues, watch, handleSubmit, formState: {
   const onSubmit = async () => {
     if (!signer) {
       toast.error('Signer not defined')
-      return
-    }
-
-    if (!scrollerContract) {
-      toast.error('Failed to collect contract information')
       return
     }
 

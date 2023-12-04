@@ -1,10 +1,10 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { useDisclosure, Modal, ModalContent, ModalHeader, ModalBody, Select, SelectItem, Button, Input, Spinner } from '@nextui-org/react'
+import { useEffect } from 'react'
+import { useDisclosure, Modal, ModalContent, ModalHeader, ModalBody, Button, Input, Spinner } from '@nextui-org/react'
 import { useForm, Controller } from 'react-hook-form'
 import { toast } from 'react-toastify'
-import { ThirdwebSDK, useAddress, useChainId, useContract, useOwnedNFTs, useSigner } from '@thirdweb-dev/react'
+import { ThirdwebSDK, useSigner } from '@thirdweb-dev/react'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import clsx from 'clsx'
@@ -13,11 +13,9 @@ import CopyButton from '@/components/copy_button'
 
 import { maskAddress } from '@/utils/address'
 
-import type { ThirdWebError } from '@/types'
+import type { TbaUser, ThirdWebError } from '@/types'
 
 import { env } from 'env.mjs'
-import { abi } from '@/utils/scrollerNft_abiEnumerable'
-import { formatEther } from 'viem'
 
 const schema = z.object({
   amount: z.string(),
@@ -29,8 +27,14 @@ const defaultValues: DepositForm = {
   amount: '',
 }
 
-const DepositButton = ({ tbaAddress, tokenId }: { tokenId: string; tbaAddress: string }) => {
-  const { isOpen, onOpen, onOpenChange } = useDisclosure()
+const DepositButton = ({ tba, isLoading, onOpenChange }: { tba: TbaUser; isLoading: boolean; onOpenChange: (isOpen: boolean) => void }) => {
+  const { isOpen, onOpen, onClose } = useDisclosure()
+
+  const signer = useSigner()
+
+  useEffect(() => {
+    onOpenChange(isOpen)
+  }, [isOpen, onOpenChange])
 
   const {
     control,
@@ -44,22 +48,6 @@ const DepositButton = ({ tbaAddress, tokenId }: { tokenId: string; tbaAddress: s
     resolver: zodResolver(schema),
   })
 
-  const [tbaBalance, setTbaBalance] = useState<string>('')
-  const address = useAddress()
-  const signer = useSigner()
-  const chainId = useChainId()
-  const { contract, isLoading, error } = useContract(chainId ? env.NEXT_PUBLIC_SCROLLER_NFT_CONTRACT_ADDRESS : null, abi)
-
-  useEffect(() => {
-    const getTbaBalance = async () => {
-      if (!contract || !address) return
-      const response = await contract.call('getTBA', [tokenId])
-      setTbaBalance(formatEther(response[1]))
-    }
-
-    getTbaBalance()
-  }, [isOpen])
-
   const onSubmit = async ({ amount }: DepositForm) => {
     if (+amount <= 0) {
       setError('amount', { type: 'custom', message: 'Invalid balance' })
@@ -71,29 +59,19 @@ const DepositButton = ({ tbaAddress, tokenId }: { tokenId: string; tbaAddress: s
       return
     }
 
-    if (!contract) {
-      toast.error('Failed to collect contract information')
-      return
-    }
-
     try {
       const sdk = ThirdwebSDK.fromSigner(signer, env.NEXT_PUBLIC_CHAIN_ID_SCROLLER, {
         clientId: env.NEXT_PUBLIC_THIRDWEB_CLIENT_ID,
       })
-      await sdk.wallet.transfer(tbaAddress, amount)
+      await sdk.wallet.transfer(tba.address, amount)
 
       toast.success(`Successfully deposited ${amount} ETH}`)
-      onOpenChange()
+
+      onOpenChange(isOpen)
     } catch (error) {
       toast.error((error as ThirdWebError)?.reason || (error as Error)?.message || 'Failed to deposit')
     }
   }
-
-  useEffect(() => {
-    if (error) {
-      toast.error((error as Error)?.message || 'Failed to load balances')
-    }
-  }, [error])
 
   useEffect(() => {
     if (isOpen) {
@@ -111,13 +89,13 @@ const DepositButton = ({ tbaAddress, tokenId }: { tokenId: string; tbaAddress: s
       </Button>
       <Modal
         isOpen={isOpen}
-        onOpenChange={onOpenChange}
+        onClose={onClose}
         size="2xl"
       >
-        <ModalContent className="bg-black text-white">
+        <ModalContent className="bg-[#1b1b1b] text-white">
           {() => (
             <>
-              <ModalHeader className="justify-center text-2xl">Deposit ETH to your Scroller Pass</ModalHeader>
+              <ModalHeader className="justify-center text-2xl">Deposit ETH to Scroller Pass</ModalHeader>
               <ModalBody className="px-8 pb-8 tracking-wider">
                 <form
                   className="flex flex-col items-center gap-4"
@@ -127,9 +105,9 @@ const DepositButton = ({ tbaAddress, tokenId }: { tokenId: string; tbaAddress: s
                     <div>Your Scroller Pass wallet address</div>
                     <CopyButton
                       className="px-4 py-1 bg-[#2B2B2B] rounded-full font-normal text-sm text-[#a6a9ae] tracking-wider hover:border-[#666666]"
-                      copyText={tbaAddress}
+                      copyText={tba.address}
                     >
-                      {maskAddress(tbaAddress)}
+                      {maskAddress(tba.address)}
                     </CopyButton>
                   </div>
                   <div className="w-full flex flex-col items-center gap-2">
@@ -140,7 +118,7 @@ const DepositButton = ({ tbaAddress, tokenId }: { tokenId: string; tbaAddress: s
                           size="sm"
                         />
                       ) : (
-                        `Balance: ${tbaBalance} ETH`
+                        `Balance: ${tba?.balance ?? 'n/a'} ETH`
                       )}
                     </div>
                   </div>
@@ -178,6 +156,10 @@ const DepositButton = ({ tbaAddress, tokenId }: { tokenId: string; tbaAddress: s
                     disabled={isSubmitting}
                     isLoading={isSubmitting}
                     type="submit"
+                    onPress={() => {
+                      onOpen()
+                      onOpenChange(true)
+                    }}
                   >
                     Deposit to Scroller Pass
                   </Button>
