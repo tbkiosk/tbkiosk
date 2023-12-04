@@ -32,6 +32,11 @@ const SettingsBoardScroller = ({ tba, tokenId }: { tba: TbaUser; tokenId: string
       return
     }
 
+    if (!gasTolerance) {
+      toast.error('Please select gas tolerance')
+      return
+    }
+
     try {
       const sdk = ThirdwebSDK.fromSigner(signer, env.NEXT_PUBLIC_CHAIN_ID_SCROLLER, {
         clientId: env.NEXT_PUBLIC_THIRDWEB_CLIENT_ID,
