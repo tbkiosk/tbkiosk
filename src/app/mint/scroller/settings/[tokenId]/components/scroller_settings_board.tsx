@@ -39,7 +39,7 @@ const SettingsBoardScroller = ({
       return
     }
 
-    if (!gasTolerance) {
+    if (gasTolerance === undefined) {
       toast.error('Please select gas tolerance')
       return
     }
@@ -74,14 +74,10 @@ const SettingsBoardScroller = ({
       />
       <div className="w-full flex justify-between mb-2">
         <div>
-          <div className="text-xl font-bold">{gasInfoMap[tba.gasPref].label}</div>
-
-          <div className="text-xs opacity-50">
-            Expected ${gasInfoMap[+tba.gasPref].price.from}-{gasInfoMap[+tba.gasPref].price.to}
-          </div>
+          <div className="font-bold">Balance: {tba.balance ?? 0} ETH</div>
         </div>
         <div
-          className="flex justify-center items-center shrink-0 font-bold cursor-pointer"
+          className="flex justify-center items-center shrink-0 font-bold cursor-pointer text-sm"
           onClick={onOpen}
         >
           <div className="h-4 w-4 text-[#caff47]">
@@ -91,22 +87,23 @@ const SettingsBoardScroller = ({
         </div>
       </div>
       <hr className="w-full mb-6 opacity-20" />
-      {tba.balance > 0 ? (
-        <div className="text-lg mb-8 font-bold">
-          <p>
-            Scroller will bridge from Ethereum to Scroll when gas is
-            <span className="text-blue-600 font-bold"> {gasInfoMap[+tba.gasPref].label} </span>
-            (typically {`less than $${gasInfoMap[+tba.gasPref].price.to}`})
-          </p>
-        </div>
-      ) : (
+
+      {tba.gasPref == 0 && (
         <div className="text-lg mb-8">
-          <p>
-            Simply deposit ETH and your Scroller Pass will automagically bridge according to your gas tolerance. Click Edit to update your
-            tolerance.
-          </p>
+          <p>Scroller Pass is OFF and will not try to bridge until you update its status to ON</p>
         </div>
       )}
+      {tba.gasPref > 0 && tba.balance > 0 && (
+        <div className="text-lg mb-8 font-bold">
+          <p>Scroller will bridge from Ethereum to Scroll at the optimal time based on historical trends (typically within 12 hours)</p>
+        </div>
+      )}
+      {tba.gasPref > 0 && tba.balance == 0 && (
+        <div className="text-lg mb-8">
+          <p>Simply deposit ETH and your Scroller Pass will automagically bridge when gas prices are optimal</p>
+        </div>
+      )}
+
       <div className="w-full flex justify-between">
         <div className="text-sm flex items-end opacity-50">
           <a
@@ -121,7 +118,8 @@ const SettingsBoardScroller = ({
           <p className="text-xs opacity-50 py-2">Status</p>
           <div className="w-16 pb-2">
             <Image
-              src={tba.balance > 0 && tba.gasPref ? '/scroller/on.png' : '/scroller/off.png'}
+              src={tba.gasPref ? '/scroller/on.png' : '/scroller/off.png'} // TODO: choose best UX
+              // src={tba.balance > 0 && tba.gasPref ? '/scroller/on.png' : '/scroller/off.png'}
               alt="status"
               width={100}
               height={100}
