@@ -4,7 +4,7 @@ import { env } from 'env.mjs'
 export const dynamic = 'force-dynamic'
 export const fetchCache = 'force-no-store'
 
-export async function GET(request: Request) {
+export async function GET() {
   try {
     const prediction = await fetch(env.SCROLLER_PREDICTION_URL)
     const response = await prediction.json()

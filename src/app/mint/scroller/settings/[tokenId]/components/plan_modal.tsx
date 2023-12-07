@@ -5,8 +5,6 @@ import { Modal, ModalContent, ModalHeader, ModalBody, Button } from '@nextui-org
 import { useForm, Controller, useWatch } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-
-import { gasInfoMap } from '@/constants/scroller/scroller'
 import { TbaUser } from '@/types'
 
 const schema = z.object({
