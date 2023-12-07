@@ -5,6 +5,7 @@ export const env = createEnv({
   server: {
     DATABASE_URL: z.string().min(1),
     EMAIL_DATABASE_URL: z.string().min(1),
+    SCROLLER_PREDICTION_URL: z.string().min(1),
     NEXT_PUBLIC_THIRDWEB_CLIENT_ID: z.string().min(1),
     ALCHEMY_KEY: z.string().min(1),
     ETHERSCAN_KEY: z.string().min(1),
@@ -39,6 +40,7 @@ export const env = createEnv({
   runtimeEnv: {
     DATABASE_URL: process.env.DATABASE_URL,
     EMAIL_DATABASE_URL: process.env.EMAIL_DATABASE_URL,
+    SCROLLER_PREDICTION_URL: process.env.SCROLLER_PREDICTION_URL,
     NEXT_PUBLIC_THIRDWEB_CLIENT_ID: process.env.NEXT_PUBLIC_THIRDWEB_CLIENT_ID,
     ALCHEMY_KEY: process.env.ALCHEMY_KEY,
     ETHERSCAN_KEY: process.env.ETHERSCAN_KEY,
