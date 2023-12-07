@@ -19,7 +19,8 @@ type ConfigForm = z.infer<typeof SCROLLER_USER_CONFIG_SCHEMA>
 const defaultValues = {
   depositAmount: '0.000',
   mintAmount: 1,
-  gasTolerance: 2, // 2 = MED
+  gasTolerance: 1,
+  email: '',
 }
 
 const DeployModal = ({ isOpen, onOpenChange, onClose }: ReturnType<typeof useDisclosure>) => {
@@ -44,21 +45,21 @@ const DeployModal = ({ isOpen, onOpenChange, onClose }: ReturnType<typeof useDis
       isDismissable={step !== 3}
       isOpen={isOpen}
       onOpenChange={onOpenChange}
-      size="2xl"
+      size="lg"
     >
       <ModalContent>
         {() =>
           isOpen && (
             <>
-              <ModalHeader className="justify-center text-2xl">
+              <ModalHeader className="justify-center text-2xl pt-8 bg-[#F7F7F7]">
                 {match(step)
                   .with(1, () => 'Configure your Scroller Pass')
-                  .with(2, () => 'Review your Scroller Pass') // TODO: REMOVE
-                  .with(3, () => 'Confirm')
+                  .with(2, () => '') // TODO: REMOVE
+                  .with(3, () => 'Review your Scroller Pass')
                   .with(4, () => null)
                   .exhaustive()}
               </ModalHeader>
-              <ModalBody className="px-8 pb-8">
+              <ModalBody className="px-8 pb-8 bg-[#F7F7F7]">
                 {match(step)
                   .with(1, () => (
                     <ScrollerConfig

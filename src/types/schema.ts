@@ -20,9 +20,8 @@ export const TBA_USER_CONFIG_SCHEMA = z.object({
 })
 
 export const SCROLLER_USER_CONFIG_SCHEMA = z.object({
-  // depositAmount: z.number().min(0),
   depositAmount: z.string(),
   mintAmount: z.number().int().min(1).max(2),
   gasTolerance: z.number().int().min(0).max(3),
-  // gasTolerance: z.enum(['OFF', 'LOW', 'MED', 'HIGH']),
+  email: z.union([z.literal(''), z.string().email()]).optional(),
 })
