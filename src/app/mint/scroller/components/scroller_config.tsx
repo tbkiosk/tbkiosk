@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { Alchemy, Network } from 'alchemy-sdk'
-import { Input, Button } from '@nextui-org/react'
+import { Input, Button, Spinner } from '@nextui-org/react'
 import EthereumCircle from 'public/icons/tokens/ethereum-circle.svg'
 import ScrollCircle from 'public/icons/tokens/scroll-circle.svg'
 import { Controller, type UseFormReturn } from 'react-hook-form'
@@ -11,8 +11,9 @@ import { z } from 'zod'
 
 import { SCROLLER_USER_CONFIG_SCHEMA } from '@/types/schema'
 
-import ArrowIcon from 'public/icons/arrow.svg'
-import { gasInfoMap, getPriceLevel } from '@/constants/scroller/scroller'
+import ArrowStraight from 'public/icons/arrow.svg'
+import ArrowIcon from 'public/icons/arrow-short.svg'
+import Image from 'next/image'
 
 type ConfigForm = z.infer<typeof SCROLLER_USER_CONFIG_SCHEMA>
 
@@ -28,19 +29,15 @@ const alchemy = new Alchemy(config)
 
 const ScrollerConfig = ({ control, watch, setValue, trigger, clearErrors, setStep }: IScrollerConfigProps) => {
   const [gasPrice, setGasPrice] = useState<string | null>('')
-  const [gasPriceLevel, setPriceLevel] = useState<string | null>('')
 
   const depositAmount = watch('depositAmount')
-  const gasTolerance = watch('gasTolerance')
 
   const fetchGasPrice = async () => {
     const response = await alchemy.core.getGasPrice()
 
     const currectGasPrice = ethers.utils.formatUnits(response, 'gwei')
-    const currentPriceLevel: string = getPriceLevel(parseInt(currectGasPrice))
 
     setGasPrice(currectGasPrice)
-    setPriceLevel(currentPriceLevel)
   }
 
   useEffect(() => {
@@ -54,109 +51,86 @@ const ScrollerConfig = ({ control, watch, setValue, trigger, clearErrors, setSte
 
     if (isValid) {
       setValue('depositAmount', depositAmount)
-      setValue('gasTolerance', gasTolerance)
+      setValue('gasTolerance', 1)
       setStep(3)
     }
   }
 
+  const [trendingDownward, setTrendingDownward] = useState<boolean>(true) // TODO: get from API
+
   return (
-    <div className="flex flex-col gap-4 font-medium">
+    <div className="flex flex-col gap-4 font-medium text-sm">
       {/* intro */}
       <div className="flex items-center">
-        <p>Tell us how much gas you would like to spend on the bridging, we will take care of the rest</p>
+        <p>Simply mint and deposit, and your Scroller Pass will make sure that you always save on gas when bridging to Scroll!</p>
       </div>
 
       {/* icons */}
       <div className="flex justify-center items-center gap-3">
-        <div className="w-10">
+        <div className="w-8">
           <EthereumCircle />
         </div>
         <div>Ethereum</div>
-        <div className="w-6">
-          <ArrowIcon />
+        <div className="w-4">
+          <ArrowStraight />
         </div>
-        <div className="w-11 rounded-full border border-black border-opacity-20">
+        <div className="w-9 rounded-full">
           <ScrollCircle />
         </div>
         <div>Scroll</div>
       </div>
 
-      <div className="text-lg leading-[2rem]">
-        <p>
-          Current gas price: {gasPrice ? `${parseInt(gasPrice).toFixed()} Gwei ` : 'Loading..'}
-          <span className="text-red-500">{gasPriceLevel ? `(${gasPriceLevel}) ` : ''}</span>
-        </p>
-        <p>I would like my gas fee tolerance to be:</p>
-      </div>
-
-      <Controller
-        control={control}
-        name="gasTolerance"
-        render={({ field }) => (
-          <div className="flex justify-between gap-6 text-center">
-            <label
-              className={`rounded-md w-1/3 text-sm p-4 cursor-pointer ${
-                field.value === 1 ? 'bg-blue-500 text-white' : 'bg-gray-100 hover:bg-gray-200'
-              }`}
-            >
-              <input
-                type="radio"
-                value="1"
-                checked={field.value === 1}
-                onChange={() => field.onChange(1)}
-                className="hidden"
-              />
-              <p className="text-base font-bold pb-2 text-xl">LOW</p>
-              <p className="text-lg">
-                ${gasInfoMap[1].price.from}-{gasInfoMap[1].price.to}
-              </p>
-              <p>Usually executes within 48 hours</p>
-            </label>
-
-            <label
-              className={`rounded-md w-1/3 text-sm p-4 cursor-pointer ${
-                field.value === 2 ? 'bg-blue-500 text-white' : 'bg-gray-100 hover:bg-gray-200'
-              }`}
-            >
-              <input
-                type="radio"
-                value="2"
-                checked={field.value === 2}
-                onChange={() => field.onChange(2)}
-                className="hidden"
-              />
-              <p className="text-base font-bold pb-2 text-xl">MED</p>
-              <p className="text-lg">
-                ${gasInfoMap[2].price.from}-{gasInfoMap[2].price.to}{' '}
-              </p>
-              <p>Usually executes within 24 hours</p>
-            </label>
-
-            <label
-              className={`rounded-md w-1/3 text-sm p-4 cursor-pointer ${
-                field.value === 3 ? 'bg-blue-500 text-white' : 'bg-gray-100 hover:bg-gray-200'
-              }`}
-            >
-              <input
-                type="radio"
-                value="3"
-                checked={field.value === 3}
-                onChange={() => field.onChange(3)}
-                className="hidden"
-              />
-              <p className="text-base font-bold pb-2 text-xl">HIGH</p>
-              <p className="text-lg">
-                ${gasInfoMap[3].price.from}-{gasInfoMap[3].price.to}{' '}
-              </p>
-              <p>Usually executes within 2 hours</p>
-            </label>
+      <div className="text-base flex flex-col gap-4 pt-2">
+        <div className="flex justify-between">
+          <p>Current Gas price:</p>
+          <div>{gasPrice ? parseInt(gasPrice).toFixed() : <Spinner size="sm" />} GWEI</div>
+        </div>
+        <div className="flex justify-between">
+          <p>Expected cost of bridging:</p>
+          <div> {gasPrice ? (350000 * 1e-9 * parseInt(gasPrice)).toFixed(4) : <Spinner size="sm" />} ETH</div>
+        </div>
+        <div className="text-xs flex justify-between pb-3 opacity-60 leading-[0]">
+          <p>This does not include the gas fee to mint your Scroller Pass NFT</p>
+          <p> {gasPrice ? (350000 * 1e-9 * parseInt(gasPrice) * 2050).toFixed(2) : '...'} USD</p>
+        </div>
+        <div>
+          <div className="bg-gradient-to-r from-[#53cfc1] to-[#6B50E9] rounded rounded-md flex gap-4 p-4 text-sm text-white">
+            <Image
+              src="/scroller/stars_white.svg"
+              alt="stars"
+              width={24}
+              height={24}
+            />
+            <div>
+              {trendingDownward ? (
+                <div>
+                  <div className="flex">
+                    <p>Scroller Pass predicts gas is trending DOWNWARDS</p>
+                    <div className="w-5 rotate-90">
+                      <ArrowIcon />
+                    </div>
+                  </div>
+                  <p className="text-[10px]">Your ETH will be bridged at an optimal moment (typically within 12 hours).</p>
+                </div>
+              ) : (
+                <div>
+                  <div className="flex">
+                    <p>Scroller Pass predicts gas is trending UPWARDS</p>
+                    <div className="w-5">
+                      <ArrowIcon />
+                    </div>
+                  </div>
+                  <p className="text-[10px]">Scroller will bridge your ETH immediately after minting.</p>
+                </div>
+              )}
+            </div>
           </div>
-        )}
-      />
+        </div>
+      </div>
 
       <div className="text-xs">
         <div className="flex justify-between gap-3">
-          <div className="bg-gray-100 rounded-md pt-4 px-6 w-2/3">
+          <div className="bg-white rounded-md pt-4 px-6 w-2/3">
             <p className="text-xs opacity-50">Deposit amount</p>
             <Controller
               control={control}
@@ -166,7 +140,7 @@ const ScrollerConfig = ({ control, watch, setValue, trigger, clearErrors, setSte
                   classNames={{
                     base: 'w-full',
                     innerWrapper: '!items-center bg-transparent',
-                    input: 'w-full pt-0 bg-transparent font-bold text-3xl text-right',
+                    input: 'w-full bg-transparent font-bold text-base text-right',
                     inputWrapper: '!bg-transparent shadow-none',
                     label: 'hidden',
                   }}
@@ -184,21 +158,21 @@ const ScrollerConfig = ({ control, watch, setValue, trigger, clearErrors, setSte
               )}
             />
           </div>
-          <div className="flex gap-3 items-center bg-gray-100 rounded-md flex-1 px-6">
+          <div className="flex gap-3 items-center bg-white rounded-md flex-1 px-6">
             <div className="w-8">
               <EthereumCircle />
             </div>
             <div>
-              <p className="text-lg">ETH</p>
+              <p className="text-base">ETH</p>
               <p className="opacity-50">Ethereum</p>
             </div>
           </div>
         </div>
-        <p className="p-3">Leave blank to deposit funds later</p>
+        <p className="pt-3 opacity-60">Leave blank to mint Scroller Pass but deposit funds later.</p>
       </div>
 
       <Button
-        className="h-14 w-full bg-black text-2xl text-white rounded-full"
+        className="h-14 w-full bg-black text-2xl text-white rounded-full mt-8"
         onClick={onSubmit}
       >
         Continue to review

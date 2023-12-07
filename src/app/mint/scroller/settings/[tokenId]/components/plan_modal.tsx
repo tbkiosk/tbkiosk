@@ -56,87 +56,66 @@ const PlanModal = ({ gasTolerance: defaultGasTolerance, tba, isOpen, onOpen, onC
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      size="2xl"
+      size="md"
     >
       <ModalContent className="bg-[#1D1D1F] text-white">
         {() => (
           <>
-            <ModalHeader className="justify-center font-bold text-2xl">Update Your Gas Tolerance</ModalHeader>
+            <ModalHeader className="justify-center font-bold text-2xl">Update Scroller Status</ModalHeader>
             <ModalBody className="px-8 pb-8">
               <form
                 className="flex flex-col items-center"
                 onSubmit={handleSubmit(_onSubmit)}
               >
-                <div className="w-[320px] max-w-[320px] flex flex-col items-center gap-8">
-                  <p>Your scroller is currently set to {gasInfoMap[tba.gasPref].label}</p>
+                <div className="w-[320px] max-w-[320px] flex flex-col text-center items-center gap-8">
+                  {tba.gasPref > 0 ? (
+                    <p>Scroller Pass is ON and will automatically try to bridge any deposited ETH balance when gas prices are optimal</p>
+                  ) : (
+                    <p>Scroller Pass is OFF and will not try to bridge until you update its status to ON</p>
+                  )}
                   <div className="flex items-center justify-center gap-2">
                     <Controller
                       control={control}
                       name="gasTolerance"
                       render={({ field }) => (
                         <div className="flex justify-between gap-6 text-center">
+                          {/* ON */}
                           <label
-                            className={`rounded-md w-1/3 text-sm p-4 px-10 bg-[#2B2B2B] cursor-pointer shadow-md ${
-                              field.value === 1 ? 'bg-blue-500 text-white' : 'hover:scale-[97%] transform transition-transform'
+                            className={`rounded-md w-1/2 text-sm p-4 px-10 bg-[#2B2B2B] cursor-pointer shadow-md ${
+                              field.value > 0 ? 'bg-blue-500 text-white' : 'hover:scale-[97%] transform transition-transform'
                             }`}
                           >
                             <input
                               type="radio"
                               value="1"
-                              checked={field.value === 1}
+                              checked={field.value > 0}
                               onChange={() => field.onChange(1)}
                               className="hidden"
                             />
-                            <p className="text-base font-bold pb-2 text-xl">LOW</p>
-                            <p className="text-sm">
-                              ${gasInfoMap[1].price.from}-{gasInfoMap[1].price.to}
-                            </p>
-                            <p className="text-xs">Usually executes within X hours</p>
+                            <p className="text-base font-bold pb-2 text-xl">ON</p>
                           </label>
 
+                          {/* OFF */}
                           <label
-                            className={`rounded-md w-1/3 text-sm p-4 px-10 bg-[#2B2B2B] cursor-pointer shadow-md ${
-                              field.value === 2 ? 'bg-blue-500 text-white' : 'hover:scale-[97%] transform transition-transform'
+                            className={`rounded-md w-1/2 text-sm p-4 px-10 bg-[#2B2B2B] cursor-pointer shadow-md ${
+                              field.value === 0 ? 'bg-blue-500 text-white' : 'hover:scale-[97%] transform transition-transform'
                             }`}
                           >
                             <input
                               type="radio"
-                              value="2"
-                              checked={field.value === 2}
-                              onChange={() => field.onChange(2)}
+                              value="0"
+                              checked={field.value === 0}
+                              onChange={() => field.onChange(0)}
                               className="hidden"
                             />
-                            <p className="text-base font-bold pb-2 text-xl">MED</p>
-                            <p className="text-sm">
-                              ${gasInfoMap[2].price.from}-{gasInfoMap[2].price.to}
-                            </p>
-                            <p className="text-xs">Usually executes within Y hours</p>
-                          </label>
-
-                          <label
-                            className={`rounded-md w-1/3 text-sm p-4 px-10 bg-[#2B2B2B] cursor-pointer shadow-md ${
-                              field.value === 3 ? 'bg-blue-500 text-white' : 'hover:scale-[97%] transform transition-transform'
-                            }`}
-                          >
-                            <input
-                              type="radio"
-                              value="3"
-                              checked={field.value === 3}
-                              onChange={() => field.onChange(3)}
-                              className="hidden"
-                            />
-                            <p className="text-base font-bold pb-2 text-xl">HIGH</p>
-                            <p className="text-sm">
-                              ${gasInfoMap[3].price.from}-{gasInfoMap[3].price.to}
-                            </p>
-                            <p className="text-xs">Usually executes within Z hours</p>
+                            <p className="text-base font-bold pb-2 text-xl">OFF</p>
                           </label>
                         </div>
                       )}
                     />
                   </div>
                   <div className="w-full text-center text-sm opacity-50 text-xs">
-                    Updating your gas tolerance requires an on-chain transaction, costs paid by your EOA wallet.
+                    Updating your status requires an on-chain transaction. Gas is paid by your EOA wallet
                   </div>
                   <Button
                     className="w-[200px] bg-white font-bold text-sm text-black tracking-wide rounded-full"
