@@ -22,10 +22,19 @@ interface IScrollerConfirmProps extends UseFormReturn<ConfigForm> {
 
 const trimTrailingZeros = (num: number) => (+num.toFixed(10)).toString().replace(/(\.[0-9]*?)0*$/, '$1')
 
-const ScrollerConfirm = ({ control, getValues, setValue, handleSubmit, formState: { isSubmitting }, setStep }: IScrollerConfirmProps) => {
-  const { depositAmount, gasTolerance, email } = getValues()
+const ScrollerConfirm = ({
+  control,
+  getValues,
+  watch,
+  setValue,
+  handleSubmit,
+  formState: { isSubmitting },
+  setStep,
+}: IScrollerConfirmProps) => {
+  const { depositAmount, gasTolerance } = getValues()
   const address = useAddress()
   const signer = useSigner()
+  const email = watch('email')
 
   const displayError = (error: ThirdWebError | Error) => {
     const errorMessage = 'reason' in error ? error.reason : error.message || 'Failed to mint'
@@ -52,29 +61,11 @@ const ScrollerConfirm = ({ control, getValues, setValue, handleSubmit, formState
     await nftContract.call('mint', mintArgs, mintOptions)
   }
 
-  const storeEmail = async () => {
-    // console.log('storing email..:', email)
-    /**
-     * TODO: add Next api
-      const response = await fetch('/api/submitEmail', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, tbaAddress }), <<<<<< TODO: add tbaAddress
-      })
-
-      if (!response.ok) {
-        throw new Error('Failed to submit email')
-      }
-    */
-  }
-
   const onSubmit = async () => {
     setValue('email', email)
 
     try {
       await mintNFT()
-      email && (await storeEmail())
-
       setStep(4)
     } catch (error) {
       if (error instanceof Error) {
@@ -121,7 +112,7 @@ const ScrollerConfirm = ({ control, getValues, setValue, handleSubmit, formState
       </div>
       <div className="w-full flex items-center gap-4 mt-[10rem]">
         <Button
-          className="h-12 w-12 min-w-12 shrink-0 p-0 bg-white rounded-[10px]"
+          className="h-12 w-12 min-w-12 shrink-0 p-0 bg-[#efefef] rounded-[10px]"
           disabled={isSubmitting}
           onClick={() => setStep(1)}
         >
