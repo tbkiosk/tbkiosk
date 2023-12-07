@@ -23,7 +23,7 @@ const ScrollerIframe = ({ tba, isLoading, tokenId }: { tba: TbaUser; isLoading: 
         <div className="relative max-w-screen mx-auto aspect-square max-h-screen overflow-hidden rounded-lg">
           <div className="absolute inset-0 bg-[#1b1b1b] bg-center bg-cover">
             <div className="absolute inset-0 z-0 flex justify-center items-center">
-              <div className="w-[8rem] md:w-[24rem] p-2">
+              <div className="w-[8rem] md:w-[12rem] p-2">
                 <Image
                   src="/scroller/scroller_gif.gif"
                   alt="ScrollerPass"
@@ -34,7 +34,7 @@ const ScrollerIframe = ({ tba, isLoading, tokenId }: { tba: TbaUser; isLoading: 
             </div>
             <div className="w-full h-full text-center p-3 flex flex-col justify-between">
               <div className="w-full z-20">
-                <p className="text-white text-sm sm:text-lg md:text-4xl font-[pixel]">Scroller Pass #{tokenId}</p>
+                <p className="text-white text-sm sm:text-lg md:text-2xl font-[pixel]">Scroller Pass #{tokenId}</p>
               </div>
 
               <div className="w-full z-10 leading-[1]">

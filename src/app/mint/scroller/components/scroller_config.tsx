@@ -83,11 +83,11 @@ const ScrollerConfig = ({ control, watch, setValue, trigger, clearErrors, setSte
       <div className="text-base flex flex-col gap-4 pt-2">
         <div className="flex justify-between">
           <p>Current Gas price:</p>
-          <p>{gasPrice ? parseInt(gasPrice).toFixed() : <Spinner size="sm" />} GWEI</p>
+          <div>{gasPrice ? parseInt(gasPrice).toFixed() : <Spinner size="sm" />} GWEI</div>
         </div>
         <div className="flex justify-between">
           <p>Expected cost of bridging:</p>
-          <p> {gasPrice ? (350000 * 1e-9 * parseInt(gasPrice)).toFixed(4) : <Spinner size="sm" />} ETH</p>
+          <div> {gasPrice ? (350000 * 1e-9 * parseInt(gasPrice)).toFixed(4) : <Spinner size="sm" />} ETH</div>
         </div>
         <div className="text-xs flex justify-between pb-3 opacity-60 leading-[0]">
           <p>This does not include the gas fee to mint your Scroller Pass NFT</p>
