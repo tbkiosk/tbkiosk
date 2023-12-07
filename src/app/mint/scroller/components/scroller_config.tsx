@@ -14,6 +14,7 @@ import { SCROLLER_USER_CONFIG_SCHEMA } from '@/types/schema'
 import ArrowStraight from 'public/icons/arrow.svg'
 import ArrowIcon from 'public/icons/arrow-short.svg'
 import Image from 'next/image'
+import { useQuery } from '@tanstack/react-query'
 
 type ConfigForm = z.infer<typeof SCROLLER_USER_CONFIG_SCHEMA>
 
@@ -29,6 +30,7 @@ const alchemy = new Alchemy(config)
 
 const ScrollerConfig = ({ control, watch, setValue, trigger, clearErrors, setStep }: IScrollerConfigProps) => {
   const [gasPrice, setGasPrice] = useState<string | null>('')
+  const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const depositAmount = watch('depositAmount')
 
@@ -56,7 +58,38 @@ const ScrollerConfig = ({ control, watch, setValue, trigger, clearErrors, setSte
     }
   }
 
+  type Prediction = {
+    prediction: string
+    status: string
+    trend: [number, number, number, number, number, number]
+  }
+
   const [trendingDownward, setTrendingDownward] = useState<boolean>(true) // TODO: get from API
+  const { data } = useQuery<Prediction>({
+    queryKey: ['prediction'],
+    queryFn: async () => {
+      setIsLoading(true)
+      const res = await fetch('/api/scroller/prediction')
+
+      if (!res.ok) {
+        throw new Error(res.statusText)
+      }
+
+      setIsLoading(false)
+      return await res.json()
+    },
+    refetchInterval: 30000,
+    refetchOnWindowFocus: true,
+    refetchOnMount: true,
+  })
+
+  useEffect(() => {
+    if (data?.prediction == 'high') {
+      setTrendingDownward(false)
+    } else {
+      setTrendingDownward(true)
+    }
+  }, [data])
 
   return (
     <div className="flex flex-col gap-4 font-medium text-sm">
@@ -105,9 +138,19 @@ const ScrollerConfig = ({ control, watch, setValue, trigger, clearErrors, setSte
               {trendingDownward ? (
                 <div>
                   <div className="flex">
-                    <p>Scroller Pass predicts gas is trending DOWNWARDS</p>
+                    <div>
+                      Scroller Pass predicts gas is trending{' '}
+                      {isLoading ? (
+                        <Spinner
+                          color="white"
+                          size="sm"
+                        />
+                      ) : (
+                        'DOWNWARDS'
+                      )}
+                    </div>
                     <div className="w-5 rotate-90">
-                      <ArrowIcon />
+                      <div className="w-5">{isLoading ? '' : <ArrowIcon />}</div>
                     </div>
                   </div>
                   <p className="text-[10px]">Your ETH will be bridged at an optimal moment (typically within 12 hours).</p>
@@ -115,10 +158,18 @@ const ScrollerConfig = ({ control, watch, setValue, trigger, clearErrors, setSte
               ) : (
                 <div>
                   <div className="flex">
-                    <p>Scroller Pass predicts gas is trending UPWARDS</p>
-                    <div className="w-5">
-                      <ArrowIcon />
+                    <div>
+                      Scroller Pass predicts gas is trending{' '}
+                      {isLoading ? (
+                        <Spinner
+                          color="white"
+                          size="sm"
+                        />
+                      ) : (
+                        'UPWARDS'
+                      )}
                     </div>
+                    <div className="w-5">{isLoading ? '' : <ArrowIcon />}</div>
                   </div>
                   <p className="text-[10px]">Scroller will bridge your ETH immediately after minting.</p>
                 </div>
