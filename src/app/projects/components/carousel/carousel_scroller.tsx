@@ -4,7 +4,7 @@ import LogoText from 'public/logo/logo-text.svg'
 import Link from 'next/link'
 import { Button } from '@nextui-org/react'
 
-const carousel_beep = () => {
+const carousel_scroller = () => {
   return (
     <>
       <div className="w-screen flex flex-col md:flex-row items-center justify-center gap-6 md:gap-12 px-8 md:px-16 py-16 md:py-24 bg-[#f5f5f5]">
@@ -46,4 +46,4 @@ const carousel_beep = () => {
   )
 }
 
-export default carousel_beep
+export default carousel_scroller

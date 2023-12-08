@@ -28,7 +28,7 @@ const Carousel = () => {
         }}
         navigation={true}
         modules={[Autoplay, Pagination, Navigation]}
-        className="mySwiper"
+        className="mySwiper bg-[#f5f5f5]"
       >
         <SwiperSlide>
           <Beep />
