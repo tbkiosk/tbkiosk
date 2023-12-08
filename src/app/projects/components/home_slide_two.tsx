@@ -1,21 +1,18 @@
 'use client'
 
 import { useRef } from 'react'
-import Link from 'next/link'
-import NextImage from 'next/image'
-import { Image, Button } from '@nextui-org/react'
 import { useSwiper, useSwiperSlide } from 'swiper/react'
 import { useSwipeable } from 'react-swipeable'
 
 import Filters from './filters'
 import ProjectsGrid from '@/components/projects_grid'
-import LogoText from 'public/logo/logo-text.svg'
 import Footer from '@/components/footer'
+import Carousel from './carousel/carousel'
 
 const HomeSlideTwo = () => {
   const projectsContainerRef = useRef<HTMLDivElement | null>(null)
 
-  const swiper = useSwiper()
+  const swiper_ = useSwiper()
   const slide = useSwiperSlide()
 
   const handlers = useSwipeable({
@@ -24,7 +21,7 @@ const HomeSlideTwo = () => {
     },
   })
 
-  const onPrevSlide = () => slide.isActive && !swiper.destroyed && swiper?.slidePrev()
+  const onPrevSlide = () => slide.isActive && !swiper_.destroyed && swiper_?.slidePrev()
 
   const onWheel = (e: React.WheelEvent<HTMLDivElement>) => {
     if (projectsContainerRef.current?.scrollTop !== 0) return
@@ -45,44 +42,13 @@ const HomeSlideTwo = () => {
       ref={refPassthrough}
     >
       <div className="h-full flex flex-col">
-        <div className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-12 px-8 md:px-16 py-16 md:py-24 bg-[#f5f5f5]">
-          <Image
-            alt="beep"
-            as={NextImage}
-            className="w-full max-w-[500px] rounded-xl"
-            height={500}
-            radius="none"
-            src="/beep/beep.gif"
-            width={500}
-          />
-          <div className="max-w-[528px] flex flex-col pt-8 md:pb-8">
-            <p className="flex items-center font-medium">
-              <span>Created by</span>
-              <span className="h-4 ml-2 text-[#EA3323]">
-                <LogoText />
-              </span>
-            </p>
-            <p className="font-bold text-5xl md:text-[80px] leading-none">BEEP BOT</p>
-            <p className="mb-4 text-[#808080]">Coming soon</p>
-            <p className="font-medium text-sm md:text-lg">
-              Beep is a Dollar-cost averaging (DCA) bot with a token-bound account.
-              <br />
-              <br />
-              In a volatile market, Beep is your reliable companion, helping you navigate fluctuations by strategically spreading your
-              purchases across different price levels.
-            </p>
-            <div className="flex flex-col-reverse items-start grow mt-8">
-              <Link
-                className="w-full"
-                href="/mint/beep"
-              >
-                <Button className="h-12 w-full bg-black hover:bg-[#0f0f0f] text-[#ffffff] rounded-full font-medium text-lg">
-                  Test on Goerli
-                </Button>
-              </Link>
-            </div>
-          </div>
+        {/* FIRST HALF –– CAROUSEL */}
+
+        <div>
+          <Carousel />
         </div>
+
+        {/* Rest of page */}
         <div className="w-full max-w-screen-2xl flex flex-col mx-auto px-8 md:px-16 pb-16">
           <p className="pt-16 pb-2 md:pb-10 font-bold text-lg text-center">LATEST PROJECTS</p>
           <Filters />
@@ -98,3 +64,97 @@ const HomeSlideTwo = () => {
 }
 
 export default HomeSlideTwo
+
+// 'use client'
+
+// import { useRef } from 'react'
+// import Link from 'next/link'
+// import NextImage from 'next/image'
+// import { Image, Button } from '@nextui-org/react'
+// import { useSwiper, useSwiperSlide } from 'swiper/react'
+// import { useSwipeable } from 'react-swipeable'
+// import Slider from 'react-slick'
+
+// import Filters from './filters'
+// import ProjectsGrid from '@/components/projects_grid'
+// import LogoText from 'public/logo/logo-text.svg'
+// import Footer from '@/components/footer'
+
+// const HomeSlideTwo = () => {
+//   const projectsContainerRef = useRef<HTMLDivElement | null>(null)
+
+//   const swiper = useSwiper()
+//   const slide = useSwiperSlide()
+
+//   const handlers = useSwipeable({
+//     onSwiped: eventData => {
+//       projectsContainerRef.current?.scrollTop === 0 && eventData.deltaY > 50 && onPrevSlide()
+//     },
+//   })
+
+//   const onPrevSlide = () => slide.isActive && !swiper.destroyed && swiper?.slidePrev()
+
+//   const onWheel = (e: React.WheelEvent<HTMLDivElement>) => {
+//     if (projectsContainerRef.current?.scrollTop !== 0) return
+
+//     e.deltaY < 0 && onPrevSlide()
+//   }
+
+//   const refPassthrough = (el: HTMLDivElement) => {
+//     handlers.ref(el)
+//     projectsContainerRef.current = el
+//   }
+
+//   const projectsData = [
+//     <carousel_beep />,
+//     <carousel_scroller />,
+//     // ... more projects
+//   ]
+
+//   const settings = {
+//     dots: true,
+//     infinite: true,
+//     speed: 500,
+//     slidesToShow: 1,
+//     slidesToScroll: 1,
+//   }
+
+//   return (
+//     <div
+//       className="h-full bg-white text-black overflow-y-auto custom-scrollbar"
+//       onWheel={onWheel}
+//       {...handlers}
+//       ref={refPassthrough}
+//     >
+//       <div className="h-full flex flex-col">
+//         {/* FIRST HALF –– CAROUSEL */}
+//         <Slider {...settings}>
+//           {projectsData.map((project, index) => (
+//             <div key={index}>
+//               <h2>{project.title}</h2>
+//               <p>{project.description}</p>
+//               <img
+//                 src={project.imageUrl}
+//                 alt={project.title}
+//               />
+//               {/* ... other project details */}
+//             </div>
+//           ))}
+//         </Slider>
+
+//         {/* SECOND HALF –– BELOW CAROUSEL */}
+//         <div className="w-full max-w-screen-2xl flex flex-col mx-auto px-8 md:px-16 pb-16">
+//           <p className="pt-16 pb-2 md:pb-10 font-bold text-lg text-center">LATEST PROJECTS</p>
+//           <Filters />
+//           <ProjectsGrid />
+//         </div>
+//         <div className="w-full max-w-screen-2xl mx-auto px-8">
+//           <hr className="border-black" />
+//         </div>
+//         <Footer />
+//       </div>
+//     </div>
+//   )
+// }
+
+// export default HomeSlideTwo
