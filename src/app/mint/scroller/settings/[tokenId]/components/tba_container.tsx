@@ -15,12 +15,25 @@ import { maskAddress } from '@/utils/address'
 import { abi } from '@/utils/scrollerNft_abiEnumerable'
 import TbaRecord from './tba_record'
 import useTbaScrollerUser from '@/hooks/useTbaScrollerUser'
+import { useEffect, useState } from 'react'
 
 const TBAContainer = ({ tokenId }: { tokenId: string }) => {
+  const [tbaOwner, setTbaOwner] = useState<string>('')
+
   const address = useAddress()
   const chainId = useChainId()
+
   const { contract } = useContract(env.NEXT_PUBLIC_SCROLLER_NFT_CONTRACT_ADDRESS, abi)
   const { isOpen, onOpen, onClose } = useDisclosure()
+
+  useEffect(() => {
+    const getTbaOwner = async () => {
+      if (!contract || !address) return
+      const owner = await contract.erc721.ownerOf(tokenId)
+      setTbaOwner(owner)
+    }
+    getTbaOwner()
+  }, [contract, address])
 
   const { tba, isLoading: isLoadingTba, error: errorTba } = useTbaScrollerUser(+tokenId, isOpen)
   const { data, isLoading: isLoadingNft, error: errorNft } = useOwnedNFTs(contract, address)
@@ -102,7 +115,12 @@ const TBAContainer = ({ tokenId }: { tokenId: string }) => {
         </div>
       </div>
       <div className="my-10 md:my-20 max-w-[900px] mx-auto">
-        <TbaRecord tba={tba} />
+        {tbaOwner && (
+          <TbaRecord
+            tba={tba}
+            owner={tbaOwner}
+          />
+        )}
       </div>
     </div>
   )

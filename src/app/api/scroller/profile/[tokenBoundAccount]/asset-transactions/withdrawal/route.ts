@@ -5,15 +5,14 @@ import { TransactionType } from '@/types/transactions'
 
 import { alchemyScoller as alchemy } from '@/lib/alchemy'
 
-const SWAP_CONTRACT_ADDRESSES = ['0xa2d937f18e9e7fc8d295ecaebb10acbd5e77e9ec'] // signer
-
 export const dynamic = 'force-dynamic'
 export const fetchCache = 'force-no-store'
 
-export async function GET(request: Request, { params }: { params: { tokenBoundAccount: string } }) {
-  const tokenBoundAccount = params.tokenBoundAccount
-
+export async function POST(request: Request) {
   try {
+    const requestBody = await request.json()
+    const { tokenBoundAccount, tbaOwner } = requestBody
+
     const withdrawalTransactions = await alchemy.core.getAssetTransfers({
       category: [AssetTransfersCategory.INTERNAL],
       excludeZeroValue: true,
@@ -27,7 +26,7 @@ export async function GET(request: Request, { params }: { params: { tokenBoundAc
     const response =
       withdrawalTransactions?.transfers
         ?.map(_tx => ({ ..._tx, type: TransactionType.WITHDRAWAL }))
-        .filter(_tx => SWAP_CONTRACT_ADDRESSES.includes(_tx.to || '')) || []
+        .filter(_tx => [tbaOwner.toLowerCase()].includes(_tx.to || '')) || []
 
     return NextResponse.json(response)
   } catch (error) {

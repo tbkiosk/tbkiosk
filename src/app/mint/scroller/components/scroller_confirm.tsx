@@ -1,6 +1,5 @@
 'use client'
 
-import NextImage from 'next/image'
 import { Button, Input } from '@nextui-org/react'
 import { Controller, type UseFormReturn } from 'react-hook-form'
 import { useSigner, ThirdwebSDK, useAddress } from '@thirdweb-dev/react'

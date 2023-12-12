@@ -20,16 +20,23 @@ import type { AssetTransfersWithMetadataResult } from 'alchemy-sdk'
 
 type ScrollerTransferResult = AssetTransfersWithMetadataResult & { type: TransactionType }
 
-const AssetHistory = ({ tbaAddress }: { tbaAddress: string }) => {
+const AssetHistory = ({ tbaAddress, tbaOwner }: { tbaAddress: string; tbaOwner: string }) => {
   const { data, isFetching, error } = useQuery<ScrollerTransferResult[]>({
     refetchInterval: 0,
     refetchOnMount: false,
     refetchOnWindowFocus: false,
     queryKey: ['token-bound-account-transactions', tbaAddress],
     queryFn: async () => {
-      const [depositRes, withdrawalRes] = await Promise.all([
-        fetch(`/api/scroller/profile/${tbaAddress}/asset-transactions/deposit`),
-        fetch(`/api/scroller/profile/${tbaAddress}/asset-transactions/withdrawal`),
+      const [depositRes] = await Promise.all([fetch(`/api/scroller/profile/${tbaAddress}/asset-transactions/deposit`)])
+
+      const [withdrawalRes] = await Promise.all([
+        fetch(`/api/scroller/profile/${tbaAddress}/asset-transactions/withdrawal`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ tokenBoundAccount: tbaAddress, tbaOwner: tbaOwner }),
+        }),
       ])
 
       if (!depositRes.ok) {
