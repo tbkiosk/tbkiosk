@@ -20,7 +20,7 @@ enum TabsKeys {
 //   GAS = 'GAS',
 // }
 
-const TbaRecord = ({ tba }: { tba: TbaUser }) => {
+const TbaRecord = ({ tba, owner }: { tba: TbaUser; owner: string }) => {
   const [selected, setSelected] = useState<TabsKeys>(TabsKeys.INVT)
   // const [filter, setFilter] = useState<HistoryFilter>(HistoryFilter.ALL)
 
@@ -48,7 +48,10 @@ const TbaRecord = ({ tba }: { tba: TbaUser }) => {
           key={TabsKeys.DW}
           title="Deposits/Withdrawals"
         >
-          <AssetHistory tbaAddress={tba.address} />
+          <AssetHistory
+            tbaAddress={tba.address}
+            tbaOwner={owner}
+          />
         </Tab>
       </Tabs>
     </div>

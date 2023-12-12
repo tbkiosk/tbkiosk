@@ -4,7 +4,6 @@ import { useChainId } from '@thirdweb-dev/react'
 import { Spinner } from '@nextui-org/react'
 import clsx from 'clsx'
 import Image from 'next/image'
-import { gasInfoMap } from '@/constants/scroller/scroller'
 import { TbaUser } from '@/types'
 import BeepEth from 'public/icons/tokens/beep-eth.svg'
 
