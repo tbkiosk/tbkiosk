@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, type Key } from 'react'
+import { useEffect, type Key, useState } from 'react'
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Spinner } from '@nextui-org/react'
 import { useQuery } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
@@ -20,7 +20,23 @@ import ScrollCircle from 'public/icons/tokens/scroll-circle.svg'
 
 type ScrollerTransferResult = AssetTransfersWithMetadataResult & { type: TransactionType }
 
+const SCROLLER_L2_FEE = 0.00035 // TODO: store in constants / get from contract
+
 const BridgeHistory = ({ tbaAddress }: { tbaAddress: string }) => {
+  const [ethPrice, setEthPrice] = useState<number | null>(null)
+
+  const fetchEthPrice = async () => {
+    const res = await fetch('/api/scroller/price/eth')
+    const data = await res.json()
+    setEthPrice(data.ethereum.usd)
+  }
+
+  useEffect(() => {
+    fetchEthPrice()
+    const intervalId = setInterval(fetchEthPrice, 10000)
+    return () => clearInterval(intervalId)
+  }, [])
+
   const { data, isFetching, error } = useQuery<ScrollerTransferResult[]>({
     refetchInterval: 0,
     refetchOnMount: false,
@@ -44,15 +60,15 @@ const BridgeHistory = ({ tbaAddress }: { tbaAddress: string }) => {
   const renderCell = (item: ScrollerTransferResult, columnKey: Key) => {
     const gasItem: ScrollerTransferResult | undefined = data?.find(_tx => _tx.hash === item.hash && _tx.type === TransactionType.GAS)
 
-    const ETH_PRICE = 2050 // TODO: retrieve
-    const scrollL2Fee = 0.00035 // TODO: store in constants / get from contract
+    let gasUsd = 0
+    if (gasItem?.value && ethPrice) {
+      gasUsd = gasItem?.value * ethPrice
+    }
 
-    const txnValue = (gasItem?.value ?? 0) + (item.value ?? 0)
+    const txnValue = (gasItem?.value ?? 0) + (item.value ?? 0) // gas + transfer value
 
-    const gasUsd = (gasItem?.value ?? 0 * ETH_PRICE).toFixed(2)
-
-    const scrollFee = scrollL2Fee
-    const scrollFeeUsd = (scrollFee * ETH_PRICE).toFixed(2)
+    const scrollFee = SCROLLER_L2_FEE
+    const scrollFeeUsd = (scrollFee * (ethPrice ? ethPrice : 0)).toFixed(2)
 
     switch (columnKey) {
       case 'activity': {
@@ -77,13 +93,14 @@ const BridgeHistory = ({ tbaAddress }: { tbaAddress: string }) => {
           </div>
         )
       }
+
       case 'gas': {
         return (
           <div className="flex items-center gap-2">
             <div>
               {gasItem?.value?.toFixed(8)} {item.asset || 'unknown'}
             </div>
-            <div className="text-xs opacity-50">${gasUsd}</div>
+            <div className="text-xs opacity-50">${gasUsd.toFixed(2)}</div>
           </div>
         )
       }
@@ -91,7 +108,7 @@ const BridgeHistory = ({ tbaAddress }: { tbaAddress: string }) => {
         return (
           <div className="flex items-center gap-2">
             <div>
-              {scrollL2Fee} {item.asset || 'unknown'}
+              {SCROLLER_L2_FEE} {item.asset || 'unknown'}
             </div>
             <div className="text-xs opacity-50">${scrollFeeUsd}</div>
           </div>
