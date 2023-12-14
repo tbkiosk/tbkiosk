@@ -30,21 +30,24 @@ const alchemy = new Alchemy(config)
 
 const ScrollerConfig = ({ control, watch, setValue, trigger, clearErrors, setStep }: IScrollerConfigProps) => {
   const [gasPrice, setGasPrice] = useState<string | null>('')
+  const [ethPrice, setEthPrice] = useState<number | null>(null)
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const depositAmount = watch('depositAmount')
 
-  const fetchGasPrice = async () => {
+  const fetchPrices = async () => {
     const response = await alchemy.core.getGasPrice()
+    const currentGasPrice = ethers.utils.formatUnits(response, 'gwei')
+    setGasPrice(currentGasPrice)
 
-    const currectGasPrice = ethers.utils.formatUnits(response, 'gwei')
-
-    setGasPrice(currectGasPrice)
+    const res = await fetch('/api/scroller/price/eth')
+    const data = await res.json()
+    setEthPrice(data.ethereum.usd)
   }
 
   useEffect(() => {
-    fetchGasPrice()
-    const intervalId = setInterval(fetchGasPrice, 60000)
+    fetchPrices()
+    const intervalId = setInterval(fetchPrices, 30000)
     return () => clearInterval(intervalId)
   }, [])
 
@@ -124,7 +127,7 @@ const ScrollerConfig = ({ control, watch, setValue, trigger, clearErrors, setSte
         </div>
         <div className="text-xs flex justify-between pb-3 opacity-60 leading-[0]">
           <p>This does not include the gas fee to mint your Scroller Pass NFT</p>
-          <p> {gasPrice ? (350000 * 1e-9 * parseInt(gasPrice) * 2050).toFixed(2) : '...'} USD</p>
+          <p> {gasPrice ? (350000 * 1e-9 * parseInt(gasPrice) * (ethPrice ? ethPrice : 0)).toFixed(2) : '...'} USD</p>
         </div>
         <div>
           <div className="bg-gradient-to-r from-[#53cfc1] to-[#6B50E9] rounded rounded-md flex gap-4 p-4 text-sm text-white">
