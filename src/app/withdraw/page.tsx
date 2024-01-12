@@ -5,34 +5,90 @@ import { useAddress, useChainId, useSigner } from '@thirdweb-dev/react'
 import ConnectWalletButton from './components/connect_wallet_button_k'
 // import WithdrawButton from './components/withdraw_button_k'
 import { Button } from '@nextui-org/react'
-import { TokenboundClient } from '@tokenbound/sdk'
+import { TBAccountParams, TokenboundClient } from '@tokenbound/sdk'
 import { env } from 'env.mjs'
 import { toast } from 'react-toastify'
 import { EXPLORER } from '@/constants/explorer'
 import LogoBlack from 'public/logo/sl1_logo-black.svg'
 import LogoText from 'public/logo/sl_logo-text.svg'
 import { Network } from './components/switch_chain'
+// import { JsonRpcProvider, Wallet, formatEther } from 'ethers'
+// import { USDC_DECIMAL } from '../../constants/token'
+
+const NFT_CONTRACT = '0x9cAc72EFe455ADb4f413A8592eD98f962B7bE293' as `0x${string}`
+const TBA_CONTRACT = '0xB9A74fea948e8d5699Df97DC114938Bee97813a8' as `0x${string}`
+const REGISTRY_CONTRACT = '0x02101dfb77fde026414827fdc604ddaf224f0921' as `0x${string}`
+
+const CHAIN_ID = 1
+
+const USDC_CONTRACT = '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48' as `0x${string}`
+const USDC_DECIMALS = 6
+const USDC_AMOUNT = 100
+
+const TBA_ADDRESS = '0x07731Bed81FF334f8C44981e90fa35fBD0169c86' as `0x${string}`
+const PARENT_ADDRESS = '0xAB279df9e6DfC08c3298322542E3116c44E64DE3' as `0x${string}`
 
 const page = () => {
   const address = useAddress()
   const signer = useSigner()
   const chainId = useChainId()
 
-  const handleClick = async (_chainId: number, _from: string, _to: string, _amount: number, _contract: string, _decimals: number) => {
+  // const provider = new JsonRpcProvider(RPC)
+
+  const handleClick = async () => {
     const tokenboundClient = new TokenboundClient({
       signer: signer,
-      chainId: _chainId,
+      chainId: 1,
+      implementationAddress: TBA_CONTRACT,
+      registryAddress: REGISTRY_CONTRACT,
+    })
+
+    // const tokenBoundAccount = tokenboundClient.getAccount({
+    //   tokenContract: NFT_CONTRACT as TBAccountParams['tokenContract'],
+    //   tokenId: '21',
+    // })
+
+    try {
+      const txHash = await tokenboundClient.transferERC20({
+        account: TBA_ADDRESS as `0x${string}`,
+        amount: USDC_AMOUNT,
+        recipientAddress: PARENT_ADDRESS as `0x${string}`,
+        erc20tokenAddress: USDC_CONTRACT as `0x${string}`,
+        erc20tokenDecimals: USDC_DECIMALS,
+      })
+      toast.success(
+        <p>
+          Success
+          <a
+            className="underline"
+            href={`https://etherscan.io/tx/${txHash}`}
+            rel="noreferrer"
+            target="_blank"
+          >
+            {txHash}
+          </a>
+        </p>
+      )
+    } catch (error) {
+      toast.error((error as Error)?.message || 'Failed to withdraw')
+    }
+  }
+
+  const handleClick2 = async () => {
+    const tokenboundClient = new TokenboundClient({
+      signer: signer,
+      chainId: 1,
       implementationAddress: '0xB9A74fea948e8d5699Df97DC114938Bee97813a8', // Beep mainnet
       registryAddress: '0x02101dfb77fde026414827fdc604ddaf224f0921', // registry v2
     })
 
     try {
       const txHash = await tokenboundClient.transferERC20({
-        account: _from as `0x${string}`,
-        amount: _amount,
-        recipientAddress: _to as `0x${string}`,
-        erc20tokenAddress: _contract as `0x${string}`,
-        erc20tokenDecimals: _decimals,
+        account: '0x07731Bed81FF334f8C44981e90fa35fBD0169c86' as `0x${string}`,
+        amount: 100,
+        recipientAddress: '0xAB279df9e6DfC08c3298322542E3116c44E64DE3' as `0x${string}`,
+        erc20tokenAddress: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48' as `0x${string}`,
+        erc20tokenDecimals: 6,
       })
 
       toast.success(
@@ -90,16 +146,7 @@ const page = () => {
             ) : (
               <Button
                 variant="solid"
-                onClick={() =>
-                  handleClick(
-                    1, // chainId
-                    '0x07731Bed81FF334f8C44981e90fa35fBD0169c86', // from (tba)
-                    '0xAB279df9e6DfC08c3298322542E3116c44E64DE3', // to
-                    100, // amount
-                    '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48', // contract
-                    6 // decimals
-                  )
-                }
+                onClick={() => handleClick()}
               >
                 Withdraw
               </Button>

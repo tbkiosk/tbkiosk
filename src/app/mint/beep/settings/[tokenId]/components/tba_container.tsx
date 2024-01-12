@@ -19,7 +19,8 @@ import { env } from 'env.mjs'
 const TBAContainer = ({ tokenId }: { tokenId: string }) => {
   const address = useAddress()
   const chainId = useChainId()
-  const { contract } = useContract(chainId ? env.NEXT_PUBLIC_BEEP_CONTRACT_ADDRESS : null)
+  // const { contract } = useContract(chainId ? env.NEXT_PUBLIC_BEEP_CONTRACT_ADDRESS : null)
+  const { contract } = useContract('0x9cAc72EFe455ADb4f413A8592eD98f962B7bE293')
   const { data, isLoading, error } = useOwnedNFTs(contract, address)
   const tbaAddress = useTbaAddress(tokenId)
 
@@ -41,7 +42,7 @@ const TBAContainer = ({ tokenId }: { tokenId: string }) => {
 
   if (!data) return <p className="text-center">No NFTs found</p>
 
-  if (!data.find(_data => _data.metadata.id === tokenId)) return <p className="text-center">This TBA is not owned by you</p>
+  // if (!data.find(_data => _data.metadata.id === tokenId)) return <p className="text-center">This TBA is not owned by you</p>
 
   return (
     <div>
