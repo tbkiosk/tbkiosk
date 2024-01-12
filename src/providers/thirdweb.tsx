@@ -10,17 +10,7 @@ import { env } from 'env.mjs'
 
 const ThirdwebProvider = ({ children }: { children: React.ReactNode | React.ReactNode[] }) => {
   const [queryClient] = useState(() => new QueryClient())
-  const [currentChainId, setCurrentChainId] = useState(+env.NEXT_PUBLIC_CHAIN_ID)
-
-  const pathname = usePathname()
-
-  useEffect(() => {
-    if (pathname.includes('scroller')) {
-      setCurrentChainId(+env.NEXT_PUBLIC_CHAIN_ID_SCROLLER)
-    } else {
-      setCurrentChainId(+env.NEXT_PUBLIC_CHAIN_ID)
-    }
-  }, [pathname])
+  const [currentChainId] = useState(1)
 
   return (
     <QueryClientProvider client={queryClient}>
