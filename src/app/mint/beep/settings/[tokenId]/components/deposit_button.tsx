@@ -31,7 +31,7 @@ const schema = z.object({
 type DepositForm = z.infer<typeof schema>
 
 const defaultValues: DepositForm = {
-  token: USDC_CONTRACT_ADDRESS[+env.NEXT_PUBLIC_CHAIN_ID as 1 | 5 | 137],
+  token: USDC_CONTRACT_ADDRESS[+env.NEXT_PUBLIC_CHAIN_ID_MAINNET as 1 | 5 | 137],
   amount: '',
 }
 

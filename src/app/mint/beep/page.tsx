@@ -31,7 +31,7 @@ export const metadata: Metadata = {
       [Goerli.chainId]: Goerli.name,
       [Ethereum.chainId]: Ethereum.name,
       [Polygon.chainId]: Polygon.name,
-    }[+env.NEXT_PUBLIC_CHAIN_ID]
+    }[+env.NEXT_PUBLIC_CHAIN_ID_MAINNET]
   }`,
 }
 
@@ -97,7 +97,7 @@ const Mint = () => (
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="h-6 w-6">
-                    {match(env.NEXT_PUBLIC_CHAIN_ID)
+                    {match(env.NEXT_PUBLIC_CHAIN_ID_MAINNET)
                       .with('1', () => <EthereumCircle />)
                       .with('5', () => <EthereumCircle />)
                       .with('137', () => <PolygonCircle />)
@@ -105,7 +105,7 @@ const Mint = () => (
                       .exhaustive()}
                   </span>
                   <span>
-                    {match(env.NEXT_PUBLIC_CHAIN_ID)
+                    {match(env.NEXT_PUBLIC_CHAIN_ID_MAINNET)
                       .with('1', () => 'On Ethereum')
                       .with('5', () => 'On Goerli')
                       .with('137', () => 'On Polygon')
@@ -161,14 +161,14 @@ const Mint = () => (
                 </div>
                 <div className="flex items-center justify-between md:justify-start gap-12 my-4 font-medium">
                   <span className="md:min-w-[130px] inline-block text-[#a6a9ae]">Contract address</span>
-                  <CopyButton copyText={env.NEXT_PUBLIC_BEEP_CONTRACT_ADDRESS}>
-                    {maskAddress(env.NEXT_PUBLIC_BEEP_CONTRACT_ADDRESS)}
+                  <CopyButton copyText={env.NEXT_PUBLIC_BEEP_CONTRACT_ADDRESS_MAINNET}>
+                    {maskAddress(env.NEXT_PUBLIC_BEEP_CONTRACT_ADDRESS_MAINNET)}
                   </CopyButton>
                 </div>
                 <div className="flex items-center justify-between md:justify-start gap-12 my-4 font-medium">
                   <span className="md:min-w-[130px] inline-block text-[#a6a9ae]">Blockchain</span>
                   <span>
-                    {match(env.NEXT_PUBLIC_CHAIN_ID)
+                    {match(env.NEXT_PUBLIC_CHAIN_ID_MAINNET)
                       .with('1', () => 'Ethereum')
                       .with('5', () => 'Goerli')
                       .with('137', () => 'Polygon')

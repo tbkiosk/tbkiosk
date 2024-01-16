@@ -26,7 +26,7 @@ const schema = z.object({
 type WithdrawForm = z.infer<typeof schema>
 
 const defaultValues: WithdrawForm = {
-  token: USDC_CONTRACT_ADDRESS[+env.NEXT_PUBLIC_CHAIN_ID as 1 | 5 | 137],
+  token: USDC_CONTRACT_ADDRESS[+env.NEXT_PUBLIC_CHAIN_ID_MAINNET as 1 | 5 | 137],
   amount: '',
   toAddress: '',
 }
@@ -78,9 +78,9 @@ const WithdrawButton = ({ tbaAddress }: { tbaAddress: string }) => {
 
     const tokenboundClient = new TokenboundClient({
       signer: signer,
-      chainId: +env.NEXT_PUBLIC_CHAIN_ID,
-      implementationAddress: env.NEXT_PUBLIC_BEEP_TBA_IMPLEMENTATION_ADDRESS as `0x${string}`,
-      registryAddress: env.NEXT_PUBLIC_REGISTRY_ADDRESS as `0x${string}`,
+      chainId: +env.NEXT_PUBLIC_CHAIN_ID_MAINNET,
+      implementationAddress: env.NEXT_PUBLIC_BEEP_TBA_IMPLEMENTATION_ADDRESS_MAINNET as `0x${string}`,
+      registryAddress: env.NEXT_PUBLIC_REGISTRY_ADDRESS_MAINNET as `0x${string}`,
     })
 
     try {
@@ -97,7 +97,7 @@ const WithdrawButton = ({ tbaAddress }: { tbaAddress: string }) => {
           Successfully transferred {TOKENS[data.token].name}.&nbsp;
           <a
             className="underline"
-            href={`${EXPLORER[+env.NEXT_PUBLIC_CHAIN_ID as 1 | 5 | 137]}/tx/${txHash}`}
+            href={`${EXPLORER[+env.NEXT_PUBLIC_CHAIN_ID_MAINNET as 1 | 5 | 137]}/tx/${txHash}`}
             rel="noreferrer"
             target="_blank"
           >

@@ -20,7 +20,7 @@ type ConfigForm = z.infer<typeof TBA_USER_CONFIG_SCHEMA>
 const BeepSuccess = ({ getValues, onClose }: UseFormReturn<ConfigForm> & { onClose: () => void }) => {
   const address = useAddress()
   const signer = useSigner()
-  const { contract } = useContract(env.NEXT_PUBLIC_BEEP_CONTRACT_ADDRESS)
+  const { contract } = useContract(env.NEXT_PUBLIC_BEEP_CONTRACT_ADDRESS_MAINNET)
   const { data, isLoading } = useOwnedNFTs(contract, address)
 
   const { mintAmount } = getValues()
@@ -30,9 +30,9 @@ const BeepSuccess = ({ getValues, onClose }: UseFormReturn<ConfigForm> & { onClo
 
   const tokenboundClient = new TokenboundClient({
     signer: signer,
-    chainId: +env.NEXT_PUBLIC_CHAIN_ID,
-    implementationAddress: env.NEXT_PUBLIC_BEEP_TBA_IMPLEMENTATION_ADDRESS as `0x${string}`,
-    registryAddress: env.NEXT_PUBLIC_REGISTRY_ADDRESS as `0x${string}`,
+    chainId: +env.NEXT_PUBLIC_CHAIN_ID_MAINNET,
+    implementationAddress: env.NEXT_PUBLIC_BEEP_TBA_IMPLEMENTATION_ADDRESS_MAINNET as `0x${string}`,
+    registryAddress: env.NEXT_PUBLIC_REGISTRY_ADDRESS_MAINNET as `0x${string}`,
   })
 
   if (isLoading) {
@@ -57,7 +57,7 @@ const BeepSuccess = ({ getValues, onClose }: UseFormReturn<ConfigForm> & { onClo
           <div className="text-xl text-[#a6a9ae]">
             {maskAddress(
               tokenboundClient.getAccount({
-                tokenContract: env.NEXT_PUBLIC_BEEP_CONTRACT_ADDRESS as `0x${string}`,
+                tokenContract: env.NEXT_PUBLIC_BEEP_CONTRACT_ADDRESS_MAINNET as `0x${string}`,
                 tokenId: mintedNFTs[0],
               })
             )}
@@ -93,7 +93,7 @@ const BeepSuccess = ({ getValues, onClose }: UseFormReturn<ConfigForm> & { onClo
                 Beep #{_nft}{' '}
                 {maskAddress(
                   tokenboundClient.getAccount({
-                    tokenContract: env.NEXT_PUBLIC_BEEP_CONTRACT_ADDRESS as `0x${string}`,
+                    tokenContract: env.NEXT_PUBLIC_BEEP_CONTRACT_ADDRESS_MAINNET as `0x${string}`,
                     tokenId: _nft,
                   })
                 )}

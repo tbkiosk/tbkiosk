@@ -37,7 +37,7 @@ const BeepConfirm = ({ control, getValues, watch, handleSubmit, formState: { isS
   const address = useAddress()
   const signer = useSigner()
   const { contract: tokenContract } = useContract(tokenAddressFrom, erc20ABI)
-  const { contract: beepContract } = useContract(env.NEXT_PUBLIC_BEEP_CONTRACT_ADDRESS)
+  const { contract: beepContract } = useContract(env.NEXT_PUBLIC_BEEP_CONTRACT_ADDRESS_MAINNET)
   const { refetch } = useOwnedNFTs(beepContract, address)
 
   const [progress, setProgress] = useState(0)
@@ -61,17 +61,17 @@ const BeepConfirm = ({ control, getValues, watch, handleSubmit, formState: { isS
 
       if (totalDepositAmount > 0) {
         await tokenContract.call('approve', [
-          env.NEXT_PUBLIC_BEEP_CONTRACT_ADDRESS,
+          env.NEXT_PUBLIC_BEEP_CONTRACT_ADDRESS_MAINNET,
           ethers.utils.parseUnits(String(totalDepositAmount), TOKENS_FROM[tokenAddressFrom].decimal),
         ])
       }
 
       setProgress(25)
 
-      const sdk = ThirdwebSDK.fromSigner(signer, env.NEXT_PUBLIC_CHAIN_ID, {
+      const sdk = ThirdwebSDK.fromSigner(signer, env.NEXT_PUBLIC_CHAIN_ID_MAINNET, {
         clientId: env.NEXT_PUBLIC_THIRDWEB_CLIENT_ID,
       })
-      const nftContract = await sdk.getContract(env.NEXT_PUBLIC_BEEP_CONTRACT_ADDRESS)
+      const nftContract = await sdk.getContract(env.NEXT_PUBLIC_BEEP_CONTRACT_ADDRESS_MAINNET)
       const prepareTx = await nftContract.erc721.claim.prepare(mintAmount)
       const claimArgs = prepareTx.getArgs()
       const salt = bytesToHex(numberToBytes(0, { size: 32 }))
@@ -82,10 +82,10 @@ const BeepConfirm = ({ control, getValues, watch, handleSubmit, formState: { isS
         pricePerToken: claimArgs[3],
         allowlistProof: claimArgs[4],
         data: claimArgs[5],
-        registry: env.NEXT_PUBLIC_REGISTRY_ADDRESS,
-        implementation: env.NEXT_PUBLIC_BEEP_TBA_IMPLEMENTATION_ADDRESS,
+        registry: env.NEXT_PUBLIC_REGISTRY_ADDRESS_MAINNET,
+        implementation: env.NEXT_PUBLIC_BEEP_TBA_IMPLEMENTATION_ADDRESS_MAINNET,
         salt: salt,
-        chainId: env.NEXT_PUBLIC_CHAIN_ID,
+        chainId: env.NEXT_PUBLIC_CHAIN_ID_MAINNET,
         tokenToTransfer: tokenAddressFrom,
         // Note: leave amountToTransfer as 0 if user doesn't want to deposit token before mint, it will still create tba but does not transfer any toke right after
         amountToTransfer: ethers.utils.parseUnits(
@@ -118,14 +118,14 @@ const BeepConfirm = ({ control, getValues, watch, handleSubmit, formState: { isS
 
       const tokenboundClient = new TokenboundClient({
         signer: signer,
-        chainId: +env.NEXT_PUBLIC_CHAIN_ID,
-        implementationAddress: env.NEXT_PUBLIC_BEEP_TBA_IMPLEMENTATION_ADDRESS as `0x${string}`,
-        registryAddress: env.NEXT_PUBLIC_REGISTRY_ADDRESS as `0x${string}`,
+        chainId: +env.NEXT_PUBLIC_CHAIN_ID_MAINNET,
+        implementationAddress: env.NEXT_PUBLIC_BEEP_TBA_IMPLEMENTATION_ADDRESS_MAINNET as `0x${string}`,
+        registryAddress: env.NEXT_PUBLIC_REGISTRY_ADDRESS_MAINNET as `0x${string}`,
       })
 
       const tokenAddresses = mintedNFTs.map(_nft =>
         tokenboundClient.getAccount({
-          tokenContract: env.NEXT_PUBLIC_BEEP_CONTRACT_ADDRESS as `0x${string}`,
+          tokenContract: env.NEXT_PUBLIC_BEEP_CONTRACT_ADDRESS_MAINNET as `0x${string}`,
           tokenId: _nft,
         })
       )

@@ -61,18 +61,18 @@ export const UNI_DECIMAL = 18
 export const LINK_DECIMAL = 18
 
 export const TOKENS_FROM = {
-  [USDC_CONTRACT_ADDRESS[+env.NEXT_PUBLIC_CHAIN_ID as 1 | 5 | 137]]: {
+  [USDC_CONTRACT_ADDRESS[+env.NEXT_PUBLIC_CHAIN_ID_MAINNET as 1 | 5 | 137]]: {
     name: 'USDC',
     fullName: 'USD Coin',
-    address: USDC_CONTRACT_ADDRESS[+env.NEXT_PUBLIC_CHAIN_ID as 1 | 5 | 137],
+    address: USDC_CONTRACT_ADDRESS[+env.NEXT_PUBLIC_CHAIN_ID_MAINNET as 1 | 5 | 137],
     decimal: USDC_DECIMAL,
     icon: () => <USDC />,
     beepIcon: () => <BeepUSDC />,
   },
-  [USDT_CONTRACT_ADDRESS[+env.NEXT_PUBLIC_CHAIN_ID as 1 | 5 | 137]]: {
+  [USDT_CONTRACT_ADDRESS[+env.NEXT_PUBLIC_CHAIN_ID_MAINNET as 1 | 5 | 137]]: {
     name: 'USDT',
     fullName: 'Tether USD',
-    address: USDT_CONTRACT_ADDRESS[+env.NEXT_PUBLIC_CHAIN_ID as 1 | 5 | 137],
+    address: USDT_CONTRACT_ADDRESS[+env.NEXT_PUBLIC_CHAIN_ID_MAINNET as 1 | 5 | 137],
     decimal: USDT_DECIMAL,
     icon: () => <USDT />,
     beepIcon: () => <BeepUSDT />,
@@ -80,18 +80,18 @@ export const TOKENS_FROM = {
 }
 
 export const TOKENS_TO = {
-  [WETH_CONTRACT_ADDRESS[+env.NEXT_PUBLIC_CHAIN_ID as 1 | 5 | 137]]: {
+  [WETH_CONTRACT_ADDRESS[+env.NEXT_PUBLIC_CHAIN_ID_MAINNET as 1 | 5 | 137]]: {
     name: 'WETH',
     fullName: 'Wrapped Ethereum',
-    address: WETH_CONTRACT_ADDRESS[+env.NEXT_PUBLIC_CHAIN_ID as 1 | 5 | 137],
+    address: WETH_CONTRACT_ADDRESS[+env.NEXT_PUBLIC_CHAIN_ID_MAINNET as 1 | 5 | 137],
     decimal: WETH_DECIMAL,
     icon: () => <EthereumCircle />,
     beepIcon: () => <BeepEth />,
   },
-  // [WSTETH_CONTRACT_ADDRESS[+env.NEXT_PUBLIC_CHAIN_ID as 1 | 5 | 137]]: {
+  // [WSTETH_CONTRACT_ADDRESS[+env.NEXT_PUBLIC_CHAIN_ID_MAINNET as 1 | 5 | 137]]: {
   //   name: 'wstETH',
   //   fullName: "Lido's wrapped stETH",
-  //   address: WSTETH_CONTRACT_ADDRESS[+env.NEXT_PUBLIC_CHAIN_ID as 1 | 5 | 137],
+  //   address: WSTETH_CONTRACT_ADDRESS[+env.NEXT_PUBLIC_CHAIN_ID_MAINNET as 1 | 5 | 137],
   //   decimal: WSTETH_DECIMAL,
   //   icon: () => <STEthereum />,
   // },

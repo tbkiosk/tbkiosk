@@ -11,7 +11,7 @@ const CHAIN_NETWORK_MAP = {
 
 export const alchemy = new Alchemy({
   apiKey: env.ALCHEMY_KEY,
-  network: CHAIN_NETWORK_MAP[env.NEXT_PUBLIC_CHAIN_ID],
+  network: CHAIN_NETWORK_MAP[env.NEXT_PUBLIC_CHAIN_ID_MAINNET],
 })
 
 export const alchemyScoller = new Alchemy({
