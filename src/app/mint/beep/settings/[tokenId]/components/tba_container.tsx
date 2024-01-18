@@ -21,13 +21,13 @@ const TBAContainer = ({ tokenId }: { tokenId: string }) => {
   const address = useAddress()
   const chainId = useChainId()
 
-  const { contract } = useContract(env.NEXT_PUBLIC_BEEP_CONTRACT_ADDRESS_MAINNET, abi)
-  const { data, isLoading, error } = useOwnedNFTs(contract, address)
-  const tbaAddress = useTbaAddress(tokenId)
-
   if (!chainId || +chainId !== +env.NEXT_PUBLIC_CHAIN_ID_MAINNET) {
     return null
   }
+
+  const { contract } = useContract(env.NEXT_PUBLIC_BEEP_CONTRACT_ADDRESS_MAINNET, abi)
+  const { data, isLoading, error } = useOwnedNFTs(contract, address)
+  const tbaAddress = useTbaAddress(tokenId)
 
   if (error) {
     return <p className="text-center">{(error as Error)?.message || 'Failed to load NFT'}</p>
