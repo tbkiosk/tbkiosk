@@ -23,7 +23,7 @@ type SwapDetail = {
 }
 
 const adminContract = env.NEXT_PUBLIC_ADMIN_CONTRACT_ADDRESS
-const chainId = env.NEXT_PUBLIC_CHAIN_ID
+const chainId = env.NEXT_PUBLIC_CHAIN_ID_MAINNET
 
 export const swapSingleUser = async ({ swapContract, beepFee, gasFee, tokenOut, tokenIn, amountIn, nonce }: SwapDetail) => {
   try {

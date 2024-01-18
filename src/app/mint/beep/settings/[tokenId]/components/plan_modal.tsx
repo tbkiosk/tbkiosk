@@ -57,8 +57,8 @@ const PlanModal = ({
       amount: defaultAmount ?? 20,
       frequency: defaultFrequncy ?? 7,
       endDate: defaultEndDate === null ? null : defaultEndDate || dayjs().add(8, 'days').toISOString(),
-      tokenAddressFrom: defaultTokenAddressFrom || USDC_CONTRACT_ADDRESS[+env.NEXT_PUBLIC_CHAIN_ID as 1 | 5 | 137],
-      tokenAddressTo: defaultTokenAddressTo || WETH_CONTRACT_ADDRESS[+env.NEXT_PUBLIC_CHAIN_ID as 1 | 5 | 137],
+      tokenAddressFrom: defaultTokenAddressFrom || USDC_CONTRACT_ADDRESS[+env.NEXT_PUBLIC_CHAIN_ID_MAINNET as 1 | 5 | 137],
+      tokenAddressTo: defaultTokenAddressTo || WETH_CONTRACT_ADDRESS[+env.NEXT_PUBLIC_CHAIN_ID_MAINNET as 1 | 5 | 137],
     },
     resolver: zodResolver(schema),
   })
@@ -93,8 +93,8 @@ const PlanModal = ({
         amount: defaultAmount ?? 20,
         frequency: defaultFrequncy ?? 7,
         endDate: defaultEndDate === null ? null : defaultEndDate || dayjs().add(8, 'days').toISOString(),
-        tokenAddressFrom: defaultTokenAddressFrom || USDC_CONTRACT_ADDRESS[+env.NEXT_PUBLIC_CHAIN_ID as 1 | 5 | 137],
-        tokenAddressTo: defaultTokenAddressTo || WETH_CONTRACT_ADDRESS[+env.NEXT_PUBLIC_CHAIN_ID as 1 | 5 | 137],
+        tokenAddressFrom: defaultTokenAddressFrom || USDC_CONTRACT_ADDRESS[+env.NEXT_PUBLIC_CHAIN_ID_MAINNET as 1 | 5 | 137],
+        tokenAddressTo: defaultTokenAddressTo || WETH_CONTRACT_ADDRESS[+env.NEXT_PUBLIC_CHAIN_ID_MAINNET as 1 | 5 | 137],
       })
     }
   }, [isOpen])

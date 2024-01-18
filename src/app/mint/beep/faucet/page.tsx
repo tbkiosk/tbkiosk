@@ -27,7 +27,7 @@ const faucet = () => {
     }
 
     try {
-      const sdk = ThirdwebSDK.fromSigner(signer, env.NEXT_PUBLIC_CHAIN_ID, {
+      const sdk = ThirdwebSDK.fromSigner(signer, env.NEXT_PUBLIC_CHAIN_ID_MAINNET, {
         clientId: env.NEXT_PUBLIC_THIRDWEB_CLIENT_ID,
       })
       const faucetContract = await sdk.getContract('0x79E0a7769F078A75F5AeFBCDd98cD94700329D6C', abi)

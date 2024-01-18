@@ -59,7 +59,7 @@ const SwapHistory = ({ tbaAddress }: { tbaAddress: string }) => {
         return (
           <a
             className="flex items-center text-[#78edc1] hover:underline"
-            href={`${EXPLORER[+env.NEXT_PUBLIC_CHAIN_ID as 1 | 5 | 137]}/tx/${item.hash}`}
+            href={`${EXPLORER[+env.NEXT_PUBLIC_CHAIN_ID_MAINNET as 1 | 5 | 137]}/tx/${item.hash}`}
             rel="noreferrer"
             target="_blank"
           >

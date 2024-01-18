@@ -13,7 +13,7 @@ const BeepsGrid = () => {
   const connectionStatus = useConnectionStatus()
   const chainId = useChainId()
   const address = useAddress()
-  const { contract } = useContract(chainId ? env.NEXT_PUBLIC_BEEP_CONTRACT_ADDRESS : null)
+  const { contract } = useContract(chainId ? env.NEXT_PUBLIC_BEEP_CONTRACT_ADDRESS_MAINNET : null)
   const { data, isLoading, error } = useOwnedNFTs(contract, address)
 
   if (connectionStatus === 'disconnected') {
